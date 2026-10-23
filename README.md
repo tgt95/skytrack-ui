@@ -8,6 +8,17 @@ local tarball, and no npm registry destination has been chosen yet. See
 [Publishing](#publishing--still-an-open-owner-decision). **Building UI with this library?**
 Read the agent/handbook guide: [AGENT_GUIDE.md](AGENT_GUIDE.md).
 
+## Live site (GitHub Pages)
+
+Published from `main` by `.github/workflows/deploy-pages.yml`:
+
+- Storybook (docs, stories, a11y panel): <https://tgt95.github.io/skytrack-ui/>
+- Showcase app (components, style overview, dashboard): <https://tgt95.github.io/skytrack-ui/showcase/>
+
+Build the same output locally with `npm run build:site` (writes `site/`, which is git-ignored).
+The Pages site is mounted at `/skytrack-ui/`, so the workflow sets `BASE_PATH`; Storybook already
+emits relative URLs.
+
 **Visual QA covers audited slices only.** Browser audits exist for part of the component set
 (screenshots under `_tasks/2026-10-07-design-system-audit/shots/`); components outside those
 slices have had no rendered check. Everything below was verified by type checking, bundling,

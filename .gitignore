@@ -3,3 +3,4 @@ dist
 dist-lib
 dist-lib-tarball
 *.tgz
+site

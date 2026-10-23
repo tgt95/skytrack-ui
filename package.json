@@ -231,6 +231,7 @@
     "prepack": "node scripts/guard-publish.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "build:site": "node scripts/build-site.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
