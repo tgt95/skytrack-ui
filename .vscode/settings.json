@@ -1,0 +1,9 @@
+{
+  "files.associations": {
+    "src/assets/styles/**/*.css": "tailwindcss",
+    "**/src/assets/styles/**/*.css": "tailwindcss"
+  },
+  "tailwindCSS.includeLanguages": {
+    "tailwindcss": "css"
+  }
+}

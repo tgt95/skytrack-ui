@@ -1,0 +1,268 @@
+{
+  "name": "skytrack-ui",
+  "private": true,
+  "version": "0.1.5",
+  "type": "module",
+  "description": "SkyTrack UI — private React component library (Base UI + Tailwind CSS v4, IBM Plex).",
+  "license": "UNLICENSED",
+  "sideEffects": [
+    "**/styles.css"
+  ],
+  "main": "./dist-lib/index.js",
+  "module": "./dist-lib/index.js",
+  "types": "./dist-lib/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist-lib/lib/index.d.ts",
+      "import": "./dist-lib/index.js",
+      "default": "./dist-lib/index.js"
+    },
+    "./styles.css": {
+      "types": "./dist-lib/styles.css.d.ts",
+      "default": "./dist-lib/styles.css"
+    },
+    "./accordion": {
+      "types": "./dist-lib/components/ui/accordion.d.ts",
+      "import": "./dist-lib/accordion.js",
+      "default": "./dist-lib/accordion.js"
+    },
+    "./alert-dialog": {
+      "types": "./dist-lib/components/ui/alert-dialog.d.ts",
+      "import": "./dist-lib/alert-dialog.js",
+      "default": "./dist-lib/alert-dialog.js"
+    },
+    "./autocomplete": {
+      "types": "./dist-lib/components/ui/autocomplete.d.ts",
+      "import": "./dist-lib/autocomplete.js",
+      "default": "./dist-lib/autocomplete.js"
+    },
+    "./avatar": {
+      "types": "./dist-lib/components/ui/avatar.d.ts",
+      "import": "./dist-lib/avatar.js",
+      "default": "./dist-lib/avatar.js"
+    },
+    "./badge": {
+      "types": "./dist-lib/components/ui/badge.d.ts",
+      "import": "./dist-lib/badge.js",
+      "default": "./dist-lib/badge.js"
+    },
+    "./button": {
+      "types": "./dist-lib/components/ui/button.d.ts",
+      "import": "./dist-lib/button.js",
+      "default": "./dist-lib/button.js"
+    },
+    "./checkbox": {
+      "types": "./dist-lib/components/ui/checkbox.d.ts",
+      "import": "./dist-lib/checkbox.js",
+      "default": "./dist-lib/checkbox.js"
+    },
+    "./checkbox-group": {
+      "types": "./dist-lib/components/ui/checkbox-group.d.ts",
+      "import": "./dist-lib/checkbox-group.js",
+      "default": "./dist-lib/checkbox-group.js"
+    },
+    "./collapsible": {
+      "types": "./dist-lib/components/ui/collapsible.d.ts",
+      "import": "./dist-lib/collapsible.js",
+      "default": "./dist-lib/collapsible.js"
+    },
+    "./combobox": {
+      "types": "./dist-lib/components/ui/combobox.d.ts",
+      "import": "./dist-lib/combobox.js",
+      "default": "./dist-lib/combobox.js"
+    },
+    "./context-menu": {
+      "types": "./dist-lib/components/ui/context-menu.d.ts",
+      "import": "./dist-lib/context-menu.js",
+      "default": "./dist-lib/context-menu.js"
+    },
+    "./dialog": {
+      "types": "./dist-lib/components/ui/dialog.d.ts",
+      "import": "./dist-lib/dialog.js",
+      "default": "./dist-lib/dialog.js"
+    },
+    "./drawer": {
+      "types": "./dist-lib/components/ui/drawer.d.ts",
+      "import": "./dist-lib/drawer.js",
+      "default": "./dist-lib/drawer.js"
+    },
+    "./field": {
+      "types": "./dist-lib/components/ui/field.d.ts",
+      "import": "./dist-lib/field.js",
+      "default": "./dist-lib/field.js"
+    },
+    "./fieldset": {
+      "types": "./dist-lib/components/ui/fieldset.d.ts",
+      "import": "./dist-lib/fieldset.js",
+      "default": "./dist-lib/fieldset.js"
+    },
+    "./form": {
+      "types": "./dist-lib/components/ui/form.d.ts",
+      "import": "./dist-lib/form.js",
+      "default": "./dist-lib/form.js"
+    },
+    "./input": {
+      "types": "./dist-lib/components/ui/input.d.ts",
+      "import": "./dist-lib/input.js",
+      "default": "./dist-lib/input.js"
+    },
+    "./menu": {
+      "types": "./dist-lib/components/ui/menu.d.ts",
+      "import": "./dist-lib/menu.js",
+      "default": "./dist-lib/menu.js"
+    },
+    "./menubar": {
+      "types": "./dist-lib/components/ui/menubar.d.ts",
+      "import": "./dist-lib/menubar.js",
+      "default": "./dist-lib/menubar.js"
+    },
+    "./meter": {
+      "types": "./dist-lib/components/ui/meter.d.ts",
+      "import": "./dist-lib/meter.js",
+      "default": "./dist-lib/meter.js"
+    },
+    "./navigation-menu": {
+      "types": "./dist-lib/components/ui/navigation-menu.d.ts",
+      "import": "./dist-lib/navigation-menu.js",
+      "default": "./dist-lib/navigation-menu.js"
+    },
+    "./number-field": {
+      "types": "./dist-lib/components/ui/number-field.d.ts",
+      "import": "./dist-lib/number-field.js",
+      "default": "./dist-lib/number-field.js"
+    },
+    "./otp-field": {
+      "types": "./dist-lib/components/ui/otp-field.d.ts",
+      "import": "./dist-lib/otp-field.js",
+      "default": "./dist-lib/otp-field.js"
+    },
+    "./popover": {
+      "types": "./dist-lib/components/ui/popover.d.ts",
+      "import": "./dist-lib/popover.js",
+      "default": "./dist-lib/popover.js"
+    },
+    "./preview-card": {
+      "types": "./dist-lib/components/ui/preview-card.d.ts",
+      "import": "./dist-lib/preview-card.js",
+      "default": "./dist-lib/preview-card.js"
+    },
+    "./progress": {
+      "types": "./dist-lib/components/ui/progress.d.ts",
+      "import": "./dist-lib/progress.js",
+      "default": "./dist-lib/progress.js"
+    },
+    "./radio": {
+      "types": "./dist-lib/components/ui/radio.d.ts",
+      "import": "./dist-lib/radio.js",
+      "default": "./dist-lib/radio.js"
+    },
+    "./scroll-area": {
+      "types": "./dist-lib/components/ui/scroll-area.d.ts",
+      "import": "./dist-lib/scroll-area.js",
+      "default": "./dist-lib/scroll-area.js"
+    },
+    "./select": {
+      "types": "./dist-lib/components/ui/select.d.ts",
+      "import": "./dist-lib/select.js",
+      "default": "./dist-lib/select.js"
+    },
+    "./separator": {
+      "types": "./dist-lib/components/ui/separator.d.ts",
+      "import": "./dist-lib/separator.js",
+      "default": "./dist-lib/separator.js"
+    },
+    "./slider": {
+      "types": "./dist-lib/components/ui/slider.d.ts",
+      "import": "./dist-lib/slider.js",
+      "default": "./dist-lib/slider.js"
+    },
+    "./switch": {
+      "types": "./dist-lib/components/ui/switch.d.ts",
+      "import": "./dist-lib/switch.js",
+      "default": "./dist-lib/switch.js"
+    },
+    "./tabs": {
+      "types": "./dist-lib/components/ui/tabs.d.ts",
+      "import": "./dist-lib/tabs.js",
+      "default": "./dist-lib/tabs.js"
+    },
+    "./toast": {
+      "types": "./dist-lib/components/ui/toast.d.ts",
+      "import": "./dist-lib/toast.js",
+      "default": "./dist-lib/toast.js"
+    },
+    "./toggle": {
+      "types": "./dist-lib/components/ui/toggle.d.ts",
+      "import": "./dist-lib/toggle.js",
+      "default": "./dist-lib/toggle.js"
+    },
+    "./toggle-group": {
+      "types": "./dist-lib/components/ui/toggle-group.d.ts",
+      "import": "./dist-lib/toggle-group.js",
+      "default": "./dist-lib/toggle-group.js"
+    },
+    "./toolbar": {
+      "types": "./dist-lib/components/ui/toolbar.d.ts",
+      "import": "./dist-lib/toolbar.js",
+      "default": "./dist-lib/toolbar.js"
+    },
+    "./tooltip": {
+      "types": "./dist-lib/components/ui/tooltip.d.ts",
+      "import": "./dist-lib/tooltip.js",
+      "default": "./dist-lib/tooltip.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist-lib",
+    "README.md",
+    "AGENT_GUIDE.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json && vite build",
+    "typecheck": "tsc -p tsconfig.json",
+    "preview": "vite preview",
+    "generate:exports": "node scripts/generate-exports.mjs",
+    "build:lib": "node scripts/build-lib.mjs",
+    "verify:lib": "node scripts/verify-lib.mjs",
+    "pack:local": "npm run build:lib && npm pack --pack-destination ./dist-lib-tarball",
+    "test:consumer": "node scripts/test-consumer.mjs",
+    "prepack": "node scripts/guard-publish.mjs",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.7.0",
+    "zod": "^4.6.5"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@storybook/addon-a11y": "^10.6.1",
+    "@storybook/addon-docs": "^10.6.1",
+    "@storybook/react-vite": "^10.6.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "prettier": "^3.9.9",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "storybook": "^10.6.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2"
+  }
+}

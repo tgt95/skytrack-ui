@@ -1,0 +1,16 @@
+/**
+ * Packaged stylesheet entry point — `import "skytrack-ui/styles.css";`
+ *
+ * Deliberately not a copy of the theme: the tokens, fonts, dark variant and base
+ * layer are imported from the showcase's `index.css`, so the published package and
+ * the showcase can never drift apart. Do not duplicate theme values here.
+ *
+ * `source(none)` turns off Tailwind's automatic source detection for this
+ * stylesheet, and `@source` below pins the scan to the shipped components — so the
+ * compiled CSS carries every utility the components need (and no demo/showcase
+ * utilities), and the consumer needs no Tailwind setup of their own.
+ */
+@import './index.css' source(none);
+
+@source "./components";
+@source inline("text-success bg-success border-success text-warning bg-warning border-warning text-info bg-info border-info text-favorite bg-favorite border-favorite");
