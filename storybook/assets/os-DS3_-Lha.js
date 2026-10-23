@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{i as t,n,r,t as i}from"./shared-CT8haQgp.js";var a,o,s,c,l;function u(){return(u=e((()=>{i(),a=/^i(os$|p)/.test(n)||n===`macintel`&&t>1,o=`android`,s=n===o||r.includes(o),c=!a&&n.startsWith(`mac`),n.startsWith(`win`),!s&&/^(linux|chrome os)/.test(n),l=c||a})))()}export{c as a,a as i,l as n,u as r,s as t};
