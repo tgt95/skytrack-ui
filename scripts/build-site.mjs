@@ -2,8 +2,8 @@
 /**
  * Builds the static GitHub Pages site into `site/`:
  *
- *   site/                      Storybook (component explorer, docs, a11y panel)
- *   site/showcase/             Showcase app (`vite build`)
+ *   site/                      Showcase app (`vite build`, src/showcase/App.tsx)
+ *   site/storybook/            Storybook (component explorer, docs, a11y panel)
  *   site/.nojekyll             keep paths such as `_assets` served by Pages
  *
  * The project site lives at /<repo>/ on GitHub Pages, so every asset URL needs
@@ -30,22 +30,22 @@ step(`clean ${path.relative(root, outDir)}`, () => {
   fs.mkdirSync(outDir, { recursive: true })
 })
 
-step('storybook build -> site/', () => {
-  execFileSync(bin('storybook'), ['build', '--quiet', '--output-dir', outDir], {
-    cwd: root,
-    stdio: 'inherit'
-  })
-})
-
-step(`showcase build -> site/showcase/ (base ${base}showcase/)`, () => {
+step(`showcase build -> site/ (base ${base})`, () => {
   execFileSync(bin('vite'), ['build'], {
     cwd: root,
     stdio: 'inherit',
     env: {
       ...process.env,
-      BASE_PATH: `${base.replace(/\/?$/, '/')}showcase/`,
-      BUILD_OUT_DIR: path.join(outDir, 'showcase')
+      BASE_PATH: base.replace(/\/?$/, '/'),
+      BUILD_OUT_DIR: outDir
     }
+  })
+})
+
+step('storybook build -> site/storybook/', () => {
+  execFileSync(bin('storybook'), ['build', '--quiet', '--output-dir', path.join(outDir, 'storybook')], {
+    cwd: root,
+    stdio: 'inherit'
   })
 })
 
