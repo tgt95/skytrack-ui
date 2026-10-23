@@ -10,14 +10,21 @@ Read the agent/handbook guide: [AGENT_GUIDE.md](AGENT_GUIDE.md).
 
 ## Live site (GitHub Pages)
 
-Published from `main` by `.github/workflows/deploy-pages.yml`:
+Published to the `gh-pages` branch by `npm run deploy:pages`:
 
 - Storybook (docs, stories, a11y panel): <https://tgt95.github.io/skytrack-ui/>
 - Showcase app (components, style overview, dashboard): <https://tgt95.github.io/skytrack-ui/showcase/>
 
-Build the same output locally with `npm run build:site` (writes `site/`, which is git-ignored).
-The Pages site is mounted at `/skytrack-ui/`, so the workflow sets `BASE_PATH`; Storybook already
-emits relative URLs.
+```bash
+npm run build:site     # writes site/ (git-ignored): Storybook + showcase/
+npm run deploy:pages   # build:site, then force-push site/ to origin/gh-pages
+```
+
+The site is mounted at `/skytrack-ui/`, so `BASE_PATH` sets the asset prefix (Storybook already
+emits relative URLs). Pages serves `gh-pages` with the legacy branch source; no Actions minutes are
+used. To move deployment into CI instead, add `.github/workflows/deploy-pages.yml` that runs
+`npm ci && npm run build:site` and deploys the `site` artifact with `actions/deploy-pages`, then set
+the Pages source to "GitHub Actions". That push needs a token with the `workflow` scope.
 
 **Visual QA covers audited slices only.** Browser audits exist for part of the component set
 (screenshots under `_tasks/2026-10-07-design-system-audit/shots/`); components outside those
