@@ -1,7 +1,7 @@
 # skytrack-ui
 
 Private, reusable React component library for SkyTrack. Built on
-[Base UI](https://base-ui.com) + Tailwind CSS v4, themed with IBM Plex Sans / IBM Plex Mono.
+[Base UI](https://base-ui.com) + Tailwind CSS v4, themed with IBM Plex Sans, Host Grotesk and Geist Mono.
 
 **Status: local/private phase.** The package is `private: true`, it is installed from a
 local tarball, and no npm registry destination has been chosen yet. See
@@ -103,10 +103,12 @@ use the components.
 
 What is inside:
 
-- the shadcn-style CSS custom properties (`--background`, `--foreground`, `--primary`,
-  `--radius`, sidebar and chart tokens, …) as owner-supplied,
+- the SkyTrack brand tokens from `src/theme/skytrack-brand-tokens-v4.json`: the 15-step
+  `brand` / `brand-alt` / `neutral` / status ramps plus the shadcn-style aliases
+  (`--background`, `--foreground`, `--primary`, `--radius`, sidebar and chart tokens, …).
+  `tokens.css` and `theme-map.css` are generated — regenerate with `npm run generate:tokens`,
 - Tailwind's preflight reset and a small `@layer base` block,
-- the IBM Plex Sans and IBM Plex Mono `@font-face` rules with all 88 font files packaged
+- the IBM Plex Sans, Host Grotesk and Geist Mono `@font-face` rules with all 92 font files packaged
   under `dist-lib/assets/` and referenced with relative URLs, so any base path works
   (a bundler may inline them as `data:` URIs instead — both forms are verified to build),
 - the compiled utilities for every shipped component.
@@ -116,9 +118,9 @@ What is inside:
 `skytrack-ui/styles.css` is a global stylesheet. It will:
 
 - reset browser defaults (Tailwind preflight),
-- set `body` to `background`/`foreground` colours and to IBM Plex Sans, and `code`/`kbd`/`samp`/`pre`
-  to IBM Plex Mono,
-- define `--radius` and the `rounded-*` scale globally.
+- set `body` to `background`/`foreground` colours and to IBM Plex Sans,
+- set headings to Host Grotesk and `code`/`kbd`/`samp`/`pre` to Geist Mono,
+- define `--radius` (`8px`) and the `rounded-*` scale globally.
 
 If the consumer app already ships its own Tailwind or its own reset, import this file **once**
 and be aware of the cascade; component styling relies on these tokens existing.

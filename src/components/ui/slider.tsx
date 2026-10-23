@@ -79,7 +79,7 @@ function SliderThumb({ className, ...props }: React.ComponentProps<typeof BaseSl
         'block size-4 cursor-pointer shrink-0 rounded-xl border border-primary bg-background shadow-sm',
         'data-[dragging]:shadow-md',
         'data-[disabled]:border-muted-foreground',
-        'outline-none focus-within:ring-[3px] focus-within:ring-ring/50 focus-within:border-ring',
+        'outline-none focus-within:ring-[3px] focus-within:ring-ring/15 focus-within:border-ring',
         className as string
       )}
       {...props}

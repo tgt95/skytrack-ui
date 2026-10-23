@@ -46,7 +46,7 @@ function AlertDialogBackdrop({ className, ...props }: React.ComponentProps<typeo
     <BaseAlertDialog.Backdrop
       data-slot='alert-dialog-backdrop'
       className={cn(
-        'fixed inset-0 z-50 min-h-dvh bg-black/20 transition-opacity duration-150',
+        'fixed inset-0 z-50 min-h-dvh bg-overlay/20 transition-opacity duration-150',
         'supports-[-webkit-touch-callout:none]:absolute',
         'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
         className as string

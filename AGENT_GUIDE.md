@@ -9,7 +9,7 @@ exact commands to verify your work honestly.
 ## 1. Current status — read this first
 
 `skytrack-ui` is a **private React component library** built on
-[Base UI](https://base-ui.com) + Tailwind CSS v4, themed with IBM Plex Sans / IBM Plex Mono.
+[Base UI](https://base-ui.com) + Tailwind CSS v4, themed with IBM Plex Sans, Host Grotesk and Geist Mono.
 
 - It is `"private": true`, version `0.1.4`, consumed as a **local tarball**
   (`dist-lib-tarball/skytrack-ui-0.1.4.tgz`).
@@ -108,8 +108,9 @@ the consumer app.**
 ### Global reset — caution
 
 `styles.css` is global. It includes Tailwind's preflight reset, sets `body` to
-`--background`/`--foreground` on IBM Plex Sans, sets `code`/`kbd`/`samp`/`pre` to IBM Plex Mono,
-and defines `--radius` (`0.25rem`, 4px) plus the `rounded-*` scale globally. If your app already ships its
+`--background`/`--foreground` on IBM Plex Sans, sets headings to Host Grotesk and
+`code`/`kbd`/`samp`/`pre` to Geist Mono, and defines `--radius` (`8px`) plus the `rounded-*`
+scale globally. If your app already ships its
 own Tailwind or reset, import this file once and be aware of the cascade — component styling
 depends on these tokens existing.
 
@@ -127,7 +128,11 @@ inherited cursor shows, not `not-allowed`). The number-field scrub area keeps `c
 Style with the semantic utilities that map to the CSS custom properties: `bg-background`,
 `text-foreground`, `text-muted-foreground`, `bg-primary`, `text-primary-foreground`,
 `border-border`, `border-input`, `ring-ring`, `bg-destructive`, `bg-accent`, `text-success`,
-`text-warning`, `text-info`, and `text-favorite`. Never hard-code a colour. Tokens are what make
+`text-warning`, `text-info`, and `text-favorite`. The v4 brand tokens add the `brand-*`,
+`brand-alt-*` and `neutral-*` ramps (`bg-brand-500`), the JSON semantic groups as
+`bg-surface-*`, `text-ink-*`, `text-icon-*` and `border-stroke-*`, plus `bg-overlay` for
+modal backdrops. Values are generated from `src/theme/skytrack-brand-tokens-v4.json`
+(`npm run generate:tokens`); do not hand-edit `tokens.css` or `theme-map.css`. Never hard-code a colour. Tokens are what make
 the light and dark themes work. Use `success`, `warning`, and `info` for status meaning; use
 `favorite` for favorited or starred state, not for warnings.
 
@@ -143,9 +148,10 @@ document.documentElement.classList.toggle('dark', prefersDark)
 
 ### Fonts
 
-`html` and `body` get IBM Plex Sans (400/500/600/700). All 88 IBM Plex font files ship under
-`dist-lib/assets/` with relative URLs, so any deploy base path works; a bundler may inline them as
-`data:` URIs. Both forms build.
+`html` and `body` get IBM Plex Sans (400/500/600/700), `h1`–`h6` get Host Grotesk (500/600/700)
+with `-2%` tracking, and mono text gets Geist Mono (400/500/600/700). All 92 font files ship
+under `dist-lib/assets/` with relative URLs, so any deploy base path works; a bundler may inline
+them as `data:` URIs. Both forms build.
 
 **Mono, with the caveat that matters.** The `@theme inline` mapping does **not** emit a
 `--font-mono` variable, and the `font-mono` utility is **not** in the shipped CSS — Tailwind only
@@ -160,7 +166,7 @@ compiled the utilities the shipped components use, and your app's files are not 
 or an explicit family on a non-semantic element:
 
 ```tsx
-<span style={{ fontFamily: '"IBM Plex Mono", ui-monospace, monospace' }}>SG0138</span>
+<span style={{ fontFamily: '"Geist Mono", ui-monospace, monospace' }}>SG0138</span>
 ```
 
 Any _custom_ utility class you invent only works if your app has its own Tailwind build that

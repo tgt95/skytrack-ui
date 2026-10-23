@@ -21,7 +21,7 @@ export const toolbarButtonVariants = cva(
       size: {
         default: 'h-8 min-w-8 px-2.5 data-[orientation=vertical]:w-full',
         sm: 'h-7 min-w-7 px-2 text-xs data-[orientation=vertical]:w-full',
-        lg: 'h-9 min-w-9 px-3 data-[orientation=vertical]:w-full',
+        lg: 'h-10 min-w-10 px-3 data-[orientation=vertical]:w-full',
         icon: 'size-8'
       }
     },

@@ -18,7 +18,7 @@ function NumberFieldGroup({ className, ...props }: React.ComponentProps<typeof B
   return (
     <BaseNumberField.Group
       data-slot='number-field-group'
-      className={cn('flex h-9 items-stretch', className as string)}
+      className={cn('flex h-10 items-stretch', className as string)}
       {...props}
     />
   )

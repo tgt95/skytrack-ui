@@ -53,7 +53,7 @@ function PreviewCardBackdrop({ className, ...props }: React.ComponentProps<typeo
     <BasePreviewCard.Backdrop
       data-slot='preview-card-backdrop'
       className={cn(
-        'fixed inset-0 z-50 bg-black/20 transition-opacity duration-150',
+        'fixed inset-0 z-50 bg-overlay/20 transition-opacity duration-150',
         'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
         className as string
       )}

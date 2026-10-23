@@ -47,7 +47,7 @@ function NavigationMenuTrigger({
     <BaseNavigationMenu.Trigger
       data-slot='navigation-menu-trigger'
       className={cn(
-        'group inline-flex h-9 cursor-pointer items-center justify-center gap-1 rounded-md bg-transparent px-3 text-sm font-medium text-foreground no-underline select-none transition-colors',
+        'group inline-flex h-10 cursor-pointer items-center justify-center gap-1 rounded-md bg-transparent px-3 text-sm font-medium text-foreground no-underline select-none transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
         'data-[orientation=vertical]:w-full data-[orientation=vertical]:justify-between',

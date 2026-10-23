@@ -123,7 +123,7 @@ function DrawerBackdrop({ className, ...props }: React.ComponentProps<typeof Bas
     <BaseDrawer.Backdrop
       data-slot='drawer-backdrop'
       className={cn(
-        'fixed inset-0 min-h-dvh bg-black/20 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]',
+        'fixed inset-0 min-h-dvh bg-overlay/20 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]',
         'supports-[-webkit-touch-callout:none]:absolute',
         'data-[swiping]:duration-0',
         'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',

@@ -134,9 +134,9 @@ if (!fs.existsSync(cssPath)) {
     `unresolved CSS urls: ${missing.slice(0, 5).join(', ')}`
   )
   check(
-    /IBM Plex Sans/.test(css) && /IBM Plex Mono/.test(css),
-    'styles.css declares both IBM Plex Sans and IBM Plex Mono',
-    'styles.css is missing one of the IBM Plex font families'
+    /IBM Plex Sans/.test(css) && /Host Grotesk/.test(css) && /Geist Mono/.test(css),
+    'styles.css declares IBM Plex Sans, Host Grotesk and Geist Mono',
+    'styles.css is missing one of the brand font families'
   )
   check(
     /--primary:/.test(css) && /\.dark/.test(css),

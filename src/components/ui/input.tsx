@@ -19,7 +19,7 @@ function InputAdornment({ className, position, ...props }: InputAdornmentProps) 
       data-slot='input-adornment'
       data-position={position}
       className={cn(
-        'flex h-9 shrink-0 items-center text-muted-foreground',
+        'flex h-10 shrink-0 items-center text-muted-foreground',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className as string
       )}
@@ -39,7 +39,7 @@ function Input({ className, startAdornment, endAdornment, ...props }: InputProps
       <BaseInput
         data-slot='input'
         className={cn(
-          'flex h-9 w-full min-w-0 rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground shadow-xs transition-colors',
+          'flex h-10 w-full min-w-0 rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground shadow-xs transition-colors',
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
           'data-[filled]:border-foreground/40',
@@ -61,7 +61,7 @@ function Input({ className, startAdornment, endAdornment, ...props }: InputProps
         // sits inside the box, matching MUI. `focus-within` replaces the input's own
         // `focus-visible` ring, and `has-*` carries the state styling from the input's
         // data attributes (Base UI only sets those when inside a Field.Root).
-        'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
+        'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/15',
         'has-[[data-filled]]:border-foreground/40',
         'has-[[data-invalid]]:border-destructive has-[[data-invalid]]:ring-destructive/20',
         'has-[[data-disabled]]:cursor-not-allowed has-[[data-disabled]]:opacity-50',
@@ -76,7 +76,7 @@ function Input({ className, startAdornment, endAdornment, ...props }: InputProps
       <BaseInput
         data-slot='input'
         className={cn(
-          'flex h-9 min-w-0 flex-1 rounded-md bg-transparent px-3 py-1 text-sm text-foreground outline-hidden transition-colors',
+          'flex h-10 min-w-0 flex-1 rounded-md bg-transparent px-3 py-1 text-sm text-foreground outline-hidden transition-colors',
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
           startAdornment != null && 'pl-2',

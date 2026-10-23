@@ -20,7 +20,7 @@ export const menuItemVariants = cva(
     variants: {
       variant: {
         default: '',
-        destructive: 'text-destructive data-[highlighted]:bg-destructive data-[highlighted]:text-white'
+        destructive: 'text-destructive data-[highlighted]:bg-destructive data-[highlighted]:text-destructive-foreground'
       },
       inset: {
         true: 'pl-8',

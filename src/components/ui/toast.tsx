@@ -108,7 +108,7 @@ export const toastCloseVariants = cva(
   {
     variants: {
       size: {
-        default: 'h-9 px-3',
+        default: 'h-10 px-3',
         sm: 'h-8 px-2.5 text-xs',
         icon: 'size-8 p-0 [&_svg]:size-4'
       },
@@ -185,7 +185,10 @@ function ToastArrow({ className, children, ...props }: React.ComponentProps<type
   return (
     <BaseToast.Arrow
       data-slot='toast-arrow'
-      className={cn('pointer-events-none absolute z-10 flex h-2.5 w-5 items-center justify-center', className as string)}
+      className={cn(
+        'pointer-events-none absolute z-10 flex h-2.5 w-5 items-center justify-center',
+        className as string
+      )}
       {...props}
     >
       {children ?? <ToastArrowGlyph />}

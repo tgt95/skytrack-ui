@@ -110,7 +110,13 @@ const TOKEN_SWATCHES: { token: string; label: string }[] = [
   { token: '--chart-2', label: '--chart-2' },
   { token: '--chart-3', label: '--chart-3' },
   { token: '--chart-4', label: '--chart-4' },
-  { token: '--chart-5', label: '--chart-5' }
+  { token: '--chart-5', label: '--chart-5' },
+  { token: '--brand-500', label: '--brand-500' },
+  { token: '--brand-400', label: '--brand-400' },
+  { token: '--brand-alt-800', label: '--brand-alt-800' },
+  { token: '--surface-primary', label: '--surface-prim…' },
+  { token: '--sem-text-secondary', label: '--text-second…' },
+  { token: '--overlay', label: '--overlay' }
 ]
 
 function TokenSwatches() {

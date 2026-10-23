@@ -6,9 +6,9 @@ export const badgeVariants = cva('', {
   variants: {
     status: {
       default: 'bg-muted text-foreground', // AntD default badge is red
-      success: 'bg-success text-white',
-      warning: 'bg-warning text-white',
-      error: 'bg-destructive text-white',
+      success: 'bg-success text-success-foreground',
+      warning: 'bg-warning text-warning-foreground',
+      error: 'bg-destructive text-destructive-foreground',
       processing: 'bg-primary text-primary-foreground',
       secondary: 'bg-secondary text-secondary-foreground',
       outline: 'border border-input bg-background text-foreground'
@@ -68,7 +68,9 @@ function Badge({
       className={cn(
         'relative inline-flex items-center justify-center  leading-none font-medium tabular-nums',
         // Dot keeps the status color but drops the size variant so `size-1.5` wins.
-        dot ? cn('size-1.5 p-0 rounded-full', badgeVariants({ status, size: null })) : cn('rounded-xl', badgeVariants({ status, size })),
+        dot
+          ? cn('size-1.5 p-0 rounded-full', badgeVariants({ status, size: null }))
+          : cn('rounded-xl', badgeVariants({ status, size })),
         className as string
       )}
       {...props}

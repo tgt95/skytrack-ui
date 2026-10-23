@@ -6,7 +6,7 @@ import { focusRing } from '@/components/ui/button'
 
 export const switchVariants = cva(
   cn(
-    'inline-flex cursor-pointer shrink-0 items-center rounded-(--radius) border border-input bg-muted p-0.5 transition-colors',
+    'inline-flex cursor-pointer shrink-0 items-center rounded-full border border-input bg-muted p-0.5 transition-colors',
     'data-checked:bg-primary data-checked:border-primary',
     'disabled:cursor-not-allowed disabled:opacity-50 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
     focusRing
@@ -22,7 +22,7 @@ export const switchVariants = cva(
   }
 )
 
-export const switchThumbVariants = cva('block rounded-xs bg-background shadow transition-transform', {
+export const switchThumbVariants = cva('block rounded-full bg-background shadow transition-transform', {
   variants: {
     size: {
       default: 'size-3.5 data-checked:translate-x-4',

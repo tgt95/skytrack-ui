@@ -31,7 +31,7 @@ function ComboboxLabel({ className, ...props }: React.ComponentProps<typeof Base
 export const comboboxInputGroupVariants = cva(
   cn(
     'relative flex w-full items-center gap-1 rounded-md border border-input bg-background text-foreground shadow-xs transition-colors',
-    'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
+    'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/15',
     'has-[button]:px-1',
     'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
     'data-[invalid]:border-destructive data-[invalid]:ring-destructive/20'
@@ -39,7 +39,7 @@ export const comboboxInputGroupVariants = cva(
   {
     variants: {
       size: {
-        default: 'min-h-9 px-2 py-1',
+        default: 'min-h-10 px-2 py-1',
         sm: 'min-h-8 px-2 py-0.5 text-xs'
       },
       shape: {
@@ -113,7 +113,7 @@ function ComboboxTriggerButton({
         'hover:not-data-[disabled]:bg-accent hover:not-data-[disabled]:text-accent-foreground',
         'data-[pressed]:bg-accent data-[pressed]:text-accent-foreground',
         'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
-        size === 'sm' ? 'h-8 text-xs' : 'h-9',
+        size === 'sm' ? 'h-8 text-xs' : 'h-10',
         focusRing,
         className as string
       )}
@@ -209,7 +209,7 @@ function ComboboxBackdrop({ className, ...props }: React.ComponentProps<typeof B
     <BaseCombobox.Backdrop
       data-slot='combobox-backdrop'
       className={cn(
-        'fixed inset-0 z-50 bg-black/20 transition-opacity data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
+        'fixed inset-0 z-50 bg-overlay/20 transition-opacity data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
         className as string
       )}
       {...props}

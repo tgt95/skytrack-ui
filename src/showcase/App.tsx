@@ -30,9 +30,16 @@ const demos = Object.values(modules)
   .sort((a, b) => a.title.localeCompare(b.title))
 
 export function App() {
-  const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
+  // `?theme=dark` and `?view=style|dashboard` make the showcase linkable and
+  // screenshot-friendly without touching localStorage first.
+  const params = new URLSearchParams(window.location.search)
+  const requestedTheme = params.get('theme')
+  const requestedView = params.get('view')
+  const [dark, setDark] = useState(() => (requestedTheme ?? localStorage.getItem('skytrack-ui-theme')) === 'dark')
   const [query, setQuery] = useState('')
-  const [view, setView] = useState<'components' | 'style' | 'dashboard'>('components')
+  const [view, setView] = useState<'components' | 'style' | 'dashboard'>(
+    requestedView === 'style' || requestedView === 'dashboard' ? requestedView : 'components'
+  )
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
@@ -128,7 +135,7 @@ export function App() {
             ))}
           </ToggleGroup>
           <div className='hidden text-sm text-muted-foreground lg:block shrink-0'>
-            Base UI · Tailwind CSS · Phosphor · IBM Plex Sans
+            Base UI · Tailwind CSS · Host Grotesk / IBM Plex Sans / Geist Mono
           </div>
           <Button
             onClick={() => setDark((d) => !d)}

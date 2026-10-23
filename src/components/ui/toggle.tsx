@@ -24,10 +24,10 @@ export const toggleVariants = cva(
           'bg-transparent hover:bg-muted hover:text-foreground data-[pressed]:bg-primary data-[pressed]:text-primary-foreground'
       },
       size: {
-        default: 'h-9 px-3',
+        default: 'h-10 px-3',
         xs: 'h-6 px-2 text-xs',
         sm: 'h-8 px-2 text-xs',
-        lg: 'h-10 px-4'
+        lg: 'h-12 px-4'
       }
     },
     defaultVariants: { variant: 'default', size: 'default' }
