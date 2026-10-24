@@ -138,12 +138,13 @@ function ToastClose({ className, size, variant, children, ...props }: ToastClose
 function ToastAction({
   className,
   size,
+  variant,
   ...props
 }: React.ComponentProps<typeof BaseToast.Action> & VariantProps<typeof toastCloseVariants>) {
   return (
     <BaseToast.Action
       data-slot='toast-action'
-      className={cn(toastCloseVariants({ size, variant: 'outline' }), className as string)}
+      className={cn(toastCloseVariants({ size, variant }), className as string)}
       {...props}
     />
   )
@@ -185,7 +186,10 @@ function ToastArrow({ className, children, ...props }: React.ComponentProps<type
   return (
     <BaseToast.Arrow
       data-slot='toast-arrow'
-      className={cn('pointer-events-none absolute z-10 flex h-2.5 w-5 items-center justify-center', className as string)}
+      className={cn(
+        'pointer-events-none absolute z-10 flex h-2.5 w-5 items-center justify-center',
+        className as string
+      )}
       {...props}
     >
       {children ?? <ToastArrowGlyph />}

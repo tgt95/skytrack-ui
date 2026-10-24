@@ -34,7 +34,7 @@ function PreviewCardTrigger({
       data-slot='preview-card-trigger'
       className={cn(
         buttonVariants({ variant: variant ?? 'link', size }),
-        'h-auto w-auto justify-start rounded-sm p-0 decoration-1 hover:no-underline',
+        size == null && 'h-auto w-auto justify-start rounded-sm p-0 decoration-1 hover:no-underline',
         className as string
       )}
       {...props}
@@ -113,11 +113,7 @@ function PreviewCardArrowGlyph(props: React.ComponentProps<'svg'>) {
   )
 }
 
-function PreviewCardArrow({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof BasePreviewCard.Arrow>) {
+function PreviewCardArrow({ className, children, ...props }: React.ComponentProps<typeof BasePreviewCard.Arrow>) {
   return (
     <BasePreviewCard.Arrow
       data-slot='preview-card-arrow'

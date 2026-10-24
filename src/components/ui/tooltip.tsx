@@ -32,7 +32,7 @@ function TooltipTrigger({
     <BaseTooltip.Trigger
       data-slot='tooltip-trigger'
       className={cn(
-        // buttonVariants({ variant: variant ?? "outline", size: size ?? "icon-sm" }),
+        variant != null || size != null ? buttonVariants({ variant: variant ?? 'outline', size }) : undefined,
         'cursor-pointer',
         'data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
         className as string

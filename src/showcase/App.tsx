@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { MagnifyingGlassIcon, MoonIcon, SunIcon, XIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { VariantBlock, type DemoMeta } from './demo'
+import { Sheet } from './sheet'
 import { OverviewStyle } from './overview-style'
 import { OverviewDashboard } from './overview-dashboard'
 import { Button } from '@/components/ui/button'
@@ -32,7 +33,7 @@ const demos = Object.values(modules)
 export function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
   const [query, setQuery] = useState('')
-  const [view, setView] = useState<'components' | 'style' | 'dashboard'>('components')
+  const [view, setView] = useState<'components' | 'sheet' | 'style' | 'dashboard'>('components')
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
@@ -105,10 +106,16 @@ export function App() {
       <main className='min-w-0 flex-1'>
         <header className='sticky top-0 flex h-14 items-center gap-4 border-b border-border bg-background/90 px-3 backdrop-blur z-1'>
           {/* <nav className='flex items-center gap-1 text-sm w-full' aria-label='Showcase views'> */}
-          <ToggleGroup className='gap-1 w-full border-none' variant="default" aria-label='Showcase views' defaultValue={['components']}>
+          <ToggleGroup
+            className='w-full min-w-0 gap-1 overflow-x-auto border-none'
+            variant='default'
+            aria-label='Showcase views'
+            defaultValue={['components']}
+          >
             {(
               [
                 ['components', 'Components'],
+                ['sheet', 'Sheet'],
                 ['style', 'Style overview'],
                 ['dashboard', 'Dashboard']
               ] as const
@@ -118,10 +125,7 @@ export function App() {
                 onClick={() => setView(id)}
                 value={id}
                 size='default'
-              // className={cn(
-              //   'px-3 py-1.5',
-              //   view === id ? 'font-semibold text-foreground' : 'text-muted-foreground hover:text-foreground'
-              // )}
+                className='h-8 shrink-0 px-2 text-xs sm:h-9 sm:px-3 sm:text-sm'
               >
                 {label}
               </Toggle>
@@ -161,7 +165,7 @@ export function App() {
           </div>
         ) : (
           <div className='mx-auto max-w-6xl px-8 py-10'>
-            {view === 'style' ? <OverviewStyle /> : <OverviewDashboard />}
+            {view === 'sheet' ? <Sheet /> : view === 'style' ? <OverviewStyle /> : <OverviewDashboard />}
           </div>
         )}
       </main>

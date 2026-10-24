@@ -15,6 +15,10 @@ Published to the `gh-pages` branch by `npm run deploy:pages`:
 - Showcase app (`src/showcase/App.tsx`): <https://tgt95.github.io/skytrack-ui/>
 - Storybook (docs, stories, a11y panel): <https://tgt95.github.io/skytrack-ui/storybook/>
 
+The showcase has four views: **Components** (live demos), **Sheet** (tokens plus each
+component's library-defined design axes and selected states, grouped per component),
+**Style overview** and **Dashboard**.
+
 ```bash
 npm run build:site     # writes site/ (git-ignored): showcase at the root, Storybook in storybook/
 npm run deploy:pages   # build:site, then force-push site/ to origin/gh-pages

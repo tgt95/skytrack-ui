@@ -2,9 +2,7 @@ import * as React from 'react'
 import { Popover as BasePopover } from '@base-ui/react/popover'
 import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { 
-  buttonVariants, 
-  focusRing } from '@/components/ui/button'
+import { buttonVariants, focusRing } from '@/components/ui/button'
 
 /** Shared variant/size props for `PopoverTrigger`. */
 export type PopoverTriggerProps = VariantProps<typeof buttonVariants>
@@ -32,8 +30,10 @@ function PopoverTrigger({
     <BasePopover.Trigger
       data-slot='popover-trigger'
       className={cn(
-        // buttonVariants({ variant: variant ?? 'outline', size: size ?? 'sm' }),
-        // 'data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
+        props.render == null && (variant != null || size != null)
+          ? buttonVariants({ variant: variant ?? 'outline', size })
+          : undefined,
+        props.render == null && 'data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
         className as string
       )}
       {...props}
@@ -110,11 +110,7 @@ function PopoverArrowGlyph(props: React.ComponentProps<'svg'>) {
   )
 }
 
-function PopoverArrow({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof BasePopover.Arrow>) {
+function PopoverArrow({ className, children, ...props }: React.ComponentProps<typeof BasePopover.Arrow>) {
   return (
     <BasePopover.Arrow
       data-slot='popover-arrow'
