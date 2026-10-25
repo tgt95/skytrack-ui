@@ -29,7 +29,7 @@ function AccordionTrigger({ className, children, ...props }: React.ComponentProp
     <BaseAccordion.Trigger
       data-slot='accordion-trigger'
       className={cn(
-        'flex flex-1 cursor-pointer items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-foreground transition-colors select-none',
+        'flex w-full flex-1 cursor-pointer items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-foreground transition-colors select-none',
         'hover:underline',
         'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         '[&[data-panel-open]>svg]:rotate-180',
