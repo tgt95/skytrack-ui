@@ -2,7 +2,6 @@ import * as React from 'react'
 import { CheckIcon } from '@phosphor-icons/react'
 import {
   Select,
-  SelectArrow,
   SelectGroup,
   SelectGroupLabel,
   SelectIcon,
@@ -49,7 +48,6 @@ function AppleSelect({ size, disabled }: { size?: 'sm' | 'default'; disabled?: b
         <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
           <SelectPopup>
             <SelectScrollUpArrow />
-            <SelectArrow />
             <SelectList>
               {apples.map((apple) => (
                 <SelectItem key={apple.value} value={apple.value}>
