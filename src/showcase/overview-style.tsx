@@ -125,39 +125,6 @@ function CardSub ({ children }: { children: React.ReactNode }) {
   return <p className='text-sm text-muted-foreground'>{children}</p>
 }
 
-const TOKEN_SWATCHES: { token: string; label: string }[] = [
-  { token: '--background', label: '--backgro…' },
-  { token: '--foreground', label: '--foregro…' },
-  { token: '--primary', label: '--primary' },
-  { token: '--secondary', label: '--second…' },
-  { token: '--muted', label: '--muted' },
-  { token: '--accent', label: '--accent' },
-  { token: '--destructive', label: '--destructive' },
-  { token: '--success', label: '--success' },
-  { token: '--warning', label: '--warning' },
-  { token: '--info', label: '--info' },
-  { token: '--favorite', label: '--favorite' },
-  { token: '--border', label: '--border' },
-  { token: '--chart-1', label: '--chart-1' },
-  { token: '--chart-2', label: '--chart-2' },
-  { token: '--chart-3', label: '--chart-3' },
-  { token: '--chart-4', label: '--chart-4' },
-  { token: '--chart-5', label: '--chart-5' }
-]
-
-function TokenSwatches () {
-  return (
-    <div className='grid grid-cols-4 gap-3'>
-      {TOKEN_SWATCHES.map((s) => (
-        <div key={s.token} className='flex flex-col gap-1.5'>
-          <div className='aspect-square w-full border border-border' style={{ backgroundColor: `var(${s.token})` }} />
-          <code className='truncate text-[11px] text-muted-foreground'>{s.label}</code>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 const ICON_BUTTONS = [
   CopyIcon,
   InfoIcon,
@@ -574,17 +541,6 @@ function SwissMissionCard () {
 export function OverviewStyle () {
   return (
     <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3'>
-      {/* Typography + tokens */}
-      {/* <Card>
-        <div>
-          <CardTitle>Host Grotesk, IBM Plex Sans</CardTitle>
-          <CardSub>
-            Designers love packing quirky glyphs into test phrases. This is a preview of the typography…
-          </CardSub>
-        </div>
-        <TokenSwatches />
-      </Card> */}
-
       <OperatorProfileCard />
       <FieldPosterCard />
       <MissionPassCard />
