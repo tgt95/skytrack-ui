@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { Popover as BasePopover } from '@base-ui/react/popover'
-import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { buttonVariants, focusRing } from '@/components/ui/button'
+import { focusRing } from '@/components/ui/button'
 
-/** Shared variant/size props for `PopoverTrigger`. */
-export type PopoverTriggerProps = VariantProps<typeof buttonVariants>
+/** Native Base UI props for `PopoverTrigger`; styling comes from the call site. */
+export type PopoverTriggerProps = React.ComponentProps<typeof BasePopover.Trigger>
 
 /**
  * Popover — a popup anchored to a trigger.
@@ -20,22 +19,11 @@ type PopoverChangeEventDetails = Parameters<
   NonNullable<React.ComponentProps<typeof BasePopover.Root>['onOpenChange']>
 >[1]
 
-function PopoverTrigger({
-  className,
-  variant,
-  size,
-  ...props
-}: React.ComponentProps<typeof BasePopover.Trigger> & PopoverTriggerProps) {
+function PopoverTrigger({ className, ...props }: React.ComponentProps<typeof BasePopover.Trigger>) {
   return (
     <BasePopover.Trigger
       data-slot='popover-trigger'
-      className={cn(
-        props.render == null && (variant != null || size != null)
-          ? buttonVariants({ variant: variant ?? 'outline', size })
-          : undefined,
-        props.render == null && 'data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
-        className as string
-      )}
+      className={className}
       {...props}
     />
   )

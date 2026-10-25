@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { DotsThree, PencilSimple, Trash } from '@phosphor-icons/react'
+import { DotsThreeIcon, PencilSimpleIcon, TrashIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import {
   Menu,
@@ -65,7 +65,7 @@ function IconButtonTrigger() {
   return (
     <Menu>
       <MenuTrigger render={<Button variant='ghost' size='icon-xs' aria-label='More actions' />}>
-        <DotsThree aria-hidden='true' />
+        <DotsThreeIcon aria-hidden='true' />
       </MenuTrigger>
       <MenuPortal>
         <MenuPositioner side='bottom' align='end' sideOffset={4}>
@@ -298,7 +298,7 @@ export const demo: DemoMeta = {
             <MenuPositioner side='bottom' align='start' sideOffset={6}>
               <MenuPopup>
                 <MenuItem>
-                  <PencilSimple /> Edit
+                  <PencilSimpleIcon /> Edit
                   <MenuShortcut>⌘E</MenuShortcut>
                 </MenuItem>
                 <MenuItem>Duplicate</MenuItem>
@@ -307,7 +307,7 @@ export const demo: DemoMeta = {
                 <MenuItem>Play Last</MenuItem>
                 <MenuSeparator />
                 <MenuItem variant='destructive'>
-                  <Trash /> Delete
+                  <TrashIcon /> Delete
                 </MenuItem>
               </MenuPopup>
             </MenuPositioner>
@@ -515,7 +515,7 @@ export const demo: DemoMeta = {
       render: () => (
         <Menu>
           <MenuTrigger>
-            Open <DotsThree />
+            Open <DotsThreeIcon />
           </MenuTrigger>
           <MenuPortal>
             <MenuPositioner side='bottom' align='start' sideOffset={6}>

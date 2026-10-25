@@ -1,4 +1,4 @@
-import { TextAlignCenter, TextAlignLeft, TextAlignRight } from '@phosphor-icons/react'
+import { TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon } from '@phosphor-icons/react'
 import { Toggle } from '@/components/ui/toggle'
 import { ToggleGroup } from '@/components/ui/toggle-group'
 import type { DemoMeta } from '@/showcase/demo'
@@ -15,13 +15,13 @@ export const demo: DemoMeta = {
       render: () => (
         <ToggleGroup aria-label='Text alignment' defaultValue={['left']}>
           <Toggle aria-label='Align left' value='left'>
-            <TextAlignLeft />
+            <TextAlignLeftIcon />
           </Toggle>
           <Toggle aria-label='Align center' value='center'>
-            <TextAlignCenter />
+            <TextAlignCenterIcon />
           </Toggle>
           <Toggle aria-label='Align right' value='right'>
-            <TextAlignRight />
+            <TextAlignRightIcon />
           </Toggle>
         </ToggleGroup>
       )
@@ -43,13 +43,13 @@ export const demo: DemoMeta = {
       render: () => (
         <ToggleGroup aria-label='Text alignment' variant='outline' defaultValue={['left']}>
           <Toggle aria-label='Align left' value='left'>
-            <TextAlignLeft />
+            <TextAlignLeftIcon />
           </Toggle>
           <Toggle aria-label='Align center' value='center'>
-            <TextAlignCenter />
+            <TextAlignCenterIcon />
           </Toggle>
           <Toggle aria-label='Align right' value='right'>
-            <TextAlignRight />
+            <TextAlignRightIcon />
           </Toggle>
         </ToggleGroup>
       )
@@ -68,13 +68,13 @@ export const demo: DemoMeta = {
       render: () => (
         <ToggleGroup aria-label='Text alignment' orientation='vertical' defaultValue={['center']}>
           <Toggle aria-label='Align left' value='left'>
-            <TextAlignLeft />
+            <TextAlignLeftIcon />
           </Toggle>
           <Toggle aria-label='Align center' value='center'>
-            <TextAlignCenter />
+            <TextAlignCenterIcon />
           </Toggle>
           <Toggle aria-label='Align right' value='right'>
-            <TextAlignRight />
+            <TextAlignRightIcon />
           </Toggle>
         </ToggleGroup>
       )

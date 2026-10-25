@@ -2,11 +2,14 @@ import * as React from 'react'
 import { Slider as BaseSlider } from '@base-ui/react/slider'
 import { cn } from '@/lib/utils'
 
-function Slider({ className, ...props }: React.ComponentProps<typeof BaseSlider.Root>) {
+function Slider({ className, thumbAlignment = 'edge', ...props }: React.ComponentProps<typeof BaseSlider.Root>) {
+  const widthClass = props.orientation === 'vertical' ? 'w-auto' : 'w-full'
+
   return (
     <BaseSlider.Root
       data-slot='slider'
-      className={cn('flex w-56 flex-col gap-2 data-[disabled]:opacity-50', className as string)}
+      thumbAlignment={thumbAlignment}
+      className={cn('flex flex-col gap-2 data-[disabled]:opacity-50', widthClass, className as string)}
       {...props}
     />
   )

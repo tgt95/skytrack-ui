@@ -1,4 +1,5 @@
-import { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionPanel } from '@/components/ui/accordion'
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
+import { AccountFaqAccordion } from '@/showcase/accordion-faq'
 import type { DemoMeta } from '@/showcase/demo'
 
 const FAQ = [
@@ -47,14 +48,18 @@ export const demo: DemoMeta = {
         <Accordion className='w-full max-w-sm'>
           {FAQ.map((item) => (
             <AccordionItem key={item.q}>
-              <AccordionHeader>
-                <AccordionTrigger>{item.q}</AccordionTrigger>
-              </AccordionHeader>
-              <AccordionPanel><div className='pb-4'>{item.a}</div></AccordionPanel>
+              <AccordionTrigger>{item.q}</AccordionTrigger>
+              <AccordionContent>
+                <div className='pb-4'>{item.a}</div>
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
       )
+    },
+    {
+      name: 'SkyTrack account FAQ',
+      render: () => <AccountFaqAccordion className='w-full max-w-sm' />
     },
     {
       name: 'Open multiple panels',
@@ -62,10 +67,10 @@ export const demo: DemoMeta = {
         <Accordion multiple className='w-full max-w-sm'>
           {FAQ.map((item) => (
             <AccordionItem key={item.q}>
-              <AccordionHeader>
-                <AccordionTrigger>{item.q}</AccordionTrigger>
-              </AccordionHeader>
-              <AccordionPanel><div className="pb-4">{item.a}</div></AccordionPanel>
+              <AccordionTrigger>{item.q}</AccordionTrigger>
+              <AccordionContent>
+                <div className="pb-4">{item.a}</div>
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
@@ -77,10 +82,12 @@ export const demo: DemoMeta = {
         <Accordion multiple className='w-full max-w-sm'>
           {FAQ.map((item) => (
             <AccordionItem key={item.q} className='border-b-0'>
-              <AccordionHeader>
-                <AccordionTrigger variant='compact'>{item.q}</AccordionTrigger>
-              </AccordionHeader>
-              <AccordionPanel><div className='pb-3 text-xs text-muted-foreground'>{item.a}</div></AccordionPanel>
+              <AccordionTrigger className='min-h-[34px] gap-2 py-1 text-[11px] font-semibold text-muted-foreground hover:no-underline [&>svg]:size-3'>
+                {item.q}
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className='pb-3 text-xs text-muted-foreground'>{item.a}</div>
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
@@ -92,10 +99,10 @@ export const demo: DemoMeta = {
         <Accordion hiddenUntilFound className='w-full max-w-sm'>
           {SHIPPING.map((item) => (
             <AccordionItem key={item.q}>
-              <AccordionHeader>
-                <AccordionTrigger>{item.q}</AccordionTrigger>
-              </AccordionHeader>
-              <AccordionPanel><div className="pb-4">{item.a}</div></AccordionPanel>
+              <AccordionTrigger>{item.q}</AccordionTrigger>
+              <AccordionContent>
+                <div className="pb-4">{item.a}</div>
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
@@ -107,10 +114,10 @@ export const demo: DemoMeta = {
         <Accordion className='w-full max-w-sm'>
           {FAQ.map((item, index) => (
             <AccordionItem key={item.q} disabled={index === 1}>
-              <AccordionHeader>
-                <AccordionTrigger>{item.q}</AccordionTrigger>
-              </AccordionHeader>
-              <AccordionPanel><div className="pb-4">{item.a}</div></AccordionPanel>
+              <AccordionTrigger>{item.q}</AccordionTrigger>
+              <AccordionContent>
+                <div className="pb-4">{item.a}</div>
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>

@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { Menu as BaseMenu } from '@base-ui/react/menu'
-import { CaretRight, Check } from '@phosphor-icons/react'
+import { CaretRightIcon, CheckIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
 
 /**
  * Shared row styling for every menu item part (Item, LinkItem, CheckboxItem,
@@ -43,26 +42,11 @@ function Menu<Payload = unknown>(props: BaseMenu.Root.Props<Payload>) {
   return <BaseMenu.Root<Payload> {...props} />
 }
 
-function MenuTrigger<Payload = unknown>({ className, render, ...props }: BaseMenu.Trigger.Props<Payload>) {
-  // A custom rendered trigger owns its visual style (for example, a Button). Avoid stacking the
-  // default outlined menu-trigger classes on top of the rendered component's variant.
+function MenuTrigger<Payload = unknown>({ className, ...props }: BaseMenu.Trigger.Props<Payload>) {
   return (
     <BaseMenu.Trigger<Payload>
       data-slot='menu-trigger'
-      className={cn(
-        render == null
-          ? cn(
-              'inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-input bg-background px-3 text-sm font-medium whitespace-nowrap text-foreground select-none transition-colors',
-              'hover:bg-accent hover:text-accent-foreground active:bg-muted',
-              'data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
-              'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-              "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-              focusRing
-            )
-          : '',
-        className as string
-      )}
-      render={render}
+      className={className}
       {...props}
     />
   )
@@ -211,7 +195,7 @@ function MenuSubmenuTrigger({ className, children, variant, inset, ...props }: M
       {...props}
     >
       {children}
-      <CaretRight className='ml-auto' />
+      <CaretRightIcon className='ml-auto' />
     </BaseMenu.SubmenuTrigger>
   )
 }
@@ -281,7 +265,7 @@ function MenuCheckboxItemIndicator({
       )}
       {...props}
     >
-      {children ?? <Check className='size-3.5' weight='bold' />}
+      {children ?? <CheckIcon className='size-3.5' weight='bold' />}
     </BaseMenu.CheckboxItemIndicator>
   )
 }

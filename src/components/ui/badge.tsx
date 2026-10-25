@@ -2,7 +2,7 @@ import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-export const badgeVariants = cva('', {
+export const badgeVariants = cva('uppercase tracking-wide', {
   variants: {
     status: {
       default: 'bg-muted text-foreground', // AntD default badge is red
@@ -31,6 +31,7 @@ export type BadgeProps = React.ComponentProps<'span'> &
     showZero?: boolean
     /** Render a 6px status dot instead of the count. Ignores `count` and `size`. */
     dot?: boolean
+    animationPing?: boolean
   }
 
 /** Numeric counts above `maxCount` collapse to `{maxCount}+`; anything else passes through. */
@@ -56,6 +57,7 @@ function Badge({
   maxCount = 99,
   showZero = false,
   dot = false,
+  animationPing = false,
   children,
   ...props
 }: BadgeProps) {
@@ -66,16 +68,18 @@ function Badge({
     <span
       data-slot='badge-count'
       className={cn(
-        'relative inline-flex items-center justify-center  leading-none font-medium tabular-nums',
+        'relative inline-flex items-center justify-center leading-none font-medium tabular-nums',
         // Dot keeps the status color but drops the size variant so `size-1.5` wins.
-        dot ? cn('size-1.5 p-0 rounded-full', badgeVariants({ status, size: null })) : cn('rounded-xl', badgeVariants({ status, size })),
+        dot
+          ? cn('size-1.5 p-0 rounded-full', badgeVariants({ status, size: null }))
+          : cn('', badgeVariants({ status, size })),
         className as string
       )}
       {...props}
     >
       {dot ? null : value}
-      {status === 'processing' && !dot ? (
-        <span aria-hidden className='absolute inset-0 animate-ping rounded-xl bg-primary/40' />
+      {animationPing ? (
+        <span aria-hidden className='absolute inset-0 animate-ping bg-primary/40' />
       ) : null}
     </span>
   )
@@ -84,7 +88,7 @@ function Badge({
     // anchored: supra top-end, RTL-safe logical props
     <span data-slot='badge' className='relative inline-flex shrink-0'>
       {children}
-      <span className='absolute top-0 end-0 translate-x-1/2 -translate-y-1/2'>{pill}</span>
+      <span className='absolute top-0 inset-e-0 translate-x-1/2 -translate-y-1/2'>{pill}</span>
     </span>
   )
 }

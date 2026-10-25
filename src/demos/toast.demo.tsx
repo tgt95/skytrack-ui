@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Check, CircleNotch, Trash } from '@phosphor-icons/react'
+import { CheckIcon, CircleNotchIcon, TrashIcon } from '@phosphor-icons/react'
 import {
   ToastAction,
   ToastArrow,
@@ -168,7 +168,7 @@ function CopyButton() {
         })
       }}
     >
-      {copied ? <Check className='size-4' /> : <Trash className='size-4' />}
+      {copied ? <CheckIcon className='size-4' /> : <TrashIcon className='size-4' />}
     </Button>
   )
 }
@@ -314,7 +314,7 @@ function PromiseToastList() {
   return toasts.map((toast) => (
     <ToastRoot key={toast.id} toast={toast}>
       <ToastContent>
-        {toast.type === 'loading' ? <CircleNotch className='size-4 shrink-0 animate-spin' aria-hidden /> : null}
+        {toast.type === 'loading' ? <CircleNotchIcon className='size-4 shrink-0 animate-spin' aria-hidden /> : null}
         <div className='flex min-w-0 flex-1 flex-col gap-1'>
           <ToastTitle />
           <ToastDescription />

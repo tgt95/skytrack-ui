@@ -3,10 +3,16 @@
   "root": {
     "values": [
       "Accordion",
+      "AccordionContent",
       "AccordionHeader",
       "AccordionItem",
       "AccordionPanel",
       "AccordionTrigger",
+      "Alert",
+      "AlertAction",
+      "AlertDescription",
+      "AlertTitle",
+      "alertVariants",
       "AlertDialog",
       "AlertDialogBackdrop",
       "AlertDialogClose",
@@ -51,6 +57,13 @@
       "AvatarImage",
       "Badge",
       "badgeVariants",
+      "Breadcrumb",
+      "BreadcrumbEllipsis",
+      "BreadcrumbItem",
+      "BreadcrumbLink",
+      "BreadcrumbList",
+      "BreadcrumbPage",
+      "BreadcrumbSeparator",
       "Button",
       "buttonVariants",
       "focusRing",
@@ -143,6 +156,7 @@
       "createDrawerHandle",
       "drawerPopupVariants",
       "drawerSideVariants",
+      "Dropzone",
       "Field",
       "FieldControl",
       "FieldDescription",
@@ -321,6 +335,7 @@
       "createTooltipHandle"
     ],
     "types": [
+      "AlertProps",
       "AlertDialogButtonProps",
       "AlertDialogChangeEventDetails",
       "AutocompleteRootProps",
@@ -334,6 +349,7 @@
       "DrawerChangeEventDetails",
       "DrawerSideProps",
       "DrawerSnapPoint",
+      "DropzoneProps",
       "InputAdornmentProps",
       "InputProps",
       "MenuItemVariantProps",
@@ -364,6 +380,7 @@
     "./accordion": {
       "values": [
         "Accordion",
+        "AccordionContent",
         "AccordionHeader",
         "AccordionItem",
         "AccordionPanel",
@@ -371,6 +388,19 @@
       ],
       "types": [],
       "prefix": "Accordion"
+    },
+    "./alert": {
+      "values": [
+        "Alert",
+        "AlertAction",
+        "AlertDescription",
+        "AlertTitle",
+        "alertVariants"
+      ],
+      "types": [
+        "AlertProps"
+      ],
+      "prefix": "Alert"
     },
     "./alert-dialog": {
       "values": [
@@ -446,6 +476,19 @@
         "BadgeProps"
       ],
       "prefix": "Badge"
+    },
+    "./breadcrumb": {
+      "values": [
+        "Breadcrumb",
+        "BreadcrumbEllipsis",
+        "BreadcrumbItem",
+        "BreadcrumbLink",
+        "BreadcrumbList",
+        "BreadcrumbPage",
+        "BreadcrumbSeparator"
+      ],
+      "types": [],
+      "prefix": "Breadcrumb"
     },
     "./button": {
       "values": [
@@ -600,6 +643,15 @@
         "DrawerSnapPoint"
       ],
       "prefix": "Drawer"
+    },
+    "./dropzone": {
+      "values": [
+        "Dropzone"
+      ],
+      "types": [
+        "DropzoneProps"
+      ],
+      "prefix": "Dropzone"
     },
     "./field": {
       "values": [

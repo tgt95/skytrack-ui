@@ -1,11 +1,9 @@
 import * as React from 'react'
 import { Tooltip as BaseTooltip } from '@base-ui/react/tooltip'
-import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
 
-/** Shared variant/size props for `TooltipTrigger`. */
-export type TooltipTriggerProps = VariantProps<typeof buttonVariants>
+/** Native Base UI props for `TooltipTrigger`; styling comes from the call site. */
+export type TooltipTriggerProps = React.ComponentProps<typeof BaseTooltip.Trigger>
 
 /**
  * Tooltip — a visual hint that appears when an element is hovered or focused.
@@ -22,21 +20,11 @@ type TooltipChangeEventDetails = Parameters<
   NonNullable<React.ComponentProps<typeof BaseTooltip.Root>['onOpenChange']>
 >[1]
 
-function TooltipTrigger({
-  className,
-  variant,
-  size,
-  ...props
-}: React.ComponentProps<typeof BaseTooltip.Trigger> & TooltipTriggerProps) {
+function TooltipTrigger({ className, ...props }: React.ComponentProps<typeof BaseTooltip.Trigger>) {
   return (
     <BaseTooltip.Trigger
       data-slot='tooltip-trigger'
-      className={cn(
-        variant != null || size != null ? buttonVariants({ variant: variant ?? 'outline', size }) : undefined,
-        'cursor-pointer',
-        'data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
-        className as string
-      )}
+      className={className}
       {...props}
     />
   )

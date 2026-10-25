@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CaretRight } from '@phosphor-icons/react'
+import { CaretRightIcon } from '@phosphor-icons/react'
 import {
   NavigationMenu,
   NavigationMenuArrow,
@@ -77,7 +77,7 @@ function LinkCards({ links, heading }: { links: LinkEntry[]; heading?: string })
       {links.map((link) => (
         <li key={link.href}>
           <NavigationMenuLink href={link.href}>
-            <h3 className='m-0 mb-1 text-sm leading-4 font-medium'>{link.title}</h3>
+            <h3 className='h6 sub-heading m-0 mb-1'>{link.title}</h3>
             <p className='m-0 text-sm text-muted-foreground'>{link.description}</p>
           </NavigationMenuLink>
         </li>
@@ -151,7 +151,7 @@ function NestedNavigationMenu() {
               {OVERVIEW_LINKS.map((link) => (
                 <li key={link.href}>
                   <NavigationMenuLink href={link.href}>
-                    <h3 className='m-0 mb-1 text-sm leading-4 font-medium'>{link.title}</h3>
+                    <h3 className='h6 sub-heading m-0 mb-1'>{link.title}</h3>
                     <p className='m-0 text-sm text-muted-foreground'>{link.description}</p>
                   </NavigationMenuLink>
                 </li>
@@ -163,7 +163,7 @@ function NestedNavigationMenu() {
                       <NavigationMenuTrigger className='justify-between'>
                         Handbook
                         <NavigationMenuIcon>
-                          <CaretRight className='transition-transform duration-200' />
+                          <CaretRightIcon className='transition-transform duration-200' />
                         </NavigationMenuIcon>
                       </NavigationMenuTrigger>
                       <NavigationMenuContent className='w-[min(20rem,80vw)]'>
@@ -171,7 +171,7 @@ function NestedNavigationMenu() {
                           {HANDBOOK_LINKS.map((link) => (
                             <li key={link.href}>
                               <NavigationMenuLink href={link.href}>
-                                <h3 className='m-0 mb-1 text-sm leading-4 font-medium'>{link.title}</h3>
+                                <h3 className='h6 sub-heading m-0 mb-1'>{link.title}</h3>
                                 <p className='m-0 text-sm text-muted-foreground'>{link.description}</p>
                               </NavigationMenuLink>
                             </li>
@@ -271,7 +271,7 @@ function CustomLinksNavigationMenu() {
               {OVERVIEW_LINKS.map((link) => (
                 <li key={link.href}>
                   <CustomLink href={link.href}>
-                    <h3 className='m-0 mb-1 text-sm leading-4 font-medium'>{link.title}</h3>
+                    <h3 className='h6 sub-heading m-0 mb-1'>{link.title}</h3>
                     <p className='m-0 text-sm text-muted-foreground'>{link.description}</p>
                   </CustomLink>
                 </li>

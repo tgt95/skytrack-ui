@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ContextMenu as BaseContextMenu } from '@base-ui/react/context-menu'
-import { CaretRight, Check } from '@phosphor-icons/react'
+import { CaretRightIcon, CheckIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
@@ -42,7 +42,7 @@ function ContextMenuTrigger({ className, ...props }: React.ComponentProps<typeof
   return (
     <BaseContextMenu.Trigger
       data-slot='context-menu-trigger'
-      className={cn('block w-full cursor-pointer select-none', className as string)}
+      className={className}
       {...props}
     />
   )
@@ -186,7 +186,7 @@ function ContextMenuSubmenuTrigger({ className, children, variant, inset, ...pro
       {...props}
     >
       {children}
-      <CaretRight className='ml-auto' />
+      <CaretRightIcon className='ml-auto' />
     </BaseContextMenu.SubmenuTrigger>
   )
 }
@@ -263,7 +263,7 @@ function ContextMenuCheckboxItemIndicator({
       )}
       {...props}
     >
-      {children ?? <Check className='size-3.5' weight='bold' />}
+      {children ?? <CheckIcon className='size-3.5' weight='bold' />}
     </BaseContextMenu.CheckboxItemIndicator>
   )
 }

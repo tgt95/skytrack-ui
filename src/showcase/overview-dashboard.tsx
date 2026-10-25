@@ -1,22 +1,22 @@
 import { useState } from 'react'
 import {
-  Camera,
-  Car,
-  Check,
-  Cloud,
-  Coffee,
-  CreditCard,
-  DotsThree,
-  Globe,
-  Image as ImageIcon,
-  Plus,
-  PlusCircle,
-  Record,
-  ShoppingCart,
-  Television,
-  UploadSimple,
-  Wallet,
-  X
+  CameraIcon,
+  CarIcon,
+  CheckIcon,
+  CloudIcon,
+  CoffeeIcon,
+  CreditCardIcon,
+  DotsThreeIcon,
+  GlobeIcon,
+  ImageIcon,
+  PlusIcon,
+  PlusCircleIcon,
+  RecordIcon,
+  ShoppingCartIcon,
+  TelevisionIcon,
+  UploadSimpleIcon,
+  WalletIcon,
+  XIcon
 } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -56,19 +56,23 @@ import {
 } from '@/components/ui/combobox'
 import { Badge } from '@/components/ui/badge'
 
-function Card({ children }: { children: React.ReactNode }) {
-  return <div className='flex flex-col gap-4 border border-border bg-card p-6 text-card-foreground'>{children}</div>
+function Card ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`flex flex-col gap-4 border border-border bg-card p-6 text-card-foreground ${className}`}>
+      {children}
+    </div>
+  )
 }
 
-function CardTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className='text-lg font-semibold tracking-tight'>{children}</h3>
+function CardTitle ({ children }: { children: React.ReactNode }) {
+  return <h5 className='h5 heading py-0.5'>{children}</h5>
 }
 
-function CardSub({ children }: { children: React.ReactNode }) {
+function CardSub ({ children }: { children: React.ReactNode }) {
   return <p className='text-sm text-muted-foreground'>{children}</p>
 }
 
-function MiniSelect({
+function MiniSelect ({
   label,
   items,
   defaultValue
@@ -78,31 +82,33 @@ function MiniSelect({
   defaultValue?: string
 }) {
   return (
-    <Select<string> items={items} defaultValue={defaultValue ?? items[0]?.value}>
-      <SelectLabel>{label}</SelectLabel>
-      <SelectTrigger className='w-full'>
-        <SelectValue />
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectPortal>
-        <SelectPositioner side='bottom' align='start' sideOffset={4}>
-          <SelectPopup>
-            <SelectList>
-              {items.map((i) => (
-                <SelectItem key={i.value} value={i.value}>
-                  <SelectItemIndicator />
-                  <SelectItemText>{i.label}</SelectItemText>
-                </SelectItem>
-              ))}
-            </SelectList>
-          </SelectPopup>
-        </SelectPositioner>
-      </SelectPortal>
-    </Select>
+    <div className='flex min-w-0 flex-col gap-1.5'>
+      <Select<string> items={items} defaultValue={defaultValue ?? items[0]?.value}>
+        <SelectLabel>{label}</SelectLabel>
+        <SelectTrigger className='w-full'>
+          <SelectValue />
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4}>
+            <SelectPopup>
+              <SelectList>
+                {items.map((i) => (
+                  <SelectItem key={i.value} value={i.value}>
+                    <SelectItemIndicator />
+                    <SelectItemText>{i.label}</SelectItemText>
+                  </SelectItem>
+                ))}
+              </SelectList>
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </div>
   )
 }
 
-function Donut({
+function Donut ({
   pct,
   size = 180,
   track = 'var(--chart-1)',
@@ -142,7 +148,7 @@ function Donut({
   )
 }
 
-function AreaSpark({ points, color = 'var(--chart-1)', id }: { points: number[]; color?: string; id: string }) {
+function AreaSpark ({ points, color = 'var(--chart-1)', id }: { points: number[]; color?: string; id: string }) {
   const W = 300
   const H = 100
   const step = W / (points.length - 1)
@@ -161,7 +167,7 @@ function AreaSpark({ points, color = 'var(--chart-1)', id }: { points: number[];
   )
 }
 
-function Ring({ pct, label, value }: { pct: number; label: string; value: string }) {
+function Ring ({ pct, label, value }: { pct: number; label: string; value: string }) {
   return (
     <div className='flex items-center gap-3'>
       <svg viewBox='0 0 36 36' className='size-4 shrink-0 text-primary' aria-hidden='true'>
@@ -194,11 +200,13 @@ const HISTORY = [
   { month: 'May', v: 92 }
 ]
 
-function ContributionCard() {
+function ContributionCard () {
   return (
     <Card>
-      <div>
-        <CardTitle>Contribution History</CardTitle>
+      <div className='flex flex-col gap-0.5'>
+        <div className='flex items-center justify-between gap-2'>
+          <CardTitle>Contribution History</CardTitle>
+        </div>
         <CardSub>Last 6 months of activity</CardSub>
       </div>
       <div>
@@ -217,12 +225,12 @@ function ContributionCard() {
       </div>
       <div className='grid grid-cols-2 gap-3'>
         <div className='bg-muted/60 p-4'>
-          <div className='text-[11px] font-medium uppercase tracking-wide text-muted-foreground'>Upcoming</div>
+          <div className='text-sm sub-heading'>Upcoming</div>
           <div className='mt-1 text-lg font-semibold'>May 25, 2024</div>
           <div className='text-sm text-muted-foreground'>$1,000 scheduled</div>
         </div>
         <div className='bg-muted/60 p-4'>
-          <div className='text-[11px] font-medium uppercase tracking-wide text-muted-foreground'>Auto-save plan</div>
+          <div className='text-sm sub-heading'>Auto-save plan</div>
           <div className='mt-1 text-lg font-semibold'>Accelerated</div>
           <div className='text-sm text-muted-foreground'>Recurring weekly</div>
         </div>
@@ -238,46 +246,48 @@ const CURRENCIES = [
   { value: 'vnd', label: 'VND — Vietnamese Dong' }
 ]
 
-function PayoutCard() {
+function PayoutCard () {
   const [amount, setAmount] = useState<number | number[]>(2500)
-  const n = Array.isArray(amount) ? (amount[0] ?? 2500) : amount
+  const n = Array.isArray(amount) ? amount[0] ?? 2500 : amount
 
   return (
     <Card>
-      <div className='flex items-start justify-between gap-2'>
-        <div>
+      <div className='flex flex-col gap-0.5'>
+        <div className='flex items-center justify-between gap-2'>
           <CardTitle>Payout Threshold</CardTitle>
-          <CardSub>Set the minimum balance required before a payout is triggered.</CardSub>
+          <Button variant='ghost' size='icon-sm' aria-label='Close payout card'>
+            <XIcon aria-hidden='true' />
+          </Button>
         </div>
-        <Button variant='ghost' size='icon-sm' aria-label='Close payout card'>
-          <X aria-hidden='true' />
-        </Button>
+        <CardSub>Set the minimum balance required before a payout is triggered.</CardSub>
       </div>
-      <Select<string> items={CURRENCIES} defaultValue='usd'>
-        <SelectLabel>Preferred Currency</SelectLabel>
-        <SelectTrigger className='w-full'>
-          <SelectValue />
-          <SelectIcon />
-        </SelectTrigger>
-        <SelectPortal>
-          <SelectPositioner side='bottom' align='start' sideOffset={4}>
-            <SelectPopup>
-              <SelectList>
-                {CURRENCIES.map((c) => (
-                  <SelectItem key={c.value} value={c.value}>
-                    <SelectItemIndicator />
-                    <SelectItemText>{c.label}</SelectItemText>
-                  </SelectItem>
-                ))}
-              </SelectList>
-            </SelectPopup>
-          </SelectPositioner>
-        </SelectPortal>
-      </Select>
+      <div>
+        <Select<string> items={CURRENCIES} defaultValue='usd'>
+          <SelectLabel className='mb-1'>Preferred Currency</SelectLabel>
+          <SelectTrigger>
+            <SelectValue />
+            <SelectIcon />
+          </SelectTrigger>
+          <SelectPortal>
+            <SelectPositioner side='bottom' align='start' sideOffset={4}>
+              <SelectPopup>
+                <SelectList>
+                  {CURRENCIES.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>
+                      <SelectItemIndicator />
+                      <SelectItemText>{c.label}</SelectItemText>
+                    </SelectItem>
+                  ))}
+                </SelectList>
+              </SelectPopup>
+            </SelectPositioner>
+          </SelectPortal>
+        </Select>
+      </div>
       <div>
         <div className='flex items-baseline justify-between'>
           <span className='text-sm font-medium'>Minimum Payout Amount</span>
-          <span className='text-2xl font-semibold'>${n.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          <span className='h4'>${n.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
         </div>
         <Slider
           value={amount}
@@ -285,6 +295,7 @@ function PayoutCard() {
           max={10000}
           step={50}
           onValueChange={(next: number | readonly number[]) => setAmount(next as number | number[])}
+          className='my-2'
         >
           <SliderControl>
             <SliderTrack>
@@ -294,38 +305,39 @@ function PayoutCard() {
           </SliderControl>
         </Slider>
         <div className='mt-1 flex justify-between text-xs text-muted-foreground'>
-          <span>$50 (MIN)</span>
-          <span>$10,000 (MAX)</span>
+          <span className='sub-heading'>$50 (MIN)</span>
+          <span className='sub-heading'>$10,000 (MAX)</span>
         </div>
       </div>
       <div>
-        <div className='mb-1.5 text-sm font-medium'>Notes</div>
+        <div className='mb-1 text-sm font-medium'>Notes</div>
         <textarea
           placeholder='Add any notes for this payout configuration…'
           rows={4}
           className='w-full resize-y border border-input bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50'
         />
       </div>
-      <Button className='w-full'>Save Threshold</Button>
+      <Button className='w-full mt-auto'>Save Threshold</Button>
     </Card>
   )
 }
 
-function SavingsCard() {
+function SavingsCard () {
   return (
-    <Card>
-      <div className='flex items-start justify-between gap-2'>
-        <div>
+    <Card className='h-full'>
+      <div className='flex flex-col gap-0.5'>
+        <div className='flex items-center justify-between gap-2'>
           <CardTitle>Savings Targets</CardTitle>
-          <CardSub>Active milestones for 2024</CardSub>
+          <Button variant='outline' size='sm'>
+            New Goal
+          </Button>
         </div>
-        <Button variant='outline' size='sm'>
-          New Goal
-        </Button>
+        <CardSub>Active milestones for 2024</CardSub>
       </div>
-      <div className='bg-muted/60 p-4'>
-        <div className='text-[11px] font-medium uppercase tracking-wide text-muted-foreground'>Retirement</div>
-        <div className='text-3xl font-semibold tracking-tight'>$420,000</div>
+
+      <div className='bg-muted/60 p-6'>
+        <div className='text-sm sub-heading mb-1'>Retirement</div>
+        <div className='h2'>$420,000</div>
         <Progress value={65} className='mt-3'>
           <ProgressTrack>
             <ProgressIndicator />
@@ -336,9 +348,9 @@ function SavingsCard() {
           <span className='font-medium'>$273,000</span>
         </div>
       </div>
-      <div className='bg-muted/60 p-4'>
-        <div className='text-[11px] font-medium uppercase tracking-wide text-muted-foreground'>Real estate</div>
-        <div className='text-3xl font-semibold tracking-tight'>$85,000</div>
+      <div className='bg-muted/60 p-6'>
+        <div className='text-sm sub-heading mb-1'>Real estate</div>
+        <div className='h2'>$85,000</div>
         <Progress value={32} className='mt-3'>
           <ProgressTrack>
             <ProgressIndicator />
@@ -355,14 +367,14 @@ function SavingsCard() {
 }
 
 const TXNS = [
-  { icon: Coffee, name: 'Blue Bottle Coffee', cat: 'Food & Drink', when: 'Today, 10:24 AM', amt: '-$6.50', hot: false },
-  { icon: ShoppingCart, name: 'Whole Foods Market', cat: 'Groceries', when: 'Yesterday', amt: '-$142.30', hot: false },
-  { icon: Wallet, name: 'Stripe Payout', cat: 'Income', when: 'Oct 12', amt: '+$4,200.00', hot: true },
-  { icon: Car, name: 'Uber Technologies', cat: 'Transport', when: 'Oct 11', amt: '-$24.10', hot: false },
-  { icon: Television, name: 'Netflix Subscription', cat: 'Entertainment', when: 'Oct 10', amt: '-$19.99', hot: false }
+  { icon: CoffeeIcon, name: 'Blue Bottle Coffee', cat: 'Food & Drink', when: 'Today, 10:24 AM', amt: '-$6.50', hot: false },
+  { icon: ShoppingCartIcon, name: 'Whole Foods Market', cat: 'Groceries', when: 'Yesterday', amt: '-$142.30', hot: false },
+  { icon: WalletIcon, name: 'Stripe Payout', cat: 'Income', when: 'Oct 12', amt: '+$4,200.00', hot: true },
+  { icon: CarIcon, name: 'Uber Technologies', cat: 'Transport', when: 'Oct 11', amt: '-$24.10', hot: false },
+  { icon: TelevisionIcon, name: 'Netflix Subscription', cat: 'Entertainment', when: 'Oct 10', amt: '-$19.99', hot: false }
 ]
 
-export function OverviewDashboard() {
+export function OverviewDashboard () {
   return (
     <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3'>
       <ContributionCard />
@@ -371,24 +383,30 @@ export function OverviewDashboard() {
         <SavingsCard />
       </div>
       <Card>
-        <div className='flex flex-col items-center gap-2 py-4 text-center'>
-          <span className='flex size-10 items-center justify-center bg-muted text-lg'>
-            <Plus aria-hidden='true' />
+        <div className='flex flex-col items-center gap-2 my-auto text-center'>
+          <span className='flex size-10 items-center justify-center bg-muted text-lg rounded-(--radius)'>
+            <PlusIcon aria-hidden='true' />
           </span>
-          <div className='text-sm font-semibold'>Distribute Track</div>
+          <div className='h6'>Distribute Track</div>
           <p className='max-w-64 text-sm text-muted-foreground'>
             Upload your first master to start reaching listeners on Spotify, Apple Music, and more.
           </p>
         </div>
       </Card>
       <Card>
-        <CardSub>Claimable Balance</CardSub>
-        <div className='-mt-2 text-4xl font-semibold tracking-tight'>$0.00</div>
+        <div className='flex flex-col gap-1'>
+          <div className='text-xs sub-heading'>Claimable Balance</div>
+          <div className='flex items-baseline gap-1'>
+            <div className='text-3xl sub-heading'>$</div>
+            <div className='h1'>32.04</div>
+          </div>
+        </div>
         <div>
-          <span className='inline-flex items-center gap-1.5 border border-border px-2 py-1 text-xs font-medium'>
+          {/* <span className='inline-flex items-center gap-1.5 border border-border px-2 py-1 text-xs font-medium'>
             <span className='size-1.5 rounded-full bg-chart-2' />
             Pending Setup
-          </span>
+          </span> */}
+          <Badge status='outline' count='Pending Setup' />
         </div>
         <div className='flex flex-col bg-muted/60 px-4 py-3 text-sm'>
           <div className='flex items-center justify-between py-1'>
@@ -435,12 +453,14 @@ export function OverviewDashboard() {
               </span>
               <span className='hidden text-xs text-muted-foreground xl:block'>{t.when}</span>
               <span
-                className={`text-sm font-semibold tabular-nums ${t.hot ? 'text-emerald-600 dark:text-emerald-400' : ''}`}
+                className={`text-sm font-semibold tabular-nums ${
+                  t.hot ? 'text-emerald-600 dark:text-emerald-400' : ''
+                }`}
               >
                 {t.amt}
               </span>
               <Button variant='ghost' size='icon-sm' aria-label={`More actions for ${t.name}`}>
-                <DotsThree aria-hidden='true' />
+                <DotsThreeIcon aria-hidden='true' />
               </Button>
             </li>
           ))}
@@ -583,7 +603,7 @@ export function OverviewDashboard() {
           <CardTitle>Weekly Fitness Summary</CardTitle>
           <CardSub>Calories and workout load by day</CardSub>
         </div>
-        <div className='grid grid-cols-7 gap-1.5'>
+        <div className='grid grid-cols-7 gap-3'>
           {[
             ['M', 84],
             ['T', 52],
@@ -593,9 +613,9 @@ export function OverviewDashboard() {
             ['S', 48],
             ['S', 61]
           ].map(([d, v]) => (
-            <div key={`${d}-${v}`} className='rounded-md p-1.5 text-center ring-1 ring-border'>
+            <div key={`${d}-${v}`} className='text-center'>
               <div className='text-xs text-muted-foreground'>{d}</div>
-              <div className='relative mt-1 h-16 overflow-hidden rounded-sm bg-muted'>
+              <div className='relative mt-1 h-20 overflow-hidden rounded-sm bg-muted'>
                 <div className='absolute inset-x-0 bottom-0 rounded-sm bg-chart-3' style={{ height: `${v}%` }} />
               </div>
             </div>
@@ -610,8 +630,7 @@ export function OverviewDashboard() {
           <div>
             <CardTitle>Analytics</CardTitle>
             <CardSub>
-              418.2K Visitors{' '}
-              <Badge status='success' count='+10%' />
+              418.2K Visitors <Badge status='success' count='+10%' />
             </CardSub>
           </div>
           <Button variant='outline' size='sm'>
@@ -662,7 +681,7 @@ export function OverviewDashboard() {
                   {(item: { value: string; label: string }) => (
                     <ComboboxItem key={item.value} value={item}>
                       <ComboboxItemIndicator>
-                        <Check className='size-4' />
+                        <CheckIcon className='size-4' />
                       </ComboboxItemIndicator>
                       <span className='col-start-2'>{item.label}</span>
                     </ComboboxItem>
@@ -683,11 +702,7 @@ export function OverviewDashboard() {
         </div>
         <label className='flex flex-col gap-1.5 text-sm'>
           <span className='font-medium'>Amount to Invest</span>
-          <Input
-            defaultValue='1,000.00'
-            aria-label='Amount to invest'
-            startAdornment={<span>$</span>}
-          />
+          <Input defaultValue='1,000.00' aria-label='Amount to invest' startAdornment={<span>$</span>} />
         </label>
         <MiniSelect
           label='Order Type'
@@ -798,10 +813,10 @@ export function OverviewDashboard() {
           <CardTitle>Social Links</CardTitle>
         </div>
         {[
-          { icon: PlusCircle, label: 'Spotify Artist URL', v: 'spotify.com/artist/3j…2k', ph: undefined },
-          { icon: Camera, label: 'Instagram Handle', v: '@julianduryea_music', ph: undefined },
-          { icon: Cloud, label: 'SoundCloud URL', v: undefined, ph: 'soundcloud.com/username' },
-          { icon: Globe, label: 'Website', v: undefined, ph: 'https://yoursite.com' }
+          { icon: PlusCircleIcon, label: 'Spotify Artist URL', v: 'spotify.com/artist/3j…2k', ph: undefined },
+          { icon: CameraIcon, label: 'Instagram Handle', v: '@julianduryea_music', ph: undefined },
+          { icon: CloudIcon, label: 'SoundCloud URL', v: undefined, ph: 'soundcloud.com/username' },
+          { icon: GlobeIcon, label: 'Website', v: undefined, ph: 'https://yoursite.com' }
         ].map((f) => (
           <label key={f.label} className='flex flex-col gap-1.5 text-sm'>
             <span className='font-medium'>{f.label}</span>
@@ -835,7 +850,7 @@ export function OverviewDashboard() {
         </label>
         <input id='ov-cover-art' accept='image/jpeg,image/png' className='sr-only' type='file' />
         <Button variant='secondary' className='w-full'>
-          <UploadSimple aria-hidden='true' /> Upload Artwork
+          <UploadSimpleIcon aria-hidden='true' /> Upload Artwork
         </Button>
         <CardSub>
           Minimum 3000 × 3000px
@@ -847,7 +862,7 @@ export function OverviewDashboard() {
       {/* Explore catalog empty */}
       <Card>
         <div className='flex flex-col items-center gap-2 py-6 text-center'>
-          <Record aria-hidden='true' className='size-8 text-muted-foreground' />
+          <RecordIcon aria-hidden='true' className='size-8 text-muted-foreground' />
           <p className='text-sm font-medium'>Explore Catalog</p>
           <p className='max-w-64 text-sm text-muted-foreground'>
             Check your ISRC codes, metadata, and visual assets before going live.
@@ -885,7 +900,7 @@ export function OverviewDashboard() {
       {/* Connect bank empty */}
       <Card>
         <div className='flex flex-col items-center gap-2 py-6 text-center'>
-          <CreditCard aria-hidden='true' className='size-8 text-muted-foreground' />
+          <CreditCardIcon aria-hidden='true' className='size-8 text-muted-foreground' />
           <p className='text-sm font-medium'>Connect Bank</p>
           <p className='max-w-64 text-sm text-muted-foreground'>
             Link your payout method to receive monthly royalty distributions automatically.
@@ -925,16 +940,12 @@ export function OverviewDashboard() {
             <CardSub>Move money between your connected accounts.</CardSub>
           </div>
           <Button variant='ghost' size='icon-sm' aria-label='Close transfer'>
-            <X />
+            <XIcon />
           </Button>
         </div>
         <label className='flex flex-col gap-1.5 text-sm'>
           <span className='font-medium'>Amount to Transfer</span>
-          <Input
-            defaultValue='1,200.00'
-            aria-label='Amount to transfer'
-            startAdornment={<span>$</span>}
-          />
+          <Input defaultValue='1,200.00' aria-label='Amount to transfer' startAdornment={<span>$</span>} />
         </label>
         <MiniSelect
           label='From Account'
@@ -1043,7 +1054,7 @@ export function OverviewDashboard() {
             <CardSub>Quarterly dividend payouts across your portfolio holdings.</CardSub>
           </div>
           <Button variant='ghost' size='icon-sm' aria-label='Close dividends'>
-            <X />
+            <XIcon />
           </Button>
         </div>
         {[

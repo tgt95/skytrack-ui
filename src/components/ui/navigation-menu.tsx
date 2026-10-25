@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { NavigationMenu as BaseNavigationMenu } from '@base-ui/react/navigation-menu'
-import { CaretDown } from '@phosphor-icons/react'
+import { CaretDownIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
 
@@ -38,24 +38,11 @@ function NavigationMenuItem({ className, ...props }: React.ComponentProps<typeof
   )
 }
 
-function NavigationMenuTrigger({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof BaseNavigationMenu.Trigger>) {
+function NavigationMenuTrigger({ className, children, ...props }: React.ComponentProps<typeof BaseNavigationMenu.Trigger>) {
   return (
     <BaseNavigationMenu.Trigger
       data-slot='navigation-menu-trigger'
-      className={cn(
-        'group inline-flex h-9 cursor-pointer items-center justify-center gap-1 rounded-md bg-transparent px-3 text-sm font-medium text-foreground no-underline select-none transition-colors',
-        'hover:bg-accent hover:text-accent-foreground',
-        'data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
-        'data-[orientation=vertical]:w-full data-[orientation=vertical]:justify-between',
-        'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        focusRing,
-        className as string
-      )}
+      className={className}
       {...props}
     >
       {children}
@@ -74,7 +61,7 @@ function NavigationMenuIcon({ className, children, ...props }: React.ComponentPr
       )}
       {...props}
     >
-      {children ?? <CaretDown />}
+      {children ?? <CaretDownIcon />}
     </BaseNavigationMenu.Icon>
   )
 }

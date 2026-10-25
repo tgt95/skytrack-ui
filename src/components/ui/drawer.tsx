@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
-/** Shared variant/size props for `DrawerTrigger` and `DrawerClose`. */
+/** Variant and size props for `DrawerClose`. */
 export type DrawerButtonProps = VariantProps<typeof buttonVariants>
 
 /**
@@ -83,14 +83,12 @@ export type DrawerSideProps = VariantProps<typeof drawerSideVariants>
 
 function DrawerTrigger({
   className,
-  variant,
-  size,
   ...props
-}: React.ComponentProps<typeof BaseDrawer.Trigger> & DrawerButtonProps) {
+}: React.ComponentProps<typeof BaseDrawer.Trigger>) {
   return (
     <BaseDrawer.Trigger
       data-slot='drawer-trigger'
-      className={cn(buttonVariants({ variant: variant ?? 'outline', size }), className as string)}
+      className={className}
       {...props}
     />
   )
@@ -123,7 +121,7 @@ function DrawerBackdrop({ className, ...props }: React.ComponentProps<typeof Bas
     <BaseDrawer.Backdrop
       data-slot='drawer-backdrop'
       className={cn(
-        'fixed inset-0 min-h-dvh bg-black/20 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]',
+        'fixed inset-0 min-h-dvh bg-black/70 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]',
         'supports-[-webkit-touch-callout:none]:absolute',
         'data-[swiping]:duration-0',
         'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',

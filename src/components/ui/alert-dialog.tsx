@@ -4,7 +4,7 @@ import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
-/** Shared variant/size props for `AlertDialogTrigger` and `AlertDialogClose`. */
+/** Variant and size props for `AlertDialogClose`. */
 export type AlertDialogButtonProps = VariantProps<typeof buttonVariants>
 
 /**
@@ -22,14 +22,12 @@ type AlertDialogChangeEventDetails = Parameters<
 
 function AlertDialogTrigger({
   className,
-  variant,
-  size,
   ...props
-}: React.ComponentProps<typeof BaseAlertDialog.Trigger> & AlertDialogButtonProps) {
+}: React.ComponentProps<typeof BaseAlertDialog.Trigger>) {
   return (
     <BaseAlertDialog.Trigger
       data-slot='alert-dialog-trigger'
-      className={cn(buttonVariants({ variant: variant ?? 'outline', size }), className as string)}
+      className={className}
       {...props}
     />
   )

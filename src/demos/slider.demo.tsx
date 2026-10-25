@@ -205,7 +205,7 @@ export const demo: DemoMeta = {
           </Slider>
           <Slider defaultValue={25} thumbAlignment='center'>
             <div className='flex items-center justify-between'>
-              <SliderLabel>Center aligned (default)</SliderLabel>
+              <SliderLabel>Center aligned</SliderLabel>
               <SliderValue />
             </div>
             <SliderControl>

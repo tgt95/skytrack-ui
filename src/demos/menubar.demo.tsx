@@ -1,4 +1,4 @@
-import { Check, PencilSimple, Trash } from '@phosphor-icons/react'
+import { CheckIcon, PencilSimpleIcon, TrashIcon } from '@phosphor-icons/react'
 import { Menubar } from '@/components/ui/menubar'
 import {
   Menu,
@@ -137,7 +137,7 @@ function MenubarWithSubmenu() {
               </MenuSubmenuRoot>
               <MenuSeparator />
               <MenuItem variant='destructive'>
-                <Trash /> Delete
+                <TrashIcon /> Delete
               </MenuItem>
             </MenuPopup>
           </MenuPositioner>
@@ -150,13 +150,13 @@ function MenubarWithSubmenu() {
           <MenuPositioner side='bottom' align='start' sideOffset={4}>
             <MenuPopup>
               <MenuItem>
-                <PencilSimple /> Rename
+                <PencilSimpleIcon /> Rename
                 <MenuShortcut>F2</MenuShortcut>
               </MenuItem>
               <MenuSeparator />
               <MenuItem disabled>Duplicate</MenuItem>
               <MenuItem>
-                <Check /> Select all
+                <CheckIcon /> Select all
                 <MenuShortcut>⌘A</MenuShortcut>
               </MenuItem>
             </MenuPopup>

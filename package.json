@@ -26,6 +26,11 @@
       "import": "./dist-lib/accordion.js",
       "default": "./dist-lib/accordion.js"
     },
+    "./alert": {
+      "types": "./dist-lib/components/ui/alert.d.ts",
+      "import": "./dist-lib/alert.js",
+      "default": "./dist-lib/alert.js"
+    },
     "./alert-dialog": {
       "types": "./dist-lib/components/ui/alert-dialog.d.ts",
       "import": "./dist-lib/alert-dialog.js",
@@ -45,6 +50,11 @@
       "types": "./dist-lib/components/ui/badge.d.ts",
       "import": "./dist-lib/badge.js",
       "default": "./dist-lib/badge.js"
+    },
+    "./breadcrumb": {
+      "types": "./dist-lib/components/ui/breadcrumb.d.ts",
+      "import": "./dist-lib/breadcrumb.js",
+      "default": "./dist-lib/breadcrumb.js"
     },
     "./button": {
       "types": "./dist-lib/components/ui/button.d.ts",
@@ -85,6 +95,11 @@
       "types": "./dist-lib/components/ui/drawer.d.ts",
       "import": "./dist-lib/drawer.js",
       "default": "./dist-lib/drawer.js"
+    },
+    "./dropzone": {
+      "types": "./dist-lib/components/ui/dropzone.d.ts",
+      "import": "./dist-lib/dropzone.js",
+      "default": "./dist-lib/dropzone.js"
     },
     "./field": {
       "types": "./dist-lib/components/ui/field.d.ts",
@@ -249,6 +264,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@fontsource-variable/host-grotesk": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@storybook/addon-a11y": "^10.6.1",

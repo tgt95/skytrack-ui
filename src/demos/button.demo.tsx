@@ -1,5 +1,5 @@
 import { useId, useState } from 'react'
-import { ArrowRight, CircleNotch, Plus, Trash } from '@phosphor-icons/react'
+import { ArrowRightIcon, CircleNotchIcon, PlusIcon, TrashIcon } from '@phosphor-icons/react'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { DemoMeta } from '@/showcase/demo'
@@ -21,7 +21,7 @@ function LoadingButton() {
         setTimeout(() => setLoading(false), 1500)
       }}
     >
-      {loading && <CircleNotch className='animate-spin' />}
+      {loading && <CircleNotchIcon className='animate-spin' />}
       <span id={labelId}>{loading ? 'Submitting' : 'Submit'}</span>
     </Button>
   )
@@ -76,16 +76,16 @@ export const demo: DemoMeta = {
           <Button>Default · 36px</Button>
           <Button size='lg'>LG · 40px</Button>
           <Button size='icon-xs' variant='outline' aria-label='Icon XS · 24px'>
-            <Plus />
+            <PlusIcon />
           </Button>
           <Button size='icon-sm' variant='outline' aria-label='Icon SM · 32px'>
-            <Plus />
+            <PlusIcon />
           </Button>
           <Button size='icon' variant='outline' aria-label='Icon · 36px'>
-            <Plus />
+            <PlusIcon />
           </Button>
           <Button size='icon-lg' variant='outline' aria-label='Icon LG · 40px'>
-            <Plus />
+            <PlusIcon />
           </Button>
         </>
       )
@@ -95,10 +95,10 @@ export const demo: DemoMeta = {
       render: () => (
         <>
           <Button>
-            Continue <ArrowRight />
+            Continue <ArrowRightIcon />
           </Button>
           <Button variant='destructive'>
-            <Trash /> Delete
+            <TrashIcon /> Delete
           </Button>
         </>
       )

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Check, CircleNotch, Plus } from '@phosphor-icons/react'
+import { CheckIcon, CircleNotchIcon, PlusIcon } from '@phosphor-icons/react'
 import {
   Combobox,
   ComboboxArrow,
@@ -102,7 +102,7 @@ function FruitCombobox() {
               {(item: Fruit) => (
                 <ComboboxItem key={item.value} value={item}>
                   <ComboboxItemIndicator>
-                    <Check className='size-4' />
+                    <CheckIcon className='size-4' />
                   </ComboboxItemIndicator>
                   <span className='col-start-2'>{item.label}</span>
                 </ComboboxItem>
@@ -161,7 +161,7 @@ function TypedWrapperCombobox() {
               {(country: Country) => (
                 <ComboboxItem key={country.code} value={country.value}>
                   <ComboboxItemIndicator>
-                    <Check className='size-4' />
+                    <CheckIcon className='size-4' />
                   </ComboboxItemIndicator>
                   <span className='col-start-2'>{country.label}</span>
                 </ComboboxItem>
@@ -257,7 +257,7 @@ function IdValueCombobox() {
               {(user: DirectoryUser) => (
                 <ComboboxItem key={user.id} value={user.id}>
                   <ComboboxItemIndicator>
-                    <Check className='size-4' />
+                    <CheckIcon className='size-4' />
                   </ComboboxItemIndicator>
                   <span className='col-start-2 flex flex-col'>
                     <span className='font-medium'>{user.name}</span>
@@ -327,7 +327,7 @@ function MultipleCombobox() {
               {(language: ProgrammingLanguage) => (
                 <ComboboxItem key={language.id} value={language}>
                   <ComboboxItemIndicator>
-                    <Check className='size-4' />
+                    <CheckIcon className='size-4' />
                   </ComboboxItemIndicator>
                   <span className='col-start-2'>{language.value}</span>
                 </ComboboxItem>
@@ -363,7 +363,7 @@ function PopupInputCombobox() {
                 {(country: Country) => (
                   <ComboboxItem key={country.code} value={country}>
                     <ComboboxItemIndicator>
-                      <Check className='size-4' />
+                      <CheckIcon className='size-4' />
                     </ComboboxItemIndicator>
                     <span className='col-start-2'>{country.label}</span>
                   </ComboboxItem>
@@ -436,7 +436,7 @@ function GroupedCombobox() {
                     {(item: Produce) => (
                       <ComboboxItem key={item.id} value={item}>
                         <ComboboxItemIndicator>
-                          <Check className='size-4' />
+                          <CheckIcon className='size-4' />
                         </ComboboxItemIndicator>
                         <span className='col-start-2'>{item.label}</span>
                       </ComboboxItem>
@@ -498,7 +498,7 @@ function AsyncSingleCombobox() {
   if (isPending) {
     status = (
       <>
-        <CircleNotch className='size-3 animate-spin' />
+        <CircleNotchIcon className='size-3 animate-spin' />
         Searching…
       </>
     )
@@ -582,7 +582,7 @@ function AsyncSingleCombobox() {
               {(user: DirectoryUser) => (
                 <ComboboxItem key={user.id} value={user} className='items-start'>
                   <ComboboxItemIndicator className='mt-1'>
-                    <Check className='size-4' />
+                    <CheckIcon className='size-4' />
                   </ComboboxItemIndicator>
                   <span className='col-start-2 flex flex-col'>
                     <span className='font-medium'>{user.name}</span>
@@ -635,7 +635,7 @@ function AsyncMultipleCombobox() {
   if (isPending) {
     status = (
       <>
-        <CircleNotch className='size-3 animate-spin' />
+        <CircleNotchIcon className='size-3 animate-spin' />
         Searching…
       </>
     )
@@ -732,7 +732,7 @@ function AsyncMultipleCombobox() {
               {(user: DirectoryUser) => (
                 <ComboboxItem key={user.id} value={user} className='items-start'>
                   <ComboboxItemIndicator className='mt-1'>
-                    <Check className='size-4' />
+                    <CheckIcon className='size-4' />
                   </ComboboxItemIndicator>
                   <span className='col-start-2 flex flex-col'>
                     <span className='font-medium'>{user.name}</span>
@@ -889,14 +889,14 @@ function CreatableCombobox() {
                       }}
                     >
                       <span className='col-start-1 flex items-center justify-center'>
-                        <Plus className='size-4' />
+                        <PlusIcon className='size-4' />
                       </span>
                       <span className='col-start-2'>Create "{item.creatable}"</span>
                     </ComboboxItem>
                   ) : (
                     <ComboboxItem key={item.id} value={item}>
                       <ComboboxItemIndicator>
-                        <Check className='size-4' />
+                        <CheckIcon className='size-4' />
                       </ComboboxItemIndicator>
                       <span className='col-start-2'>{item.value}</span>
                     </ComboboxItem>
@@ -1041,7 +1041,7 @@ function VirtualizedList() {
               }}
             >
               <ComboboxItemIndicator>
-                <Check className='size-4' />
+                <CheckIcon className='size-4' />
               </ComboboxItemIndicator>
               <span className='col-start-2'>{item.name}</span>
             </ComboboxItem>

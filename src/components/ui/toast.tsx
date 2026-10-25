@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Toast as BaseToast } from '@base-ui/react/toast'
-import { X } from '@phosphor-icons/react'
+import { XIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
@@ -130,7 +130,7 @@ function ToastClose({ className, size, variant, children, ...props }: ToastClose
       className={cn(toastCloseVariants({ size, variant }), className as string)}
       {...props}
     >
-      {children ?? <X className='size-4' />}
+      {children ?? <XIcon className='size-4' />}
     </BaseToast.Close>
   )
 }

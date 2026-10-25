@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Checkbox } from '@base-ui/react/checkbox'
-import { Check, Minus } from '@phosphor-icons/react'
+import { CheckIcon, MinusIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
 
@@ -21,8 +21,8 @@ function CheckboxRoot({ className, children, ...props }: React.ComponentProps<ty
     >
       {children ?? (
         <CheckboxIndicator>
-          <Check className='hidden size-3 group-data-[checked]/indicator:block' weight='bold' />
-          <Minus className='hidden size-3 group-data-[indeterminate]/indicator:block' weight='bold' />
+          <CheckIcon className='hidden size-3 group-data-[checked]/indicator:block' weight='bold' />
+          <MinusIcon className='hidden size-3 group-data-[indeterminate]/indicator:block' weight='bold' />
         </CheckboxIndicator>
       )}
     </Checkbox.Root>

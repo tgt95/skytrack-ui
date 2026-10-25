@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {
-  TextAlignLeft,
-  TextAlignRight,
-  TextB,
-  TextItalic,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+  TextBIcon,
+  TextItalicIcon,
   CursorIcon,
   PathIcon,
   ArrowUUpLeftIcon,
@@ -44,10 +44,10 @@ function DefaultToolbar() {
     <Toolbar className='w-full max-w-2xl'>
       <ToggleGroup value={alignment} onValueChange={setAlignment} aria-label='Alignment' className='border-0 p-0'>
         <ToolbarButton render={<Toggle />} value='align-left' aria-label='Align left'>
-          <TextAlignLeft />
+          <TextAlignLeftIcon />
         </ToolbarButton>
         <ToolbarButton render={<Toggle />} value='align-right' aria-label='Align right'>
-          <TextAlignRight />
+          <TextAlignRightIcon />
         </ToolbarButton>
       </ToggleGroup>
 
@@ -153,7 +153,7 @@ function ToolbarWithTooltip() {
       <Toolbar>
         <Tooltip>
           <TooltipTrigger render={<ToolbarButton />} aria-label='Align left'>
-            <TextAlignLeft />
+            <TextAlignLeftIcon />
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipPositioner sideOffset={8}>
@@ -167,7 +167,7 @@ function ToolbarWithTooltip() {
 
         <Tooltip>
           <TooltipTrigger render={<ToolbarButton />} aria-label='Bold'>
-            <TextB />
+            <TextBIcon />
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipPositioner sideOffset={8}>
@@ -183,7 +183,7 @@ function ToolbarWithTooltip() {
 
         <Tooltip>
           <TooltipTrigger render={<ToolbarButton />} aria-label='Italic'>
-            <TextItalic />
+            <TextItalicIcon />
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipPositioner sideOffset={8}>
@@ -231,17 +231,17 @@ function VerticalToolbar() {
   return (
     // <Toolbar orientation="vertical" aria-label="Formatting">
     //   <ToolbarButton aria-label="Align left">
-    //     <TextAlignLeft />
+    //     <TextAlignLeftIcon />
     //   </ToolbarButton>
     //   <ToolbarButton aria-label="Align right">
-    //     <TextAlignRight />
+    //     <TextAlignRightIcon />
     //   </ToolbarButton>
     //   <ToolbarSeparator />
     //   <ToolbarButton aria-label="Bold">
-    //     <TextB />
+    //     <TextBIcon />
     //   </ToolbarButton>
     //   <ToolbarButton aria-label="Italic">
-    //     <TextItalic />
+    //     <TextItalicIcon />
     //   </ToolbarButton>
     // </Toolbar>
     <Toolbar orientation='vertical'>

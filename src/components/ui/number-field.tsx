@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { NumberField as BaseNumberField } from '@base-ui/react/number-field'
-import { CaretLeft, CaretRight } from '@phosphor-icons/react'
+import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
 
@@ -68,7 +68,7 @@ function NumberFieldDecrement({
       className={cn(stepperClasses, 'border-e-0', className as string)}
       {...props}
     >
-      {children ?? <CaretLeft />}
+      {children ?? <CaretLeftIcon />}
     </BaseNumberField.Decrement>
   )
 }
@@ -84,7 +84,7 @@ function NumberFieldIncrement({
       className={cn(stepperClasses, 'border-s-0', className as string)}
       {...props}
     >
-      {children ?? <CaretRight />}
+      {children ?? <CaretRightIcon />}
     </BaseNumberField.Increment>
   )
 }

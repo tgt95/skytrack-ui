@@ -1,4 +1,4 @@
-import { CaretRight } from '@phosphor-icons/react'
+import { CaretRightIcon } from '@phosphor-icons/react'
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@/components/ui/collapsible'
 import type { DemoMeta } from '@/showcase/demo'
 
@@ -14,7 +14,7 @@ export const demo: DemoMeta = {
         <Collapsible className='min-h-36'>
           <CollapsibleTrigger>
             Recovery keys
-            <CaretRight className='transition-transform duration-100 ease-out group-data-[panel-open]:rotate-90' />
+            <CaretRightIcon className='transition-transform duration-100 ease-out group-data-[panel-open]:rotate-90' />
           </CollapsibleTrigger>
           <CollapsiblePanel>
             <div className='flex flex-col gap-2 border border-t-0 border-border px-3.5 py-2'>
@@ -32,7 +32,7 @@ export const demo: DemoMeta = {
         <Collapsible>
           <CollapsibleTrigger>
             Shipping details
-            <CaretRight className='transition-transform duration-100 ease-out group-data-[panel-open]:rotate-90' />
+            <CaretRightIcon className='transition-transform duration-100 ease-out group-data-[panel-open]:rotate-90' />
           </CollapsibleTrigger>
           <CollapsiblePanel hiddenUntilFound>
             <div className='border border-t-0 border-border px-3.5 py-2'>

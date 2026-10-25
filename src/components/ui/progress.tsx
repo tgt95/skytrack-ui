@@ -6,7 +6,7 @@ function Progress({ className, ...props }: React.ComponentProps<typeof BaseProgr
   return (
     <BaseProgress.Root
       data-slot='progress'
-      className={cn('grid w-60 max-w-full grid-cols-2 gap-y-2', className as string)}
+      className={cn('grid max-w-full grid-cols-2 gap-y-2', className as string)}
       {...props}
     />
   )

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Bell } from '@phosphor-icons/react'
+import { BellIcon } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui/badge'
 import type { DemoMeta } from '@/showcase/demo'
 
@@ -18,7 +18,7 @@ export const demo: DemoMeta = {
       name: 'Basic',
       render: () => (
         <Badge count={5} status='error'>
-          <Bell size={24} />
+          <BellIcon size={24} />
         </Badge>
       )
     },
@@ -26,7 +26,7 @@ export const demo: DemoMeta = {
       name: 'Overflow',
       render: () => (
         <Badge count={100} status='error'>
-          <Bell size={24} />
+          <BellIcon size={24} />
         </Badge>
       )
     },
@@ -34,7 +34,7 @@ export const demo: DemoMeta = {
       name: 'Dot',
       render: () => (
         <Badge dot status='error'>
-          <Bell size={24} />
+          <BellIcon size={24} />
         </Badge>
       )
     },
@@ -43,10 +43,10 @@ export const demo: DemoMeta = {
       render: () => (
         <>
           <Badge count={0}  status='error' showZero>
-            <Bell size={24} />
+            <BellIcon size={24} />
           </Badge>
           <Badge count={0} status='error'>
-            <Bell size={24} />
+            <BellIcon size={24} />
           </Badge>
         </>
       )
@@ -57,27 +57,27 @@ export const demo: DemoMeta = {
         <>
           <Badge count={9} status='success'>
             <Box>
-              <Bell size={20} />
+              <BellIcon size={20} />
             </Box>
           </Badge>
           <Badge count={9} status='processing'>
             <Box>
-              <Bell size={20} />
+              <BellIcon size={20} />
             </Box>
           </Badge>
           <Badge count={91} status='outline'>
             <Box>
-              <Bell size={20} />
+              <BellIcon size={20} />
             </Box>
           </Badge>
           <Badge count={9} status='error'>
             <Box>
-              <Bell size={20} />
+              <BellIcon size={20} />
             </Box>
           </Badge>
           <Badge count={9} status='warning'>
             <Box>
-              <Bell size={20} />
+              <BellIcon size={20} />
             </Box>
           </Badge>
         </>
@@ -98,10 +98,10 @@ export const demo: DemoMeta = {
       render: () => (
         <>
           <Badge count={9} size='sm'>
-            <Bell size={20} />
+            <BellIcon size={20} />
           </Badge>
           <Badge count={9}>
-            <Bell size={20} />
+            <BellIcon size={20} />
           </Badge>
         </>
       )

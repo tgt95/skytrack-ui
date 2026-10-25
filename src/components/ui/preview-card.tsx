@@ -1,14 +1,9 @@
 import * as React from 'react'
 import { PreviewCard as BasePreviewCard } from '@base-ui/react/preview-card'
-import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
 
-/**
- * `PreviewCardTrigger` is an inline link in the docs, so it defaults to the
- * `link` button variant while still accepting the shared variant/size props.
- */
-export type PreviewCardTriggerProps = VariantProps<typeof buttonVariants>
+/** Native Base UI props for `PreviewCardTrigger`; styling comes from the call site. */
+export type PreviewCardTriggerProps = React.ComponentProps<typeof BasePreviewCard.Trigger>
 
 /**
  * Preview Card — a link that shows a destination preview on hover or focus.
@@ -23,20 +18,11 @@ type PreviewCardChangeEventDetails = Parameters<
   NonNullable<React.ComponentProps<typeof BasePreviewCard.Root>['onOpenChange']>
 >[1]
 
-function PreviewCardTrigger({
-  className,
-  variant,
-  size,
-  ...props
-}: React.ComponentProps<typeof BasePreviewCard.Trigger> & PreviewCardTriggerProps) {
+function PreviewCardTrigger({ className, ...props }: React.ComponentProps<typeof BasePreviewCard.Trigger>) {
   return (
     <BasePreviewCard.Trigger
       data-slot='preview-card-trigger'
-      className={cn(
-        buttonVariants({ variant: variant ?? 'link', size }),
-        size == null && 'h-auto w-auto justify-start rounded-sm p-0 decoration-1 hover:no-underline',
-        className as string
-      )}
+      className={className}
       {...props}
     />
   )

@@ -1,33 +1,57 @@
 import {
-  ArrowsClockwise,
-  ArrowsOut,
-  Briefcase,
-  CalendarBlank,
-  CaretDown,
-  CaretRight,
-  CaretUp,
-  Check,
-  CheckCircle,
-  CloudArrowUp,
-  Copy,
-  DotsThree,
-  Gauge,
-  Gear,
-  Info,
-  MagnifyingGlass,
-  Minus,
-  Plus,
-  Repeat,
-  Sun,
-  Trash,
-  ArrowLeft,
-  ArrowRight,
-  LockKey,
-  SpeakerHigh,
-  Thermometer,
-  Timer,
-  WarningCircle,
-  X
+  ArrowsClockwiseIcon,
+  ArrowsOutIcon,
+  AirplaneIcon,
+  AirTrafficControlIcon,
+  BatteryChargingIcon,
+  BellIcon,
+  BellRingingIcon,
+  BriefcaseIcon,
+  CameraIcon,
+  CalendarBlankIcon,
+  ChartLineUpIcon,
+  CaretDownIcon,
+  CaretRightIcon,
+  CheckIcon,
+  CheckCircleIcon,
+  CloudArrowUpIcon,
+  CompassIcon,
+  CrosshairIcon,
+  CopyIcon,
+  DatabaseIcon,
+  DotsThreeIcon,
+  DroneIcon,
+  EyeIcon,
+  GaugeIcon,
+  GearIcon,
+  GearSixIcon,
+  GlobeHemisphereWestIcon,
+  InfoIcon,
+  MapPinIcon,
+  MapTrifoldIcon,
+  MagnifyingGlassIcon,
+  MinusIcon,
+  NavigationArrowIcon,
+  PathIcon,
+  PlusIcon,
+  RadioIcon,
+  RepeatIcon,
+  RocketIcon,
+  SlidersHorizontalIcon,
+  SunIcon,
+  TrashIcon,
+  VideoCameraIcon,
+  WifiHighIcon,
+  WindIcon,
+  WrenchIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  LockKeyIcon,
+  SpeakerHighIcon,
+  ThermometerIcon,
+  TimerIcon,
+  WarningCircleIcon,
+  XIcon
 } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -74,22 +98,30 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { Tabs, TabsIndicator, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs'
-import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, AccordionTrigger } from '@/components/ui/accordion'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ToggleGroup } from '@/components/ui/toggle-group'
 import { Toggle } from '@/components/ui/toggle'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
+import { Menu, MenuItem, MenuPortal, MenuPopup, MenuPositioner, MenuSeparator, MenuTrigger } from '@/components/ui/menu'
+import { AccountFaqAccordion } from './accordion-faq'
+import miniProA8miniSvg from './images/MiniPro_A8mini_blueprint_static.svg?raw'
 
-function Card({ children }: { children: React.ReactNode }) {
-  return <div className='flex flex-col gap-4 border border-border bg-card p-6 text-card-foreground'>{children}</div>
+const miniProA8mini = miniProA8miniSvg
+
+function Card ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`flex flex-col gap-4 border border-border bg-card p-6 text-card-foreground ${className}`}>
+      {children}
+    </div>
+  )
 }
 
-function CardTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className='text-lg font-semibold tracking-tight'>{children}</h3>
+function CardTitle ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return <h5 className={`h5 heading ${className}`}>{children}</h5>
 }
 
-function CardSub({ children }: { children: React.ReactNode }) {
+function CardSub ({ children }: { children: React.ReactNode }) {
   return <p className='text-sm text-muted-foreground'>{children}</p>
 }
 
@@ -113,9 +145,9 @@ const TOKEN_SWATCHES: { token: string; label: string }[] = [
   { token: '--chart-5', label: '--chart-5' }
 ]
 
-function TokenSwatches() {
+function TokenSwatches () {
   return (
-    <div className='grid grid-cols-6 gap-3'>
+    <div className='grid grid-cols-4 gap-3'>
       {TOKEN_SWATCHES.map((s) => (
         <div key={s.token} className='flex flex-col gap-1.5'>
           <div className='aspect-square w-full border border-border' style={{ backgroundColor: `var(${s.token})` }} />
@@ -127,25 +159,50 @@ function TokenSwatches() {
 }
 
 const ICON_BUTTONS = [
-  Copy,
-  Info,
-  Trash,
-  ArrowsOut,
-  Briefcase,
-  DotsThree,
-  Sun,
-  Plus,
-  Minus,
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  CaretDown,
-  CaretRight,
-  MagnifyingGlass,
-  Gear
+  CopyIcon,
+  InfoIcon,
+  TrashIcon,
+  ArrowsOutIcon,
+  BriefcaseIcon,
+  DotsThreeIcon,
+  SunIcon,
+  PlusIcon,
+  MinusIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CheckIcon,
+  CaretDownIcon,
+  CaretRightIcon,
+  MagnifyingGlassIcon,
+  GearIcon,
+  AirplaneIcon,
+  AirTrafficControlIcon,
+  BatteryChargingIcon,
+  BellIcon,
+  BellRingingIcon,
+  CameraIcon,
+  ChartLineUpIcon,
+  CompassIcon,
+  CrosshairIcon,
+  DatabaseIcon,
+  DroneIcon,
+  EyeIcon,
+  GearSixIcon,
+  GlobeHemisphereWestIcon,
+  MapPinIcon,
+  MapTrifoldIcon,
+  NavigationArrowIcon,
+  PathIcon,
+  RadioIcon,
+  RocketIcon,
+  SlidersHorizontalIcon,
+  VideoCameraIcon,
+  WifiHighIcon,
+  WindIcon,
+  WrenchIcon
 ]
 
-function IconButtonGrid() {
+function IconButtonGrid () {
   return (
     <div className='flex flex-wrap gap-2'>
       {ICON_BUTTONS.map((Icon, i) => (
@@ -166,14 +223,14 @@ const TRAFFIC: { month: string; desktop: number; mobile: number }[] = [
   { month: 'Jun', desktop: 58, mobile: 52 }
 ]
 
-function TrafficChart() {
+function TrafficChart () {
   return (
     <div>
       <div className='flex h-44 items-end justify-between gap-3'>
         {TRAFFIC.map((t) => (
           <div key={t.month} className='flex h-full flex-1 items-end justify-center gap-1.5'>
-            <div className='w-full rounded-t-sm bg-chart-1' style={{ height: `${t.desktop}%` }} />
-            <div className='w-full rounded-t-sm bg-chart-3' style={{ height: `${t.mobile}%` }} />
+            <div className='w-full bg-chart-1' style={{ height: `${t.desktop}%` }} />
+            <div className='w-full bg-chart-3' style={{ height: `${t.mobile}%` }} />
           </div>
         ))}
       </div>
@@ -186,17 +243,17 @@ function TrafficChart() {
       </div>
       <div className='mt-3 flex items-center justify-center gap-4 text-xs text-muted-foreground'>
         <span className='flex items-center gap-1.5'>
-          <span className='size-2.5 rounded-[2px] bg-chart-1' /> Desktop
+          <span className='size-2.5 bg-chart-1' /> Desktop
         </span>
         <span className='flex items-center gap-1.5'>
-          <span className='size-2.5 rounded-[2px] bg-chart-3' /> Mobile
+          <span className='size-2.5 bg-chart-3' /> Mobile
         </span>
       </div>
     </div>
   )
 }
 
-function MiniSelect({
+function MiniSelect ({
   label,
   items,
   defaultValue
@@ -230,15 +287,16 @@ function MiniSelect({
   )
 }
 
-function Kbd({ children }: { children: React.ReactNode }) {
+function Kbd ({ children }: { children: React.ReactNode }) {
   return (
-    <kbd className='pointer-events-none inline-flex min-w-6 items-center justify-center border border-border bg-muted px-1.5 py-0.5 text-xs select-none'>
-      {children}
-    </kbd>
+    <Badge className='flex gap-1' status='default' size='sm' count={children} />
+    // <kbd className='pointer-events-none inline-flex min-w-6 items-center justify-center border border-border bg-muted px-1.5 py-0.5 text-xs select-none'>
+    // {children}
+    // </kbd>
   )
 }
 
-function PseudoQr({ size = 148 }: { size?: number }) {
+function PseudoQr ({ size = 148 }: { size?: number }) {
   const N = 21
   const rand: boolean[] = []
   let h = 7
@@ -264,35 +322,415 @@ function PseudoQr({ size = 148 }: { size?: number }) {
     return rand[r * N + c]
   }
   return (
-    <div className='border border-border bg-white p-3' style={{ width: size + 24 }}>
+    <div className='border border-border bg-background p-3' style={{ width: size + 24 }}>
       <div className='grid' style={{ gridTemplateColumns: `repeat(${N}, 1fr)`, width: size, height: size }}>
         {Array.from({ length: N * N }, (_, i) => {
           const r = Math.floor(i / N)
           const c = i % N
-          return <div key={i} className={on(r, c) ? 'bg-black' : 'bg-transparent'} />
+          return <div key={i} className={on(r, c) ? 'bg-foreground' : 'bg-transparent'} />
         })}
       </div>
     </div>
   )
 }
 
-export function OverviewStyle() {
+function BarcodeMark () {
+  return (
+    <div aria-hidden='true' className='flex h-12 items-stretch gap-px overflow-hidden'>
+      {Array.from({ length: 52 }, (_, index) => (
+        <span
+          key={index}
+          className={index % 5 === 1 || index % 7 === 3 ? 'w-1.5 bg-foreground' : 'w-0.5 bg-foreground'}
+        />
+      ))}
+    </div>
+  )
+}
+
+function OperatorProfileCard () {
+  return (
+    <Card className='lg:col-span-2 xl:col-span-1'>
+      <header className='flex items-center justify-between border-b border-border pb-3 text-xs'>
+        <span className='sub-heading text-foreground'>FLIGHT CREW</span>
+        <span className='sub-heading'>PROFILE 01</span>
+      </header>
+      <div className='grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4'>
+        <div className='space-y-3'>
+          <Avatar className='size-32 rounded-(--radius) border-border border bg-muted text-2xl'>
+            <AvatarImage src='/images/lineart-avatar-1.png' />
+          </Avatar>
+          <div className='flex flex-col gap-2'>
+            <div>
+              <h2 className='h2'>Sky-001</h2>
+              <p className='text-xs sub-heading mt-1'>The Terminator</p>
+            </div>
+            <p className='text-sm'>mPlaza, VN</p>
+          </div>
+        </div>
+        <div className='text-center'>
+          <Badge className='mt-3' status='processing' count='ACTIVE NOW' />
+          <div className='text-7xl heading'>04</div>
+          <p className='mt-2 text-xs text-muted-foreground'>Missions today</p>
+        </div>
+      </div>
+      <Separator />
+      <div className='space-y-2'>
+        <p className='text-xs sub-heading'>About</p>
+        <p className='max-w-72 text-sm leading-5'>
+          Mapping coastlines and infrastructure with careful, repeatable flight plans.
+        </p>
+      </div>
+      <div className='flex flex-wrap items-center gap-2'>
+        <Badge status='outline' count='Survey' />
+        <Badge status='outline' count='Mapping' />
+        <Badge status='outline' count='Inspection' />
+      </div>
+      <div className='flex items-center justify-between gap-4 p-3 -mx-2 bg-muted'>
+        <div className='space-y-2'>
+          <div className='flex flex-col gap-1'>
+            <p className='text-xs sub-heading'>Connect crew</p>
+            <p className='text-sm text-foreground'>Scan to open Sky-001&apos;s field card.</p>
+          </div>
+          <Button variant='outline'>View profile</Button>
+        </div>
+        <PseudoQr size={76} />
+      </div>
+      <div className='grid grid-cols-2 divide-x divide-border pt-3'>
+        <div className='pr-4'>
+          <p className='text-xs sub-heading'>Flights</p>
+          <p className='h2 mt-1 tabular-nums'>23</p>
+        </div>
+        <div className='pl-4'>
+          <p className='text-xs sub-heading'>Missions</p>
+          <p className='h2 mt-1 tabular-nums'>07</p>
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+function MissionPassCard () {
+  return (
+    <Card className='lg:col-span-2'>
+      <header className='flex items-start justify-between gap-4 border-b border-border pb-4'>
+        <div>
+          <CardTitle>Mission boarding pass</CardTitle>
+          <CardSub>United Flight · UAV-048</CardSub>
+        </div>
+        <Badge status='success' count='READY' />
+      </header>
+      <div className='grid gap-5 md:grid-cols-[minmax(0,1fr)_12rem]'>
+        <div className='space-y-5'>
+          <div className='grid grid-cols-[1fr_auto_1fr] items-center gap-4'>
+            <div>
+              <p className='text-xs sub-heading'>Launch</p>
+              <p className='h2 mt-2'>H01</p>
+              <p className='text-sm'>Hangar 01</p>
+            </div>
+            <ArrowRightIcon aria-hidden='true' className='size-5 text-muted-foreground' />
+            <div className='text-right'>
+              <p className='text-xs sub-heading'>Survey zone</p>
+              <p className='h2 mt-2'>Z08</p>
+              <p className='text-sm'>Coastal sector</p>
+            </div>
+          </div>
+          <Separator />
+          <div className='grid grid-cols-3 gap-3'>
+            <div>
+              <p className='text-xs sub-heading'>Takeoff</p>
+              <p className='mt-1 h6 tabular-nums'>04:20 PM</p>
+            </div>
+            <div>
+              <p className='text-xs sub-heading'>Return</p>
+              <p className='mt-1 h6 tabular-nums'>06:30 PM</p>
+            </div>
+            <div>
+              <p className='text-xs sub-heading'>Waypoints</p>
+              <p className='mt-1 h6 tabular-nums'>48</p>
+            </div>
+          </div>
+        </div>
+        <aside className='flex flex-col justify-between gap-5 border-t border-border pt-4 md:border-t-0 md:border-l border-dashed md:pt-0 md:pl-5'>
+          <div className='flex justify-between'>
+            <div>
+              <p className='text-xs sub-heading'>Drone</p>
+              <p className='h6 heading'>MiniPro V6</p>
+            </div>
+            <div className='text-right'>
+              <p className='text-xs sub-heading'>Slot</p>
+              <p className='h5 tabular-nums'>10C</p>
+            </div>
+          </div>
+          <div className='space-y-2'>
+            <BarcodeMark />
+            <p className='text-center font-mono text-xs font-medium tracking-widest text-muted-foreground'>
+              UF048 · H01 · Z08
+            </p>
+          </div>
+        </aside>
+      </div>
+    </Card>
+  )
+}
+
+function FieldPosterCard () {
+  return (
+    <Card className='lg:col-span-2 xl:col-span-2 gap-0! p-0!'>
+      <header className='flex items-center justify-between border-b border-border p-6 pb-3 text-xs'>
+        <span className='sub-heading text-foreground'>Unmanned Aerial Vehicle</span>
+        <span className='sub-heading'>Oct 25, 2026</span>
+      </header>
+      <div className='grid gap-0 sm:grid-cols-[minmax(0,1fr)_12rem] min-h-0 h-full'>
+        <div className='flex flex-col justify-between border-r border-border'>
+          <div className='relative p-6 min-h-0 h-full'>
+            <h2 className='text-7xl heading mb-4'>
+              Autonomy for <br /> Every Drone
+            </h2>
+            <p className='text-xs sub-heading'>SkyTrack OS · v1.1.2</p>
+            <div
+              className='absolute z-1 -bottom-5 -right-19 [&_svg]:block [&_svg]:h-auto [&_svg]:w-xl'
+              role='img'
+              aria-label='SkyTrack'
+              dangerouslySetInnerHTML={{ __html: miniProA8mini }}
+            />
+          </div>
+          <div className='relative z-1 flex flex-wrap items-end justify-between gap-4 border-t border-border p-6 bg-card'>
+            <div>
+              <p className='text-xs sub-heading'>Our goal</p>
+              <p className='h4 mt-1'>An operating system for autonomous missions </p>
+            </div>
+          </div>
+        </div>
+        <div className='relative z-0 flex flex-col min-h-0 h-full bg-size-[5px_5px] bg-[linear-gradient(45deg,var(--border)_12.50%,transparent_12.50%,transparent_50%,var(--border)_50%,var(--border)_62.50%,transparent_62.50%,transparent_100%)]'>
+          <div className='flex w-full flex-col justify-between bg-primary p-4 py-6 text-center text-primary-foreground'>
+            <p className='text-xs sub-heading text-primary-foreground'>Mini Pro</p>
+            <p className='text-8xl heading tabular-nums pb-2'>A8</p>
+            <div className='flex items-center justify-between border-t border-primary-foreground/30 pt-2 text-sm'>
+              <span className='w-full text-center'>Quadcopter</span>
+              {/* <Badge status='secondary' count='Verified' /> */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+function SwissMissionCard () {
+  return (
+    <Card className='lg:col-span-2 p-0! gap-0!'>
+      <header className='flex items-start justify-between gap-4 p-6'>
+        <div>
+          <p className='text-xs sub-heading'>Mission studio</p>
+          <h2 className='h1 mt-2'>Plan with clarity</h2>
+        </div>
+        <Badge status='processing' count='DESIGN PRINCIPLE' />
+      </header>
+      <div className='grid grid-cols-1 border-y border-border sm:grid-cols-3'>
+        <div className='flex flex-col gap-8 justify-between bg-primary p-6 text-primary-foreground'>
+          <div className='flex flex-col gap-4'>
+            <span className='text-xs sub-heading text-primary-foreground'>01. Grid</span>
+            <p className='text-7xl heading tabular-nums'>03</p>
+          </div>
+          <span className='text-sm mt-auto'>
+            A clear route, <br /> at a glance.
+          </span>
+        </div>
+        <div className='flex flex-col gap-8 justify-between border-border p-6'>
+          <div className='flex flex-col gap-4'>
+            <span className='text-xs sub-heading text-muted-foreground'>02. Type</span>
+            <p className='h3'>Form follows function.</p>
+          </div>
+          <p className='text-sm text-muted-foreground  mt-auto'>
+            Every label <br /> gives the crew one useful signal.
+          </p>
+        </div>
+        <div className='flex flex-col gap-8 justify-between border-border p-6 sm:border-l'>
+          <div className='flex flex-col gap-4'>
+            <span className='text-xs sub-heading text-muted-foreground'>03. Accuracy</span>
+            <div className='grid w-fit grid-cols-7 gap-2' aria-hidden='true'>
+              {Array.from({ length: 49 }, (_, index) => (
+                <span key={index} className={index % 4 === 0 ? 'size-1.5 bg-primary' : 'size-1.5 bg-border'} />
+              ))}
+            </div>
+          </div>
+          <p className='text-sm text-muted-foreground  mt-auto'>
+            A precise grid <br /> keeps decisions legible.
+          </p>
+        </div>
+      </div>
+      {/* <footer className='flex flex-wrap items-center justify-between gap-3'>
+        <p className='max-w-lg text-sm text-muted-foreground'>
+          Mission details stay structured, so operators can focus on the airspace.
+        </p>
+        <Button variant='outline' size='sm'>
+          View mission guide
+        </Button>
+      </footer> */}
+    </Card>
+  )
+}
+
+export function OverviewStyle () {
   return (
     <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3'>
       {/* Typography + tokens */}
-      <Card>
+      {/* <Card>
         <div>
-          <CardTitle>Nova - IBM Plex Sans</CardTitle>
+          <CardTitle>Host Grotesk, IBM Plex Sans</CardTitle>
           <CardSub>
             Designers love packing quirky glyphs into test phrases. This is a preview of the typography…
           </CardSub>
         </div>
         <TokenSwatches />
+      </Card> */}
+
+      <OperatorProfileCard />
+      <FieldPosterCard />
+      <MissionPassCard />
+
+      {/* Type rhythm */}
+      <Card className='lg:col-span-1 lg:row-span-2'>
+        <p className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>Inherit - IBM Plex Sans</p>
+        <h2 className='h1'>
+          Designing <br /> with rhythm and hierarchy
+        </h2>
+        <Separator className='my-3' />
+        <div className='grid gap-3'>
+          <h1 className='h1'>Heading 1</h1>
+          <h2 className='h2'>Heading 2</h2>
+          <h3 className='h3'>Heading 3</h3>
+          <h4 className='h4'>Heading 4</h4>
+          <h5 className='h5'>Heading 5</h5>
+          <h6 className='h6'>Heading 6</h6>
+        </div>
+        <div className='flex flex-col gap-0.5'>
+          <p className='text-sm leading-6 text-muted-foreground'>
+            A strong body style keeps long-form content readable and balances the visual weight of headings.
+          </p>
+          <p className='text-sm leading-6 text-muted-foreground'>
+            Thoughtful spacing and cadence help paragraphs scan quickly without feeling dense.
+          </p>
+        </div>
       </Card>
+
+      <SwissMissionCard />
 
       {/* Icon buttons */}
       <Card>
         <IconButtonGrid />
+      </Card>
+
+      {/* Controls kitchen-sink */}
+      <Card className='lg:col-span-2'>
+        <div className='flex items-center justify-between border border-border p-4'>
+          <div>
+            <div className='text-sm font-medium'>Two-factor authentication</div>
+            <div className='text-sm text-muted-foreground'>Verify via email or phone number.</div>
+          </div>
+          <Button variant='secondary' size='sm'>
+            Enable
+          </Button>
+        </div>
+        <Slider defaultValue={62}>
+          <SliderControl>
+            <SliderTrack>
+              <SliderIndicator />
+              <SliderThumb aria-label='Sample value' />
+            </SliderTrack>
+          </SliderControl>
+        </Slider>
+        <Input placeholder='Name' startAdornment={<MagnifyingGlassIcon aria-hidden='true' />} />
+        <textarea
+          placeholder='Message'
+          rows={3}
+          className='w-full resize-y border border-input bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50'
+        />
+        <div className='flex flex-wrap items-center gap-2 text-xs font-semibold'>
+          <Badge status='processing' count='Badge' />
+          <Badge status='secondary' count='Secondary' />
+          <Badge status='outline' count='Outline' />
+        </div>
+
+        <div className='flex items-center gap-8'>
+          <RadioGroup defaultValue='a' aria-label='Sample radios' className='flex flex-row items-center gap-2'>
+            <RadioRoot value='a' aria-label='Option A' />
+            <RadioRoot value='b' aria-label='Option B' />
+          </RadioGroup>
+          <div className='flex flex-row items-center gap-2'>
+            <label className='flex items-center'>
+              <CheckboxRoot defaultChecked aria-label='Sample checked' />
+            </label>
+            <label className='flex items-center'>
+              <CheckboxRoot aria-label='Sample unchecked' />
+            </label>
+          </div>
+          <div className='flex flex-row items-center gap-2'>
+            <label className='ml-auto flex items-center gap-2 text-sm'>
+              <Switch defaultChecked>
+                <SwitchThumb />
+              </Switch>
+            </label>
+            <label className='ml-auto flex items-center gap-2 text-sm'>
+              <Switch>
+                <SwitchThumb />
+              </Switch>
+            </label>
+          </div>
+        </div>
+
+        <div className='flex flex-wrap items-center gap-2'>
+          <div className='flex flex-wrap items-center gap-2'>
+            <Button>Primary</Button>
+            <Button variant='secondary'>Secondary</Button>
+            <Button variant='outline'>Outline</Button>
+            <Button variant='ghost'>Ghost</Button>
+          </div>
+
+          <div className='ml-auto'>
+            <AlertDialog>
+              <AlertDialogTrigger render={<Button variant='outline'>Alert Dialog</Button>} />
+              <AlertDialogPortal>
+                <AlertDialogBackdrop />
+                <AlertDialogPopup>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Discard changes?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Unsaved edits will be lost. This is the alert-dialog style.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogClose>Cancel</AlertDialogClose>
+                    <AlertDialogClose>Discard</AlertDialogClose>
+                  </AlertDialogFooter>
+                </AlertDialogPopup>
+              </AlertDialogPortal>
+            </AlertDialog>
+          </div>
+          <span className='flex items-stretch'>
+            <Button variant='outline' className='rounded-r-none border-r-0'>
+              Split Button
+            </Button>
+            <Menu>
+              <MenuTrigger
+                render={<Button variant='outline' size='icon' aria-label='More group actions' className='rounded-l-none' />}
+              >
+                <CaretDownIcon aria-hidden='true' />
+              </MenuTrigger>
+              <MenuPortal>
+                <MenuPositioner side='bottom' align='end' sideOffset={4}>
+                  <MenuPopup>
+                    <MenuItem>Edit</MenuItem>
+                    <MenuItem>Duplicate</MenuItem>
+                    <MenuItem>Archive</MenuItem>
+                    <MenuSeparator />
+                    <MenuItem variant='destructive'>Delete</MenuItem>
+                  </MenuPopup>
+                </MenuPositioner>
+              </MenuPortal>
+            </Menu>
+          </span>
+        </div>
       </Card>
 
       {/* Env vars */}
@@ -315,113 +753,9 @@ export function OverviewStyle() {
             <span className='text-muted-foreground'>••••••••</span>
           </div>
         </div>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-end gap-2'>
           <Button variant='outline'>Edit</Button>
           <Button variant='default'>Deploy</Button>
-        </div>
-      </Card>
-
-      {/* Type rhythm */}
-      <Card>
-        <p className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>Inherit - IBM Plex Sans</p>
-        <h2 className='text-3xl font-semibold tracking-tight'>Designing with rhythm and hierarchy.</h2>
-        <p className='text-sm leading-6 text-muted-foreground'>
-          A strong body style keeps long-form content readable and balances the visual weight of headings.
-        </p>
-        <p className='text-sm leading-6 text-muted-foreground'>
-          Thoughtful spacing and cadence help paragraphs scan quickly without feeling dense.
-        </p>
-        <Button variant='outline' className='w-full'>
-          Share Feedback
-        </Button>
-      </Card>
-
-      {/* Controls kitchen-sink */}
-      <Card>
-        <div className='flex flex-wrap items-center gap-2'>
-          <Button size='sm'>Button</Button>
-          <Button size='sm' variant='secondary'>
-            Secondary
-          </Button>
-          <Button size='sm' variant='outline'>
-            Outline
-          </Button>
-          <Button size='sm' variant='ghost'>
-            Ghost
-          </Button>
-        </div>
-        <div className='flex items-center justify-between border border-border p-4'>
-          <div>
-            <div className='text-sm font-semibold'>Two-factor authentication</div>
-            <div className='text-sm text-muted-foreground'>Verify via email or phone number.</div>
-          </div>
-          <Button variant='secondary' size='sm'>
-            Enable
-          </Button>
-        </div>
-        <Slider defaultValue={62}>
-          <SliderControl>
-            <SliderTrack>
-              <SliderIndicator />
-              <SliderThumb aria-label='Sample value' />
-            </SliderTrack>
-          </SliderControl>
-        </Slider>
-        <Input placeholder='Name' startAdornment={<MagnifyingGlass aria-hidden='true' />} />
-        <textarea
-          placeholder='Message'
-          rows={3}
-          className='w-full resize-y border border-input bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50'
-        />
-        <div className='flex flex-wrap items-center gap-2 text-xs font-semibold'>
-          <Badge status='processing' count='Badge' />
-          <Badge status='secondary' count='Secondary' />
-          <Badge status='outline' count='Outline' />
-          <span className='ml-auto flex items-center gap-3'>
-            <RadioGroup defaultValue='a' aria-label='Sample radios' className='flex items-center gap-2'>
-              <RadioRoot value='a' aria-label='Option A' />
-              <RadioRoot value='b' aria-label='Option B' />
-            </RadioGroup>
-            <label className='flex items-center'>
-              <CheckboxRoot defaultChecked aria-label='Sample checked' />
-            </label>
-            <label className='flex items-center'>
-              <CheckboxRoot aria-label='Sample unchecked' />
-            </label>
-          </span>
-        </div>
-        <div className='flex flex-wrap items-center gap-2'>
-          <AlertDialog>
-            <AlertDialogTrigger>Alert Dialog</AlertDialogTrigger>
-            <AlertDialogPortal>
-              <AlertDialogBackdrop />
-              <AlertDialogPopup>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Discard changes?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Unsaved edits will be lost. This is the alert-dialog style.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogClose>Cancel</AlertDialogClose>
-                  <AlertDialogClose>Discard</AlertDialogClose>
-                </AlertDialogFooter>
-              </AlertDialogPopup>
-            </AlertDialogPortal>
-          </AlertDialog>
-          <span className='flex items-stretch'>
-            <Button variant='outline' className='rounded-r-none border-r-0'>
-              Button Group
-            </Button>
-            <Button variant='outline' size='icon' aria-label='More group actions' className='rounded-l-none'>
-              <CaretUp aria-hidden='true' />
-            </Button>
-          </span>
-          <label className='ml-auto flex items-center gap-2 text-sm'>
-            <Switch defaultChecked>
-              <SwitchThumb />
-            </Switch>
-          </label>
         </div>
       </Card>
 
@@ -436,23 +770,23 @@ export function OverviewStyle() {
         <TrafficChart />
         <div className='grid grid-cols-3 gap-2 border-t border-border pt-4 text-center'>
           <div>
-            <div className='text-[11px] uppercase tracking-wide text-muted-foreground'>Desktop</div>
-            <div className='text-lg font-semibold'>1,224</div>
+            <div className='text-xs sub-heading'>Desktop</div>
+            <div className='h5'>1,224</div>
           </div>
           <div>
-            <div className='text-[11px] uppercase tracking-wide text-muted-foreground'>Mobile</div>
-            <div className='text-lg font-semibold'>860</div>
+            <div className='text-xs sub-heading'>Mobile</div>
+            <div className='h5'>860</div>
           </div>
           <div>
-            <div className='text-[11px] uppercase tracking-wide text-muted-foreground'>Mix delta</div>
-            <div className='text-lg font-semibold'>+42%</div>
+            <div className='text-xs sub-heading'>Mix delta</div>
+            <div className='h5'>+42%</div>
           </div>
         </div>
       </Card>
 
       {/* Tabs */}
       <Card>
-        <Tabs defaultValue='codespaces'>
+        <Tabs defaultValue='codespaces' className='min-h-0 h-full'>
           <TabsList className='w-full'>
             <TabsTab value='codespaces' className='flex-1'>
               Codespaces
@@ -462,13 +796,13 @@ export function OverviewStyle() {
             </TabsTab>
             <TabsIndicator />
           </TabsList>
-          <TabsPanel value='codespaces'>
-            <div className='flex flex-col items-center gap-2 py-6 text-center'>
+          <TabsPanel value='codespaces' className='flex items-center'>
+            <div className='w-full flex flex-col items-center gap-2 py-6 text-center'>
               <p className='text-sm font-medium'>No codespaces</p>
               <p className='max-w-64 text-sm text-muted-foreground'>
                 You don&apos;t have any codespaces with this repository checked out
               </p>
-              <Button size='sm'>Create Codespace</Button>
+              <Button>Create Codespace</Button>
               <a href='#learn-more' className='text-xs text-muted-foreground underline underline-offset-4'>
                 Learn more about codespaces
               </a>
@@ -482,29 +816,7 @@ export function OverviewStyle() {
 
       {/* Accordion FAQ */}
       <Card>
-        <Accordion className='w-full'>
-          {[
-            {
-              q: 'How secure is my financial data?',
-              a: 'Bank-level AES-256 encryption, SOC 2 Type II infrastructure, read-only access tokens.'
-            },
-            {
-              q: 'How do I connect my accounts?',
-              a: 'Link any bank or investment account in under a minute with secure OAuth.'
-            },
-            {
-              q: 'Can I export my data for tax purposes?',
-              a: 'Yes — one-click CSV and PDF exports, grouped by category and quarter.'
-            }
-          ].map((item) => (
-            <AccordionItem key={item.q}>
-              <AccordionHeader>
-                <AccordionTrigger>{item.q}</AccordionTrigger>
-              </AccordionHeader>
-              <AccordionPanel>{item.a}</AccordionPanel>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <AccountFaqAccordion />
         <div className='flex gap-2'>
           <Button variant='outline' className='flex-1'>
             Contact Support
@@ -522,9 +834,27 @@ export function OverviewStyle() {
           <Badge status='secondary' count='312' />
         </div>
         <div className='flex flex-wrap gap-2'>
-          {['SC', 'VL', 'NX', 'TW', 'TS', 'ES', 'PR', 'BB', 'WP', 'RU', 'PC', 'VT', 'RC', 'VU', 'NG', 'SO'].map((n) => (
-            <Avatar key={n}>
-              <AvatarFallback>{n}</AvatarFallback>
+          {[
+            ['SC', 'Female/1.jpg'],
+            ['VL', 'Male/1.jpg'],
+            ['NX', 'Female/2.jpg'],
+            ['TW', 'Male/2.jpg'],
+            ['TS', 'Female/3.jpg'],
+            ['ES', 'Male/3.jpg'],
+            ['PR', 'Female/4.jpg'],
+            ['BB', 'Male/4.jpg'],
+            ['WP', 'Female/5.jpg'],
+            ['RU', 'Male/5.jpg'],
+            ['PC', 'Female/6.jpg'],
+            ['VT', 'Male/6.jpg'],
+            ['RC', 'Male/7.jpg'],
+            ['VU', 'Male/8.jpg'],
+            ['NG', 'Male/9.jpg'],
+            ['SO', 'Male/10.jpg']
+          ].map(([initials, image]) => (
+            <Avatar key={initials}>
+              <AvatarImage src={`/images/avatars/${image}`} alt={`Contributor ${initials}`} />
+              <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
           ))}
         </div>
@@ -540,7 +870,7 @@ export function OverviewStyle() {
           <CardSub>Open a real dialog built from the library — not a mock.</CardSub>
         </div>
         <Dialog>
-          <DialogTrigger className='w-full'>Share Feedback</DialogTrigger>
+          <DialogTrigger className='w-auto'>Share Feedback</DialogTrigger>
           <DialogPortal>
             <DialogBackdrop />
             <DialogPopup>
@@ -619,28 +949,24 @@ export function OverviewStyle() {
             </tr>
           </tbody>
         </table>
-        <div className='flex gap-2'>
-          <Button variant='outline' size='sm'>
-            Download PDF
-          </Button>
-          <Button size='sm' className='ml-auto'>
-            Pay Now
-          </Button>
+        <div className='flex justify-end gap-2'>
+          <Button variant='outline'>Download PDF</Button>
+          <Button>Pay Now</Button>
         </div>
       </Card>
 
       {/* Kitchen island smart home */}
       <Card>
-        <div className='flex items-start justify-between gap-2'>
-          <div>
+        <div className='w-full'>
+          <div className='w-full flex items-center justify-between gap-2'>
             <CardTitle>Kitchen Island</CardTitle>
-            <CardSub>Hue Color Ambient</CardSub>
+            <label className='flex items-center gap-2 text-sm'>
+              <Switch defaultChecked>
+                <SwitchThumb />
+              </Switch>
+            </label>
           </div>
-          <label className='flex items-center gap-2 text-sm'>
-            <Switch defaultChecked>
-              <SwitchThumb />
-            </Switch>
-          </label>
+          <CardSub>Hue Color Ambient</CardSub>
         </div>
         <ToggleGroup defaultValue={['cooking']} aria-label='Scenes'>
           {['Cooking', 'Dining', 'Nightlight', 'Focus'].map((s) => (
@@ -650,10 +976,10 @@ export function OverviewStyle() {
           ))}
         </ToggleGroup>
         {[
-          { icon: Sun, label: 'Brightness', v: 90 },
-          { icon: Thermometer, label: 'Color Temp', v: 70 },
-          { icon: SpeakerHigh, label: 'Volume', v: 30 },
-          { icon: Timer, label: 'Fade', v: 0 }
+          { icon: SunIcon, label: 'Brightness', v: 90 },
+          { icon: ThermometerIcon, label: 'Color Temp', v: 70 },
+          { icon: SpeakerHighIcon, label: 'Volume', v: 30 },
+          { icon: TimerIcon, label: 'Fade', v: 0 }
         ].map((row) => (
           <div key={row.label} className='flex items-center gap-3 border border-border p-3'>
             <row.icon aria-hidden='true' className='size-4 shrink-0 text-muted-foreground' />
@@ -673,25 +999,27 @@ export function OverviewStyle() {
       {/* Shortcuts */}
       <Card>
         <CardTitle>Shortcuts</CardTitle>
-        {[
-          ['Search', ['⌘', 'K']],
-          ['Quick Actions', ['⌘', 'J']],
-          ['New File', ['⌘', 'N']],
-          ['Save', ['⌘', 'S']],
-          ['Toggle Sidebar', ['⌘', 'B']]
-        ].map(([label, keys], i, arr) => (
-          <div key={label as string}>
-            <div className='flex items-center justify-between py-1.5 text-sm'>
-              <span>{label}</span>
-              <span className='flex gap-1'>
-                {(keys as string[]).map((k) => (
-                  <Kbd key={k}>{k}</Kbd>
-                ))}
-              </span>
-            </div>
-            {i < arr.length - 1 && <Separator />}
-          </div>
-        ))}
+        <div className='flex flex-col gap-0 border border-border rounded-(--radius)'>
+          {[
+            ['Search', ['⌘', 'K']],
+            ['Quick Actions', ['⌘', 'J']],
+            ['New File', ['⌘', 'N']],
+            ['Save', ['⌘', 'S']],
+            ['Toggle Sidebar', ['⌘', 'B']]
+          ].map(([label, keys], i, arr) => (
+            <>
+              <div key={label as string} className='flex items-center justify-between px-4 py-3 text-sm'>
+                <span>{label}</span>
+                <span className='flex gap-1'>
+                  {(keys as string[]).map((k) => (
+                    <Kbd key={k}>{k}</Kbd>
+                  ))}
+                </span>
+              </div>
+              {i < arr.length - 1 && <Separator />}
+            </>
+          ))}
+        </div>
       </Card>
 
       {/* Notifications checkboxes */}
@@ -736,22 +1064,22 @@ export function OverviewStyle() {
         <div className='flex flex-col gap-1.5 text-sm'>
           <span className='flex items-center justify-between'>
             <span className='font-medium'>Current Password</span>
-            <a href='#forgot' className='text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground'>
+            <a href='#forgot' className='sub-heading text-xs hover:text-foreground'>
               Forgot?
             </a>
           </span>
           <Input type='password' defaultValue='password123' />
         </div>
         <Button className='w-full'>
-          <LockKey aria-hidden='true' /> Update Security
+          <LockKeyIcon aria-hidden='true' /> Update Security
         </Button>
         <a href='#danger' className='flex items-center gap-3 border border-border p-3 text-sm hover:bg-muted/50'>
-          <WarningCircle aria-hidden='true' className='size-4 shrink-0 text-destructive' />
+          <WarningCircleIcon aria-hidden='true' className='size-4 shrink-0 text-destructive' />
           <span>
             <span className='block font-medium'>Danger Zone</span>
             <span className='block text-muted-foreground'>Archive account and remove catalog</span>
           </span>
-          <ArrowRight aria-hidden='true' className='ml-auto size-4' />
+          <ArrowRightIcon aria-hidden='true' className='ml-auto size-4' />
         </a>
       </Card>
 
@@ -763,7 +1091,7 @@ export function OverviewStyle() {
             <CardSub>Manage your account settings and notifications.</CardSub>
           </div>
           <Button variant='ghost' size='icon-sm' aria-label='Close preferences'>
-            <X />
+            <XIcon />
           </Button>
         </div>
         <MiniSelect
@@ -793,9 +1121,9 @@ export function OverviewStyle() {
             <Separator className='mt-3' />
           </div>
         ))}
-        <div className='flex gap-2'>
+        <div className='flex justify-end gap-2'>
           <Button variant='outline'>Reset</Button>
-          <Button className='ml-auto'>Save Preferences</Button>
+          <Button>Save Preferences</Button>
         </div>
       </Card>
 
@@ -807,7 +1135,7 @@ export function OverviewStyle() {
             <CardTitle>Receiving Method</CardTitle>
           </div>
           <Button variant='ghost' size='icon-sm' aria-label='Close receiving method'>
-            <X />
+            <XIcon />
           </Button>
         </div>
         <label className='flex flex-col gap-1.5 text-sm'>
@@ -845,16 +1173,21 @@ export function OverviewStyle() {
 
       {/* QR connect */}
       <Card>
-        <div className='flex justify-center pt-2'>
-          <PseudoQr />
+        <div className='grid grid-cols-1 gap-3 my-auto'>
+          <div className='flex justify-center pt-2'>
+            <PseudoQr />
+          </div>
+          <div className='flex flex-col gap-1 text-center'>
+            <CardTitle>Scan to connect your mobile device</CardTitle>
+            <CardSub>
+              Open the Ledger mobile app and scan this code <br />
+              to link your device.
+            </CardSub>
+          </div>
+          <Button variant='secondary' className='w-full'>
+            Got it
+          </Button>
         </div>
-        <div className='text-center'>
-          <CardTitle>Scan to connect your mobile device</CardTitle>
-          <CardSub>Open the Ledger mobile app and scan this code to link your device.</CardSub>
-        </div>
-        <Button variant='secondary' className='w-full'>
-          Got it
-        </Button>
       </Card>
 
       {/* Skeleton loading */}
@@ -885,15 +1218,15 @@ export function OverviewStyle() {
               </a>
             </li>
             <li aria-hidden='true' className='text-muted-foreground'>
-              <CaretRight className='size-3' />
+              <CaretRightIcon className='size-3' />
             </li>
             <li>
               <Button variant='ghost' size='icon-sm' aria-label='Account options'>
-                <DotsThree aria-hidden='true' />
+                <DotsThreeIcon aria-hidden='true' />
               </Button>
             </li>
             <li aria-hidden='true' className='text-muted-foreground'>
-              <CaretRight className='size-3' />
+              <CaretRightIcon className='size-3' />
             </li>
             <li aria-current='page' className='font-medium'>
               Payments
@@ -901,10 +1234,10 @@ export function OverviewStyle() {
           </ol>
         </nav>
         {[
-          { icon: Gauge, t: 'Change transfer limit', d: 'Adjust how much you can send from your balance.' },
-          { icon: CalendarBlank, t: 'Scheduled transfers', d: 'Set up a transfer to send at a later date.' },
-          { icon: Repeat, t: 'Direct Debits', d: 'Set up and manage regular payments.' },
-          { icon: ArrowsClockwise, t: 'Recurring card payments', d: 'Manage your repeated card transactions.' }
+          { icon: GaugeIcon, t: 'Change transfer limit', d: 'Adjust how much you can send from your balance.' },
+          { icon: CalendarBlankIcon, t: 'Scheduled transfers', d: 'Set up a transfer to send at a later date.' },
+          { icon: RepeatIcon, t: 'Direct Debits', d: 'Set up and manage regular payments.' },
+          { icon: ArrowsClockwiseIcon, t: 'Recurring card payments', d: 'Manage your repeated card transactions.' }
         ].map((r) => (
           <a
             key={r.t}
@@ -916,7 +1249,7 @@ export function OverviewStyle() {
               <span className='block font-medium'>{r.t}</span>
               <span className='block text-muted-foreground'>{r.d}</span>
             </span>
-            <CaretRight aria-hidden='true' className='ml-auto size-4 text-muted-foreground' />
+            <CaretRightIcon aria-hidden='true' className='ml-auto size-4 text-muted-foreground' />
           </a>
         ))}
       </Card>
@@ -929,10 +1262,10 @@ export function OverviewStyle() {
             <CardSub>Smart Lock Pro</CardSub>
           </div>
           <span className='flex items-center gap-1.5 text-sm text-muted-foreground'>
-            Locked <LockKey aria-hidden='true' className='size-4' />
+            Locked <LockKeyIcon aria-hidden='true' className='size-4' />
           </span>
         </div>
-        <div className='relative flex aspect-video items-center justify-center overflow-hidden rounded-lg border border-border bg-muted bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,var(--border)_10px,var(--border)_11px)]'>
+        <div className='relative flex min-h-0 h-full items-center justify-center overflow-hidden rounded-lg border border-border bg-muted bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,var(--border)_10px,var(--border)_11px)]'>
           <span className='absolute top-2 right-2'>
             <Badge status='error' count='Live' />
           </span>
@@ -941,13 +1274,15 @@ export function OverviewStyle() {
 
       {/* 404 empty */}
       <Card>
-        <div className='flex flex-col items-center gap-2 py-6 text-center'>
-          <p className='text-lg font-semibold'>404 - Not Found</p>
-          <p className='max-w-64 text-sm text-muted-foreground'>
-            The page you&apos;re looking for doesn&apos;t exist. Try searching below.
-          </p>
+        <div className='flex flex-col items-center gap-3 my-auto text-center'>
+          <div className='flex flex-col gap-2'>
+            <p className='h5'>404 - Not Found</p>
+            <p className='max-w-64 text-sm text-muted-foreground'>
+              The page you&apos;re looking for doesn&apos;t exist. Try searching below.
+            </p>
+          </div>
           <div className='w-3/4'>
-            <Input placeholder='Try searching for pages…' startAdornment={<MagnifyingGlass aria-hidden='true' />} />
+            <Input placeholder='Try searching for pages…' startAdornment={<MagnifyingGlassIcon aria-hidden='true' />} />
           </div>
           <Button variant='link'>Go to homepage</Button>
         </div>
@@ -975,7 +1310,7 @@ export function OverviewStyle() {
           ['Root-cause analysis', 'for production issues with deployment context.']
         ].map(([strong, rest]) => (
           <div key={strong as string} className='flex items-start gap-2.5 text-sm'>
-            <CheckCircle aria-hidden='true' className='mt-0.5 size-5 shrink-0 text-primary' />
+            <CheckCircleIcon aria-hidden='true' className='mt-0.5 size-5 shrink-0 text-primary' />
             <p className='text-muted-foreground'>
               <strong className='font-medium text-foreground'>{strong}</strong> {rest}
             </p>
@@ -996,8 +1331,8 @@ export function OverviewStyle() {
           <CardTitle>File Upload</CardTitle>
           <CardSub>Drag and drop or browse</CardSub>
         </div>
-        <div className='flex flex-col items-center gap-2 border border-border py-8 text-center'>
-          <CloudArrowUp aria-hidden='true' className='size-8 text-muted-foreground' />
+        <div className='flex flex-col justify-center items-center gap-2 border border-border py-8 text-center min-h-0 h-full'>
+          <CloudArrowUpIcon aria-hidden='true' className='size-8 text-muted-foreground' />
           <p className='text-sm font-medium'>Upload files</p>
           <p className='text-sm text-muted-foreground'>PNG, JPG, PDF up to 10MB</p>
           <Button>Browse Files</Button>

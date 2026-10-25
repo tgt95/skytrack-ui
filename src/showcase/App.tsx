@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { MagnifyingGlassIcon, MoonIcon, SunIcon, XIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { VariantBlock, type DemoMeta } from './demo'
@@ -30,10 +30,53 @@ const demos = Object.values(modules)
   .filter(Boolean)
   .sort((a, b) => a.title.localeCompare(b.title))
 
+const VIEWS = [
+  ['components', 'Components'],
+  ['sheet', 'Sheet'],
+  ['style-overview', 'Style overview'],
+  ['dashboard', 'Dashboard']
+] as const
+
+type View = (typeof VIEWS)[number][0]
+
+function readViewFromUrl(): View {
+  const route = new URLSearchParams(window.location.search).get('view')
+  return VIEWS.some(([id]) => id === route) ? (route as View) : 'components'
+}
+
 export function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
   const [query, setQuery] = useState('')
-  const [view, setView] = useState<'components' | 'sheet' | 'style' | 'dashboard'>('components')
+  const [view, setView] = useState<View>(readViewFromUrl)
+
+  const navigateToView = (nextView: View) => {
+    if (nextView === view) return
+    const url = new URL(window.location.href)
+    url.searchParams.set('view', nextView)
+    window.history.pushState({ view: nextView }, '', url)
+    setView(nextView)
+  }
+
+  useEffect(() => {
+    const syncViewFromUrl = () => setView(readViewFromUrl())
+    window.addEventListener('popstate', syncViewFromUrl)
+    return () => window.removeEventListener('popstate', syncViewFromUrl)
+  }, [])
+
+  useEffect(() => {
+    document.body.dataset.showcaseView = view
+    return () => {
+      delete document.body.dataset.showcaseView
+    }
+  }, [view])
+
+  useLayoutEffect(() => {
+    const hash = window.location.hash.slice(1)
+    if (!hash) return
+
+    const targetId = decodeURIComponent(hash)
+    document.getElementById(targetId)?.scrollIntoView({ block: 'start' })
+  }, [view])
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
@@ -110,19 +153,12 @@ export function App() {
             className='w-full min-w-0 gap-1 overflow-x-auto border-none'
             variant='default'
             aria-label='Showcase views'
-            defaultValue={['components']}
+            value={[view]}
           >
-            {(
-              [
-                ['components', 'Components'],
-                ['sheet', 'Sheet'],
-                ['style', 'Style overview'],
-                ['dashboard', 'Dashboard']
-              ] as const
-            ).map(([id, label]) => (
+            {VIEWS.map(([id, label]) => (
               <Toggle
                 key={id}
-                onClick={() => setView(id)}
+                onClick={() => navigateToView(id)}
                 value={id}
                 size='default'
                 className='h-8 shrink-0 px-2 text-xs sm:h-9 sm:px-3 sm:text-sm'
@@ -150,7 +186,7 @@ export function App() {
             {filtered.map((d) => (
               <section key={d.id} id={d.id} className={cn('scroll-mt-20 space-y-4')}>
                 <div>
-                  <h2 className='text-2xl font-semibold tracking-tight'>{d.title}</h2>
+                  <h4 className='h4 heading'>{d.title}</h4>
                   <p className='text-sm text-muted-foreground'>{d.description}</p>
                 </div>
                 <div className='grid gap-4'>
@@ -164,8 +200,8 @@ export function App() {
             ))}
           </div>
         ) : (
-          <div className='mx-auto max-w-6xl px-8 py-10'>
-            {view === 'sheet' ? <Sheet /> : view === 'style' ? <OverviewStyle /> : <OverviewDashboard />}
+          <div className='mx-auto max-w-7xl px-8 py-10'>
+            {view === 'sheet' ? <Sheet /> : view === 'style-overview' ? <OverviewStyle /> : <OverviewDashboard />}
           </div>
         )}
       </main>

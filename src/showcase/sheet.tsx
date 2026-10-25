@@ -188,7 +188,7 @@ function TokenTable({ tokens }: { tokens: string[] }) {
     <div className='overflow-x-auto border border-border'>
       <table className='w-full table-fixed text-left'>
         <thead>
-          <tr className='bg-muted/40 text-[11px] uppercase tracking-wide text-muted-foreground'>
+          <tr className='bg-muted/40 text-xs sub-heading'>
             <th className='w-[30%] px-2 py-2 font-medium sm:px-3'>Token</th>
             <th className='px-2 py-2 font-medium sm:px-3'>Light</th>
             <th className='px-2 py-2 font-medium sm:px-3'>Dark</th>
@@ -248,7 +248,7 @@ function TypographyTable() {
     <div className='overflow-x-auto border border-border'>
       <table className='w-full text-left'>
         <thead>
-          <tr className='bg-muted/40 text-[11px] uppercase tracking-wide text-muted-foreground'>
+          <tr className='bg-muted/40 text-xs sub-heading'>
             <th className='px-2 py-2 font-medium sm:px-3'>Utility</th>
             <th className='px-2 py-2 font-medium sm:px-3'>Size / line-height</th>
             <th className='px-2 py-2 font-medium sm:px-3'>Sample</th>
@@ -286,8 +286,8 @@ function SheetSection({ index, title, description }: { index: string; title: str
   return (
     <div className='border-b border-foreground pb-3'>
       <div className='flex items-baseline gap-3'>
-        <span className='text-xs tabular-nums text-muted-foreground'>{index}</span>
-        <h2 className='text-2xl font-semibold tracking-tight'>{title}</h2>
+        <span className='text-base tabular-nums sub-heading'>{index}</span>
+        <h5 className='h5 heading'>{title}</h5>
       </div>
       <p className='mt-1 text-sm text-muted-foreground'>{description}</p>
     </div>
@@ -442,6 +442,13 @@ const SPECS: ComponentSpec[] = [
     group: 'Forms',
     states: ['valid', 'invalid'],
     note: 'Zod-backed form wrapper. Error copy comes from the Field parts you place inside it.'
+  },
+  {
+    id: 'dropzone',
+    title: 'Dropzone',
+    group: 'Forms',
+    states: ['idle', 'dragging', 'disabled'],
+    note: 'Accepts accept, multiple, disabled, hint and buttonLabel props; onFilesSelected receives the selected File array.'
   },
   {
     id: 'input',
@@ -739,9 +746,9 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
   const meta = spec.axes?.length ? `${spec.axes.length} axes · ${combinations} combinations` : 'single style'
 
   return (
-    <div id={`sheet-${spec.id}`} className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8'>
+    <div id={spec.id} className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8'>
       <div className='flex flex-col gap-1'>
-        <h4 className='text-sm font-semibold'>{spec.title}</h4>
+        <h4 className='h6 heading'>{spec.title}</h4>
         <p className='text-xs text-muted-foreground'>{meta}</p>
       </div>
       <div className='flex min-w-0 flex-col gap-2.5'>
@@ -817,6 +824,7 @@ export function Sheet() {
 
   const specs = useMemo(() => filtered.sort((a, b) => a.title.localeCompare(b.title)), [filtered])
 
+  const headingFamily = firstFamily(THEME['--font-heading'], 'Host Grotesk Variable')
   const sansFamily = firstFamily(THEME['--font-sans'], 'IBM Plex Sans')
   const monoFamily = firstFamily(THEME['--font-mono'], 'IBM Plex Mono')
 
@@ -824,8 +832,8 @@ export function Sheet() {
     <div className='flex flex-col gap-14'>
       <header className='flex flex-col gap-4'>
         <div className='flex flex-col gap-1'>
-          <span className='text-xs uppercase tracking-[0.2em] text-muted-foreground'>Reference sheet</span>
-          <h1 className='text-3xl font-semibold tracking-tight'>Tokens and component levels</h1>
+          <span className='text-xs tracking-widest sub-heading'>Reference sheet</span>
+          <h1 className='h1 heading'>Tokens and component levels</h1>
           <p className='max-w-2xl text-sm text-muted-foreground'>
             Every token, variant axis and size this library exposes, on one page. Use it to check what a component can
             already do before adding a one-off style. Live examples sit on the Components page.
@@ -839,7 +847,7 @@ export function Sheet() {
             [String(COLOR_TOKEN_COUNT), 'colour tokens']
           ].map(([value, label]) => (
             <div key={label} className='flex flex-col gap-1 bg-background px-4 py-3'>
-              <dt className='text-[11px] uppercase tracking-wide text-muted-foreground'>{label}</dt>
+              <dt className='text-xs sub-heading'>{label}</dt>
               <dd className='text-2xl font-semibold tabular-nums'>{value}</dd>
             </div>
           ))}
@@ -856,7 +864,7 @@ export function Sheet() {
         {TOKEN_GROUPS.map((group) => (
           <div key={group.id} className='flex flex-col gap-3'>
             <div>
-              <h3 className='text-sm font-semibold'>{group.title}</h3>
+              <h3 className='h6 heading'>{group.title}</h3>
               <p className='text-xs text-muted-foreground'>{group.description}</p>
             </div>
             <TokenTable tokens={group.tokens} />
@@ -866,7 +874,7 @@ export function Sheet() {
         <div className='grid gap-8 lg:grid-cols-2'>
           <div className='flex flex-col gap-3'>
             <div>
-              <h3 className='text-sm font-semibold'>Radius</h3>
+              <h3 className='h6 heading'>Radius</h3>
               <p className='text-xs text-muted-foreground'>Reference corner radius values: 2, 4, 8 and 12 px.</p>
             </div>
             <RadiusScale />
@@ -874,20 +882,25 @@ export function Sheet() {
 
           <div className='flex flex-col gap-3'>
             <div>
-              <h3 className='text-sm font-semibold'>Type</h3>
+              <h3 className='h6 heading'>Type</h3>
               <p className='text-xs text-muted-foreground'>
                 Families come from the theme; the size ramp is Tailwind&apos;s default. Code, kbd, samp and pre switch
                 to mono automatically.
               </p>
             </div>
-            <div className='flex flex-col gap-3 border border-border p-4'>
-              <p className='text-sm'>
-                <span className='text-[11px] uppercase tracking-wide text-muted-foreground'>Sans</span>
+            <div className='grid grid-cols-3 gap-3 border border-border p-4'>
+              <p className='text-base'>
+                <span className='text-xs sub-heading'>Heading</span>
+                <br />
+                {headingFamily}
+              </p>
+              <p className='text-base'>
+                <span className='text-xs sub-heading'>Sans</span>
                 <br />
                 {sansFamily}
               </p>
-              <p className='text-sm'>
-                <span className='text-[11px] uppercase tracking-wide text-muted-foreground'>Mono</span>
+              <p className='text-base'>
+                <span className='text-xs sub-heading'>Mono</span>
                 <br />
                 <code>{monoFamily}</code>
               </p>
@@ -897,7 +910,7 @@ export function Sheet() {
 
         <div className='flex flex-col gap-3'>
           <div>
-            <h3 className='text-sm font-semibold'>Type scale</h3>
+            <h3 className='h6 heading'>Type scale</h3>
             <p className='text-xs text-muted-foreground'>
               Sizes in px at the default 16 px root. Showcase headings pair a ramp size with semibold and
               tracking-tight.
@@ -935,7 +948,7 @@ export function Sheet() {
               {specs.map((spec) => (
                 <a
                   key={spec.id}
-                  href={`#sheet-${spec.id}`}
+                  href={`#${spec.id}`}
                   className='border border-border px-2 py-1 text-xs text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                 >
                   {spec.title}

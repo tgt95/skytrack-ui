@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CaretDown } from '@phosphor-icons/react'
+import { CaretDownIcon } from '@phosphor-icons/react'
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -47,7 +47,7 @@ function OpenFromMenu() {
     <div className='flex flex-col items-start gap-3'>
       <Menu>
         <MenuTrigger>
-          Document actions <CaretDown />
+          Document actions <CaretDownIcon />
         </MenuTrigger>
         <MenuPortal>
           <MenuPositioner sideOffset={8} align='start'>
@@ -227,7 +227,7 @@ export const demo: DemoMeta = {
       name: 'Default',
       render: () => (
         <AlertDialog>
-          <AlertDialogTrigger variant='destructive'>Discard draft</AlertDialogTrigger>
+          <AlertDialogTrigger render={<Button variant='destructive'>Discard draft</Button>} />
           <AlertDialogPortal>
             <AlertDialogBackdrop />
             <AlertDialogPopup className='sm:max-w-md'>

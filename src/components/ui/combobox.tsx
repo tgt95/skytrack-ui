@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
-import { CaretDown, CaretUpDown, Check, X } from '@phosphor-icons/react'
+import { CaretDownIcon, CaretUpDownIcon, CheckIcon, XIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
@@ -92,7 +92,7 @@ function ComboboxTrigger({ className, children, ...props }: React.ComponentProps
       )}
       {...props}
     >
-      {children ?? <CaretDown className='size-4' />}
+      {children ?? <CaretDownIcon className='size-4' />}
     </BaseCombobox.Trigger>
   )
 }
@@ -119,7 +119,7 @@ function ComboboxTriggerButton({
       )}
       {...props}
     >
-      {children ?? <CaretUpDown className='size-4 shrink-0 text-muted-foreground' />}
+      {children ?? <CaretUpDownIcon className='size-4 shrink-0 text-muted-foreground' />}
     </BaseCombobox.Trigger>
   )
 }
@@ -131,7 +131,7 @@ function ComboboxIcon({ className, children, ...props }: React.ComponentProps<ty
       className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className as string)}
       {...props}
     >
-      {children ?? <CaretUpDown className='size-4' />}
+      {children ?? <CaretUpDownIcon className='size-4' />}
     </BaseCombobox.Icon>
   )
 }
@@ -149,7 +149,7 @@ function ComboboxClear({ className, children, ...props }: React.ComponentProps<t
       )}
       {...props}
     >
-      {children ?? <X className='size-4' />}
+      {children ?? <XIcon className='size-4' />}
     </BaseCombobox.Clear>
   )
 }
@@ -195,7 +195,7 @@ function ComboboxChipRemove({ className, children, ...props }: React.ComponentPr
       )}
       {...props}
     >
-      {children ?? <X className='size-3' />}
+      {children ?? <XIcon className='size-3' />}
     </BaseCombobox.ChipRemove>
   )
 }
@@ -250,7 +250,7 @@ function ComboboxArrow({ className, children, ...props }: React.ComponentProps<t
       className={cn('flex size-4 items-center justify-center text-muted-foreground', className as string)}
       {...props}
     >
-      {children ?? <CaretDown className='size-3 rotate-180' />}
+      {children ?? <CaretDownIcon className='size-3 rotate-180' />}
     </BaseCombobox.Arrow>
   )
 }
@@ -324,7 +324,7 @@ function ComboboxItemIndicator({
       )}
       {...props}
     >
-      {children ?? <Check className='size-4' />}
+      {children ?? <CheckIcon className='size-4' />}
     </BaseCombobox.ItemIndicator>
   )
 }

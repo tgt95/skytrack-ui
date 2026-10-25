@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CircleNotch, MagnifyingGlass, Smiley } from '@phosphor-icons/react'
+import { CircleNotchIcon, MagnifyingGlassIcon, SmileyIcon } from '@phosphor-icons/react'
 import {
   Autocomplete,
   AutocompleteArrow,
@@ -149,7 +149,7 @@ function AsyncAutocomplete() {
   if (isPending) {
     status = (
       <>
-        <CircleNotch className='size-3 animate-spin' />
+        <CircleNotchIcon className='size-3 animate-spin' />
         Searching…
       </>
     )
@@ -588,7 +588,7 @@ function CommandPalette() {
       <div className='flex w-80 max-w-full flex-col overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-md'>
         <Autocomplete open inline items={paletteGroups} autoHighlight='always' keepHighlight>
           <AutocompleteInputGroup className='border-0 border-b border-border shadow-none'>
-            <MagnifyingGlass className='size-4 shrink-0 text-muted-foreground' aria-hidden />
+            <MagnifyingGlassIcon className='size-4 shrink-0 text-muted-foreground' aria-hidden />
             <AutocompleteInput
               context='group'
               aria-label='Search commands'
@@ -760,7 +760,7 @@ function EmojiGrid() {
           }}
         >
           <AutocompleteTrigger className='h-9 w-9 shrink-0 rounded-none border-l-0' aria-label='Choose emoji'>
-            <Smiley className='size-4' />
+            <SmileyIcon className='size-4' />
           </AutocompleteTrigger>
           <AutocompletePortal>
             <AutocompletePositioner side='bottom' align='end' sideOffset={4}>

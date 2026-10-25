@@ -4,7 +4,7 @@ import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
-/** Shared variant/size props for `DialogTrigger` and `DialogClose`. */
+/** Variant and size props for `DialogClose`. */
 export type DialogButtonProps = VariantProps<typeof buttonVariants>
 
 /**
@@ -20,14 +20,12 @@ type DialogChangeEventDetails = Parameters<NonNullable<React.ComponentProps<type
 
 function DialogTrigger({
   className,
-  variant,
-  size,
   ...props
-}: React.ComponentProps<typeof BaseDialog.Trigger> & DialogButtonProps) {
+}: React.ComponentProps<typeof BaseDialog.Trigger>) {
   return (
     <BaseDialog.Trigger
       data-slot='dialog-trigger'
-      className={cn(buttonVariants({ variant: variant ?? 'outline', size }), className as string)}
+      className={className}
       {...props}
     />
   )

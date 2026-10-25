@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, X } from '@phosphor-icons/react'
+import { PlusIcon, XIcon } from '@phosphor-icons/react'
 import { focusRing } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTab, TabsIndicator, TabsPanel } from '@/components/ui/tabs'
 import type { DemoMeta } from '@/showcase/demo'
@@ -12,7 +12,7 @@ const TABS = [
 
 /**
  * Browser-style card tabs. The nested close button matches browser-tab UX
- * practice; arrow-key tab navigation is unaffected and each X stays
+ * practice; arrow-key tab navigation is unaffected and each XIcon stays
  * Tab-reachable with an accessible name.
  */
 function ClosableTabsExample() {
@@ -53,7 +53,7 @@ function ClosableTabsExample() {
               }}
               className={`-mr-1 rounded-xs p-0.5 text-muted-foreground hover:text-foreground ${focusRing}`}
             >
-              <X className='size-3.5' />
+              <XIcon className='size-3.5' />
             </button>
           </TabsTab>
         ))}
@@ -63,7 +63,7 @@ function ClosableTabsExample() {
           onClick={addTab}
           className={`relative z-10 ml-1 mr-1 rounded-xs p-0.5 text-muted-foreground hover:text-foreground ${focusRing}`}
         >
-          <Plus className='size-4' />
+          <PlusIcon className='size-4' />
         </button>
         <TabsIndicator />
       </TabsList>

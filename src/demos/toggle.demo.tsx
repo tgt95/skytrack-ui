@@ -1,4 +1,4 @@
-import { Heart, TextB, TextItalic } from '@phosphor-icons/react'
+import { HeartIcon, TextBIcon, TextItalicIcon } from '@phosphor-icons/react'
 import { Toggle } from '@/components/ui/toggle'
 import type { DemoMeta } from '@/showcase/demo'
 
@@ -13,7 +13,7 @@ export const demo: DemoMeta = {
       name: 'Default',
       render: () => (
         <Toggle aria-label='Favorite' defaultPressed>
-          <Heart weight='fill' />
+          <HeartIcon weight='fill' />
         </Toggle>
       )
     },
@@ -21,7 +21,7 @@ export const demo: DemoMeta = {
       name: 'Outline',
       render: () => (
         <Toggle aria-label='Favorite' variant='outline' defaultPressed>
-          <Heart weight='fill' />
+          <HeartIcon weight='fill' />
         </Toggle>
       )
     },
@@ -30,13 +30,13 @@ export const demo: DemoMeta = {
       render: () => (
         <div className='flex items-center gap-2'>
           <Toggle aria-label='Favorite' size='sm' defaultPressed>
-            <Heart weight='fill' />
+            <HeartIcon weight='fill' />
           </Toggle>
           <Toggle aria-label='Favorite' defaultPressed>
-            <Heart weight='fill' />
+            <HeartIcon weight='fill' />
           </Toggle>
           <Toggle aria-label='Favorite' size='lg' defaultPressed>
-            <Heart weight='fill' />
+            <HeartIcon weight='fill' />
           </Toggle>
         </div>
       )
@@ -46,11 +46,11 @@ export const demo: DemoMeta = {
       render: () => (
         <div className='flex items-center gap-2'>
           <Toggle aria-label='Toggle bold' defaultPressed>
-            <TextB />
+            <TextBIcon />
             Bold
           </Toggle>
           <Toggle aria-label='Toggle italic' variant='outline'>
-            <TextItalic />
+            <TextItalicIcon />
             Italic
           </Toggle>
         </div>
@@ -61,10 +61,10 @@ export const demo: DemoMeta = {
       render: () => (
         <>
           <Toggle aria-label='Favorite' disabled>
-            <Heart />
+            <HeartIcon />
           </Toggle>
           <Toggle aria-label='Favorite' disabled defaultPressed>
-            <Heart weight='fill' />
+            <HeartIcon weight='fill' />
           </Toggle>
         </>
       )

@@ -228,7 +228,7 @@ const nestedPeek = 'data-[nested-drawer-open]:-mt-[calc(var(--peek)*var(--nested
 function SecurityDrawer() {
   return (
     <Drawer>
-      <DrawerTrigger variant='secondary'>Security settings</DrawerTrigger>
+      <DrawerTrigger render={<Button variant='secondary'>Security settings</Button>} />
       <DrawerPortal>
         <DrawerBackdrop />
         <DrawerViewport>
@@ -254,7 +254,7 @@ function SecurityDrawer() {
 function AdvancedDrawer() {
   return (
     <Drawer>
-      <DrawerTrigger variant='secondary'>Advanced options</DrawerTrigger>
+      <DrawerTrigger render={<Button variant='secondary'>Advanced options</Button>} />
       <DrawerPortal>
         <DrawerBackdrop />
         <DrawerViewport>

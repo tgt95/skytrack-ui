@@ -8,7 +8,7 @@ function Tabs({ className, ...props }: React.ComponentProps<typeof BaseTabs.Root
   return (
     <BaseTabs.Root
       data-slot='tabs'
-      className={cn('flex w-full max-w-lg flex-col gap-2', className as string)}
+      className={cn('flex w-full flex-col gap-2', className as string)}
       {...props}
     />
   )
@@ -19,9 +19,9 @@ function Tabs({ className, ...props }: React.ComponentProps<typeof BaseTabs.Root
 const tabsListVariants = cva('relative z-0 flex w-fit items-center text-muted-foreground', {
   variants: {
     variant: {
-      filled: 'gap-1 rounded-lg bg-muted p-1',
+      filled: 'gap-1 rounded-(--radius) bg-muted p-1',
       standard: 'gap-2 bg-transparent',
-      outlined: 'gap-1 rounded-lg border border-input bg-transparent p-1'
+      outlined: 'gap-1 rounded-(--radius) border border-input bg-transparent p-1'
     }
   },
   defaultVariants: { variant: 'filled' }
@@ -43,7 +43,7 @@ function TabsList({ className, variant, ...props }: React.ComponentProps<typeof 
 
 const tabsTabVariants = cva(
   cn(
-    'relative z-10 inline-flex cursor-pointer flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors select-none',
+    'relative z-10 inline-flex cursor-pointer flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-(--radius) font-medium transition-colors select-none',
     'hover:text-foreground',
     'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     focusRing
@@ -85,7 +85,7 @@ const tabsIndicatorVariants = cva(
   {
     variants: {
       variant: {
-        pill: 'left-[var(--active-tab-left)] top-[var(--active-tab-top)] h-[var(--active-tab-height)] w-[var(--active-tab-width)] rounded-md bg-background',
+        pill: 'left-[var(--active-tab-left)] top-[var(--active-tab-top)] h-[var(--active-tab-height)] w-[var(--active-tab-width)] rounded-(--radius) bg-background',
         /* Follow the active tab edge: bottom for horizontal, left for vertical. */
         underline:
           'top-auto bottom-0 left-[var(--active-tab-left)] h-0.5 w-[var(--active-tab-width)] rounded-none bg-primary shadow-none data-[orientation=vertical]:top-[var(--active-tab-top)] data-[orientation=vertical]:bottom-auto data-[orientation=vertical]:h-[var(--active-tab-height)] data-[orientation=vertical]:w-0.5'
@@ -118,7 +118,7 @@ function TabsPanel({ className, ...props }: React.ComponentProps<typeof BaseTabs
     <BaseTabs.Panel
       data-slot='tabs-panel'
       className={cn(
-        'flex-1 rounded-lg border border-border bg-card p-4 text-sm text-card-foreground outline-none',
+        'flex-1 rounded-(--radius) border border-border bg-card p-4 text-sm text-card-foreground outline-none',
         'transition-all duration-200 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
         'motion-safe:data-[starting-style]:data-[activation-direction=left]:translate-x-[-50%]',
         'motion-safe:data-[starting-style]:data-[activation-direction=right]:translate-x-[50%]',

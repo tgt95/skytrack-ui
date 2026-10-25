@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { DotsThreeVertical, ImageSquare } from '@phosphor-icons/react'
+import { DotsThreeVerticalIcon, ImageSquareIcon } from '@phosphor-icons/react'
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
@@ -62,7 +62,7 @@ function ImageCardWithBothMenus() {
       <ContextMenu>
         <ContextMenuTrigger>
           <div className='flex aspect-5/3 items-center justify-center bg-muted text-muted-foreground'>
-            <ImageSquare className='size-8' />
+            <ImageSquareIcon className='size-8' />
           </div>
           <div className='p-2'>
             <p className='text-sm leading-5'>Station Hofplein</p>
@@ -84,7 +84,7 @@ function ImageCardWithBothMenus() {
           aria-label='Image actions'
           className='absolute top-2 right-2 opacity-0 group-hover:opacity-100 data-[popup-open]:opacity-100'
         >
-          <DotsThreeVertical />
+          <DotsThreeVerticalIcon />
         </MenuTrigger>
         <MenuPortal>
           <MenuPositioner align='end' sideOffset={8}>

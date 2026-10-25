@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CaretDown, X } from '@phosphor-icons/react'
+import { CaretDownIcon, XIcon } from '@phosphor-icons/react'
 import {
   AlertDialog,
   AlertDialogClose,
@@ -166,7 +166,7 @@ function OpenFromMenu() {
     <div className='flex flex-col items-start gap-3'>
       <Menu>
         <MenuTrigger>
-          Playlist <CaretDown />
+          Playlist <CaretDownIcon />
         </MenuTrigger>
         <MenuPortal>
           <MenuPositioner sideOffset={8} align='start'>
@@ -377,13 +377,13 @@ function OutsideScrollDialog() {
                       aria-label='Close'
                       className='absolute -top-1 -right-1 size-8 border-0 bg-transparent p-0 hover:bg-accent'
                     >
-                      <X />
+                      <XIcon />
                     </DialogClose>
                   </div>
                   <div className='flex flex-col gap-4'>
                     {LOREM_SECTIONS.map((item) => (
                       <section key={item.title} className='flex flex-col gap-1'>
-                        <h3 className='text-sm font-bold'>{item.title}</h3>
+                        <h3 className='h6 sub-heading'>{item.title}</h3>
                         <p className='text-sm text-muted-foreground'>{item.body}</p>
                       </section>
                     ))}
@@ -421,7 +421,7 @@ function InsideScrollDialog() {
                 <ScrollAreaContent>
                   {LOREM_SECTIONS.map((item) => (
                     <section key={item.title} className='flex flex-col gap-1'>
-                      <h3 className='text-sm font-bold'>{item.title}</h3>
+                      <h3 className='h6 sub-heading'>{item.title}</h3>
                       <p className='text-sm text-muted-foreground'>{item.body}</p>
                     </section>
                   ))}
@@ -454,7 +454,7 @@ function UncontainedDialog() {
               aria-label='Close'
               className='pointer-events-auto absolute -top-2 -right-2 z-10 size-8 border-0 bg-transparent p-0 hover:bg-accent'
             >
-              <X />
+              <XIcon />
             </DialogClose>
             <div className='pointer-events-auto flex w-72 flex-col gap-4 rounded-lg border border-border bg-background p-6 text-foreground shadow-lg'>
               <DialogHeader>

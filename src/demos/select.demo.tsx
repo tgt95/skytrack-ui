@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Check } from '@phosphor-icons/react'
+import { CheckIcon } from '@phosphor-icons/react'
 import {
   Select,
   SelectArrow,
@@ -329,7 +329,7 @@ function MultipleSelect() {
               {languageValues.map((value) => (
                 <SelectItem key={value} value={value}>
                   <SelectItemIndicator>
-                    <Check className='size-4' />
+                    <CheckIcon className='size-4' />
                   </SelectItemIndicator>
                   <SelectItemText>{languages[value]}</SelectItemText>
                 </SelectItem>

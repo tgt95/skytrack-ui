@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Select as BaseSelect } from '@base-ui/react/select'
-import { CaretDown, CaretUp, CaretUpDown, Check } from '@phosphor-icons/react'
+import { CaretDownIcon, CaretUpIcon, CaretUpDownIcon, CheckIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
@@ -77,7 +77,7 @@ function SelectIcon({ className, children, ...props }: React.ComponentProps<type
       className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className as string)}
       {...props}
     >
-      {children ?? <CaretUpDown className='size-4' />}
+      {children ?? <CaretUpDownIcon className='size-4' />}
     </BaseSelect.Icon>
   )
 }
@@ -99,10 +99,21 @@ function SelectBackdrop({ className, ...props }: React.ComponentProps<typeof Bas
   )
 }
 
-function SelectPositioner({ className, ...props }: React.ComponentProps<typeof BaseSelect.Positioner>) {
+function SelectPositioner({
+  className,
+  side = 'bottom',
+  align = 'start',
+  sideOffset = 4,
+  alignItemWithTrigger = false,
+  ...props
+}: React.ComponentProps<typeof BaseSelect.Positioner>) {
   return (
     <BaseSelect.Positioner
       data-slot='select-positioner'
+      side={side}
+      align={align}
+      sideOffset={sideOffset}
+      alignItemWithTrigger={alignItemWithTrigger}
       className={cn('z-50 outline-hidden', className as string)}
       {...props}
     />
@@ -182,7 +193,7 @@ function SelectItemIndicator({ className, children, ...props }: React.ComponentP
       )}
       {...props}
     >
-      {children ?? <Check className='size-4' />}
+      {children ?? <CheckIcon className='size-4' />}
     </BaseSelect.ItemIndicator>
   )
 }
@@ -194,7 +205,7 @@ function SelectArrow({ className, children, ...props }: React.ComponentProps<typ
       className={cn('flex size-4 items-center justify-center text-muted-foreground', className as string)}
       {...props}
     >
-      {children ?? <CaretDown className='size-4 rotate-180' />}
+      {children ?? <CaretDownIcon className='size-4 rotate-180' />}
     </BaseSelect.Arrow>
   )
 }
@@ -209,7 +220,7 @@ function SelectScrollUpArrow({ className, children, ...props }: React.ComponentP
       )}
       {...props}
     >
-      {children ?? <CaretUp className='size-3' />}
+      {children ?? <CaretUpIcon className='size-3' />}
     </BaseSelect.ScrollUpArrow>
   )
 }
@@ -228,7 +239,7 @@ function SelectScrollDownArrow({
       )}
       {...props}
     >
-      {children ?? <CaretDown className='size-3' />}
+      {children ?? <CaretDownIcon className='size-3' />}
     </BaseSelect.ScrollDownArrow>
   )
 }

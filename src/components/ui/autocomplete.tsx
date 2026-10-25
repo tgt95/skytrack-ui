@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Autocomplete as BaseAutocomplete } from '@base-ui/react/autocomplete'
-import { CaretDown, MagnifyingGlass, X } from '@phosphor-icons/react'
+import { CaretDownIcon, MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
@@ -101,7 +101,7 @@ function AutocompleteTrigger({ className, children, ...props }: React.ComponentP
       )}
       {...props}
     >
-      {children ?? <CaretDown className='size-4' />}
+      {children ?? <CaretDownIcon className='size-4' />}
     </BaseAutocomplete.Trigger>
   )
 }
@@ -125,7 +125,7 @@ function AutocompleteTriggerButton({
       )}
       {...props}
     >
-      {children ?? <MagnifyingGlass className='size-4 shrink-0 text-muted-foreground' />}
+      {children ?? <MagnifyingGlassIcon className='size-4 shrink-0 text-muted-foreground' />}
     </BaseAutocomplete.Trigger>
   )
 }
@@ -137,7 +137,7 @@ function AutocompleteIcon({ className, children, ...props }: React.ComponentProp
       className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className as string)}
       {...props}
     >
-      {children ?? <CaretDown className='size-4' />}
+      {children ?? <CaretDownIcon className='size-4' />}
     </BaseAutocomplete.Icon>
   )
 }
@@ -155,7 +155,7 @@ function AutocompleteClear({ className, children, ...props }: React.ComponentPro
       )}
       {...props}
     >
-      {children ?? <X className='size-4' />}
+      {children ?? <XIcon className='size-4' />}
     </BaseAutocomplete.Clear>
   )
 }
@@ -215,7 +215,7 @@ function AutocompleteArrow({ className, children, ...props }: React.ComponentPro
       className={cn('flex size-4 items-center justify-center text-muted-foreground', className as string)}
       {...props}
     >
-      {children ?? <CaretDown className='size-3 rotate-180' />}
+      {children ?? <CaretDownIcon className='size-3 rotate-180' />}
     </BaseAutocomplete.Arrow>
   )
 }

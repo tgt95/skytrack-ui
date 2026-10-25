@@ -23,11 +23,20 @@ import { cn } from "@/lib/utils";
 
 import {
   Accordion,
+  AccordionContent,
   AccordionHeader,
   AccordionItem,
   AccordionPanel,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+  alertVariants,
+  AlertProps,
+} from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -84,6 +93,15 @@ import {
   badgeVariants,
   BadgeProps,
 } from "@/components/ui/badge";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
   Button,
   buttonVariants,
@@ -201,6 +219,10 @@ import {
   DrawerSideProps,
   DrawerSnapPoint,
 } from "@/components/ui/drawer";
+import {
+  Dropzone,
+  DropzoneProps,
+} from "@/components/ui/dropzone";
 import {
   Field,
   FieldControl,
@@ -448,10 +470,16 @@ export { cn };
 
 export {
   Accordion,
+  AccordionContent,
   AccordionHeader,
   AccordionItem,
   AccordionPanel,
   AccordionTrigger,
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+  alertVariants,
   AlertDialog,
   AlertDialogBackdrop,
   AlertDialogClose,
@@ -496,6 +524,13 @@ export {
   AvatarImage,
   Badge,
   badgeVariants,
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
   Button,
   buttonVariants,
   focusRing,
@@ -588,6 +623,7 @@ export {
   createDrawerHandle,
   drawerPopupVariants,
   drawerSideVariants,
+  Dropzone,
   Field,
   FieldControl,
   FieldDescription,
@@ -767,6 +803,7 @@ export {
 };
 
 export type {
+  AlertProps,
   AlertDialogButtonProps,
   AlertDialogChangeEventDetails,
   AutocompleteRootProps,
@@ -780,6 +817,7 @@ export type {
   DrawerChangeEventDetails,
   DrawerSideProps,
   DrawerSnapPoint,
+  DropzoneProps,
   InputAdornmentProps,
   InputProps,
   MenuItemVariantProps,

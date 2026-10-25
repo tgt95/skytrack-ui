@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ArrowUUpLeft, MagnifyingGlass, Plus, X } from '@phosphor-icons/react'
+import { ArrowUUpLeftIcon, MagnifyingGlassIcon, PlusIcon, XIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import { ToggleGroup } from '@/components/ui/toggle-group'
@@ -108,10 +108,11 @@ import { CheckboxGroup } from '@/components/ui/checkbox-group'
 import { FieldRoot, FieldLabel, FieldControl, FieldDescription } from '@/components/ui/field'
 import { FieldsetRoot, FieldsetLegend } from '@/components/ui/fieldset'
 import { Form } from '@/components/ui/form'
+import { Dropzone } from '@/components/ui/dropzone'
 import { RadioRoot, RadioGroup } from '@/components/ui/radio'
 import { Meter, MeterLabel, MeterTrack, MeterIndicator } from '@/components/ui/meter'
 import { Progress, ProgressLabel, ProgressTrack, ProgressIndicator } from '@/components/ui/progress'
-import { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionPanel } from '@/components/ui/accordion'
+import { AccountFaqAccordion } from './accordion-faq'
 import { Collapsible, CollapsibleTrigger, CollapsiblePanel } from '@/components/ui/collapsible'
 import {
   TooltipProvider,
@@ -205,7 +206,7 @@ function isIconSize(size?: string) {
 
 function ButtonSpecimenContent({ size, label, close = false }: { size?: string; label: string; close?: boolean }) {
   if (!isIconSize(size)) return label
-  return close ? <X aria-hidden /> : <Plus aria-hidden />
+  return close ? <XIcon aria-hidden /> : <PlusIcon aria-hidden />
 }
 
 /* ------------------------------------------------------------------ Button */
@@ -218,7 +219,7 @@ function ButtonSpecimen({ variant, size }: { variant?: string; size?: string }) 
       size={size as React.ComponentProps<typeof Button>['size']}
       aria-label={icon ? (size ?? 'icon') : undefined}
     >
-      {icon ? <Plus aria-hidden /> : variant === 'link' ? 'Link' : 'Button'}
+      {icon ? <PlusIcon aria-hidden /> : variant === 'link' ? 'Link' : 'Button'}
     </Button>
   )
 }
@@ -280,11 +281,11 @@ function ToolbarSpecimen({
         isActivated={isActivated === 'true'}
         aria-label='Bold'
       >
-        {icon ? <Plus aria-hidden /> : 'B'}
+        {icon ? <PlusIcon aria-hidden /> : 'B'}
       </ToolbarButton>
       <ToolbarSeparator />
       <ToolbarButton size={size as React.ComponentProps<typeof ToolbarButton>['size']} aria-label='Italic'>
-        {icon ? <Plus aria-hidden /> : 'I'}
+        {icon ? <PlusIcon aria-hidden /> : 'I'}
       </ToolbarButton>
     </Toolbar>
   )
@@ -455,7 +456,7 @@ function InputSpecimen({ adornment }: { adornment: string }) {
       className='w-40'
       placeholder='Value'
       aria-label={`input ${adornment}`}
-      startAdornment={start ? <MagnifyingGlass aria-hidden /> : undefined}
+      startAdornment={start ? <MagnifyingGlassIcon aria-hidden /> : undefined}
       endAdornment={end ? <span className='text-xs'>kg</span> : undefined}
     />
   )
@@ -566,12 +567,16 @@ function DrawerSpecimen({
   return (
     <Drawer>
       <DrawerTrigger
-        variant={buttonVariant as React.ComponentProps<typeof DrawerTrigger>['variant']}
-        size={buttonSize as React.ComponentProps<typeof DrawerTrigger>['size']}
         aria-label={isIconSize(buttonSize) ? `Open ${side} drawer` : undefined}
-      >
-        <ButtonSpecimenContent size={buttonSize} label={side} />
-      </DrawerTrigger>
+        render={
+          <Button
+            variant={buttonVariant as React.ComponentProps<typeof Button>['variant']}
+            size={buttonSize as React.ComponentProps<typeof Button>['size']}
+          >
+            <ButtonSpecimenContent size={buttonSize} label={side} />
+          </Button>
+        }
+      />
       <DrawerPortal>
         <DrawerBackdrop />
         <DrawerViewport side={side as React.ComponentProps<typeof DrawerViewport>['side']}>
@@ -675,7 +680,7 @@ function ToastList({
             variant={actionVariant}
             aria-label={actionSize === 'icon' ? 'Undo' : undefined}
           >
-            {actionSize === 'icon' ? <ArrowUUpLeft aria-hidden /> : 'Undo'}
+            {actionSize === 'icon' ? <ArrowUUpLeftIcon aria-hidden /> : 'Undo'}
           </ToastAction>
         )}
         <ToastClose size={closeSize} variant={closeVariant} aria-label='Dismiss' />
@@ -951,24 +956,7 @@ function ProgressSpecimen() {
 
 function AccordionSpecimen({ variant = 'default' }: { variant?: 'default' | 'compact' }) {
   return (
-    <Accordion defaultValue={['item-1']} multiple>
-      <AccordionItem value='item-1'>
-        <AccordionHeader>
-          <AccordionTrigger variant={variant}>Is it accessible?</AccordionTrigger>
-        </AccordionHeader>
-        <AccordionPanel>
-          <p className='m-0 text-sm'>Yes. It follows WAI-ARIA accordion pattern.</p>
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem value='item-2'>
-        <AccordionHeader>
-          <AccordionTrigger variant={variant}>Is it styled?</AccordionTrigger>
-        </AccordionHeader>
-        <AccordionPanel>
-          <p className='m-0 text-sm'>Yes. It uses the library tokens.</p>
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
+    <AccountFaqAccordion compact={variant === 'compact'} defaultOpen multiple />
   )
 }
 
@@ -992,12 +980,16 @@ function TooltipSpecimen({ variant, size }: { variant?: string; size?: string })
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger
-          variant={variant as React.ComponentProps<typeof TooltipTrigger>['variant']}
-          size={size as React.ComponentProps<typeof TooltipTrigger>['size']}
           aria-label={isIconSize(size) ? 'Show tooltip' : undefined}
-        >
-          <ButtonSpecimenContent size={size} label='Hover me' />
-        </TooltipTrigger>
+          render={
+            <Button
+              variant={variant as React.ComponentProps<typeof Button>['variant']}
+              size={size as React.ComponentProps<typeof Button>['size']}
+            >
+              <ButtonSpecimenContent size={size} label='Hover me' />
+            </Button>
+          }
+        />
         <TooltipPortal>
           <TooltipPositioner>
             <TooltipPopup>This is a tooltip.</TooltipPopup>
@@ -1020,12 +1012,16 @@ function AlertDialogSpecimen({
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        variant={buttonVariant as React.ComponentProps<typeof AlertDialogTrigger>['variant']}
-        size={buttonSize as React.ComponentProps<typeof AlertDialogTrigger>['size']}
         aria-label={isIconSize(buttonSize) ? 'Open alert dialog' : undefined}
-      >
-        <ButtonSpecimenContent size={buttonSize} label='Open alert dialog' />
-      </AlertDialogTrigger>
+        render={
+          <Button
+            variant={buttonVariant as React.ComponentProps<typeof Button>['variant']}
+            size={buttonSize as React.ComponentProps<typeof Button>['size']}
+          >
+            <ButtonSpecimenContent size={buttonSize} label='Open alert dialog' />
+          </Button>
+        }
+      />
       <AlertDialogPortal>
         <AlertDialogBackdrop />
         <AlertDialogViewport>
@@ -1067,12 +1063,16 @@ function DialogSpecimen({
   return (
     <Dialog>
       <DialogTrigger
-        variant={buttonVariant as React.ComponentProps<typeof DialogTrigger>['variant']}
-        size={buttonSize as React.ComponentProps<typeof DialogTrigger>['size']}
         aria-label={isIconSize(buttonSize) ? 'Open dialog' : undefined}
-      >
-        <ButtonSpecimenContent size={buttonSize} label='Open dialog' />
-      </DialogTrigger>
+        render={
+          <Button
+            variant={buttonVariant as React.ComponentProps<typeof Button>['variant']}
+            size={buttonSize as React.ComponentProps<typeof Button>['size']}
+          >
+            <ButtonSpecimenContent size={buttonSize} label='Open dialog' />
+          </Button>
+        }
+      />
       <DialogPortal>
         <DialogBackdrop />
         <DialogViewport>
@@ -1108,12 +1108,16 @@ function PopoverSpecimen({ variant, size }: { variant?: string; size?: string })
   return (
     <Popover>
       <PopoverTrigger
-        variant={variant as React.ComponentProps<typeof PopoverTrigger>['variant']}
-        size={size as React.ComponentProps<typeof PopoverTrigger>['size']}
         aria-label={isIconSize(size) ? 'Open popover' : undefined}
-      >
-        <ButtonSpecimenContent size={size} label='Open popover' />
-      </PopoverTrigger>
+        render={
+          <Button
+            variant={variant as React.ComponentProps<typeof Button>['variant']}
+            size={size as React.ComponentProps<typeof Button>['size']}
+          >
+            <ButtonSpecimenContent size={size} label='Open popover' />
+          </Button>
+        }
+      />
       <PopoverPortal>
         <PopoverPositioner>
           <PopoverPopup>
@@ -1132,12 +1136,16 @@ function PreviewCardSpecimen({ variant = 'link', size }: { variant?: string; siz
   return (
     <PreviewCard>
       <PreviewCardTrigger
-        variant={variant as React.ComponentProps<typeof PreviewCardTrigger>['variant']}
-        size={size as React.ComponentProps<typeof PreviewCardTrigger>['size']}
         aria-label={isIconSize(size) ? 'View preview' : undefined}
-      >
-        <ButtonSpecimenContent size={size} label='View preview' />
-      </PreviewCardTrigger>
+        render={
+          <Button
+            variant={variant as React.ComponentProps<typeof Button>['variant']}
+            size={size as React.ComponentProps<typeof Button>['size']}
+          >
+            <ButtonSpecimenContent size={size} label='View preview' />
+          </Button>
+        }
+      />
       <PreviewCardPortal>
         <PreviewCardPositioner>
           <PreviewCardPopup>
@@ -1332,6 +1340,9 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   },
   form: {
     states: () => <FormSpecimen />
+  },
+  dropzone: {
+    states: () => <Dropzone className='w-full max-w-sm' />
   },
   radio: {
     states: () => <RadioSpecimen />

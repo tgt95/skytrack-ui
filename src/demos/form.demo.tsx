@@ -1,5 +1,5 @@
 import { useActionState, useRef, useState } from 'react'
-import { CircleNotch } from '@phosphor-icons/react'
+import { CircleNotchIcon } from '@phosphor-icons/react'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
 import { FieldRoot, FieldLabel, FieldControl, FieldDescription, FieldError, FieldItem } from '@/components/ui/field'
@@ -58,7 +58,7 @@ function BasicForm() {
         <FieldError />
       </FieldRoot>
       <Button type='submit' disabled={loading} focusableWhenDisabled>
-        {loading && <CircleNotch className='animate-spin' />}
+        {loading && <CircleNotchIcon className='animate-spin' />}
         {loading ? 'Submitting' : 'Submit'}
       </Button>
     </Form>
@@ -96,7 +96,7 @@ function ActionStateForm() {
         <FieldError />
       </FieldRoot>
       <Button type='submit' disabled={loading} focusableWhenDisabled>
-        {loading && <CircleNotch className='animate-spin' />}
+        {loading && <CircleNotchIcon className='animate-spin' />}
         {loading ? 'Submitting' : 'Submit'}
       </Button>
     </Form>

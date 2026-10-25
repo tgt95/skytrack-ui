@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Accordion as BaseAccordion } from '@base-ui/react/accordion'
-import { CaretDown } from '@phosphor-icons/react'
+import { CaretDownIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
 
@@ -24,19 +24,13 @@ function AccordionHeader({ className, ...props }: React.ComponentProps<typeof Ba
   return <BaseAccordion.Header data-slot='accordion-header' className={cn('flex', className as string)} {...props} />
 }
 
-type AccordionTriggerProps = React.ComponentProps<typeof BaseAccordion.Trigger> & {
-  variant?: 'default' | 'compact'
-}
-
-function AccordionTrigger({ className, children, variant = 'default', ...props }: AccordionTriggerProps) {
+function AccordionTrigger({ className, children, ...props }: React.ComponentProps<typeof BaseAccordion.Trigger>) {
   return (
     <BaseAccordion.Trigger
       data-slot='accordion-trigger'
       className={cn(
-        'flex cursor-pointer flex-1 items-center justify-between transition-colors select-none',
-        variant === 'compact'
-          ? 'min-h-[34px] gap-2 rounded-none py-1 text-left text-[11px] font-semibold text-muted-foreground hover:no-underline [&>svg]:size-3'
-          : 'gap-4 rounded-md py-4 text-left text-sm font-medium hover:underline',
+        'flex flex-1 cursor-pointer items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium text-foreground transition-colors select-none',
+        'hover:underline',
         'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         '[&[data-panel-open]>svg]:rotate-180',
         "[&>svg]:pointer-events-none [&>svg]:shrink-0 [&>svg:not([class*='size-'])]:size-4",
@@ -46,15 +40,18 @@ function AccordionTrigger({ className, children, variant = 'default', ...props }
       {...props}
     >
       {children}
-      <CaretDown className='text-muted-foreground transition-transform duration-200' />
+      <CaretDownIcon
+        aria-hidden='true'
+        className='size-4 shrink-0 text-muted-foreground transition-transform duration-200'
+      />
     </BaseAccordion.Trigger>
   )
 }
 
-function AccordionPanel({ className, ...props }: React.ComponentProps<typeof BaseAccordion.Panel>) {
+function accordionContent(dataSlot: string, { className, ...props }: React.ComponentProps<typeof BaseAccordion.Panel>) {
   return (
     <BaseAccordion.Panel
-      data-slot='accordion-panel'
+      data-slot={dataSlot}
       className={cn(
         'h-[var(--accordion-panel-height)] overflow-hidden text-sm transition-[height] duration-200 ease-out',
         'data-[ending-style]:h-0 data-[starting-style]:h-0',
@@ -65,4 +62,12 @@ function AccordionPanel({ className, ...props }: React.ComponentProps<typeof Bas
   )
 }
 
-export { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionPanel }
+function AccordionContent(props: React.ComponentProps<typeof BaseAccordion.Panel>) {
+  return accordionContent('accordion-content', props)
+}
+
+function AccordionPanel(props: React.ComponentProps<typeof BaseAccordion.Panel>) {
+  return accordionContent('accordion-panel', props)
+}
+
+export { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionContent, AccordionPanel }
