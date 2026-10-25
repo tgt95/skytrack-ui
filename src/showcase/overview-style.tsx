@@ -9,6 +9,7 @@ import {
   BatteryEmptyIcon,
   BatteryFullIcon,
   BatteryChargingIcon,
+  BatteryWarningIcon,
   BellIcon,
   BellRingingIcon,
   BluetoothConnectedIcon,
@@ -35,6 +36,8 @@ import {
   FileCsvIcon,
   FileTextIcon,
   FlagIcon,
+  FolderOpenIcon,
+  FunnelSimpleIcon,
   GasPumpIcon,
   GaugeIcon,
   GearIcon,
@@ -43,10 +46,12 @@ import {
   HardDriveIcon,
   InfoIcon,
   LifebuoyIcon,
+  ListMagnifyingGlassIcon,
   ListChecksIcon,
   MapPinIcon,
   MapPinAreaIcon,
   MapPinLineIcon,
+  MapPinPlusIcon,
   MapTrifoldIcon,
   MagnifyingGlassIcon,
   MinusIcon,
@@ -60,6 +65,7 @@ import {
   RadioIcon,
   RepeatIcon,
   RocketIcon,
+  SirenIcon,
   ShieldCheckIcon,
   SlidersHorizontalIcon,
   SunIcon,
@@ -133,6 +139,7 @@ import { AccountFaqAccordion } from './accordion-faq'
 import miniProA8miniSvg from './images/MiniPro_A8mini_blueprint_static.svg?raw'
 
 const miniProA8mini = miniProA8miniSvg
+const publicAssetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`
 
 function Card ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
@@ -216,7 +223,13 @@ const ICON_BUTTONS = [
   PaperPlaneTiltIcon,
   PlugChargingIcon,
   ShieldCheckIcon,
-  TrafficSignalIcon
+  TrafficSignalIcon,
+  BatteryWarningIcon,
+  FolderOpenIcon,
+  FunnelSimpleIcon,
+  ListMagnifyingGlassIcon,
+  MapPinPlusIcon,
+  SirenIcon
 ]
 
 function IconButtonGrid () {
@@ -374,7 +387,7 @@ function OperatorProfileCard () {
       <div className='grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4'>
         <div className='space-y-3'>
           <Avatar className='size-32 rounded-(--radius) border-border border bg-muted text-2xl'>
-            <AvatarImage src='/images/lineart-avatar-1.png' />
+            <AvatarImage src={publicAssetUrl('images/lineart-avatar-1.png')} />
           </Avatar>
           <div className='flex flex-col gap-2'>
             <div>
@@ -859,7 +872,7 @@ export function OverviewStyle () {
             ['SO', 'Male/10.jpg']
           ].map(([initials, image]) => (
             <Avatar key={initials}>
-              <AvatarImage src={`/images/avatars/${image}`} alt={`Contributor ${initials}`} />
+              <AvatarImage src={publicAssetUrl(`images/avatars/${image}`)} alt={`Contributor ${initials}`} />
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
           ))}
