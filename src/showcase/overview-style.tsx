@@ -391,7 +391,7 @@ function BarcodeMark () {
   )
 }
 
-function OperatorProfileCard () {
+function PreviewStyle0 () {
   return (
     <Card className='lg:col-span-2 xl:col-span-1'>
       <header className='flex items-center justify-between border-b border-border pb-3 text-xs'>
@@ -470,15 +470,15 @@ function OperatorProfileCard () {
   )
 }
 
-function MissionPassCard () {
+function PreviewStyle2 () {
   return (
     <Card className='lg:col-span-2'>
-      <header className='flex items-start justify-between gap-4 border-b border-border pb-4'>
-        <div>
+      <header className='flex flex-col gap-0.5 border-b border-border pb-4'>
+        <div className='flex items-center justify-between gap-2'>
           <CardTitle>Mission boarding pass</CardTitle>
-          <CardSub>United Flight · UAV-048</CardSub>
+          <Badge status='success' count='READY' />
         </div>
-        <Badge status='success' count='READY' />
+        <CardSub>United Flight · UAV-048</CardSub>
       </header>
       <div className='grid gap-5 md:grid-cols-[minmax(0,1fr)_12rem]'>
         <div className='space-y-5'>
@@ -534,7 +534,7 @@ function MissionPassCard () {
   )
 }
 
-function FieldPosterCard () {
+function PreviewStyle1 () {
   return (
     <Card className='lg:col-span-2 xl:col-span-2 gap-0! p-0!'>
       <header className='flex items-center justify-between border-b border-border p-6 pb-3 text-xs'>
@@ -577,7 +577,7 @@ function FieldPosterCard () {
   )
 }
 
-function SwissMissionCard () {
+function PreviewStyle3 () {
   return (
     <Card className='lg:col-span-2 p-0! gap-0!'>
       <header className='flex items-start justify-between gap-4 p-6'>
@@ -639,9 +639,9 @@ function SwissMissionCard () {
 export function OverviewStyle () {
   return (
     <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3'>
-      <OperatorProfileCard />
-      <FieldPosterCard />
-      <MissionPassCard />
+      <PreviewStyle0 />
+      <PreviewStyle1 />
+      <PreviewStyle2 />
 
       {/* Type rhythm */}
       <Card className='lg:col-span-1 lg:row-span-2'>
@@ -668,7 +668,7 @@ export function OverviewStyle () {
         </div>
       </Card>
 
-      <SwissMissionCard />
+      <PreviewStyle3 />
 
       {/* Icon buttons */}
       <Card>
@@ -791,8 +791,10 @@ export function OverviewStyle () {
 
       {/* Env vars */}
       <Card>
-        <div>
-          <CardTitle>Environment Variables</CardTitle>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
+            <CardTitle>Environment Variables</CardTitle>
+          </div>
           <CardSub>Production · 8 variables</CardSub>
         </div>
         <div className='flex flex-col gap-3'>
@@ -808,6 +810,10 @@ export function OverviewStyle () {
             <FieldLabel>STRIPE_SECRET</FieldLabel>
             <Input type='password' defaultValue='••••••••' autoComplete='off' />
           </FieldRoot>
+          <FieldRoot name='REDIS_URL'>
+            <FieldLabel>REDIS_URL</FieldLabel>
+            <Input type='password' defaultValue='••••••••' autoComplete='off' />
+          </FieldRoot>
         </div>
         <div className='flex items-center justify-end gap-2'>
           <Button variant='outline'>Edit</Button>
@@ -817,8 +823,10 @@ export function OverviewStyle () {
 
       {/* Traffic */}
       <Card>
-        <div>
-          <CardTitle>Traffic channels</CardTitle>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
+            <CardTitle>Traffic channels</CardTitle>
+          </div>
           <CardSub>
             Monthly desktop and mobile traffic for the last six months—compare volume and mix across platforms…
           </CardSub>
@@ -921,12 +929,16 @@ export function OverviewStyle () {
 
       {/* Share feedback dialog */}
       <Card>
-        <div>
-          <CardTitle>Designing with rhythm and hierarchy.</CardTitle>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
+            <CardTitle>Designing with rhythm and hierarchy.</CardTitle>
+          </div>
           <CardSub>Open a real dialog built from the library — not a mock.</CardSub>
         </div>
         <Dialog>
-          <DialogTrigger className='w-auto'>Share Feedback</DialogTrigger>
+          <DialogTrigger className='w-auto' render={
+            <Button variant='outline'>Share Feedback</Button>
+          }/>
           <DialogPortal>
             <DialogBackdrop />
             <DialogPopup>
@@ -961,13 +973,13 @@ export function OverviewStyle () {
       </Card>
 
       {/* Invoice table */}
-      <Card>
-        <div className='flex items-start justify-between gap-2'>
-          <div>
+      <Card className='xl:col-span-2'>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
             <CardTitle>Invoice #INV-2847</CardTitle>
-            <CardSub>Due March 30, 2026</CardSub>
+            <Badge status='outline' count='Pending' />
           </div>
-          <Badge status='outline' count='Pending' />
+          <CardSub>Due March 30, 2026</CardSub>
         </div>
         <table className='w-full text-sm'>
           <thead>
@@ -982,7 +994,8 @@ export function OverviewStyle () {
             {[
               ['Design System License', '1', '$499.00', '$499.00'],
               ['Priority Support', '12', '$99.00', '$1,188.00'],
-              ['Custom Components', '3', '$250.00', '$750.00']
+              ['Custom Components', '3', '$250.00', '$750.00'],
+              ['Onboarding Workshop', '2', '$350.00', '$700.00']
             ].map((row) => (
               <tr key={row[0]}>
                 <td className='py-1.5 pr-2'>{row[0]}</td>
@@ -995,13 +1008,13 @@ export function OverviewStyle () {
               <td colSpan={3} className='py-1.5 pr-2 text-right text-muted-foreground'>
                 Subtotal
               </td>
-              <td className='py-1.5 text-right tabular-nums'>$2,437.00</td>
+              <td className='py-1.5 text-right tabular-nums'>$3,137.00</td>
             </tr>
             <tr>
               <td colSpan={3} className='py-1.5 pr-2 text-right font-medium'>
                 Total Due
               </td>
-              <td className='py-1.5 text-right font-semibold tabular-nums'>$2,437.00</td>
+              <td className='py-1.5 text-right font-semibold tabular-nums'>$3,137.00</td>
             </tr>
           </tbody>
         </table>
@@ -1013,8 +1026,8 @@ export function OverviewStyle () {
 
       {/* Kitchen island smart home */}
       <Card>
-        <div className='w-full'>
-          <div className='w-full flex items-center justify-between gap-2'>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
             <CardTitle>Kitchen Island</CardTitle>
             <label className='flex items-center gap-2 text-sm'>
               <Switch defaultChecked>
@@ -1061,7 +1074,9 @@ export function OverviewStyle () {
             ['Quick Actions', ['⌘', 'J']],
             ['New File', ['⌘', 'N']],
             ['Save', ['⌘', 'S']],
-            ['Toggle Sidebar', ['⌘', 'B']]
+            ['Copy Path', ['⌘', '⇧', 'B']],
+            ['Toggle Sidebar', ['⌘', 'B']],
+            ['Toggle Right Sidebar', ['⌘', 'L']],
           ].map(([label, keys], i, arr) => (
             <>
               <div key={label as string} className='flex items-center justify-between px-4 py-3 text-sm'>
@@ -1080,8 +1095,10 @@ export function OverviewStyle () {
 
       {/* Notifications checkboxes */}
       <Card>
-        <div>
-          <CardTitle>Notifications</CardTitle>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
+            <CardTitle>Notifications</CardTitle>
+          </div>
           <CardSub>Choose what you want to be notified about.</CardSub>
         </div>
         {[
@@ -1109,8 +1126,10 @@ export function OverviewStyle () {
 
       {/* Account access */}
       <Card>
-        <div>
-          <CardTitle>Account Access</CardTitle>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
+            <CardTitle>Account Access</CardTitle>
+          </div>
           <CardSub>Update your credentials or re-authenticate.</CardSub>
         </div>
         <label className='flex flex-col gap-1.5 text-sm'>
@@ -1141,14 +1160,14 @@ export function OverviewStyle () {
 
       {/* Preferences switches */}
       <Card>
-        <div className='flex items-start justify-between gap-2'>
-          <div>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
             <CardTitle>Preferences</CardTitle>
-            <CardSub>Manage your account settings and notifications.</CardSub>
+            <Button variant='ghost' size='icon-sm' aria-label='Close preferences'>
+              <XIcon />
+            </Button>
           </div>
-          <Button variant='ghost' size='icon-sm' aria-label='Close preferences'>
-            <XIcon />
-          </Button>
+          <CardSub>Manage your account settings and notifications.</CardSub>
         </div>
         <MiniSelect
           label='Default Currency'
@@ -1234,11 +1253,15 @@ export function OverviewStyle () {
             <PseudoQr />
           </div>
           <div className='flex flex-col gap-1 text-center'>
-            <CardTitle>Scan to connect your mobile device</CardTitle>
-            <CardSub>
-              Open the Ledger mobile app and scan this code <br />
-              to link your device.
-            </CardSub>
+            <div className='flex flex-col gap-0.5'>
+              <div className='flex items-center justify-between gap-2'>
+                <CardTitle>Scan to connect your mobile device</CardTitle>
+              </div>
+              <CardSub>
+                Open the Ledger mobile app and scan this code <br />
+                to link your device.
+              </CardSub>
+            </div>
           </div>
           <Button variant='secondary' className='w-full'>
             Got it
@@ -1312,14 +1335,14 @@ export function OverviewStyle () {
 
       {/* Front door live */}
       <Card>
-        <div className='flex items-start justify-between gap-2'>
-          <div>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
             <CardTitle>Front Door</CardTitle>
-            <CardSub>Smart Lock Pro</CardSub>
+            <span className='flex items-center gap-1.5 text-sm text-muted-foreground'>
+              Locked <LockKeyIcon aria-hidden='true' className='size-4' />
+            </span>
           </div>
-          <span className='flex items-center gap-1.5 text-sm text-muted-foreground'>
-            Locked <LockKeyIcon aria-hidden='true' className='size-4' />
-          </span>
+          <CardSub>Smart Lock Pro</CardSub>
         </div>
         <div className='relative flex min-h-0 h-full items-center justify-center overflow-hidden rounded-lg border border-border bg-muted bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,var(--border)_10px,var(--border)_11px)]'>
           <span className='absolute top-2 right-2'>
@@ -1346,8 +1369,10 @@ export function OverviewStyle () {
 
       {/* Agent checklist */}
       <Card>
-        <div>
-          <CardTitle>Ship faster &amp; safer with Vercel Agent</CardTitle>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
+            <CardTitle>Ship faster &amp; safer with Vercel Agent</CardTitle>
+          </div>
           <CardSub>
             Your use is subject to the{' '}
             <a href='#beta' className='underline underline-offset-4'>
@@ -1383,8 +1408,10 @@ export function OverviewStyle () {
 
       {/* File upload empty */}
       <Card>
-        <div>
-          <CardTitle>File Upload</CardTitle>
+        <div className='flex flex-col gap-0.5'>
+          <div className='flex items-center justify-between gap-2'>
+            <CardTitle>File Upload</CardTitle>
+          </div>
           <CardSub>Drag and drop or browse</CardSub>
         </div>
         <div className='flex flex-col justify-center items-center gap-2 border border-border py-8 text-center min-h-0 h-full'>
