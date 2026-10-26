@@ -86,6 +86,7 @@ import {
 } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { FieldRoot, FieldLabel } from '@/components/ui/field'
 import {
   Select,
   SelectItem,
@@ -758,19 +759,30 @@ export function OverviewStyle () {
           <CardTitle>Environment Variables</CardTitle>
           <CardSub>Production · 8 variables</CardSub>
         </div>
-        <div className='flex flex-col gap-2 text-sm'>
-          <div className='flex items-center justify-between border border-border px-3 py-2'>
-            <code>DATABASE_URL</code>
-            <span className='text-muted-foreground'>••••••••</span>
-          </div>
-          <div className='flex items-center justify-between border border-border px-3 py-2'>
-            <code>NEXT_PUBLIC_API</code>
-            <span className='truncate text-xs text-muted-foreground'>https://api.example.com</span>
-          </div>
-          <div className='flex items-center justify-between border border-border px-3 py-2'>
-            <code>STRIPE_SECRET</code>
-            <span className='text-muted-foreground'>••••••••</span>
-          </div>
+        <div className='flex flex-col gap-3'>
+          <FieldRoot name='DATABASE_URL'>
+            <FieldLabel>DATABASE_URL</FieldLabel>
+            <Input
+              type='password'
+              defaultValue='••••••••'
+              autoComplete='off'
+            />
+          </FieldRoot>
+          <FieldRoot name='NEXT_PUBLIC_API'>
+            <FieldLabel>NEXT_PUBLIC_API</FieldLabel>
+            <Input
+              type='url'
+              defaultValue='https://api.example.com'
+            />
+          </FieldRoot>
+          <FieldRoot name='STRIPE_SECRET'>
+            <FieldLabel>STRIPE_SECRET</FieldLabel>
+            <Input
+              type='password'
+              defaultValue='••••••••'
+              autoComplete='off'
+            />
+          </FieldRoot>
         </div>
         <div className='flex items-center justify-end gap-2'>
           <Button variant='outline'>Edit</Button>
