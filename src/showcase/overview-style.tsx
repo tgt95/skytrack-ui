@@ -144,8 +144,21 @@ const publicAssetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`
 
 function Card ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`flex flex-col gap-4 border border-border bg-card p-6 text-card-foreground ${className}`}>
-      {children}
+    <div className={`relative ${className}`}>
+      <div
+        className={`flex h-full flex-col gap-4 border border-border bg-card p-6 text-card-foreground ${className} [clip-path:polygon(0_0,100%_0,100%_calc(100%-16px),calc(100%-16px)_100%,0_100%)]`}
+      >
+        {children}
+      </div>
+      <svg
+        aria-hidden='true'
+        className='pointer-events-none absolute bottom-0 right-0 z-10 overflow-visible'
+        width='16'
+        height='16'
+        viewBox='0 0 16 16'
+      >
+        <path d='M0 16 16 0' fill='none' stroke='var(--border)' strokeWidth='1' vectorEffect='non-scaling-stroke' />
+      </svg>
     </div>
   )
 }
@@ -385,23 +398,40 @@ function OperatorProfileCard () {
         <span className='sub-heading text-foreground'>FLIGHT CREW</span>
         <span className='sub-heading'>PROFILE 01</span>
       </header>
-      <div className='grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4'>
+      <div className='grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4'>
         <div className='space-y-3'>
-          <Avatar className='size-32 rounded-(--radius) border-border border bg-muted text-2xl'>
+          <Avatar className='size-32 rounded-(--radius) border-border border bg-muted text-2xl [clip-path:polygon(0_0,100%_0,100%_calc(100%-16px),calc(100%-16px)_100%,0_100%)]'>
             <AvatarImage src={publicAssetUrl('images/lineart-avatar-1.png')} />
+            <svg
+              aria-hidden='true'
+              className='pointer-events-none absolute bottom-0 right-0 z-10 overflow-visible'
+              width='16'
+              height='16'
+              viewBox='0 0 16 16'
+            >
+              <path
+                d='M0 16 16 0'
+                fill='none'
+                stroke='var(--border)'
+                strokeWidth='1'
+                vectorEffect='non-scaling-stroke'
+              />
+            </svg>
           </Avatar>
           <div className='flex flex-col gap-2'>
             <div>
               <h2 className='h2'>Sky-001</h2>
-              <p className='text-xs sub-heading mt-1'>The Terminator</p>
+              <p className='text-xs sub-heading mt-1'>Robotic Flight System</p>
             </div>
-            <p className='text-sm'>mPlaza, VN</p>
+            <p className='text-sm'>SkyTrack Research Labs, VN</p>
           </div>
         </div>
-        <div className='text-center'>
-          <Badge className='mt-3' status='processing' count='ACTIVE NOW' />
-          <div className='text-7xl heading'>04</div>
-          <p className='mt-2 text-xs text-muted-foreground'>Missions today</p>
+        <div className='flex flex-col justify-between min-h-0 h-full text-center'>
+          <Badge status='processing' count='ACTIVE NOW' />
+          <div className='mt-auto'>
+            <div className='text-7xl heading'>04</div>
+            <p className='mt-2 text-xs text-muted-foreground'>Missions today</p>
+          </div>
         </div>
       </div>
       <Separator />
@@ -557,8 +587,8 @@ function SwissMissionCard () {
         </div>
         <Badge status='processing' count='DESIGN PRINCIPLE' />
       </header>
-      <div className='grid grid-cols-1 border-y border-border sm:grid-cols-3'>
-        <div className='flex flex-col gap-8 justify-between bg-primary p-6 text-primary-foreground'>
+      <div className='grid grid-cols-1 sm:grid-cols-3'>
+        <div className='flex flex-col gap-8 justify-between bg-primary p-6 text-primary-foreground [clip-path:polygon(0_0,100%_0,100%_calc(100%-8px),calc(100%-8px)_100%,0_100%)]'>
           <div className='flex flex-col gap-4'>
             <span className='text-xs sub-heading text-primary-foreground'>01. Grid</span>
             <p className='text-7xl heading tabular-nums'>03</p>
@@ -567,7 +597,11 @@ function SwissMissionCard () {
             A clear route, <br /> at a glance.
           </span>
         </div>
-        <div className='flex flex-col gap-8 justify-between border-border p-6'>
+        <div className='relative flex flex-col gap-8 justify-between border-border sm:border-t p-6'>
+          {/* <span
+            aria-hidden='true'
+            className='absolute -left-0.5 top-0 size-4 bg-primary [clip-path:polygon(0_0,100%_0,0_100%)]'
+          /> */}
           <div className='flex flex-col gap-4'>
             <span className='text-xs sub-heading text-muted-foreground'>02. Type</span>
             <p className='h3'>Form follows function.</p>
@@ -576,7 +610,7 @@ function SwissMissionCard () {
             Every label <br /> gives the crew one useful signal.
           </p>
         </div>
-        <div className='flex flex-col gap-8 justify-between border-border p-6 sm:border-l'>
+        <div className='flex flex-col gap-8 justify-between border-border p-6 sm:border-l sm:border-t'>
           <div className='flex flex-col gap-4'>
             <span className='text-xs sub-heading text-muted-foreground'>03. Accuracy</span>
             <div className='grid w-fit grid-cols-7 gap-2' aria-hidden='true'>
@@ -733,7 +767,9 @@ export function OverviewStyle () {
             </Button>
             <Menu>
               <MenuTrigger
-                render={<Button variant='outline' size='icon' aria-label='More group actions' className='rounded-l-none' />}
+                render={
+                  <Button variant='outline' size='icon' aria-label='More group actions' className='rounded-l-none' />
+                }
               >
                 <CaretDownIcon aria-hidden='true' />
               </MenuTrigger>
@@ -762,26 +798,15 @@ export function OverviewStyle () {
         <div className='flex flex-col gap-3'>
           <FieldRoot name='DATABASE_URL'>
             <FieldLabel>DATABASE_URL</FieldLabel>
-            <Input
-              type='password'
-              defaultValue='••••••••'
-              autoComplete='off'
-            />
+            <Input type='password' defaultValue='••••••••' autoComplete='off' />
           </FieldRoot>
           <FieldRoot name='NEXT_PUBLIC_API'>
             <FieldLabel>NEXT_PUBLIC_API</FieldLabel>
-            <Input
-              type='url'
-              defaultValue='https://api.example.com'
-            />
+            <Input type='url' defaultValue='https://api.example.com' />
           </FieldRoot>
           <FieldRoot name='STRIPE_SECRET'>
             <FieldLabel>STRIPE_SECRET</FieldLabel>
-            <Input
-              type='password'
-              defaultValue='••••••••'
-              autoComplete='off'
-            />
+            <Input type='password' defaultValue='••••••••' autoComplete='off' />
           </FieldRoot>
         </div>
         <div className='flex items-center justify-end gap-2'>

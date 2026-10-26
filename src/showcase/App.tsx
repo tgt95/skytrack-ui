@@ -33,7 +33,7 @@ const demos = Object.values(modules)
 const VIEWS = [
   ['components', 'Components'],
   ['sheet', 'Sheet'],
-  ['style-overview', 'Style overview'],
+  ['style-overview', 'Overview'],
   ['dashboard', 'Dashboard']
 ] as const
 
@@ -147,7 +147,7 @@ export function App() {
       )}
 
       <main className='min-w-0 flex-1'>
-        <header className='sticky top-0 flex h-14 items-center gap-4 border-b border-border bg-background/90 px-3 backdrop-blur z-1'>
+        <header className='sticky top-0 flex h-14 items-center gap-4 border-b border-border bg-background/90 px-3 backdrop-blur z-999'>
           {/* <nav className='flex items-center gap-1 text-sm w-full' aria-label='Showcase views'> */}
           <ToggleGroup
             className='w-full min-w-0 gap-1 overflow-x-auto border-none'
