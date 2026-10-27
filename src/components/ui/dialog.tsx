@@ -42,7 +42,7 @@ function DialogBackdrop({ className, ...props }: React.ComponentProps<typeof Bas
       className={cn(
         'fixed inset-0 z-50 min-h-dvh bg-black/70 transition-opacity duration-150',
         'supports-[-webkit-touch-callout:none]:absolute',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
+        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[closed]:pointer-events-none',
         className as string
       )}
       {...props}
@@ -70,7 +70,7 @@ function DialogPopup({ className, ...props }: React.ComponentProps<typeof BaseDi
     <BaseDialog.Popup
       data-slot='dialog-popup'
       className={cn(
-        'fixed top-[calc(50%+var(--nested-dialogs,0)*1.25rem)] left-1/2 z-50 flex w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs,0))] flex-col gap-4 rounded-lg border border-border bg-background p-6 text-foreground shadow-lg sm:max-w-lg',
+        'fixed top-[calc(50%+var(--nested-dialogs,0)*1.25rem)] left-1/2 z-50 flex w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs,0))] flex-col gap-4 rounded-(--radius) border border-border bg-background p-6 text-foreground shadow-lg sm:max-w-lg',
         'after:pointer-events-none after:absolute after:inset-0 after:bg-foreground/5 after:opacity-0 after:transition-opacity after:duration-100',
         'data-[nested-dialog-open]:after:opacity-100',
         'transition-[top,scale,opacity] duration-100 ease-out',
@@ -102,7 +102,7 @@ function DialogTitle({ className, ...props }: React.ComponentProps<typeof BaseDi
   return (
     <BaseDialog.Title
       data-slot='dialog-title'
-      className={cn('text-base leading-none font-semibold', className as string)}
+      className={cn('h5', className as string)}
       {...props}
     />
   )

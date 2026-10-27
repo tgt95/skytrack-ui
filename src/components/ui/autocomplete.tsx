@@ -31,7 +31,7 @@ export const autocompleteInputVariants = cva(
       context: {
         group: 'h-full px-1',
         standalone:
-          'h-9 rounded-md border border-input bg-background px-3 shadow-xs focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
+          'h-9 rounded-(--radius) border border-input bg-background px-3 shadow-xs focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
       },
       size: {
         default: '',
@@ -57,7 +57,7 @@ function AutocompleteInput({ className, context, size, ...props }: AutocompleteI
 
 export const autocompleteInputGroupVariants = cva(
   cn(
-    'relative flex w-full items-center gap-1 rounded-md border border-input bg-background text-foreground shadow-xs transition-colors',
+    'relative flex w-full items-center gap-1 rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
     'has-[button]:px-1',
     'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
@@ -92,7 +92,7 @@ function AutocompleteTrigger({ className, children, ...props }: React.ComponentP
     <BaseAutocomplete.Trigger
       data-slot='autocomplete-trigger'
       className={cn(
-        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-sm border-0 bg-transparent p-0 text-muted-foreground transition-colors',
+        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-[pressed]:bg-accent data-[pressed]:text-accent-foreground',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
@@ -116,7 +116,7 @@ function AutocompleteTriggerButton({
     <BaseAutocomplete.Trigger
       data-slot='autocomplete-trigger-button'
       className={cn(
-        'flex h-9 w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm text-foreground shadow-xs transition-colors',
+        'flex h-9 w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-(--radius) border border-input bg-background px-3 text-sm text-foreground shadow-xs transition-colors',
         'data-[placeholder]:text-muted-foreground',
         'hover:not-data-[disabled]:bg-accent hover:not-data-[disabled]:text-accent-foreground',
         'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
@@ -147,7 +147,7 @@ function AutocompleteClear({ className, children, ...props }: React.ComponentPro
     <BaseAutocomplete.Clear
       data-slot='autocomplete-clear'
       className={cn(
-        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-sm border-0 bg-transparent p-0 text-muted-foreground transition-colors',
+        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         focusRing,
@@ -197,7 +197,7 @@ function AutocompletePopup({ className, ...props }: React.ComponentProps<typeof 
     <BaseAutocomplete.Popup
       data-slot='autocomplete-popup'
       className={cn(
-        'w-[var(--anchor-width)] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-md border border-border bg-popover text-popover-foreground shadow-md',
+        'w-[var(--anchor-width)] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md',
         'transition-[transform,scale,opacity] duration-150 ease-out',
         'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
         'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
@@ -264,7 +264,7 @@ function AutocompleteItem({ className, children, ...props }: React.ComponentProp
     <BaseAutocomplete.Item
       data-slot='autocomplete-item'
       className={cn(
-        'flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none',
+        'flex cursor-pointer items-center gap-2 rounded-(--radius) px-2 py-1.5 text-sm select-none',
         'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         focusRing,

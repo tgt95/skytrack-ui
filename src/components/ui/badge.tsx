@@ -6,9 +6,9 @@ export const badgeVariants = cva('uppercase tracking-wide', {
   variants: {
     status: {
       default: 'bg-muted text-foreground', // AntD default badge is red
-      success: 'bg-success text-white',
-      warning: 'bg-warning text-white',
-      error: 'bg-destructive text-white',
+      success: 'bg-success text-(--foreground-inverse)',
+      warning: 'bg-warning text-(--foreground-inverse)',
+      error: 'bg-destructive text-(--foreground-inverse)',
       processing: 'bg-primary text-primary-foreground',
       secondary: 'bg-secondary text-secondary-foreground',
       outline: 'border border-input bg-background text-foreground'

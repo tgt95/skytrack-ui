@@ -39,7 +39,7 @@ function Input({ className, startAdornment, endAdornment, ...props }: InputProps
       <BaseInput
         data-slot='input'
         className={cn(
-          'flex h-9 w-full min-w-0 rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground shadow-xs transition-colors',
+          'flex h-9 w-full min-w-0 rounded-(--radius) border border-input bg-background px-3 py-1 text-sm text-foreground shadow-xs transition-colors',
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
           'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
@@ -55,7 +55,7 @@ function Input({ className, startAdornment, endAdornment, ...props }: InputProps
     <span
       data-slot='input-root'
       className={cn(
-        'flex w-full items-center rounded-md border border-input bg-background transition-colors',
+        'flex h-9 w-full items-center rounded-(--radius) border border-input bg-background transition-colors',
         // The border, background and focus ring live on the wrapper so the adornment
         // sits inside the box, matching MUI. `focus-within` replaces the input's own
         // `focus-visible` ring, and `has-*` carries validation and disabled states.
@@ -66,14 +66,14 @@ function Input({ className, startAdornment, endAdornment, ...props }: InputProps
       )}
     >
       {startAdornment != null && (
-        <InputAdornment position='start' className='pl-3'>
+        <InputAdornment position='start' className='h-full pl-3'>
           {startAdornment}
         </InputAdornment>
       )}
       <BaseInput
         data-slot='input'
         className={cn(
-          'flex h-9 min-w-0 flex-1 rounded-md bg-transparent px-3 py-1 text-sm text-foreground outline-hidden transition-colors',
+          'flex h-full min-w-0 flex-1 rounded-(--radius) bg-transparent px-3 py-1 text-sm text-foreground outline-hidden transition-colors',
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
           startAdornment != null && 'pl-2',
@@ -82,7 +82,7 @@ function Input({ className, startAdornment, endAdornment, ...props }: InputProps
         {...props}
       />
       {endAdornment != null && (
-        <InputAdornment position='end' className='pr-3'>
+        <InputAdornment position='end' className='h-full pr-3'>
           {endAdornment}
         </InputAdornment>
       )}

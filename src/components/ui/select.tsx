@@ -27,7 +27,7 @@ function SelectLabel({ className, ...props }: React.ComponentProps<typeof BaseSe
 
 export const selectTriggerVariants = cva(
   cn(
-    'flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs transition-colors',
+    'flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-(--radius) border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs transition-colors',
     'data-[placeholder]:text-muted-foreground',
     'hover:not-data-[disabled]:bg-accent hover:not-data-[disabled]:text-accent-foreground',
     'active:not-data-[disabled]:bg-accent',
@@ -125,7 +125,7 @@ function SelectPopup({ className, ...props }: React.ComponentProps<typeof BaseSe
     <BaseSelect.Popup
       data-slot='select-popup'
       className={cn(
-        'max-h-[var(--available-height)] min-w-[var(--anchor-width)] origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md',
+        'max-h-[var(--available-height)] min-w-[var(--anchor-width)] origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md',
         'transition-[transform,scale,opacity] duration-150 ease-out',
         'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
         'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
@@ -154,7 +154,7 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
     <BaseSelect.Item
       data-slot='select-item'
       className={cn(
-        'relative grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none',
+        'relative grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 rounded-(--radius) px-2 py-1.5 text-sm select-none',
         'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         focusRing,

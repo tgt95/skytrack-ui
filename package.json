@@ -46,6 +46,11 @@
       "import": "./dist-lib/avatar.js",
       "default": "./dist-lib/avatar.js"
     },
+    "./attachment": {
+      "types": "./dist-lib/components/ui/attachment.d.ts",
+      "import": "./dist-lib/attachment.js",
+      "default": "./dist-lib/attachment.js"
+    },
     "./badge": {
       "types": "./dist-lib/components/ui/badge.d.ts",
       "import": "./dist-lib/badge.js",
@@ -120,6 +125,11 @@
       "types": "./dist-lib/components/ui/input.d.ts",
       "import": "./dist-lib/input.js",
       "default": "./dist-lib/input.js"
+    },
+    "./inline-edit": {
+      "types": "./dist-lib/components/ui/inline-edit.d.ts",
+      "import": "./dist-lib/inline-edit.js",
+      "default": "./dist-lib/inline-edit.js"
     },
     "./menu": {
       "types": "./dist-lib/components/ui/menu.d.ts",

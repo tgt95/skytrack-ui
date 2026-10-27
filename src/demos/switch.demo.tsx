@@ -59,7 +59,7 @@ export const demo: DemoMeta = {
             </Switch>
             Notifications
           </label>
-          <button type='submit' className='rounded-md border border-border px-2 py-1'>
+          <button type='submit' className='rounded-(--radius) border border-border px-2 py-1'>
             Submit
           </button>
         </form>

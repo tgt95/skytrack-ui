@@ -17,7 +17,7 @@ function ToastProvider(props: React.ComponentProps<typeof BaseToast.Provider>) {
 
 export const toastRootVariants = cva(
   cn(
-    'w-full cursor-pointer rounded-md border bg-popover text-popover-foreground shadow-md select-none',
+    'w-full cursor-pointer rounded-(--radius) border bg-popover text-popover-foreground shadow-md select-none',
     'origin-bottom',
     '[--gap:0.5rem] [--peek:0.5rem]',
     '[--scale:calc(max(0,1-(var(--toast-index)*0.1)))]',
@@ -100,7 +100,7 @@ function ToastDescription({ className, ...props }: React.ComponentProps<typeof B
 
 export const toastCloseVariants = cva(
   cn(
-    'inline-flex cursor-pointer shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm leading-none font-medium text-foreground transition-colors select-none',
+    'inline-flex cursor-pointer shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-(--radius) border border-input bg-background px-3 text-sm leading-none font-medium text-foreground transition-colors select-none',
     'hover:bg-accent hover:text-accent-foreground',
     'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     focusRing

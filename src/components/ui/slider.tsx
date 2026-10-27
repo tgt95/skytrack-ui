@@ -79,7 +79,7 @@ function SliderThumb({ className, ...props }: React.ComponentProps<typeof BaseSl
     <BaseSlider.Thumb
       data-slot='slider-thumb'
       className={cn(
-        'block size-4 cursor-pointer shrink-0 rounded-xl border border-primary bg-background shadow-sm',
+        'block size-4 cursor-pointer shrink-0 rounded-(--radius) border border-primary bg-background shadow-sm',
         'data-[dragging]:shadow-md',
         'data-[disabled]:border-muted-foreground',
         'outline-none focus-within:ring-[3px] focus-within:ring-ring/50 focus-within:border-ring',

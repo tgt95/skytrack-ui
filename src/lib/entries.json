@@ -26,6 +26,15 @@
       "AlertDialogTrigger",
       "AlertDialogViewport",
       "createAlertDialogHandle",
+      "Attachment",
+      "AttachmentAction",
+      "AttachmentActions",
+      "AttachmentContent",
+      "AttachmentDescription",
+      "AttachmentGroup",
+      "AttachmentMedia",
+      "AttachmentTitle",
+      "AttachmentTrigger",
       "Autocomplete",
       "AutocompleteArrow",
       "AutocompleteBackdrop",
@@ -170,6 +179,9 @@
       "FieldsetLegend",
       "FieldsetRoot",
       "Form",
+      "InlineEdit",
+      "InlineEditInput",
+      "InlineEditTrigger",
       "Input",
       "InputAdornment",
       "Menu",
@@ -338,6 +350,12 @@
       "AlertProps",
       "AlertDialogButtonProps",
       "AlertDialogChangeEventDetails",
+      "AttachmentMediaProps",
+      "AttachmentOrientation",
+      "AttachmentProps",
+      "AttachmentSize",
+      "AttachmentState",
+      "AttachmentTriggerProps",
       "AutocompleteRootProps",
       "BadgeProps",
       "ButtonProps",
@@ -350,6 +368,9 @@
       "DrawerSideProps",
       "DrawerSnapPoint",
       "DropzoneProps",
+      "InlineEditInputProps",
+      "InlineEditRootProps",
+      "InlineEditTriggerProps",
       "InputAdornmentProps",
       "InputProps",
       "MenuItemVariantProps",
@@ -423,6 +444,28 @@
         "AlertDialogChangeEventDetails"
       ],
       "prefix": "AlertDialog"
+    },
+    "./attachment": {
+      "values": [
+        "Attachment",
+        "AttachmentAction",
+        "AttachmentActions",
+        "AttachmentContent",
+        "AttachmentDescription",
+        "AttachmentGroup",
+        "AttachmentMedia",
+        "AttachmentTitle",
+        "AttachmentTrigger"
+      ],
+      "types": [
+        "AttachmentMediaProps",
+        "AttachmentOrientation",
+        "AttachmentProps",
+        "AttachmentSize",
+        "AttachmentState",
+        "AttachmentTriggerProps"
+      ],
+      "prefix": "Attachment"
     },
     "./autocomplete": {
       "values": [
@@ -683,6 +726,19 @@
       ],
       "types": [],
       "prefix": "Form"
+    },
+    "./inline-edit": {
+      "values": [
+        "InlineEdit",
+        "InlineEditInput",
+        "InlineEditTrigger"
+      ],
+      "types": [
+        "InlineEditInputProps",
+        "InlineEditRootProps",
+        "InlineEditTriggerProps"
+      ],
+      "prefix": "InlineEdit"
     },
     "./input": {
       "values": [

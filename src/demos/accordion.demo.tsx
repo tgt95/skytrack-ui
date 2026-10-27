@@ -76,23 +76,23 @@ export const demo: DemoMeta = {
         </Accordion>
       )
     },
-    {
-      name: 'Compact disclosure',
-      render: () => (
-        <Accordion multiple className='w-full max-w-sm'>
-          {FAQ.map((item) => (
-            <AccordionItem key={item.q} className='border-b-0'>
-              <AccordionTrigger className='min-h-[34px] gap-2 py-1 text-[11px] font-semibold text-muted-foreground hover:no-underline [&>svg]:size-3'>
-                {item.q}
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className='pb-3 text-xs text-muted-foreground'>{item.a}</div>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      )
-    },
+    // {
+    //   name: 'Compact disclosure',
+    //   render: () => (
+    //     <Accordion multiple className='w-full max-w-sm'>
+    //       {FAQ.map((item) => (
+    //         <AccordionItem key={item.q} className='border-b-0'>
+    //           <AccordionTrigger className='gap-2 py-1 text-base font-semibold text-muted-foreground hover:no-underline [&>svg]:size-5'>
+    //             {item.q}
+    //           </AccordionTrigger>
+    //           <AccordionContent>
+    //             <div className='pb-3 text-xs text-muted-foreground'>{item.a}</div>
+    //           </AccordionContent>
+    //         </AccordionItem>
+    //       ))}
+    //     </Accordion>
+    //   )
+    // },
     {
       name: 'Hidden until found',
       render: () => (

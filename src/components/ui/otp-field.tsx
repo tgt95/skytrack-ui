@@ -18,7 +18,7 @@ function OTPFieldInput({ className, ...props }: React.ComponentProps<typeof Base
     <BaseOTPField.Input
       data-slot='otp-field-input'
       className={cn(
-        'm-0 h-10 w-10 rounded-md border border-input bg-background text-center text-base font-normal transition-colors',
+        'm-0 h-10 w-10 rounded-(--radius) border border-input bg-background text-center text-base font-normal transition-colors',
         'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[readonly]:bg-muted',
         'data-[filled]:border-foreground',
         focusRing,

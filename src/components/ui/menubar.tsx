@@ -11,7 +11,7 @@ function Menubar({ className, ...props }: React.ComponentProps<typeof BaseMenuba
     <BaseMenubar
       data-slot='menubar'
       className={cn(
-        'flex items-center gap-1 rounded-lg border border-border bg-background p-1',
+        'flex items-center gap-1 rounded-(--radius) border border-border bg-background p-1',
         'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
         'data-[disabled]:opacity-50',
         className as string

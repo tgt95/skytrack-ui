@@ -22,7 +22,8 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Field.L
     <Field.Label
       data-slot='field-label'
       className={cn(
-        'text-sm leading-none font-medium text-foreground select-none',
+        // 'text-xs sub-heading',
+        'text-sm leading-none font-medium text-foreground',
         'group-data-[disabled]/field:cursor-not-allowed group-data-[disabled]/field:opacity-50',
         className as string
       )}
@@ -36,7 +37,7 @@ function FieldControl({ className, ...props }: React.ComponentProps<typeof Field
     <Field.Control
       data-slot='field-control'
       className={cn(
-        'flex h-9 w-full min-w-0 self-stretch rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground shadow-xs transition-colors',
+        'flex h-9 w-full min-w-0 self-stretch rounded-(--radius) border border-input bg-background px-3 py-1 text-sm text-foreground shadow-xs transition-colors',
         'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
         'data-[filled]:border-foreground/40',
         'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',

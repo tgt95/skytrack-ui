@@ -4,7 +4,7 @@ import themeCss from '../index.css?raw'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { renderSpecimen, renderStateSpecimen } from './sheet-specimens'
+import { renderConfiguredSpecimen, renderStateSpecimen } from './sheet-specimens'
 
 /**
  * Sheet — a single reference page for the library: design tokens plus every
@@ -106,7 +106,7 @@ const TOKEN_GROUPS: { id: string; title: string; description: string; tokens: st
 
 const COLOR_TOKEN_COUNT = TOKEN_GROUPS.reduce((n, g) => n + g.tokens.length, 0)
 
-const RADIUS_PREVIEW_PX = [2, 4, 8, 12] as const
+const RADIUS_PREVIEW_PX = [2] as const
 
 const TYPE_SCALE: { className: string; size: string; line: string }[] = [
   { className: 'text-xs', size: '12', line: '16' },
@@ -150,7 +150,7 @@ function CopyValue({
         aria-label={`Copy ${value}`}
         onClick={copy}
         className={cn(
-          'inline cursor-copy rounded-sm text-left font-mono text-[11px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-ring',
+          'inline cursor-copy rounded-(--radius) text-left font-mono text-[11px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-ring',
           className
         )}
       >
@@ -160,7 +160,7 @@ function CopyValue({
         <span
           role='status'
           className={cn(
-            'pointer-events-none absolute left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-md bg-foreground px-3 py-1.5 font-sans text-xs text-background shadow-md',
+            'pointer-events-none absolute left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-(--radius) bg-foreground px-3 py-1.5 font-sans text-xs text-background shadow-md',
             tooltipPlacement === 'above' ? 'bottom-full mb-1' : 'top-full mt-1'
           )}
         >
@@ -513,6 +513,14 @@ const SPECS: ComponentSpec[] = [
     note: 'The thumb inherits size from the root, so do not set it twice.'
   },
   {
+    id: 'alert',
+    title: 'Alert',
+    group: 'Overlays',
+    axes: [{ name: 'variant', values: ['default', 'info', 'success', 'warning', 'destructive'], default: 'default' }],
+    states: ['alert role', 'informative role'],
+    note: 'Semantic variants use the matching info, success, warning, and destructive tokens.'
+  },
+  {
     id: 'alert-dialog',
     title: 'Alert Dialog',
     group: 'Overlays',
@@ -641,6 +649,19 @@ const SPECS: ComponentSpec[] = [
     note: 'Rounded-full mask. Fallback text is 14 px medium.'
   },
   {
+    id: 'attachment',
+    title: 'Attachment',
+    group: 'Data Display',
+    axes: [
+      { name: 'state', values: ['idle', 'uploading', 'processing', 'error', 'done'], default: 'done' },
+      { name: 'size', values: ['default', 'sm', 'xs'], default: 'default' },
+      { name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' },
+      { name: 'media variant', values: ['icon', 'image'], default: 'icon' }
+    ],
+    states: ['idle', 'uploading', 'processing', 'error', 'done'],
+    note: 'Root state, size and orientation configure the row; media variant selects the icon or image slot.'
+  },
+  {
     id: 'badge',
     title: 'Badge',
     group: 'Data Display',
@@ -655,6 +676,13 @@ const SPECS: ComponentSpec[] = [
     states: ['count', 'dot', 'label pill', 'anchored to a child', 'standalone'],
     sizes: 'Heights: default 20 · sm 16 px.',
     note: 'maxCount is 99 by default; showZero is off. dot ignores count and size.'
+  },
+  {
+    id: 'breadcrumb',
+    title: 'Breadcrumb',
+    group: 'Menus & Navigation',
+    states: ['link', 'current page', 'separator', 'ellipsis'],
+    note: 'Breadcrumb has no built-in style variants; compose the exported list, item, link, page, separator and ellipsis parts.'
   },
   {
     id: 'meter',
@@ -708,15 +736,19 @@ const SPECS: ComponentSpec[] = [
     title: 'Tabs',
     group: 'Layout',
     axes: [
-      { name: 'list variant', values: ['filled', 'standard', 'outlined'], default: 'filled' },
-      { name: 'tab variant', values: ['filled', 'standard', 'outlined'], default: 'filled' },
+      { name: 'default value', values: ['one', 'two', 'three', 'none'], default: 'one' },
+      { name: 'list variant', values: ['line', 'filled', 'pill'], default: 'line' },
+      { name: 'list width', values: ['hug', 'full'], default: 'hug' },
       { name: 'tab size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' },
-      { name: 'indicator', values: ['pill', 'underline'], default: 'pill' },
-      { name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' }
+      { name: 'indicator side', values: ['left', 'right'], default: 'left' },
+      { name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' },
+      { name: 'disabled tab', values: ['none', 'one', 'two', 'three'], default: 'none' },
+      { name: 'activation', values: ['manual', 'automatic'], default: 'manual' },
+      { name: 'focus loop', values: ['loop', 'stop'], default: 'loop' }
     ],
     states: ['active', 'inactive', 'disabled', 'focus-visible'],
     sizes: 'Tab size is padding-based: xs px-2 py-0.5 · sm px-2.5 py-1 · default px-3 py-1.5 · lg px-4 py-2.',
-    note: 'filled pairs with the pill indicator; standard and outlined pair with underline. Vertical underline sits on the left edge.'
+    note: 'Line is the default. Set list width to full or hug. Vertical line tabs use the left edge by default; set indicatorSide to right to move it. Activation and focus loop control keyboard behavior.'
   }
 ]
 
@@ -742,8 +774,13 @@ function Chip({ children, shaded }: { children: ReactNode; shaded?: boolean }) {
 }
 
 function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
+  const [selected, setSelected] = useState<Record<string, string>>(() =>
+    Object.fromEntries((spec.axes ?? []).map((axis) => [axis.name, axis.default ?? axis.values[0]]))
+  )
   const combinations = combinationCount(spec)
-  const meta = spec.axes?.length ? `${spec.axes.length} axes · ${combinations} combinations` : 'single style'
+  const meta = spec.axes?.length
+    ? `${spec.axes.length} props · ${combinations.toLocaleString()} combinations`
+    : 'no visual props'
 
   return (
     <div id={spec.id} className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8'>
@@ -755,23 +792,52 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
         {spec.axes?.map((axis) => (
           <div key={axis.name} className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
             <span className='pt-0.5 text-[11px] text-muted-foreground'>{axis.name}</span>
-            <div className='flex flex-wrap items-start gap-x-5 gap-y-4'>
+            <div role='group' aria-label={`${spec.title} ${axis.name}`} className='flex flex-wrap gap-1.5'>
               {axis.values.map((value) => {
-                const specimen = renderSpecimen(spec.id, axis.name, value)
+                const active = selected[axis.name] === value
                 return (
-                  <div key={value} className='flex min-w-0 flex-col items-start gap-1.5'>
-                    <Chip shaded={axis.default === value}>{value}</Chip>
-                    {specimen != null && (
-                      <div data-specimen={value} className='flex min-h-9 items-center'>
-                        {specimen}
-                      </div>
+                  <button
+                    key={value}
+                    type='button'
+                    aria-pressed={active}
+                    title={axis.default === value ? 'Component default' : undefined}
+                    onClick={() => setSelected((current) => ({ ...current, [axis.name]: value }))}
+                    className={cn(
+                      'inline-flex min-h-7 items-center border px-2 py-1 text-[11px] leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
+                      active
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
                     )}
-                  </div>
+                  >
+                    {value}
+                    {axis.default === value && <span className='ml-1 opacity-75'>· default</span>}
+                  </button>
                 )
               })}
             </div>
           </div>
         ))}
+        {spec.axes?.length ? (
+          <div className='mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
+            <div className='flex flex-wrap items-center justify-between gap-2'>
+              <span className='text-[11px] font-medium text-muted-foreground'>Live preview · selected combination</span>
+              <button
+                type='button'
+                className='text-[11px] text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
+                onClick={() =>
+                  setSelected(
+                    Object.fromEntries((spec.axes ?? []).map((axis) => [axis.name, axis.default ?? axis.values[0]]))
+                  )
+                }
+              >
+                Reset defaults
+              </button>
+            </div>
+            <div className='flex min-h-12 min-w-0 items-center overflow-x-auto py-1'>
+              {renderConfiguredSpecimen(spec.id, selected)}
+            </div>
+          </div>
+        ) : null}
         {spec.states && (
           <div className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-3'>
             <span className='pt-0.5 text-[11px] text-muted-foreground'>states &amp; modes</span>
@@ -796,9 +862,9 @@ function SheetLegend() {
   return (
     <p className='flex flex-wrap items-center gap-2 text-xs text-muted-foreground'>
       <Chip shaded>default</Chip>
-      <span>= default value from the component source.</span>
+      <span>= component default. Select prop values to update the combined live preview.</span>
       <span className='hidden sm:inline'>·</span>
-      <span>One row per component; every axis value carries a live specimen.</span>
+      <span>Counts show the Cartesian product of the listed props.</span>
     </p>
   )
 }
@@ -833,17 +899,17 @@ export function Sheet() {
       <header className='flex flex-col gap-4'>
         <div className='flex flex-col gap-1'>
           <span className='text-xs tracking-widest sub-heading'>Reference sheet</span>
-          <h1 className='h1 heading'>Tokens and component levels</h1>
+          <h1 className='h1 heading'>Tokens and component props</h1>
           <p className='max-w-2xl text-sm text-muted-foreground'>
-            Every token, variant axis and size this library exposes, on one page. Use it to check what a component can
-            already do before adding a one-off style. Live examples sit on the Components page.
+            See each component&apos;s configurable variants, prop values and combination count. Change a value to
+            inspect the combined preview before adding a one-off style.
           </p>
         </div>
         <dl className='grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-4'>
           {[
             [String(SPECS.length), 'components'],
-            [String(AXIS_COUNT), 'variant axes'],
-            [String(OPTION_COUNT), 'documented values'],
+            [String(AXIS_COUNT), 'configurable props'],
+            [String(OPTION_COUNT), 'prop values'],
             [String(COLOR_TOKEN_COUNT), 'colour tokens']
           ].map(([value, label]) => (
             <div key={label} className='flex flex-col gap-1 bg-background px-4 py-3'>
@@ -875,7 +941,7 @@ export function Sheet() {
           <div className='flex flex-col gap-3'>
             <div>
               <h3 className='h6 heading'>Radius</h3>
-              <p className='text-xs text-muted-foreground'>Reference corner radius values: 2, 4, 8 and 12 px.</p>
+              <p className='text-xs text-muted-foreground'>Component corner radius: 2px (`var(--radius)`).</p>
             </div>
             <RadiusScale />
           </div>
@@ -928,21 +994,21 @@ export function Sheet() {
         />
 
         <div className='flex flex-col gap-4'>
-            <div className='w-full sm:max-w-64'>
-              <Input
-                startAdornment={<MagnifyingGlassIcon />}
-                endAdornment={
-                  query !== '' && (
-                    <Button size='icon-xs' variant='ghost' aria-label='Clear filter' onClick={() => setQuery('')}>
-                      <XIcon />
-                    </Button>
-                  )
-                }
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder='Filter components or values'
-              />
-            </div>
+          <div className='w-full sm:max-w-64'>
+            <Input
+              startAdornment={<MagnifyingGlassIcon />}
+              endAdornment={
+                query !== '' && (
+                  <Button size='icon-xs' variant='ghost' aria-label='Clear filter' onClick={() => setQuery('')}>
+                    <XIcon />
+                  </Button>
+                )
+              }
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder='Filter components or values'
+            />
+          </div>
           <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
             <nav aria-label='Components' className='flex flex-wrap gap-1.5'>
               {specs.map((spec) => (
@@ -955,7 +1021,6 @@ export function Sheet() {
                 </a>
               ))}
             </nav>
-            
           </div>
           <SheetLegend />
         </div>

@@ -212,7 +212,7 @@ function ContributionCard () {
       <div>
         <div className='flex h-44 items-end gap-3'>
           {HISTORY.map((h) => (
-            <div key={h.month} className='flex-1 rounded-t-md bg-chart-2' style={{ height: `${h.v}%` }} />
+            <div key={h.month} className='flex-1 rounded-t-[var(--radius)] bg-chart-2' style={{ height: `${h.v}%` }} />
           ))}
         </div>
         <div className='mt-2 flex gap-3 text-xs text-muted-foreground'>
@@ -444,7 +444,7 @@ export function OverviewDashboard () {
               key={t.name}
               className='flex items-center gap-3 border-t border-border py-3 first:border-t-0 first:pt-0'
             >
-              <span className='flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted'>
+              <span className='flex size-9 shrink-0 items-center justify-center rounded-(--radius) bg-muted'>
                 <t.icon aria-hidden='true' className='size-4' />
               </span>
               <span className='min-w-0 flex-1'>
@@ -498,7 +498,7 @@ export function OverviewDashboard () {
             ['Safari', 'var(--chart-2)']
           ].map(([n, c]) => (
             <span key={n} className='flex items-center gap-1.5'>
-              <span className='size-2 rounded-[2px]' style={{ backgroundColor: c }} />
+              <span className='size-2 rounded-(--radius)' style={{ backgroundColor: c }} />
               {n}
             </span>
           ))}
@@ -524,7 +524,7 @@ export function OverviewDashboard () {
         </div>
         <div className='flex h-32 items-end gap-2'>
           {[30, 70, 78, 60, 86, 73, 96, 81].map((v, i) => (
-            <div key={i} className='flex-1 rounded-t bg-chart-2' style={{ height: `${v}%` }} />
+            <div key={i} className='flex-1 rounded-t-[var(--radius)] bg-chart-2' style={{ height: `${v}%` }} />
           ))}
         </div>
         <div className='flex justify-between text-xs text-muted-foreground'>
@@ -573,7 +573,7 @@ export function OverviewDashboard () {
             ['var(--chart-1)', 41],
             ['var(--chart-2)', 25]
           ].map(([c, v], i) => (
-            <div key={i} className='flex-1 rounded-t-sm' style={{ height: `${v}%`, backgroundColor: c as string }} />
+            <div key={i} className='flex-1 rounded-t-[var(--radius)]' style={{ height: `${v}%`, backgroundColor: c as string }} />
           ))}
         </div>
         <div className='grid grid-cols-4 gap-2 text-center'>
@@ -615,8 +615,8 @@ export function OverviewDashboard () {
           ].map(([d, v]) => (
             <div key={`${d}-${v}`} className='text-center'>
               <div className='text-xs text-muted-foreground'>{d}</div>
-              <div className='relative mt-1 h-20 overflow-hidden rounded-sm bg-muted'>
-                <div className='absolute inset-x-0 bottom-0 rounded-sm bg-chart-3' style={{ height: `${v}%` }} />
+              <div className='relative mt-1 h-20 overflow-hidden rounded-(--radius) bg-muted'>
+                <div className='absolute inset-x-0 bottom-0 rounded-(--radius) bg-chart-3' style={{ height: `${v}%` }} />
               </div>
             </div>
           ))}
@@ -1070,7 +1070,7 @@ export function OverviewDashboard () {
             </span>
             <span className='flex h-8 w-24 items-end gap-1' aria-hidden='true'>
               {d.v.map((h, i) => (
-                <span key={i} className='flex-1 rounded-t-[3px] bg-chart-2' style={{ height: `${h}%` }} />
+                <span key={i} className='flex-1 rounded-t-[var(--radius)] bg-chart-2' style={{ height: `${h}%` }} />
               ))}
             </span>
             <span className='text-sm font-semibold tabular-nums'>{d.amt}</span>

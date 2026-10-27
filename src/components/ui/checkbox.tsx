@@ -9,7 +9,7 @@ function CheckboxRoot({ className, children, ...props }: React.ComponentProps<ty
     <Checkbox.Root
       data-slot='checkbox'
       className={cn(
-        'flex size-4 cursor-pointer shrink-0 items-center justify-center rounded-md border border-input bg-background p-0 text-primary-foreground transition-colors',
+        'flex size-4 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border border-input bg-background p-0 text-(--foreground-inverse) transition-colors',
         'data-[checked]:border-primary data-[checked]:bg-primary',
         'data-[indeterminate]:border-primary data-[indeterminate]:bg-primary',
         'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',

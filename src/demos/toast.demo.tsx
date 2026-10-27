@@ -110,7 +110,7 @@ function AnchoredToastViewport() {
           <ToastPositioner key={toast.id} toast={toast}>
             <ToastRoot
               toast={toast}
-              className='relative flex w-max rounded-md border bg-popover px-2 py-1 text-sm text-popover-foreground shadow-md'
+              className='relative flex w-max rounded-(--radius) border bg-popover px-2 py-1 text-sm text-popover-foreground shadow-md'
             >
               <ToastArrow className='absolute -bottom-2 left-1/2 -translate-x-1/2 rotate-180' />
               <ToastContent className='p-0'>

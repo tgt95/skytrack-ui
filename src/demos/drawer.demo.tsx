@@ -69,7 +69,7 @@ const SNAP_POINTS: DrawerSnapPoint[] = [`${30 + TOP_MARGIN_REM}rem`, 1]
 
 /* Drawer handle bar shown at the top of every bottom sheet. */
 function Handle() {
-  return <div aria-hidden className='mx-auto mb-2 h-1 w-12 shrink-0 rounded-sm bg-muted-foreground/30' />
+  return <div aria-hidden className='mx-auto mb-2 h-1 w-12 shrink-0 rounded-(--radius) bg-muted-foreground/30' />
 }
 
 /* "State" */
@@ -326,7 +326,7 @@ function SnapPoints() {
               <DrawerContent>
                 <div aria-hidden className='flex flex-col gap-2'>
                   {Array.from({ length: 14 }, (_, index) => (
-                    <div key={index} className='h-6 rounded-md bg-muted' />
+                    <div key={index} className='h-6 rounded-(--radius) bg-muted' />
                   ))}
                 </div>
                 <DrawerClose className='self-start'>Close</DrawerClose>
@@ -477,7 +477,7 @@ function MobileNavigation() {
                       <a
                         key={item.label}
                         href={item.href}
-                        className='rounded-md px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground'
+                        className='rounded-(--radius) px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground'
                       >
                         {item.label}
                       </a>
@@ -504,7 +504,7 @@ function SwipeToOpen() {
   return (
     <div
       ref={setPortalContainer}
-      className='relative flex min-h-40 flex-col gap-3 overflow-hidden rounded-md border border-border p-4'
+      className='relative flex min-h-40 flex-col gap-3 overflow-hidden rounded-(--radius) border border-border p-4'
     >
       <Drawer swipeDirection='right' modal={false}>
         <DrawerSwipeArea>
@@ -566,7 +566,7 @@ function CloseConfirmation() {
               <textarea
                 aria-labelledby={titleId}
                 required
-                className='min-h-32 w-full resize-none rounded-md border border-input bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
+                className='min-h-32 w-full resize-none rounded-(--radius) border border-input bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
                 placeholder="What's on your mind?"
                 value={note}
                 onChange={(event) => setNote(event.target.value)}

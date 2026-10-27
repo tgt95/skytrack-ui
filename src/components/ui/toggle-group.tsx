@@ -17,7 +17,7 @@ function ToggleGroup({ className, variant, size, ...props }: ToggleGroupProps) {
       <BaseToggleGroup
         data-slot='toggle-group'
         className={cn(
-          'flex items-center rounded-md border border-border',
+          'flex items-center rounded-(--radius) border border-border',
           variant === 'segmented' && 'gap-1 bg-background p-0.5',
           'data-[orientation=vertical]:flex-col',
           className as string

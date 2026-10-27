@@ -22,7 +22,7 @@ export const switchVariants = cva(
   }
 )
 
-export const switchThumbVariants = cva('block rounded-xs bg-background shadow transition-transform', {
+export const switchThumbVariants = cva('block rounded-(--radius) bg-background shadow transition-transform', {
   variants: {
     size: {
       default: 'size-3.5 data-checked:translate-x-4',

@@ -1,6 +1,21 @@
 import * as React from 'react'
 import { ArrowUUpLeftIcon, MagnifyingGlassIcon, PlusIcon, XIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import {
+  Attachment,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentMedia,
+  AttachmentTitle
+} from '@/components/ui/attachment'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
 import { Toggle } from '@/components/ui/toggle'
 import { ToggleGroup } from '@/components/ui/toggle-group'
 import { Toolbar, ToolbarButton, ToolbarSeparator } from '@/components/ui/toolbar'
@@ -101,7 +116,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport
 } from '@/components/ui/scroll-area'
-import { Tabs, TabsIndicator, TabsList, TabsTab } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTab } from '@/components/ui/tabs'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { CheckboxRoot } from '@/components/ui/checkbox'
 import { CheckboxGroup } from '@/components/ui/checkbox-group'
@@ -221,6 +236,62 @@ function ButtonSpecimen({ variant, size }: { variant?: string; size?: string }) 
     >
       {icon ? <PlusIcon aria-hidden /> : variant === 'link' ? 'Link' : 'Button'}
     </Button>
+  )
+}
+
+function AlertSpecimen({ variant = 'default' }: { variant?: string }) {
+  return (
+    <Alert variant={variant as React.ComponentProps<typeof Alert>['variant']} className='max-w-sm'>
+      <AlertTitle>Flight plan updated</AlertTitle>
+      <AlertDescription>Changes are saved and ready to sync.</AlertDescription>
+    </Alert>
+  )
+}
+
+function AttachmentSpecimen({
+  state = 'done',
+  size = 'default',
+  orientation = 'horizontal',
+  media = 'icon'
+}: {
+  state?: string
+  size?: string
+  orientation?: string
+  media?: string
+}) {
+  return (
+    <Attachment
+      state={state as React.ComponentProps<typeof Attachment>['state']}
+      size={size as React.ComponentProps<typeof Attachment>['size']}
+      orientation={orientation as React.ComponentProps<typeof Attachment>['orientation']}
+      className='max-w-sm'
+    >
+      <AttachmentMedia variant={media as React.ComponentProps<typeof AttachmentMedia>['variant']}>
+        <PlusIcon aria-hidden />
+      </AttachmentMedia>
+      <AttachmentContent>
+        <AttachmentTitle>mission-plan.json</AttachmentTitle>
+        <AttachmentDescription>
+          {state === 'error' ? 'Upload failed · Retry' : state === 'done' ? 'Ready · 24 KB' : `${state} · 24 KB`}
+        </AttachmentDescription>
+      </AttachmentContent>
+    </Attachment>
+  )
+}
+
+function BreadcrumbSpecimen() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>Projects</BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>Mission Alpha</BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Plan</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
   )
 }
 
@@ -443,6 +514,29 @@ function ComboboxSpecimen({
         </ComboboxPositioner>
       </ComboboxPortal>
     </Combobox>
+  )
+}
+
+function ConfiguredComboboxSpecimen({
+  size,
+  shape,
+  standaloneTriggerSize
+}: {
+  size: string
+  shape: string
+  standaloneTriggerSize: string
+}) {
+  return (
+    <div className='flex flex-col gap-2'>
+      <div className='flex flex-wrap items-center gap-2'>
+        <span className='w-28 text-[11px] text-muted-foreground'>Input group</span>
+        <ComboboxSpecimen size={size} shape={shape} />
+      </div>
+      <div className='flex flex-wrap items-center gap-2'>
+        <span className='w-28 text-[11px] text-muted-foreground'>Standalone trigger</span>
+        <ComboboxSpecimen standaloneTriggerSize={standaloneTriggerSize} />
+      </div>
+    </div>
   )
 }
 
@@ -768,7 +862,7 @@ function SeparatorSpecimen({ orientation }: { orientation: string }) {
 function ScrollAreaSpecimen({ orientation }: { orientation: string }) {
   if (orientation === 'horizontal') {
     return (
-      <ScrollArea className='h-14 w-40 rounded-md border border-border'>
+      <ScrollArea className='h-14 w-40 rounded-(--radius) border border-border'>
         <ScrollAreaViewport>
           <ScrollAreaContent className='w-72 p-2 text-xs whitespace-nowrap'>
             Wide content scrolls sideways.
@@ -782,7 +876,7 @@ function ScrollAreaSpecimen({ orientation }: { orientation: string }) {
   }
 
   return (
-    <ScrollArea className='h-20 w-40 rounded-md border border-border'>
+    <ScrollArea className='h-20 w-40 rounded-(--radius) border border-border'>
       <ScrollAreaViewport>
         <ScrollAreaContent className='p-2 text-xs'>
           <p className='m-0'>Tall content scrolls vertically.</p>
@@ -802,31 +896,47 @@ function ScrollAreaSpecimen({ orientation }: { orientation: string }) {
 /* ------------------------------------------------------------------- Tabs */
 
 function TabsSpecimen({
-  listVariant = 'filled',
-  tabVariant = listVariant,
+  defaultTab = 'one',
+  listVariant = 'line',
   tabSize = 'default',
-  indicator = 'pill',
-  orientation = 'horizontal'
+  listWidth = 'hug',
+  indicatorSide = 'left',
+  orientation = 'horizontal',
+  disabledTab = 'none',
+  activation = 'manual',
+  focusLoop = 'loop'
 }: {
-  listVariant?: 'filled' | 'standard' | 'outlined'
-  tabVariant?: 'filled' | 'standard' | 'outlined'
+  defaultTab?: 'none' | 'one' | 'two' | 'three'
+  listVariant?: 'filled' | 'pill' | 'line'
   tabSize?: 'default' | 'xs' | 'sm' | 'lg'
-  indicator?: 'pill' | 'underline'
+  listWidth?: 'full' | 'hug'
+  indicatorSide?: 'left' | 'right'
   orientation?: 'horizontal' | 'vertical'
+  disabledTab?: 'none' | 'one' | 'two' | 'three'
+  activation?: 'manual' | 'automatic'
+  focusLoop?: 'loop' | 'stop'
 }) {
   return (
     <Tabs
-      defaultValue='one'
+      key={defaultTab}
+      defaultValue={defaultTab === 'none' ? null : defaultTab}
       orientation={orientation}
       className={orientation === 'vertical' ? 'w-fit flex-row gap-3' : 'w-fit'}
     >
-      <TabsList variant={listVariant} className={orientation === 'vertical' ? 'flex-col' : undefined}>
+      <TabsList
+        variant={listVariant}
+        size={tabSize}
+        width={listWidth}
+        indicatorSide={indicatorSide}
+        activateOnFocus={activation === 'automatic'}
+        loopFocus={focusLoop === 'loop'}
+        className={orientation === 'vertical' ? 'flex-col' : undefined}
+      >
         {TAB_ITEMS.map((tab) => (
-          <TabsTab key={tab.value} value={tab.value} variant={tabVariant} size={tabSize}>
+          <TabsTab key={tab.value} value={tab.value} disabled={disabledTab === tab.value}>
             {tab.label}
           </TabsTab>
         ))}
-        <TabsIndicator variant={indicator} />
       </TabsList>
     </Tabs>
   )
@@ -955,9 +1065,7 @@ function ProgressSpecimen() {
 /* ----------------------------------------------------------- Accordion */
 
 function AccordionSpecimen({ variant = 'default' }: { variant?: 'default' | 'compact' }) {
-  return (
-    <AccountFaqAccordion compact={variant === 'compact'} defaultOpen multiple />
-  )
+  return <AccountFaqAccordion compact={variant === 'compact'} defaultOpen multiple />
 }
 
 /* --------------------------------------------------------- Collapsible */
@@ -1310,18 +1418,15 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
     orientation: (value) => <ScrollAreaSpecimen orientation={value} />
   },
   tabs: {
-    'list variant': (value) => (
-      <TabsSpecimen listVariant={value as 'filled'} indicator={value === 'filled' ? 'pill' : 'underline'} />
-    ),
-    'tab variant': (value) => <TabsSpecimen tabVariant={value as 'filled' | 'standard' | 'outlined'} />,
+    'default value': (value) => <TabsSpecimen defaultTab={value as 'none' | 'one' | 'two' | 'three'} />,
+    'list variant': (value) => <TabsSpecimen listVariant={value as 'filled' | 'pill' | 'line'} />,
     'tab size': (value) => <TabsSpecimen tabSize={value as 'default'} />,
-    indicator: (value) => (
-      <TabsSpecimen
-        listVariant={value === 'underline' ? 'standard' : 'filled'}
-        indicator={value as 'pill' | 'underline'}
-      />
-    ),
-    orientation: (value) => <TabsSpecimen orientation={value as 'horizontal' | 'vertical'} />
+    'list width': (value) => <TabsSpecimen listWidth={value as 'full' | 'hug'} />,
+    'indicator side': (value) => <TabsSpecimen indicatorSide={value as 'left' | 'right'} orientation='vertical' />,
+    orientation: (value) => <TabsSpecimen orientation={value as 'horizontal' | 'vertical'} />,
+    'disabled tab': (value) => <TabsSpecimen disabledTab={value as 'none' | 'one' | 'two' | 'three'} />,
+    activation: (value) => <TabsSpecimen activation={value as 'manual' | 'automatic'} />,
+    'focus loop': (value) => <TabsSpecimen focusLoop={value as 'loop' | 'stop'} />
   },
   avatar: {
     states: () => <AvatarSpecimen />
@@ -1343,6 +1448,15 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   },
   dropzone: {
     states: () => <Dropzone className='w-full max-w-sm' />
+  },
+  attachment: {
+    states: () => <AttachmentSpecimen />
+  },
+  alert: {
+    states: () => <AlertSpecimen />
+  },
+  breadcrumb: {
+    states: () => <BreadcrumbSpecimen />
   },
   radio: {
     states: () => <RadioSpecimen />
@@ -1390,6 +1504,176 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   },
   'navigation-menu': {
     states: () => <NavigationMenuSpecimen />
+  }
+}
+
+type SpecimenSettings = Record<string, string>
+
+function setting(settings: SpecimenSettings, name: string, fallback: string) {
+  return settings[name] ?? fallback
+}
+
+/** Renders one specimen with all selected prop values applied together. */
+export function renderConfiguredSpecimen(specId: string, settings: SpecimenSettings): React.ReactNode {
+  switch (specId) {
+    case 'button':
+      return (
+        <ButtonSpecimen variant={setting(settings, 'variant', 'default')} size={setting(settings, 'size', 'default')} />
+      )
+    case 'toggle':
+      return (
+        <ToggleSpecimen variant={setting(settings, 'variant', 'default')} size={setting(settings, 'size', 'default')} />
+      )
+    case 'toggle-group':
+      return (
+        <ToggleGroupSpecimen
+          variant={setting(settings, 'variant', 'default')}
+          size={setting(settings, 'size', 'default')}
+          orientation={setting(settings, 'orientation', 'horizontal')}
+        />
+      )
+    case 'toolbar':
+      return (
+        <ToolbarSpecimen
+          size={setting(settings, 'size (button)', 'default')}
+          isActivated={setting(settings, 'isActivated', 'false')}
+          orientation={setting(settings, 'orientation', 'horizontal')}
+        />
+      )
+    case 'autocomplete':
+      return (
+        <AutocompleteSpecimen
+          context={setting(settings, 'input context', 'standalone')}
+          inputSize={setting(settings, 'input size', 'default')}
+          groupSize={setting(settings, 'input group size', 'default')}
+        />
+      )
+    case 'combobox':
+      return (
+        <ConfiguredComboboxSpecimen
+          size={setting(settings, 'size (input group)', 'default')}
+          shape={setting(settings, 'shape', 'input')}
+          standaloneTriggerSize={setting(settings, 'size (standalone trigger)', 'default')}
+        />
+      )
+    case 'input':
+      return <InputSpecimen adornment={setting(settings, 'adornment', 'none')} />
+    case 'number-field':
+      return <NumberFieldSpecimen size={setting(settings, 'size', 'default')} />
+    case 'otp-field':
+      return <OtpFieldSpecimen orientation={setting(settings, 'separator orientation', 'horizontal')} />
+    case 'select':
+      return <SelectSpecimen size={setting(settings, 'size (trigger)', 'default')} />
+    case 'slider':
+      return <SliderSpecimen orientation={setting(settings, 'orientation', 'horizontal')} />
+    case 'switch':
+      return <SwitchSpecimen size={setting(settings, 'size', 'default')} />
+    case 'alert':
+      return <AlertSpecimen variant={setting(settings, 'variant', 'default')} />
+    case 'attachment':
+      return (
+        <AttachmentSpecimen
+          state={setting(settings, 'state', 'done')}
+          size={setting(settings, 'size', 'default')}
+          orientation={setting(settings, 'orientation', 'horizontal')}
+          media={setting(settings, 'media variant', 'icon')}
+        />
+      )
+    case 'alert-dialog':
+      return (
+        <AlertDialogSpecimen
+          buttonVariant={setting(settings, 'trigger/close variant', 'outline')}
+          buttonSize={setting(settings, 'trigger/close size', 'default')}
+        />
+      )
+    case 'dialog':
+      return (
+        <DialogSpecimen
+          buttonVariant={setting(settings, 'trigger/close variant', 'outline')}
+          buttonSize={setting(settings, 'trigger/close size', 'default')}
+        />
+      )
+    case 'drawer':
+      return (
+        <DrawerSpecimen
+          side={setting(settings, 'side', 'bottom')}
+          buttonVariant={setting(settings, 'trigger/close variant', 'outline')}
+          buttonSize={setting(settings, 'trigger/close size', 'default')}
+        />
+      )
+    case 'popover':
+      return (
+        <PopoverSpecimen
+          variant={setting(settings, 'trigger variant', 'default')}
+          size={setting(settings, 'trigger size', 'default')}
+        />
+      )
+    case 'preview-card':
+      return (
+        <PreviewCardSpecimen
+          variant={setting(settings, 'trigger variant', 'link')}
+          size={setting(settings, 'trigger size', 'default')}
+        />
+      )
+    case 'toast':
+      return (
+        <ToastSpecimen
+          label={setting(settings, 'type', 'success')}
+          layout={setting(settings, 'layout', 'stacked') as 'stacked' | 'flat'}
+          type={setting(settings, 'type', 'success') as ToastType}
+          closeSize={setting(settings, 'close size', 'default') as 'default' | 'sm' | 'icon'}
+          closeVariant={setting(settings, 'close variant', 'outline') as 'outline' | 'ghost'}
+          actionSize={setting(settings, 'action size', 'default') as 'default' | 'sm' | 'icon'}
+          actionVariant={setting(settings, 'action variant', 'outline') as 'outline' | 'ghost'}
+        />
+      )
+    case 'tooltip':
+      return (
+        <TooltipSpecimen
+          variant={setting(settings, 'trigger variant', 'default')}
+          size={setting(settings, 'trigger size', 'default')}
+        />
+      )
+    case 'context-menu':
+      return (
+        <ContextMenuSpecimen
+          variant={setting(settings, 'item variant', 'default')}
+          inset={setting(settings, 'item inset', 'false')}
+        />
+      )
+    case 'menu':
+      return (
+        <MenuSpecimen
+          variant={setting(settings, 'item variant', 'default')}
+          inset={setting(settings, 'item inset', 'false')}
+        />
+      )
+    case 'badge':
+      return (
+        <BadgeSpecimen status={setting(settings, 'status', 'default')} size={setting(settings, 'size', 'default')} />
+      )
+    case 'separator':
+      return <SeparatorSpecimen orientation={setting(settings, 'orientation', 'horizontal')} />
+    case 'accordion':
+      return <AccordionSpecimen variant={setting(settings, 'trigger variant', 'default') as 'default' | 'compact'} />
+    case 'scroll-area':
+      return <ScrollAreaSpecimen orientation={setting(settings, 'orientation', 'vertical')} />
+    case 'tabs':
+      return (
+        <TabsSpecimen
+          defaultTab={setting(settings, 'default value', 'one') as 'none' | 'one' | 'two' | 'three'}
+          listVariant={setting(settings, 'list variant', 'line') as 'filled' | 'pill' | 'line'}
+          listWidth={setting(settings, 'list width', 'hug') as 'full' | 'hug'}
+          tabSize={setting(settings, 'tab size', 'default') as 'default' | 'xs' | 'sm' | 'lg'}
+          indicatorSide={setting(settings, 'indicator side', 'left') as 'left' | 'right'}
+          orientation={setting(settings, 'orientation', 'horizontal') as 'horizontal' | 'vertical'}
+          disabledTab={setting(settings, 'disabled tab', 'none') as 'none' | 'one' | 'two' | 'three'}
+          activation={setting(settings, 'activation', 'manual') as 'manual' | 'automatic'}
+          focusLoop={setting(settings, 'focus loop', 'loop') as 'loop' | 'stop'}
+        />
+      )
+    default:
+      return SPECIMENS[specId]?.states?.()
   }
 }
 

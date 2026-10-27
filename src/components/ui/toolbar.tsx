@@ -6,7 +6,7 @@ import { focusRing } from '@/components/ui/button'
 
 export const toolbarButtonVariants = cva(
   cn(
-    'inline-flex cursor-pointer shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium text-foreground select-none transition-colors',
+    'inline-flex cursor-pointer shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-(--radius) text-sm font-medium text-foreground select-none transition-colors',
     'hover:bg-accent hover:text-accent-foreground active:bg-muted',
     'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -38,7 +38,7 @@ function Toolbar({ className, ...props }: React.ComponentProps<typeof BaseToolba
     <BaseToolbar.Root
       data-slot='toolbar'
       className={cn(
-        'inline-flex w-fit items-center gap-1 rounded-xl border border-border bg-background p-1',
+        'inline-flex w-fit items-center gap-1 rounded-(--radius) border border-border bg-background p-1',
         'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
         'data-[disabled]:opacity-50',
         className as string
@@ -96,7 +96,7 @@ function ToolbarLink({ className, ...props }: React.ComponentProps<typeof BaseTo
     <BaseToolbar.Link
       data-slot='toolbar-link'
       className={cn(
-        'inline-flex cursor-pointer shrink-0 items-center gap-1.5 rounded-md px-2 text-sm text-muted-foreground no-underline transition-colors select-none',
+        'inline-flex cursor-pointer shrink-0 items-center gap-1.5 rounded-(--radius) px-2 text-sm text-muted-foreground no-underline transition-colors select-none',
         'hover:text-foreground',
         focusRing,
         className as string
@@ -113,7 +113,7 @@ function ToolbarInput({ className, ...props }: React.ComponentProps<typeof BaseT
     <BaseToolbar.Input
       data-slot='toolbar-input'
       className={cn(
-        'h-8 min-w-0 flex-1 rounded-md border border-input bg-background px-2 text-sm text-foreground',
+        'h-8 min-w-0 flex-1 rounded-(--radius) border border-input bg-background px-2 text-sm text-foreground',
         'placeholder:text-muted-foreground',
         'disabled:cursor-not-allowed disabled:opacity-50 data-[disabled]:opacity-50',
         focusRing,

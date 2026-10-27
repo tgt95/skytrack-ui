@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import type { DemoMeta } from '@/showcase/demo'
 
 function Box({ children }: { children: ReactNode }) {
-  return <div className='grid size-10 place-items-center rounded-md bg-muted text-muted-foreground'>{children}</div>
+  return <div className='grid size-10 place-items-center rounded-(--radius) bg-muted text-muted-foreground'>{children}</div>
 }
 
 export const demo: DemoMeta = {

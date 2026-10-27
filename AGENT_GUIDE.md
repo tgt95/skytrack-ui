@@ -109,7 +109,9 @@ the consumer app.**
 
 `styles.css` is global. It includes Tailwind's preflight reset, sets `body` to
 `--background`/`--foreground` on IBM Plex Sans, sets `code`/`kbd`/`samp`/`pre` to IBM Plex Mono,
-and defines `--radius` (`0.25rem`, 4px) plus the `rounded-*` scale globally. If your app already ships its
+and defines `--radius` (`0.125rem`, 2px) plus the `rounded-*` scale globally. All component corner
+radii use `rounded-(--radius)`; circular shapes keep `rounded-full`, and intentional square seams keep
+`rounded-none`. If your app already ships its
 own Tailwind or reset, import this file once and be aware of the cascade — component styling
 depends on these tokens existing.
 

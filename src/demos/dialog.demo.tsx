@@ -71,7 +71,7 @@ const payloadDialog = createHandle<{ text: string }>()
 const controlledDialog = createHandle()
 
 /* "State" */
-function StateExample() {
+function StateExample () {
   const [open, setOpen] = React.useState(false)
   const [log, setLog] = React.useState<string[]>([])
 
@@ -79,7 +79,7 @@ function StateExample() {
     <div className='flex flex-col items-start gap-3'>
       <div className='flex gap-3'>
         <Dialog>
-          <DialogTrigger>Uncontrolled</DialogTrigger>
+          <DialogTrigger render={<Button variant='outline'>Uncontrolled</Button>} />
           <DialogPortal>
             <DialogBackdrop />
             <DialogPopup>
@@ -159,15 +159,19 @@ function StateExample() {
 /* "Open from a menu" */
 const MENU_ITEMS = ['Playlist details', 'Share playlist', 'Export playlist']
 
-function OpenFromMenu() {
+function OpenFromMenu () {
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
   return (
     <div className='flex flex-col items-start gap-3'>
       <Menu>
-        <MenuTrigger>
-          Playlist <CaretDownIcon />
-        </MenuTrigger>
+        <MenuTrigger
+          render={
+            <Button variant='outline'>
+              Playlist <CaretDownIcon />
+            </Button>
+          }
+        ></MenuTrigger>
         <MenuPortal>
           <MenuPositioner sideOffset={8} align='start'>
             <MenuPopup className='w-56'>
@@ -202,10 +206,10 @@ function OpenFromMenu() {
 }
 
 /* "Nested dialogs" */
-function NestedDialogs() {
+function NestedDialogs () {
   return (
     <Dialog>
-      <DialogTrigger>View notifications</DialogTrigger>
+      <DialogTrigger render={<Button variant='outline'>View notifications</Button>} />
       <DialogPortal>
         <DialogBackdrop />
         <DialogPopup>
@@ -236,7 +240,7 @@ function NestedDialogs() {
 }
 
 /* "Close confirmation" */
-function CloseConfirmation() {
+function CloseConfirmation () {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [confirmationOpen, setConfirmationOpen] = React.useState(false)
   const [textareaValue, setTextareaValue] = React.useState('')
@@ -270,7 +274,7 @@ function CloseConfirmation() {
             <textarea
               aria-labelledby={titleId}
               required
-              className='min-h-32 w-full resize-none rounded-md border border-input bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
+              className='min-h-32 w-full resize-none rounded-(--radius) border border-input bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
               placeholder="What's on your mind?"
               value={textareaValue}
               onChange={(event) => setTextareaValue(event.target.value)}
@@ -311,7 +315,7 @@ function CloseConfirmation() {
 }
 
 /* "Custom focus management" */
-function CustomFocusManagement() {
+function CustomFocusManagement () {
   const initialFocusRef = React.useRef<HTMLInputElement | null>(null)
   const finalFocusRef = React.useRef<HTMLButtonElement | null>(null)
 
@@ -351,7 +355,7 @@ function CustomFocusManagement() {
 }
 
 /* "Outside scroll dialog" */
-function OutsideScrollDialog() {
+function OutsideScrollDialog () {
   const popupRef = React.useRef<HTMLDivElement | null>(null)
 
   return (
@@ -402,7 +406,7 @@ function OutsideScrollDialog() {
 }
 
 /* "Inside scroll dialog" */
-function InsideScrollDialog() {
+function InsideScrollDialog () {
   return (
     <Dialog>
       <DialogTrigger>Open dialog</DialogTrigger>
@@ -442,7 +446,7 @@ function InsideScrollDialog() {
 }
 
 /* "Placing elements outside the popup" */
-function UncontainedDialog() {
+function UncontainedDialog () {
   return (
     <Dialog>
       <DialogTrigger>Open dialog</DialogTrigger>
@@ -456,7 +460,7 @@ function UncontainedDialog() {
             >
               <XIcon />
             </DialogClose>
-            <div className='pointer-events-auto flex w-72 flex-col gap-4 rounded-lg border border-border bg-background p-6 text-foreground shadow-lg'>
+            <div className='pointer-events-auto flex w-72 flex-col gap-4 rounded-(--radius) border border-border bg-background p-6 text-foreground shadow-lg'>
               <DialogHeader>
                 <DialogTitle>Uncontained dialog</DialogTitle>
                 <DialogDescription>
@@ -476,7 +480,7 @@ function UncontainedDialog() {
 }
 
 /* "Controlled mode with multiple triggers" */
-function ControlledTriggers() {
+function ControlledTriggers () {
   const [open, setOpen] = React.useState(false)
   const [triggerId, setTriggerId] = React.useState<string | null>(null)
 

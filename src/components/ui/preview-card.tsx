@@ -40,7 +40,7 @@ function PreviewCardBackdrop({ className, ...props }: React.ComponentProps<typeo
       data-slot='preview-card-backdrop'
       className={cn(
         'fixed inset-0 z-50 bg-black/20 transition-opacity duration-150',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
+        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[closed]:pointer-events-none',
         className as string
       )}
       {...props}
@@ -66,7 +66,7 @@ function PreviewCardPopup({ className, ...props }: React.ComponentProps<typeof B
     <BasePreviewCard.Popup
       data-slot='preview-card-popup'
       className={cn(
-        'relative z-50 w-[var(--popup-width,auto)] max-w-80 origin-[var(--transform-origin)] rounded-md border border-border bg-popover text-popover-foreground shadow-md',
+        'relative z-50 w-[var(--popup-width,auto)] max-w-80 origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md',
         'transition-[scale,opacity] duration-100 ease-out',
         'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
         'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',

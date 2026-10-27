@@ -5,15 +5,16 @@ import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
 
 function RadioRoot({ className, children, ...props }: React.ComponentProps<typeof Radio.Root>) {
+  const newLocal = 'data-invalid:border-destructive data-[invalid]:ring-destructive/20'
   return (
     <Radio.Root
       data-slot='radio'
       className={cn(
-        'flex size-4 cursor-pointer shrink-0 items-center justify-center rounded-full border border-input bg-background p-0 text-primary-foreground transition-colors',
-        'data-[checked]:border-primary data-[checked]:bg-primary',
-        'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
-        'data-[readonly]:cursor-default',
-        'data-[invalid]:border-destructive data-[invalid]:ring-destructive/20',
+        'flex size-4 cursor-pointer shrink-0 items-center justify-center rounded-full border border-input bg-background p-0 text-(--foreground-inverse) transition-colors',
+        'data-checked:border-primary data-checked:bg-primary',
+        'data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        'data-readonly:cursor-default',
+        newLocal,
         focusRing,
         className as string
       )}
@@ -30,7 +31,7 @@ function RadioIndicator({ className, ...props }: React.ComponentProps<typeof Rad
       data-slot='radio-indicator'
       className={cn(
         'flex items-center justify-center text-current',
-        'transition-all data-[starting-style]:scale-50 data-[starting-style]:opacity-0 data-[ending-style]:scale-50 data-[ending-style]:opacity-0',
+        'transition-all data-starting-style:scale-50 data-starting-style:opacity-0 data-ending-style:scale-50 data-ending-style:opacity-0',
         className as string
       )}
       {...props}

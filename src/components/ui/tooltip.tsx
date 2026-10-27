@@ -52,7 +52,7 @@ function TooltipPopup({ className, ...props }: React.ComponentProps<typeof BaseT
     <BaseTooltip.Popup
       data-slot='tooltip-popup'
       className={cn(
-        'z-50 flex w-[var(--popup-width,auto)] max-w-64 origin-[var(--transform-origin)] items-center rounded-md bg-foreground px-3 py-1.5 text-xs text-background',
+        'z-50 flex w-[var(--popup-width,auto)] max-w-64 origin-[var(--transform-origin)] items-center rounded-(--radius) bg-foreground px-3 py-1.5 text-xs text-background',
         'transition-[scale,opacity] duration-100 ease-out',
         'data-[starting-style]:scale-90 data-[starting-style]:opacity-0',
         'data-[ending-style]:scale-90 data-[ending-style]:opacity-0',

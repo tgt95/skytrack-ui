@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
  */
 export const menuItemVariants = cva(
   cn(
-    'relative flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-popover-foreground select-none outline-none transition-colors',
+    'relative flex cursor-pointer items-center gap-2 rounded-(--radius) px-2 py-1.5 text-left text-sm text-popover-foreground select-none outline-none transition-colors',
     'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground',
     'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
@@ -87,7 +87,7 @@ function MenuPopup({ className, ...props }: React.ComponentProps<typeof BaseMenu
     <BaseMenu.Popup
       data-slot='menu-popup'
       className={cn(
-        'origin-[var(--transform-origin)] rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-md outline-hidden',
+        'origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover p-1 text-popover-foreground shadow-md outline-hidden',
         'max-h-[var(--available-height)] min-w-[8rem] overflow-y-auto overscroll-contain',
         'transition-[scale,opacity] duration-100 ease-out data-[instant]:transition-none',
         'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
@@ -104,7 +104,7 @@ function MenuArrow({ className, ...props }: React.ComponentProps<typeof BaseMenu
     <BaseMenu.Arrow
       data-slot='menu-arrow'
       className={cn(
-        'h-2 w-2 rotate-45 rounded-md border border-border bg-popover',
+        'h-2 w-2 rotate-45 rounded-(--radius) border border-border bg-popover',
         'data-[side=top]:-bottom-1 data-[side=top]:-rotate-135',
         'data-[side=bottom]:-top-1 data-[side=bottom]:rotate-45',
         'data-[side=left]:-right-1 data-[side=left]:rotate-225',

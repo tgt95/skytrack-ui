@@ -23,7 +23,7 @@ import type { DemoMeta } from '@/showcase/demo'
 
 /** Trigger styling for a menubar: flat, no border, sits inside the bar. */
 const barTrigger =
-  'h-8 rounded-md border-0 bg-transparent px-3 font-medium hover:bg-accent hover:text-accent-foreground data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground'
+  'h-8 rounded-(--radius) border-0 bg-transparent px-3 font-medium hover:bg-accent hover:text-accent-foreground data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground'
 
 function DefaultMenubar() {
   return (

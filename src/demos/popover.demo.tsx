@@ -52,10 +52,10 @@ function ProfileBody() {
         <span className='text-sm text-muted-foreground'>Pro plan</span>
       </div>
       <div className='flex flex-col'>
-        <a className='rounded-md px-2 py-1 text-sm text-primary underline-offset-4 hover:underline' href='#popover'>
+        <a className='rounded-(--radius) px-2 py-1 text-sm text-primary underline-offset-4 hover:underline' href='#popover'>
           Profile settings
         </a>
-        <a className='rounded-md px-2 py-1 text-sm text-primary underline-offset-4 hover:underline' href='#popover'>
+        <a className='rounded-(--radius) px-2 py-1 text-sm text-primary underline-offset-4 hover:underline' href='#popover'>
           Log out
         </a>
       </div>

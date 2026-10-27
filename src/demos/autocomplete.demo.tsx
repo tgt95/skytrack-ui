@@ -585,7 +585,7 @@ function CommandPalette() {
 
   return (
     <div className='flex w-full max-w-md flex-col gap-2'>
-      <div className='flex w-80 max-w-full flex-col overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-md'>
+      <div className='flex w-80 max-w-full flex-col overflow-hidden rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md'>
         <Autocomplete open inline items={paletteGroups} autoHighlight='always' keepHighlight>
           <AutocompleteInputGroup className='border-0 border-b border-border shadow-none'>
             <MagnifyingGlassIcon className='size-4 shrink-0 text-muted-foreground' aria-hidden />

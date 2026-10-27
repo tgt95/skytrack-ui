@@ -143,6 +143,9 @@ What is inside:
   to IBM Plex Mono,
 - define `--radius` and the `rounded-*` scale globally.
 
+`--radius` is `0.125rem` (2px). Component corners use this single token; circular controls keep
+their circular shape.
+
 If the consumer app already ships its own Tailwind or its own reset, import this file **once**
 and be aware of the cascade; component styling relies on these tokens existing.
 

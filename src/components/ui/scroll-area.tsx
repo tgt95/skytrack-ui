@@ -38,7 +38,7 @@ function ScrollAreaScrollbar({ className, ...props }: React.ComponentProps<typeo
     <BaseScrollArea.Scrollbar
       data-slot='scroll-area-scrollbar'
       className={cn(
-        'm-1 flex justify-center rounded-md bg-border/60 opacity-0 transition-opacity duration-150 select-none',
+        'm-1 flex justify-center rounded-(--radius) bg-border/60 opacity-0 transition-opacity duration-150 select-none',
         'pointer-events-none data-[hovering]:pointer-events-auto data-[hovering]:opacity-100',
         'data-[scrolling]:pointer-events-auto data-[scrolling]:opacity-100 data-[scrolling]:duration-0',
         'data-[orientation=vertical]:w-2 data-[orientation=horizontal]:h-2',
@@ -54,7 +54,7 @@ function ScrollAreaThumb({ className, ...props }: React.ComponentProps<typeof Ba
     <BaseScrollArea.Thumb
       data-slot='scroll-area-thumb'
       className={cn(
-        'cursor-pointer rounded-md bg-border',
+        'cursor-pointer rounded-(--radius) bg-border',
         'data-[orientation=vertical]:w-full data-[orientation=horizontal]:h-full',
         className as string
       )}
@@ -67,7 +67,7 @@ function ScrollAreaCorner({ className, ...props }: React.ComponentProps<typeof B
   return (
     <BaseScrollArea.Corner
       data-slot='scroll-area-corner'
-      className={cn('rounded-md bg-background', className as string)}
+      className={cn('rounded-(--radius) bg-background', className as string)}
       {...props}
     />
   )

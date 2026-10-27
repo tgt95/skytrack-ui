@@ -42,7 +42,7 @@ export const drawerSideVariants = cva('', {
 
 export const drawerPopupVariants = cva(
   cn(
-    'flex max-h-dvh w-full flex-col overflow-y-auto overscroll-contain rounded-lg border border-border bg-background text-foreground shadow-lg outline-none',
+    'flex max-h-dvh w-full flex-col overflow-y-auto overscroll-contain rounded-(--radius) border border-border bg-background text-foreground shadow-lg outline-none',
     'transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform',
     'data-[swiping]:select-none',
     'data-[ending-style]:duration-[calc(var(--drawer-swipe-strength,0)*400ms)]',
@@ -124,7 +124,7 @@ function DrawerBackdrop({ className, ...props }: React.ComponentProps<typeof Bas
         'fixed inset-0 min-h-dvh bg-black/70 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]',
         'supports-[-webkit-touch-callout:none]:absolute',
         'data-[swiping]:duration-0',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
+        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[closed]:pointer-events-none',
         className as string
       )}
       {...props}
@@ -170,7 +170,7 @@ function DrawerTitle({ className, ...props }: React.ComponentProps<typeof BaseDr
   return (
     <BaseDrawer.Title
       data-slot='drawer-title'
-      className={cn('text-base leading-none font-semibold', className as string)}
+      className={cn('h5', className as string)}
       {...props}
     />
   )
@@ -216,12 +216,12 @@ function DrawerIndent({ className, ...props }: React.ComponentProps<typeof BaseD
     <BaseDrawer.Indent
       data-slot='drawer-indent'
       className={cn(
-        '[--indent-radius:calc(1rem*(1-var(--drawer-swipe-progress,0)))] [--indent-transition:calc(1-clamp(0,calc(var(--drawer-swipe-progress,0)*100000),1))] relative origin-[center_top] bg-background will-change-transform',
+        '[--indent-transition:calc(1-clamp(0,calc(var(--drawer-swipe-progress,0)*100000),1))] relative origin-[center_top] bg-background will-change-transform',
         '[transform:scale(1)_translateY(0)]',
-        '[transition:transform_400ms_cubic-bezier(0.32,0.72,0,1),border-radius_250ms_cubic-bezier(0.32,0.72,0,1)]',
-        '[transition-duration:calc(400ms*var(--indent-transition)),calc(250ms*var(--indent-transition))]',
+        '[transition:transform_400ms_cubic-bezier(0.32,0.72,0,1)]',
+        '[transition-duration:calc(400ms*var(--indent-transition))]',
         'data-active:transform-[scale(calc(0.98+(0.02*var(--drawer-swipe-progress,0))))_translateY(calc(0.5rem*(1-var(--drawer-swipe-progress,0))))]',
-        'data-active:rounded-tl-[var(--indent-radius)] data-active:rounded-tr-[var(--indent-radius)]',
+        'rounded-tl-[var(--radius)] rounded-tr-[var(--radius)]',
         'motion-reduce:transition-none',
         className as string
       )}

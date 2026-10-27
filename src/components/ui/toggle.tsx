@@ -7,7 +7,7 @@ import { ToggleGroupContext } from '@/components/ui/toggle-group'
 
 export const toggleVariants = cva(
   cn(
-    'inline-flex cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors select-none',
+    'inline-flex cursor-pointer items-center justify-center gap-2 rounded-(--radius) text-sm font-medium whitespace-nowrap transition-colors select-none',
     'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     'data-[pressed]:bg-accent data-[pressed]:text-accent-foreground',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -19,7 +19,7 @@ export const toggleVariants = cva(
         default: 'bg-transparent hover:bg-muted hover:text-foreground',
         outline: 'border border-input bg-transparent hover:bg-accent',
         segmented:
-          'flex-1 justify-center rounded-[calc(var(--radius)-2px)] bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground data-[pressed]:bg-card data-[pressed]:text-foreground data-[pressed]:shadow-sm',
+          'flex-1 justify-center rounded-(--radius) bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground data-[pressed]:bg-card data-[pressed]:text-foreground data-[pressed]:shadow-sm',
         brand:
           'bg-transparent hover:bg-muted hover:text-foreground data-[pressed]:bg-primary data-[pressed]:text-primary-foreground'
       },

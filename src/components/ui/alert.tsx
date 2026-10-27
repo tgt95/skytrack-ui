@@ -2,7 +2,7 @@ import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-export const alertVariants = cva('relative flex w-full items-start gap-3 rounded-md border p-4 text-sm', {
+export const alertVariants = cva('relative flex w-full items-start gap-3 rounded-(--radius) border p-4 text-sm', {
   variants: {
     variant: {
       default: 'border-border bg-card text-card-foreground [&>svg]:text-foreground',

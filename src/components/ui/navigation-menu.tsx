@@ -124,7 +124,7 @@ function NavigationMenuPopup({ className, ...props }: React.ComponentProps<typeo
     <BaseNavigationMenu.Popup
       data-slot='navigation-menu-popup'
       className={cn(
-        'relative h-[var(--popup-height)] w-[var(--popup-width)] origin-[var(--transform-origin)] rounded-lg border border-border bg-popover text-popover-foreground shadow-md outline-hidden',
+        'relative h-[var(--popup-height)] w-[var(--popup-width)] origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md outline-hidden',
         'transition-[opacity,transform,width,height,scale] duration-200 ease-out',
         'data-[instant]:transition-none',
         'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
@@ -189,7 +189,7 @@ function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof
     <BaseNavigationMenu.Link
       data-slot='navigation-menu-link'
       className={cn(
-        'block cursor-pointer select-none rounded-md p-2 text-foreground no-underline transition-colors',
+        'block cursor-pointer select-none rounded-(--radius) p-2 text-foreground no-underline transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-[active]:bg-accent/60 data-[active]:font-medium',
         focusRing,

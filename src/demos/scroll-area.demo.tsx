@@ -6,7 +6,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaCorner
 } from '@/components/ui/scroll-area'
-import { Tabs, TabsList, TabsTab, TabsIndicator, TabsPanel } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs'
 import type { DemoMeta } from '@/showcase/demo'
 
 const LOREM_1 =
@@ -26,7 +26,7 @@ export const demo: DemoMeta = {
     {
       name: 'Demo',
       render: () => (
-        <ScrollArea className='h-48 w-96 max-w-full rounded-lg border border-border'>
+        <ScrollArea className='h-48 w-96 max-w-full rounded-(--radius) border border-border'>
           <ScrollAreaViewport>
             <ScrollAreaContent className='pr-6'>
               <p className='m-0'>{LOREM_1}</p>
@@ -42,7 +42,7 @@ export const demo: DemoMeta = {
     {
       name: 'Both scrollbars',
       render: () => (
-        <ScrollArea className='h-80 w-80 max-w-full rounded-lg border border-border'>
+        <ScrollArea className='h-80 w-80 max-w-full rounded-(--radius) border border-border'>
           <ScrollAreaViewport>
             <ScrollAreaContent>
               <ul className='m-0 grid list-none grid-cols-[repeat(10,6.25rem)] grid-rows-[repeat(10,6.25rem)] gap-3 p-0'>
@@ -70,7 +70,7 @@ export const demo: DemoMeta = {
     {
       name: 'Gradient scroll fade',
       render: () => (
-        <ScrollArea className='h-48 w-96 max-w-full rounded-lg bg-muted'>
+        <ScrollArea className='h-48 w-96 max-w-full rounded-(--radius) bg-muted'>
           <ScrollAreaViewport className='mask-no-repeat [mask-image:linear-gradient(to_bottom,transparent_0,black_min(40px,var(--scroll-area-overflow-y-start)),black_calc(100%_-_min(40px,var(--scroll-area-overflow-y-end,40px))),transparent_100%)]'>
             <ScrollAreaContent className='pr-6'>
               <p className='m-0'>{LOREM_1}</p>
@@ -88,7 +88,11 @@ export const demo: DemoMeta = {
       render: () => (
         <Tabs defaultValue='overview' className='max-w-sm'>
           <ScrollArea className='relative overflow-hidden'>
-            <TabsList render={<ScrollAreaViewport />} className='flex w-full gap-1 border-b border-border'>
+            <TabsList
+              render={<ScrollAreaViewport />}
+              className='flex w-full gap-1 border-b border-border'
+              indicatorClassName='z-20 rounded-none bg-transparent shadow-none [border-bottom:2px_solid_var(--primary)]'
+            >
               <TabsTab value='overview' className='flex-none px-3'>
                 Overview
               </TabsTab>
@@ -98,7 +102,6 @@ export const demo: DemoMeta = {
               <TabsTab value='account' className='flex-none px-3'>
                 Account
               </TabsTab>
-              <TabsIndicator className='z-20 rounded-none bg-transparent shadow-none [border-bottom:2px_solid_var(--primary)]' />
             </TabsList>
           </ScrollArea>
           <TabsPanel value='overview'>

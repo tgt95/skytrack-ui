@@ -127,8 +127,8 @@ export function App() {
               const items = filtered.filter((d) => d.group === group)
               if (!items.length) return null
               return (
-                <div key={group} className='mb-4'>
-                  <div className='px-2 pb-1 text-xs font-medium text-muted-foreground'>{group}</div>
+                <div key={group} className='mb-6'>
+                  <div className='px-2 pb-1 text-xs sub-heading'>{group}</div>
                   {items.map((d) => (
                     <a
                       key={d.id}

@@ -30,7 +30,7 @@ function ComboboxLabel({ className, ...props }: React.ComponentProps<typeof Base
 
 export const comboboxInputGroupVariants = cva(
   cn(
-    'relative flex w-full items-center gap-1 rounded-md border border-input bg-background text-foreground shadow-xs transition-colors',
+    'relative flex w-full items-center gap-1 rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
     'has-[button]:px-1',
     'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
@@ -83,7 +83,7 @@ function ComboboxTrigger({ className, children, ...props }: React.ComponentProps
     <BaseCombobox.Trigger
       data-slot='combobox-trigger'
       className={cn(
-        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-sm border-0 bg-transparent p-0 text-muted-foreground transition-colors',
+        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-[pressed]:bg-accent data-[pressed]:text-accent-foreground',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
@@ -108,7 +108,7 @@ function ComboboxTriggerButton({
     <BaseCombobox.Trigger
       data-slot='combobox-trigger-button'
       className={cn(
-        'flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm text-foreground shadow-xs transition-colors',
+        'flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-(--radius) border border-input bg-background px-3 text-sm text-foreground shadow-xs transition-colors',
         'data-[placeholder]:text-muted-foreground',
         'hover:not-data-[disabled]:bg-accent hover:not-data-[disabled]:text-accent-foreground',
         'data-[pressed]:bg-accent data-[pressed]:text-accent-foreground',
@@ -141,7 +141,7 @@ function ComboboxClear({ className, children, ...props }: React.ComponentProps<t
     <BaseCombobox.Clear
       data-slot='combobox-clear'
       className={cn(
-        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-sm border-0 bg-transparent p-0 text-muted-foreground transition-colors',
+        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         focusRing,
@@ -174,7 +174,7 @@ function ComboboxChip({ className, ...props }: React.ComponentProps<typeof BaseC
     <BaseCombobox.Chip
       data-slot='combobox-chip'
       className={cn(
-        'flex min-h-6 cursor-pointer items-center gap-1 overflow-hidden rounded-sm bg-secondary py-0 pr-1 pl-1.5 text-sm leading-none text-secondary-foreground select-none',
+        'flex min-h-6 cursor-pointer items-center gap-1 overflow-hidden rounded-(--radius) bg-secondary py-0 pr-1 pl-1.5 text-sm leading-none text-secondary-foreground select-none',
         'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground',
         'data-[focused]:bg-accent data-[focused]:text-accent-foreground',
         className as string
@@ -189,7 +189,7 @@ function ComboboxChipRemove({ className, children, ...props }: React.ComponentPr
     <BaseCombobox.ChipRemove
       data-slot='combobox-chip-remove'
       className={cn(
-        'flex size-4 cursor-pointer shrink-0 items-center justify-center rounded-sm border-0 bg-transparent p-0 text-current transition-colors hover:bg-accent',
+        'flex size-4 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-current transition-colors hover:bg-accent',
         focusRing,
         className as string
       )}
@@ -232,7 +232,7 @@ function ComboboxPopup({ className, ...props }: React.ComponentProps<typeof Base
     <BaseCombobox.Popup
       data-slot='combobox-popup'
       className={cn(
-        'w-[var(--anchor-width)] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-md border border-border bg-popover text-popover-foreground shadow-md',
+        'w-[var(--anchor-width)] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md',
         'transition-[transform,scale,opacity] duration-150 ease-out',
         'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
         'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
@@ -295,7 +295,7 @@ function ComboboxItem({ className, children, ...props }: React.ComponentProps<ty
     <BaseCombobox.Item
       data-slot='combobox-item'
       className={cn(
-        'relative grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none',
+        'relative grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 rounded-(--radius) px-2 py-1.5 text-sm select-none',
         'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground',
         'data-[selected]:font-medium',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',

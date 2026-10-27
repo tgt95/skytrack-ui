@@ -24,7 +24,7 @@ const ACTIONS = ['Preview', 'Download', 'Copy link', 'Rename']
 
 function TriggerPanel({ children }: { children: React.ReactNode }) {
   return (
-    <div className='flex h-32 w-full max-w-64 items-center justify-center rounded-lg border border-dashed border-border bg-muted text-sm text-muted-foreground select-none'>
+    <div className='flex h-32 w-full max-w-64 items-center justify-center rounded-(--radius) border border-dashed border-border bg-muted text-sm text-muted-foreground select-none'>
       {children}
     </div>
   )
@@ -58,7 +58,7 @@ function SharedMenuItems({ type = 'menu' }: { type?: 'menu' | 'context-menu' }) 
 
 function ImageCardWithBothMenus() {
   return (
-    <div className='group relative w-full max-w-64 overflow-hidden rounded-lg border border-border bg-card text-card-foreground select-none'>
+    <div className='group relative w-full max-w-64 overflow-hidden rounded-(--radius) border border-border bg-card text-card-foreground select-none'>
       <ContextMenu>
         <ContextMenuTrigger>
           <div className='flex aspect-5/3 items-center justify-center bg-muted text-muted-foreground'>

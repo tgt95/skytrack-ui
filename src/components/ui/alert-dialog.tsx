@@ -46,7 +46,7 @@ function AlertDialogBackdrop({ className, ...props }: React.ComponentProps<typeo
       className={cn(
         'fixed inset-0 z-50 min-h-dvh bg-black/20 transition-opacity duration-150',
         'supports-[-webkit-touch-callout:none]:absolute',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
+        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[closed]:pointer-events-none',
         className as string
       )}
       {...props}
@@ -74,7 +74,7 @@ function AlertDialogPopup({ className, ...props }: React.ComponentProps<typeof B
     <BaseAlertDialog.Popup
       data-slot='alert-dialog-popup'
       className={cn(
-        'fixed top-1/2 left-1/2 z-50 flex w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg border border-border bg-background p-6 text-foreground shadow-lg sm:max-w-lg',
+        'fixed top-1/2 left-1/2 z-50 flex w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-(--radius) border border-border bg-background p-6 text-foreground shadow-lg sm:max-w-lg',
         'transition-[scale,opacity] duration-100 ease-out',
         'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
         'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
@@ -104,7 +104,7 @@ function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof B
   return (
     <BaseAlertDialog.Title
       data-slot='alert-dialog-title'
-      className={cn('text-lg leading-none font-semibold', className as string)}
+      className={cn('h5', className as string)}
       {...props}
     />
   )

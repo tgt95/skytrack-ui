@@ -40,15 +40,19 @@ const controlledAlert = createHandle()
 const MENU_ITEMS = ['Discard draft', 'Duplicate draft', 'Export draft']
 
 /* "Open from a menu" */
-function OpenFromMenu() {
+function OpenFromMenu () {
   const [alertOpen, setAlertOpen] = React.useState(false)
 
   return (
     <div className='flex flex-col items-start gap-3'>
       <Menu>
-        <MenuTrigger>
-          Document actions <CaretDownIcon />
-        </MenuTrigger>
+        <MenuTrigger
+          render={
+            <Button variant='outline'>
+              Document actions <CaretDownIcon />
+            </Button>
+          }
+        />
         <MenuPortal>
           <MenuPositioner sideOffset={8} align='start'>
             <MenuPopup className='w-56'>
@@ -88,7 +92,7 @@ function OpenFromMenu() {
 }
 
 /* "Close confirmation" */
-function CloseConfirmation() {
+function CloseConfirmation () {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [confirmationOpen, setConfirmationOpen] = React.useState(false)
   const [textareaValue, setTextareaValue] = React.useState('')
@@ -107,7 +111,7 @@ function CloseConfirmation() {
         }
       }}
     >
-      <DialogTrigger>Tweet</DialogTrigger>
+      <DialogTrigger render={<Button variant='outline'>Tweet</Button>} />
       <DialogPortal>
         <DialogBackdrop />
         <DialogPopup className='sm:max-w-md'>
@@ -122,7 +126,7 @@ function CloseConfirmation() {
             <textarea
               aria-labelledby={titleId}
               required
-              className='min-h-32 w-full resize-none rounded-md border border-input bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
+              className='min-h-32 w-full resize-none rounded-(--radius) border border-input bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
               placeholder="What's on your mind?"
               value={textareaValue}
               onChange={(event) => setTextareaValue(event.target.value)}
@@ -164,7 +168,7 @@ function CloseConfirmation() {
 }
 
 /* "Controlled mode with multiple triggers" */
-function ControlledTriggers() {
+function ControlledTriggers () {
   const [open, setOpen] = React.useState(false)
   const [triggerId, setTriggerId] = React.useState<string | null>(null)
 
@@ -175,15 +179,21 @@ function ControlledTriggers() {
 
   return (
     <div className='flex flex-wrap items-center gap-3'>
-      <AlertDialogTrigger handle={controlledAlert} id='trigger-1'>
-        Trigger 1
-      </AlertDialogTrigger>
-      <AlertDialogTrigger handle={controlledAlert} id='trigger-2'>
-        Trigger 2
-      </AlertDialogTrigger>
-      <AlertDialogTrigger handle={controlledAlert} id='trigger-3'>
-        Trigger 3
-      </AlertDialogTrigger>
+      <AlertDialogTrigger
+        handle={controlledAlert}
+        id='trigger-1'
+        render={<Button variant='outline'>Trigger 1</Button>}
+      />
+      <AlertDialogTrigger
+        handle={controlledAlert}
+        id='trigger-2'
+        render={<Button variant='outline'>Trigger 2</Button>}
+      />
+      <AlertDialogTrigger
+        handle={controlledAlert}
+        id='trigger-3'
+        render={<Button variant='outline'>Trigger 3</Button>}
+      />
       <Button
         variant='outline'
         onClick={() => {
@@ -258,7 +268,7 @@ export const demo: DemoMeta = {
       name: 'Detached triggers',
       render: () => (
         <div className='flex flex-wrap items-center gap-3'>
-          <AlertDialogTrigger handle={detachedAlert}>Discard draft</AlertDialogTrigger>
+          <AlertDialogTrigger handle={detachedAlert} render={<Button variant='outline'>Discard draft</Button>} />
 
           <AlertDialog handle={detachedAlert}>
             <AlertDialogPortal>
@@ -282,15 +292,9 @@ export const demo: DemoMeta = {
       name: 'Multiple triggers',
       render: () => (
         <div className='flex flex-wrap items-center gap-3'>
-          <AlertDialogTrigger handle={payloadAlert} payload={{ text: 'Trigger 1' }}>
-            Trigger 1
-          </AlertDialogTrigger>
-          <AlertDialogTrigger handle={payloadAlert} payload={{ text: 'Trigger 2' }}>
-            Trigger 2
-          </AlertDialogTrigger>
-          <AlertDialogTrigger handle={payloadAlert} payload={{ text: 'Trigger 3' }}>
-            Trigger 3
-          </AlertDialogTrigger>
+          <AlertDialogTrigger handle={payloadAlert} payload={{ text: 'Trigger 1' }} render={<Button variant='outline'>Trigger 1</Button>} />
+          <AlertDialogTrigger handle={payloadAlert} payload={{ text: 'Trigger 2' }} render={<Button variant='outline'>Trigger 2</Button>} />
+          <AlertDialogTrigger handle={payloadAlert} payload={{ text: 'Trigger 3' }} render={<Button variant='outline'>Trigger 3</Button>} />
 
           <AlertDialog handle={payloadAlert}>
             {({ payload }) => (
