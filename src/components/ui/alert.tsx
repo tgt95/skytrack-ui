@@ -30,9 +30,9 @@ function Alert({ className, variant, role = 'alert', ...props }: AlertProps) {
 
 function AlertTitle({ className, ...props }: React.ComponentProps<'h5'>) {
   return (
-    <h5
+    <div
       data-slot='alert-title'
-      className={cn('font-medium leading-none tracking-tight text-foreground', className as string)}
+      className={cn('font-medium tracking-tight text-foreground', className as string)}
       {...props}
     />
   )

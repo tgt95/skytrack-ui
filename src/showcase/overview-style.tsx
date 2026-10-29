@@ -129,7 +129,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Tabs, TabsIndicator, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ToggleGroup } from '@/components/ui/toggle-group'
 import { Toggle } from '@/components/ui/toggle'
@@ -146,11 +146,13 @@ function Card ({ children, className = '' }: { children: React.ReactNode; classN
   return (
     <div className={`relative ${className}`}>
       <div
-        className={`flex h-full flex-col gap-4 border border-border bg-card p-6 text-card-foreground ${className} [clip-path:polygon(0_0,100%_0,100%_calc(100%-16px),calc(100%-16px)_100%,0_100%)]`}
+        className={`flex h-full flex-col gap-4 border border-border bg-card p-6 text-card-foreground ${className}`}
+        // [clip-path:polygon(0_0,100%_0,100%_calc(100%-16px),calc(100%-16px)_100%,0_100%)]
+        // bg-size-[5px_5px] bg-[linear-gradient(45deg,var(--border)_12.50%,transparent_12.50%,transparent_50%,var(--border)_50%,var(--border)_62.50%,transparent_62.50%,transparent_100%)]
       >
         {children}
       </div>
-      <svg
+      {/* <svg
         aria-hidden='true'
         className='pointer-events-none absolute bottom-0 right-0 z-10 overflow-visible'
         width='16'
@@ -158,7 +160,7 @@ function Card ({ children, className = '' }: { children: React.ReactNode; classN
         viewBox='0 0 16 16'
       >
         <path d='M0 16 16 0' fill='none' stroke='var(--border)' strokeWidth='1' vectorEffect='non-scaling-stroke' />
-      </svg>
+      </svg> */}
     </div>
   )
 }
@@ -564,7 +566,7 @@ function PreviewStyle1 () {
             </div>
           </div>
         </div>
-        <div className='relative z-0 flex flex-col min-h-0 h-full bg-size-[5px_5px] bg-[linear-gradient(45deg,var(--border)_12.50%,transparent_12.50%,transparent_50%,var(--border)_50%,var(--border)_62.50%,transparent_62.50%,transparent_100%)]'>
+        <div className='relative z-0 flex flex-col min-h-0 h-full'>
           <div className='flex w-full flex-col justify-between bg-primary p-4 py-6 text-center text-primary-foreground'>
             <p className='text-xs sub-heading text-primary-foreground'>Mini Pro</p>
             <p className='text-8xl heading tabular-nums pb-2'>A8</p>

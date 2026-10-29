@@ -1,5 +1,4 @@
-
-/* Primitive / Mode 1 */
+/* Primitive */
 :root {
   --amber-100: #fef1d2;
   --amber-150: #fde6b9;
@@ -16,43 +15,6 @@
   --amber-850: #6c3705;
   --amber-900: #592904;
   --amber-950: #451a03;
-  /* --black-a0: #NaNNaNNaN;
-  --black-a1: #NaNNaNNaN;
-  --black-a10: #NaNNaNNaN;
-  --black-a100: var(--brand-color-key-black, #000000);
-  --black-a15: #NaNNaNNaN;
-  --black-a2: #NaNNaNNaN;
-  --black-a20: #NaNNaNNaN;
-  --black-a25: #NaNNaNNaN;
-  --black-a3: #NaNNaNNaN;
-  --black-a30: #NaNNaNNaN;
-  --black-a35: #NaNNaNNaN;
-  --black-a4: #NaNNaNNaN;
-  --black-a40: #NaNNaNNaN;
-  --black-a45: #NaNNaNNaN;
-  --black-a5: #NaNNaNNaN;
-  --black-a50: #NaNNaNNaN;
-  --black-a55: #NaNNaNNaN;
-  --black-a6: #NaNNaNNaN;
-  --black-a60: #NaNNaNNaN;
-  --black-a65: #NaNNaNNaN;
-  --black-a7: #NaNNaNNaN;
-  --black-a70: #NaNNaNNaN;
-  --black-a75: #NaNNaNNaN;
-  --black-a8: #NaNNaNNaN;
-  --black-a80: #NaNNaNNaN;
-  --black-a85: #NaNNaNNaN;
-  --black-a9: #NaNNaNNaN;
-  --black-a90: #NaNNaNNaN;
-  --black-a91: #NaNNaNNaN;
-  --black-a92: #NaNNaNNaN;
-  --black-a93: #NaNNaNNaN;
-  --black-a94: #NaNNaNNaN;
-  --black-a95: #NaNNaNNaN;
-  --black-a96: #NaNNaNNaN;
-  --black-a97: #NaNNaNNaN;
-  --black-a98: #NaNNaNNaN;
-  --black-a99: #NaNNaNNaN; */
   --blue-100: #dbe9fe;
   --blue-150: #c7dcfd;
   --blue-200: #b3cffc;
@@ -233,7 +195,23 @@
   --violet-850: #432185;
   --violet-900: #381875;
   --violet-950: #2e1065;
-  /* --white-a0: #NaNNaNNaN;
+  --yellow-100: #fcf4cf;
+  --yellow-150: #faecb6;
+  --yellow-200: #f7e49d;
+  --yellow-250: #f5dc84;
+  --yellow-300: #f3d36c;
+  --yellow-400: #eec33a;
+  --yellow-50: #fefce8;
+  --yellow-500: #eab308;
+  --yellow-600: #c59208;
+  --yellow-700: #9f7207;
+  --yellow-750: #8d6107;
+  --yellow-800: #7a5107;
+  --yellow-850: #674106;
+  --yellow-900: #553006;
+  --yellow-950: #422006;
+
+    /* --white-a0: #NaNNaNNaN;
   --white-a1: #NaNNaNNaN;
   --white-a10: #NaNNaNNaN;
   --white-a100: var(--brand-color-key-white, #ffffff);
@@ -270,21 +248,45 @@
   --white-a97: #NaNNaNNaN;
   --white-a98: #NaNNaNNaN;
   --white-a99: #NaNNaNNaN; */
-  --yellow-100: #fcf4cf;
-  --yellow-150: #faecb6;
-  --yellow-200: #f7e49d;
-  --yellow-250: #f5dc84;
-  --yellow-300: #f3d36c;
-  --yellow-400: #eec33a;
-  --yellow-50: #fefce8;
-  --yellow-500: #eab308;
-  --yellow-600: #c59208;
-  --yellow-700: #9f7207;
-  --yellow-750: #8d6107;
-  --yellow-800: #7a5107;
-  --yellow-850: #674106;
-  --yellow-900: #553006;
-  --yellow-950: #422006;
+
+  /* --black-a0: #NaNNaNNaN;
+  --black-a1: #NaNNaNNaN;
+  --black-a10: #NaNNaNNaN;
+  --black-a100: var(--brand-color-key-black, #000000);
+  --black-a15: #NaNNaNNaN;
+  --black-a2: #NaNNaNNaN;
+  --black-a20: #NaNNaNNaN;
+  --black-a25: #NaNNaNNaN;
+  --black-a3: #NaNNaNNaN;
+  --black-a30: #NaNNaNNaN;
+  --black-a35: #NaNNaNNaN;
+  --black-a4: #NaNNaNNaN;
+  --black-a40: #NaNNaNNaN;
+  --black-a45: #NaNNaNNaN;
+  --black-a5: #NaNNaNNaN;
+  --black-a50: #NaNNaNNaN;
+  --black-a55: #NaNNaNNaN;
+  --black-a6: #NaNNaNNaN;
+  --black-a60: #NaNNaNNaN;
+  --black-a65: #NaNNaNNaN;
+  --black-a7: #NaNNaNNaN;
+  --black-a70: #NaNNaNNaN;
+  --black-a75: #NaNNaNNaN;
+  --black-a8: #NaNNaNNaN;
+  --black-a80: #NaNNaNNaN;
+  --black-a85: #NaNNaNNaN;
+  --black-a9: #NaNNaNNaN;
+  --black-a90: #NaNNaNNaN;
+  --black-a91: #NaNNaNNaN;
+  --black-a92: #NaNNaNNaN;
+  --black-a93: #NaNNaNNaN;
+  --black-a94: #NaNNaNNaN;
+  --black-a95: #NaNNaNNaN;
+  --black-a96: #NaNNaNNaN;
+  --black-a97: #NaNNaNNaN;
+  --black-a98: #NaNNaNNaN;
+  --black-a99: #NaNNaNNaN; */
+
   /* --primitive-unit-border-radius-12: 12;
   --primitive-unit-border-radius-14: 14;
   --primitive-unit-border-radius-16: 16;
@@ -375,4 +377,9 @@
   --primitive-unit-spacing-8: 8;
   --primitive-unit-spacing-80: 80;
   --primitive-unit-spacing-96: 96; */
+}
+
+
+/* Agent's work */
+:root {
 }

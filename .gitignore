@@ -4,3 +4,4 @@ dist-lib
 dist-lib-tarball
 *.tgz
 site
+.DS_Store
