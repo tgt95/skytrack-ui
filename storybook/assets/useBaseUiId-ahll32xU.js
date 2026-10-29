@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{n as t,t as n}from"./useId-DI_qLjp6.js";function r(e){return t(e,`base-ui`)}function i(){return(i=e((()=>{n()})))()}export{r as n,i as t};

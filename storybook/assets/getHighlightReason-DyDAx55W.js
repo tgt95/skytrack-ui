@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{D as t,T as n,p as r,x as i}from"./reason-parts-Bqfd2doX.js";function a(e){return e==null?n:e.type.startsWith(`key`)?i:e.type.startsWith(`mouse`)||e.type.startsWith(`pointer`)?t:n}function o(){return(o=e((()=>{r()})))()}export{o as n,a as t};

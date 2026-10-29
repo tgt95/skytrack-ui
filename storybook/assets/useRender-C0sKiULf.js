@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{r as t,t as n}from"./useRenderElement-Ud9gqE11.js";function r(e){return t(e.defaultTagName??`div`,e,e)}function i(){return(i=e((()=>{n()})))()}export{r as n,i as t};

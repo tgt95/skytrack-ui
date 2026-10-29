@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{i as t,r as n}from"./formatErrorMessage-Cx0Tp8t_.js";import{_ as r,v as i}from"./useRenderElement-Ud9gqE11.js";function a(e){let n=i(o,e).current;return n.next=e,t(n.effect),n}function o(e){let t={current:e,next:e,effect:()=>{t.current=t.next}};return t}function s(){return(s=e((()=>{n(),r()})))()}export{a as n,s as t};

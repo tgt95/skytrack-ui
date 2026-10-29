@@ -1,0 +1,1 @@
+import{a as e,n as t}from"./rolldown-runtime-DkW27tQK.js";import{p as n}from"./iframe-DBEW51QV.js";import{n as r,t as i}from"./formatErrorMessage-Cx0Tp8t_.js";function a(e){let t=o.useContext(s);if(t===void 0&&!e)throw Error(i(69));return t}var o,s;function c(){return(c=t((()=>{r(),o=e(n(),1),s=o.createContext(void 0)})))()}export{c as n,a as r,s as t};

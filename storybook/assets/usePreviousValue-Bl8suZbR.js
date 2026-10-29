@@ -1,0 +1,1 @@
+import{a as e,n as t}from"./rolldown-runtime-DkW27tQK.js";import{p as n}from"./iframe-DBEW51QV.js";function r(e){let[t,n]=i.useState({current:e,previous:null});return Object.is(e,t.current)||n({current:e,previous:t.current}),t.previous}var i;function a(){return(a=t((()=>{i=e(n(),1)})))()}export{r as n,a as t};
