@@ -463,10 +463,10 @@ const SPECS: ComponentSpec[] = [
     id: 'number-field',
     title: 'Number Field',
     group: 'Forms',
-    axes: [{ name: 'size', values: ['default', 'compact', 'xs'], default: 'default' }],
+    axes: [{ name: 'size', values: ['default', 'xs'], default: 'default' }],
     states: ['disabled', 'readonly', 'invalid', 'scrubbing'],
-    sizes: 'Input heights: default 36 · compact 26 · xs 24 px. Group is 36 px with 36 px steppers.',
-    note: 'compact and xs are the dense inspector variants; xs matches the 24 px Button range.'
+    sizes: 'Input heights: default 36 · xs 24 px. Group is 36 px with 36 px steppers.',
+    note: 'xs matches the 24 px Button range.'
   },
   {
     id: 'otp-field',
@@ -749,6 +749,19 @@ const SPECS: ComponentSpec[] = [
     states: ['active', 'inactive', 'disabled', 'focus-visible'],
     sizes: 'Tab size is padding-based: xs px-2 py-0.5 · sm px-2.5 py-1 · default px-3 py-1.5 · lg px-4 py-2.',
     note: 'Line is the default. Set list width to full or hug. Vertical line tabs use the left edge by default; set indicatorSide to right to move it. Activation and focus loop control keyboard behavior.'
+  },
+  {
+    id: 'sidebar',
+    title: 'Sidebar',
+    group: 'Layout',
+    axes: [
+      { name: 'side', values: ['left', 'right'], default: 'left' },
+      { name: 'variant', values: ['sidebar', 'floating', 'inset'], default: 'sidebar' },
+      { name: 'collapsible', values: ['offcanvas', 'icon', 'none'], default: 'offcanvas' }
+    ],
+    states: ['expanded', 'collapsed', 'mobile drawer', 'active menu item', 'focus-visible'],
+    sizes: 'Widths: sidebar 16rem · mobile 18rem · icon rail 3rem.',
+    note: 'SidebarProvider owns controlled/uncontrolled desktop state and mobile drawer state. ⌘/Ctrl+B toggles the sidebar.'
   }
 ]
 

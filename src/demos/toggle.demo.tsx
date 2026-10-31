@@ -12,7 +12,7 @@ export const demo: DemoMeta = {
     {
       name: 'Default',
       render: () => (
-        <Toggle aria-label='Favorite' defaultPressed>
+        <Toggle size='icon' aria-label='Favorite' defaultPressed>
           <HeartIcon weight='fill' />
         </Toggle>
       )
@@ -20,7 +20,7 @@ export const demo: DemoMeta = {
     {
       name: 'Outline',
       render: () => (
-        <Toggle aria-label='Favorite' variant='outline' defaultPressed>
+        <Toggle size='icon' aria-label='Favorite' variant='outline' defaultPressed>
           <HeartIcon weight='fill' />
         </Toggle>
       )
@@ -29,15 +29,11 @@ export const demo: DemoMeta = {
       name: 'Sizes',
       render: () => (
         <div className='flex items-center gap-2'>
-          <Toggle aria-label='Favorite' size='sm' defaultPressed>
-            <HeartIcon weight='fill' />
-          </Toggle>
-          <Toggle aria-label='Favorite' defaultPressed>
-            <HeartIcon weight='fill' />
-          </Toggle>
-          <Toggle aria-label='Favorite' size='lg' defaultPressed>
-            <HeartIcon weight='fill' />
-          </Toggle>
+          {(['xs', 'sm', 'default', 'lg', 'icon-xs', 'icon-sm', 'icon', 'icon-lg'] as const).map((size) => (
+            <Toggle key={size} aria-label={`${size} favorite`} size={size} defaultPressed>
+              {size.includes('icon') ? <HeartIcon weight='fill' /> : size}
+            </Toggle>
+          ))}
         </div>
       )
     },
@@ -60,10 +56,10 @@ export const demo: DemoMeta = {
       name: 'Disabled',
       render: () => (
         <>
-          <Toggle aria-label='Favorite' disabled>
+          <Toggle size='icon' aria-label='Favorite' disabled>
             <HeartIcon />
           </Toggle>
-          <Toggle aria-label='Favorite' disabled defaultPressed>
+          <Toggle size='icon' aria-label='Favorite' disabled defaultPressed>
             <HeartIcon weight='fill' />
           </Toggle>
         </>

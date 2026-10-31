@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { ArrowsLeftRightIcon } from '@phosphor-icons/react'
 import {
   createHandle,
   Drawer,
@@ -13,7 +14,7 @@ import {
   DrawerProvider,
   DrawerSwipeArea,
   DrawerTitle,
-  DrawerTrigger,
+  DrawerTrigger as BaseDrawerTrigger,
   DrawerViewport,
   DrawerVirtualKeyboardProvider,
   type DrawerSnapPoint
@@ -63,6 +64,10 @@ const DELIVERY_FIELDS = [
 /* "Detached triggers" and "Stacking and animations" */
 const detachedDrawer = createHandle()
 const payloadDrawer = createHandle<{ title: string }>()
+
+function DrawerTrigger(props: React.ComponentProps<typeof BaseDrawerTrigger>) {
+  return <BaseDrawerTrigger {...props} render={props.render ?? <Button variant='outline' />} />
+}
 
 const TOP_MARGIN_REM = 1
 const SNAP_POINTS: DrawerSnapPoint[] = [`${30 + TOP_MARGIN_REM}rem`, 1]
@@ -223,7 +228,7 @@ const stackStyles =
   '[transform:translateY(var(--drawer-swipe-movement-y,0px))_scale(calc(1-(var(--nested-drawers,0)*var(--stack-step))))] ' +
   'transition-[transform,margin] duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]'
 
-const nestedPeek = 'data-[nested-drawer-open]:-mt-[calc(var(--peek)*var(--nested-drawers,0))]'
+const nestedPeek = 'data-nested-drawer-open:-mt-[calc(var(--peek)*var(--nested-drawers,0))]'
 
 function SecurityDrawer() {
   return (
@@ -507,10 +512,12 @@ function SwipeToOpen() {
       className='relative flex min-h-40 flex-col gap-3 overflow-hidden rounded-(--radius) border border-border p-4'
     >
       <Drawer swipeDirection='right' modal={false}>
-        <DrawerSwipeArea>
-          <span className='absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground'>Swipe here</span>
+        <DrawerSwipeArea className='flex items-center justify-center border-l border-border bg-muted/30'>
+          <span className='rounded-(--radius) bg-background/80 p-1 text-muted-foreground'>
+            <ArrowsLeftRightIcon aria-hidden='true' className='size-4 rotate-90' />
+          </span>
         </DrawerSwipeArea>
-        <p className='text-sm text-muted-foreground'>Swipe from the right edge to open the drawer.</p>
+        <p className='pr-10 text-sm text-muted-foreground'>Swipe from the right edge to open the drawer.</p>
         <DrawerPortal container={portalContainer}>
           <DrawerBackdrop />
           <DrawerViewport side='right'>
@@ -536,6 +543,7 @@ function CloseConfirmation() {
   const [confirmationOpen, setConfirmationOpen] = React.useState(false)
   const [note, setNote] = React.useState('')
   const titleId = React.useId()
+  const noteId = React.useId()
 
   return (
     <Drawer
@@ -563,14 +571,18 @@ function CloseConfirmation() {
                 setDrawerOpen(false)
               }}
             >
-              <textarea
-                aria-labelledby={titleId}
-                required
-                className='min-h-32 w-full resize-none rounded-(--radius) border border-input bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
-                placeholder="What's on your mind?"
-                value={note}
-                onChange={(event) => setNote(event.target.value)}
-              />
+              <FieldRoot className='w-full'>
+                <FieldLabel htmlFor={noteId}>Note</FieldLabel>
+                <FieldControl
+                  id={noteId}
+                  render={<textarea />}
+                  required
+                  className='h-auto min-h-32 resize-none p-2'
+                  placeholder="What's on your mind?"
+                  value={note}
+                  onChange={(event) => setNote(event.target.value)}
+                />
+              </FieldRoot>
               <div className='flex gap-3'>
                 <DrawerClose variant='secondary'>Cancel</DrawerClose>
                 <Button type='submit'>Save note</Button>

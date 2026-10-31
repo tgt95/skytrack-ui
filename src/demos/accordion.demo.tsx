@@ -1,5 +1,4 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
-import { AccountFaqAccordion } from '@/showcase/accordion-faq'
 import type { DemoMeta } from '@/showcase/demo'
 
 const FAQ = [
@@ -56,10 +55,6 @@ export const demo: DemoMeta = {
           ))}
         </Accordion>
       )
-    },
-    {
-      name: 'SkyTrack account FAQ',
-      render: () => <AccountFaqAccordion className='w-full max-w-sm' />
     },
     {
       name: 'Open multiple panels',

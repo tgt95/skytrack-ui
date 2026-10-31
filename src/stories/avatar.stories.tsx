@@ -17,7 +17,7 @@ export const ImageAndFallback: Story = {
   render: () => <VariantBlock name={"Image and fallback"}>{demo.variants[0].render()}</VariantBlock>,
 };
 
-export const FallbackOnly: Story = {
-  name: "Fallback only",
-  render: () => <VariantBlock name={"Fallback only"}>{demo.variants[1].render()}</VariantBlock>,
+export const Sizes: Story = {
+  name: "Sizes",
+  render: () => <VariantBlock name={"Sizes"}>{demo.variants[1].render()}</VariantBlock>,
 };

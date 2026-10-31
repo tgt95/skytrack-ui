@@ -66,6 +66,16 @@
       "import": "./dist-lib/button.js",
       "default": "./dist-lib/button.js"
     },
+    "./calendar": {
+      "types": "./dist-lib/components/ui/calendar.d.ts",
+      "import": "./dist-lib/calendar.js",
+      "default": "./dist-lib/calendar.js"
+    },
+    "./chart": {
+      "types": "./dist-lib/components/ui/chart.d.ts",
+      "import": "./dist-lib/chart.js",
+      "default": "./dist-lib/chart.js"
+    },
     "./checkbox": {
       "types": "./dist-lib/components/ui/checkbox.d.ts",
       "import": "./dist-lib/checkbox.js",
@@ -86,10 +96,25 @@
       "import": "./dist-lib/combobox.js",
       "default": "./dist-lib/combobox.js"
     },
+    "./command": {
+      "types": "./dist-lib/components/ui/command.d.ts",
+      "import": "./dist-lib/command.js",
+      "default": "./dist-lib/command.js"
+    },
     "./context-menu": {
       "types": "./dist-lib/components/ui/context-menu.d.ts",
       "import": "./dist-lib/context-menu.js",
       "default": "./dist-lib/context-menu.js"
+    },
+    "./data-table": {
+      "types": "./dist-lib/components/ui/data-table.d.ts",
+      "import": "./dist-lib/data-table.js",
+      "default": "./dist-lib/data-table.js"
+    },
+    "./date-picker": {
+      "types": "./dist-lib/components/ui/date-picker.d.ts",
+      "import": "./dist-lib/date-picker.js",
+      "default": "./dist-lib/date-picker.js"
     },
     "./dialog": {
       "types": "./dist-lib/components/ui/dialog.d.ts",
@@ -161,6 +186,16 @@
       "import": "./dist-lib/otp-field.js",
       "default": "./dist-lib/otp-field.js"
     },
+    "./page-header": {
+      "types": "./dist-lib/components/ui/page-header.d.ts",
+      "import": "./dist-lib/page-header.js",
+      "default": "./dist-lib/page-header.js"
+    },
+    "./pagination": {
+      "types": "./dist-lib/components/ui/pagination.d.ts",
+      "import": "./dist-lib/pagination.js",
+      "default": "./dist-lib/pagination.js"
+    },
     "./popover": {
       "types": "./dist-lib/components/ui/popover.d.ts",
       "import": "./dist-lib/popover.js",
@@ -195,6 +230,11 @@
       "types": "./dist-lib/components/ui/separator.d.ts",
       "import": "./dist-lib/separator.js",
       "default": "./dist-lib/separator.js"
+    },
+    "./sidebar": {
+      "types": "./dist-lib/components/ui/sidebar.d.ts",
+      "import": "./dist-lib/sidebar.js",
+      "default": "./dist-lib/sidebar.js"
     },
     "./slider": {
       "types": "./dist-lib/components/ui/slider.d.ts",
@@ -262,10 +302,14 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@base-ui/react": "^1.8.0",
+    "@base-ui/react": "^1.9.0",
     "@phosphor-icons/react": "^2.1.10",
+    "@tanstack/react-table": "^9.3.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "react-day-picker": "^10.0.2",
+    "recharts": "^3.10.1",
     "tailwind-merge": "^3.7.0",
     "zod": "^4.6.5"
   },

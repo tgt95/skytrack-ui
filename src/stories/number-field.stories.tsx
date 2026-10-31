@@ -27,14 +27,14 @@ export const MinMaxAndStep: Story = {
   render: () => <VariantBlock name={"Min, max and step"}>{demo.variants[2].render()}</VariantBlock>,
 };
 
-export const CompactInline: Story = {
-  name: "Compact inline",
-  render: () => <VariantBlock name={"Compact inline"}>{demo.variants[3].render()}</VariantBlock>,
-};
-
 export const XSInline: Story = {
   name: "XS inline",
-  render: () => <VariantBlock name={"XS inline"}>{demo.variants[4].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"XS inline"}>{demo.variants[3].render()}</VariantBlock>,
+};
+
+export const ButtonAlignedSizes: Story = {
+  name: "Button-aligned sizes",
+  render: () => <VariantBlock name={"Button-aligned sizes"}>{demo.variants[4].render()}</VariantBlock>,
 };
 
 export const Disabled: Story = {

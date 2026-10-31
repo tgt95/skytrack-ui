@@ -2,14 +2,19 @@ import * as React from 'react'
 import { Button as BaseButton } from '@base-ui/react/button'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
+import { CONTROL_SIZE_CLASSES } from '@/components/ui/control-sizes'
 
 /** Shared focus ring + disabled styles. Reuse in every interactive component. */
 export const focusRing = 'outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring'
 
+/** Keep existing button-subpath imports working while shared controls use the common module. */
+export { CONTROL_SIZE_CLASSES as controlSizeClasses } from '@/components/ui/control-sizes'
+export type { ControlSize } from '@/components/ui/control-sizes'
+
 export const buttonVariants = cva(
   cn(
     'inline-flex cursor-pointer shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-(--radius) text-sm font-medium transition-colors select-none',
-    'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+    'disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
     focusRing
   ),
@@ -17,7 +22,8 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive: 'bg-destructive text-(--foreground-inverse) hover:bg-destructive/90 focus-visible:ring-destructive/30',
+        destructive:
+          'bg-destructive text-(--foreground-inverse) hover:bg-destructive/90 focus-visible:ring-destructive/30',
         outline:
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:hover:bg-input/50',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
@@ -25,10 +31,10 @@ export const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline'
       },
       size: {
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        xs: 'h-6 gap-1.5 px-3 text-xs has-[>svg]:px-2.5',
-        sm: 'h-8 gap-1.5 px-3 text-sm has-[>svg]:px-2.5',
-        lg: 'h-10 px-6 has-[>svg]:px-4',
+        default: cn(CONTROL_SIZE_CLASSES.default, 'px-4 py-2 has-[>svg]:px-3'),
+        xs: cn(CONTROL_SIZE_CLASSES.xs, 'gap-1.5 px-3 has-[>svg]:px-2.5'),
+        sm: cn(CONTROL_SIZE_CLASSES.sm, 'gap-1.5 px-3 has-[>svg]:px-2.5'),
+        lg: cn(CONTROL_SIZE_CLASSES.lg, 'px-6 has-[>svg]:px-4'),
         icon: 'size-9',
         'icon-xs': 'size-6',
         'icon-sm': 'size-8',
@@ -43,7 +49,12 @@ export type ButtonProps = React.ComponentProps<typeof BaseButton> & VariantProps
 
 function Button({ className, variant, size, ...props }: ButtonProps) {
   return (
-    <BaseButton data-slot='button' className={cn(buttonVariants({ variant, size }), className as string)} {...props} />
+    <BaseButton
+      data-slot='button'
+      data-size={size ?? 'default'}
+      className={cn(buttonVariants({ variant, size }), className)}
+      {...props}
+    />
   )
 }
 

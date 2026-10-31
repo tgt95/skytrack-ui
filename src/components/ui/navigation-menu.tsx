@@ -8,7 +8,7 @@ function NavigationMenu({ className, ...props }: React.ComponentProps<typeof Bas
   return (
     <BaseNavigationMenu.Root
       data-slot='navigation-menu'
-      className={cn('relative flex max-w-max flex-col', 'data-[orientation=vertical]:flex-row', className as string)}
+      className={cn('relative flex max-w-max flex-col', 'data-[orientation=vertical]:flex-row', className)}
       {...props}
     />
   )
@@ -21,7 +21,7 @@ function NavigationMenuList({ className, ...props }: React.ComponentProps<typeof
       className={cn(
         'flex list-none flex-row items-center gap-1',
         'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
-        className as string
+        className
       )}
       {...props}
     />
@@ -29,22 +29,16 @@ function NavigationMenuList({ className, ...props }: React.ComponentProps<typeof
 }
 
 function NavigationMenuItem({ className, ...props }: React.ComponentProps<typeof BaseNavigationMenu.Item>) {
-  return (
-    <BaseNavigationMenu.Item
-      data-slot='navigation-menu-item'
-      className={cn('relative', className as string)}
-      {...props}
-    />
-  )
+  return <BaseNavigationMenu.Item data-slot='navigation-menu-item' className={cn('relative', className)} {...props} />
 }
 
-function NavigationMenuTrigger({ className, children, ...props }: React.ComponentProps<typeof BaseNavigationMenu.Trigger>) {
+function NavigationMenuTrigger({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof BaseNavigationMenu.Trigger>) {
   return (
-    <BaseNavigationMenu.Trigger
-      data-slot='navigation-menu-trigger'
-      className={className}
-      {...props}
-    >
+    <BaseNavigationMenu.Trigger data-slot='navigation-menu-trigger' className={className} {...props}>
       {children}
     </BaseNavigationMenu.Trigger>
   )
@@ -56,8 +50,8 @@ function NavigationMenuIcon({ className, children, ...props }: React.ComponentPr
       data-slot='navigation-menu-icon'
       className={cn(
         'flex size-4 items-center justify-center transition-transform duration-200',
-        'data-[popup-open]:rotate-180',
-        className as string
+        'data-popup-open:rotate-180',
+        className
       )}
       {...props}
     >
@@ -73,12 +67,12 @@ function NavigationMenuContent({ className, ...props }: React.ComponentProps<typ
       className={cn(
         'h-full w-[calc(100vw-2.5rem)] p-2 md:w-max md:max-w-[25rem]',
         'transition-[opacity,transform,translate] duration-200 ease-out',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
-        'data-[starting-style]:data-[activation-direction=left]:translate-x-[-50%]',
-        'data-[starting-style]:data-[activation-direction=right]:translate-x-[50%]',
-        'data-[ending-style]:data-[activation-direction=left]:translate-x-[50%]',
-        'data-[ending-style]:data-[activation-direction=right]:translate-x-[-50%]',
-        className as string
+        'data-starting-style:opacity-0 data-ending-style:opacity-0',
+        'data-starting-style:data-[activation-direction=left]:translate-x-[-50%]',
+        'data-starting-style:data-[activation-direction=right]:translate-x-[50%]',
+        'data-ending-style:data-[activation-direction=left]:translate-x-[50%]',
+        'data-ending-style:data-[activation-direction=right]:translate-x-[-50%]',
+        className
       )}
       {...props}
     />
@@ -88,7 +82,7 @@ function NavigationMenuContent({ className, ...props }: React.ComponentProps<typ
 /* ----------------------------------------------------------------- Popup */
 
 function NavigationMenuPortal({ className, ...props }: React.ComponentProps<typeof BaseNavigationMenu.Portal>) {
-  return <BaseNavigationMenu.Portal data-slot='navigation-menu-portal' className={cn(className as string)} {...props} />
+  return <BaseNavigationMenu.Portal data-slot='navigation-menu-portal' className={cn(className)} {...props} />
 }
 
 function NavigationMenuBackdrop({ className, ...props }: React.ComponentProps<typeof BaseNavigationMenu.Backdrop>) {
@@ -97,8 +91,8 @@ function NavigationMenuBackdrop({ className, ...props }: React.ComponentProps<ty
       data-slot='navigation-menu-backdrop'
       className={cn(
         'fixed inset-0 z-50 bg-foreground/20 transition-opacity duration-150',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
-        className as string
+        'data-starting-style:opacity-0 data-ending-style:opacity-0',
+        className
       )}
       {...props}
     />
@@ -111,8 +105,8 @@ function NavigationMenuPositioner({ className, ...props }: React.ComponentProps<
       data-slot='navigation-menu-positioner'
       className={cn(
         'z-50 outline-hidden',
-        'transition-[top,left,right,bottom,transform] duration-200 ease-out data-[instant]:transition-none',
-        className as string
+        'transition-[top,left,right,bottom,transform] duration-200 ease-out data-instant:transition-none',
+        className
       )}
       {...props}
     />
@@ -126,10 +120,10 @@ function NavigationMenuPopup({ className, ...props }: React.ComponentProps<typeo
       className={cn(
         'relative h-[var(--popup-height)] w-[var(--popup-width)] origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md outline-hidden',
         'transition-[opacity,transform,width,height,scale] duration-200 ease-out',
-        'data-[instant]:transition-none',
-        'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
-        'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
-        className as string
+        'data-instant:transition-none',
+        'data-starting-style:scale-95 data-starting-style:opacity-0',
+        'data-ending-style:scale-95 data-ending-style:opacity-0',
+        className
       )}
       {...props}
     />
@@ -140,7 +134,7 @@ function NavigationMenuViewport({ className, ...props }: React.ComponentProps<ty
   return (
     <BaseNavigationMenu.Viewport
       data-slot='navigation-menu-viewport'
-      className={cn('relative h-full w-full overflow-hidden', className as string)}
+      className={cn('relative h-full w-full overflow-hidden', className)}
       {...props}
     />
   )
@@ -173,7 +167,7 @@ function NavigationMenuArrow({ className, children, ...props }: React.ComponentP
         'data-[side=bottom]:top-[-9px]',
         'data-[side=left]:right-[-14px] data-[side=left]:rotate-90',
         'data-[side=right]:left-[-14px] data-[side=right]:-rotate-90',
-        className as string
+        className
       )}
       {...props}
     >
@@ -191,9 +185,9 @@ function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof
       className={cn(
         'block cursor-pointer select-none rounded-(--radius) p-2 text-foreground no-underline transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
-        'data-[active]:bg-accent/60 data-[active]:font-medium',
+        'data-active:bg-accent/60 data-active:font-medium',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     />

@@ -110,6 +110,19 @@ import { Menu, MenuItem, MenuPopup, MenuPortal, MenuPositioner, MenuTrigger } fr
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger
+} from '@/components/ui/sidebar'
+import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaScrollbar,
@@ -1339,6 +1352,50 @@ type ComponentSpecimens = Record<string, SpecimenRenderer | undefined> & {
   states?: () => React.ReactNode
 }
 
+function SidebarSpecimen({
+  side = 'left',
+  variant = 'sidebar',
+  collapsible = 'offcanvas'
+}: {
+  side?: 'left' | 'right'
+  variant?: 'sidebar' | 'floating' | 'inset'
+  collapsible?: 'offcanvas' | 'icon' | 'none'
+}) {
+  return (
+    <SidebarProvider className='relative h-56 min-h-0 w-full overflow-hidden border border-border'>
+      <Sidebar
+        side={side}
+        variant={variant}
+        collapsible={collapsible}
+        gapClassName='!h-full !min-h-0'
+        containerClassName='!absolute !h-full'
+      >
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton isActive>Overview</SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>Missions</SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+      <SidebarInset className='h-full min-h-0 min-w-0'>
+        <header className='flex h-10 items-center gap-2 border-b border-border px-2'>
+          <SidebarTrigger />
+          <span className='text-sm'>Sidebar layout</span>
+        </header>
+      </SidebarInset>
+    </SidebarProvider>
+  )
+}
+
 const SPECIMENS: Record<string, ComponentSpecimens> = {
   button: {
     variant: (value) => <ButtonSpecimen variant={value} size='sm' />,
@@ -1416,6 +1473,12 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   },
   'scroll-area': {
     orientation: (value) => <ScrollAreaSpecimen orientation={value} />
+  },
+  sidebar: {
+    side: (value) => <SidebarSpecimen side={value as 'left' | 'right'} />,
+    variant: (value) => <SidebarSpecimen variant={value as 'sidebar' | 'floating' | 'inset'} />,
+    collapsible: (value) => <SidebarSpecimen collapsible={value as 'offcanvas' | 'icon' | 'none'} />,
+    states: () => <SidebarSpecimen collapsible='icon' />
   },
   tabs: {
     'default value': (value) => <TabsSpecimen defaultTab={value as 'none' | 'one' | 'two' | 'three'} />,
@@ -1670,6 +1733,14 @@ export function renderConfiguredSpecimen(specId: string, settings: SpecimenSetti
           disabledTab={setting(settings, 'disabled tab', 'none') as 'none' | 'one' | 'two' | 'three'}
           activation={setting(settings, 'activation', 'manual') as 'manual' | 'automatic'}
           focusLoop={setting(settings, 'focus loop', 'loop') as 'loop' | 'stop'}
+        />
+      )
+    case 'sidebar':
+      return (
+        <SidebarSpecimen
+          side={setting(settings, 'side', 'left') as 'left' | 'right'}
+          variant={setting(settings, 'variant', 'sidebar') as 'sidebar' | 'floating' | 'inset'}
+          collapsible={setting(settings, 'collapsible', 'offcanvas') as 'offcanvas' | 'icon' | 'none'}
         />
       )
     default:

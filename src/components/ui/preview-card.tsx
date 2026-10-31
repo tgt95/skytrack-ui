@@ -19,19 +19,11 @@ type PreviewCardChangeEventDetails = Parameters<
 >[1]
 
 function PreviewCardTrigger({ className, ...props }: React.ComponentProps<typeof BasePreviewCard.Trigger>) {
-  return (
-    <BasePreviewCard.Trigger
-      data-slot='preview-card-trigger'
-      className={className}
-      {...props}
-    />
-  )
+  return <BasePreviewCard.Trigger data-slot='preview-card-trigger' className={className} {...props} />
 }
 
 function PreviewCardPortal({ className, ...props }: React.ComponentProps<typeof BasePreviewCard.Portal>) {
-  return (
-    <BasePreviewCard.Portal data-slot='preview-card-portal' className={cn('z-50', className as string)} {...props} />
-  )
+  return <BasePreviewCard.Portal data-slot='preview-card-portal' className={cn('z-50', className)} {...props} />
 }
 
 function PreviewCardBackdrop({ className, ...props }: React.ComponentProps<typeof BasePreviewCard.Backdrop>) {
@@ -40,8 +32,8 @@ function PreviewCardBackdrop({ className, ...props }: React.ComponentProps<typeo
       data-slot='preview-card-backdrop'
       className={cn(
         'fixed inset-0 z-50 bg-black/20 transition-opacity duration-150',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[closed]:pointer-events-none',
-        className as string
+        'data-starting-style:opacity-0 data-ending-style:opacity-0 data-closed:pointer-events-none',
+        className
       )}
       {...props}
     />
@@ -54,7 +46,7 @@ function PreviewCardPositioner({ className, ...props }: React.ComponentProps<typ
       data-slot='preview-card-positioner'
       className={cn(
         'z-50 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)]',
-        className as string
+        className
       )}
       {...props}
     />
@@ -68,10 +60,10 @@ function PreviewCardPopup({ className, ...props }: React.ComponentProps<typeof B
       className={cn(
         'relative z-50 w-[var(--popup-width,auto)] max-w-80 origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md',
         'transition-[scale,opacity] duration-100 ease-out',
-        'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
-        'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
-        'data-[instant]:transition-none',
-        className as string
+        'data-starting-style:scale-95 data-starting-style:opacity-0',
+        'data-ending-style:scale-95 data-ending-style:opacity-0',
+        'data-instant:transition-none',
+        className
       )}
       {...props}
     />
@@ -109,7 +101,7 @@ function PreviewCardArrow({ className, children, ...props }: React.ComponentProp
         'data-[side=bottom]:top-[-9px]',
         'data-[side=left]:right-[-9px] data-[side=left]:rotate-90',
         'data-[side=right]:left-[-9px] data-[side=right]:-rotate-90',
-        className as string
+        className
       )}
       {...props}
     >
@@ -122,7 +114,7 @@ function PreviewCardViewport({ className, ...props }: React.ComponentProps<typeo
   return (
     <BasePreviewCard.Viewport
       data-slot='preview-card-viewport'
-      className={cn('relative h-full w-full overflow-clip', className as string)}
+      className={cn('relative h-full w-full overflow-clip', className)}
       {...props}
     />
   )

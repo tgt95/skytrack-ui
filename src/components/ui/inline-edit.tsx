@@ -9,6 +9,7 @@ type InlineEditContextValue = {
   disabled: boolean
   inputId: string
   label?: string
+  rootRef: React.RefObject<HTMLDivElement | null>
   triggerRef: React.RefObject<HTMLElement | null>
   setDraft: React.Dispatch<React.SetStateAction<string>>
   startEditing: () => void
@@ -54,6 +55,7 @@ function InlineEdit({
   const [draft, setDraft] = React.useState(value)
   const [uncontrolledEditing, setUncontrolledEditing] = React.useState(defaultEditing)
   const editing = editingProp ?? uncontrolledEditing
+  const rootRef = React.useRef<HTMLDivElement>(null)
   const triggerRef = React.useRef<HTMLElement>(null)
   const restoreFocusRef = React.useRef(false)
 
@@ -110,6 +112,7 @@ function InlineEdit({
       disabled,
       inputId: `${id}-input`,
       label: label ?? value,
+      rootRef,
       triggerRef,
       setDraft,
       startEditing,
@@ -121,7 +124,13 @@ function InlineEdit({
 
   return (
     <InlineEditContext.Provider value={context}>
-      <div data-slot='inline-edit' data-editing={editing ? '' : undefined} className={cn('inline-flex min-w-0 flex-col', className as string)} {...props}>
+      <div
+        data-slot='inline-edit'
+        data-editing={editing ? '' : undefined}
+        ref={rootRef}
+        className={cn('relative inline-flex min-w-0 flex-col', className)}
+        {...props}
+      >
         {children}
       </div>
     </InlineEditContext.Provider>
@@ -135,7 +144,7 @@ function InlineEditTrigger({ children, disabled, onClick, render, ...props }: In
   const trigger = useRender({
     defaultTagName: 'button',
     render,
-    enabled: !context.editing,
+    enabled: true,
     ref: context.triggerRef,
     state: { editing: context.editing, value: context.value },
     props: {
@@ -146,6 +155,9 @@ function InlineEditTrigger({ children, disabled, onClick, render, ...props }: In
       'aria-disabled': disabled ?? context.disabled,
       'aria-expanded': context.editing,
       'aria-controls': context.inputId,
+      'aria-hidden': context.editing || undefined,
+      tabIndex: context.editing ? -1 : props.tabIndex,
+      style: context.editing ? { ...props.style, visibility: 'hidden' } : props.style,
       onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
         if (!event.defaultPrevented && !context.disabled && !disabled) context.startEditing()
@@ -153,12 +165,22 @@ function InlineEditTrigger({ children, disabled, onClick, render, ...props }: In
       children: children ?? context.value
     }
   })
-  return context.editing ? null : trigger
+  return trigger
 }
 
 export type InlineEditInputProps = Omit<useRender.ComponentProps<'textarea'>, 'value' | 'defaultValue'>
 
-function InlineEditInput({ className, id, onBlur, onChange, onKeyDown, ref, render, rows, ...props }: InlineEditInputProps) {
+function InlineEditInput({
+  className,
+  id,
+  onBlur,
+  onChange,
+  onKeyDown,
+  ref,
+  render,
+  rows,
+  ...props
+}: InlineEditInputProps) {
   const context = useInlineEditContext()
   const inputRef = React.useRef<HTMLElement>(null)
 
@@ -172,11 +194,36 @@ function InlineEditInput({ className, id, onBlur, onChange, onKeyDown, ref, rend
   React.useLayoutEffect(() => {
     if (!context.editing) return
     const input = inputRef.current
+    const trigger = context.triggerRef.current
+    const root = context.rootRef.current
+    if (!input || !trigger || !root) return
+
+    const triggerRect = trigger.getBoundingClientRect()
+    const rootRect = root.getBoundingClientRect()
+    const triggerStyle = window.getComputedStyle(trigger)
+    const overlay = 6
+    const borderWidth = 1
+
+    Object.assign(input.style, {
+      top: `${triggerRect.top - rootRect.top - overlay}px`,
+      left: `${triggerRect.left - rootRect.left - overlay}px`,
+      width: `${triggerRect.width + overlay * 2}px`,
+      height: `${triggerRect.height + overlay * 2}px`,
+      boxSizing: 'border-box',
+      font: triggerStyle.font,
+      letterSpacing: triggerStyle.letterSpacing,
+      lineHeight: triggerStyle.lineHeight,
+      textAlign: triggerStyle.textAlign,
+      paddingTop: `${Number.parseFloat(triggerStyle.paddingTop) + Number.parseFloat(triggerStyle.borderTopWidth) + overlay - borderWidth}px`,
+      paddingRight: `${Number.parseFloat(triggerStyle.paddingRight) + Number.parseFloat(triggerStyle.borderRightWidth) + overlay - borderWidth}px`,
+      paddingBottom: `${Number.parseFloat(triggerStyle.paddingBottom) + Number.parseFloat(triggerStyle.borderBottomWidth) + overlay - borderWidth}px`,
+      paddingLeft: `${Number.parseFloat(triggerStyle.paddingLeft) + Number.parseFloat(triggerStyle.borderLeftWidth) + overlay - borderWidth}px`
+    })
+
     if (input instanceof HTMLTextAreaElement) {
-      input.style.height = 'auto'
-      input.style.height = `${input.scrollHeight}px`
+      input.style.height = `${Math.max(triggerRect.height + overlay * 2, input.scrollHeight)}px`
     }
-  }, [context.editing, context.draft])
+  }, [context.editing, context.draft, context.rootRef, context.triggerRef])
 
   const input = useRender({
     defaultTagName: 'textarea',
@@ -192,9 +239,9 @@ function InlineEditInput({ className, id, onBlur, onChange, onKeyDown, ref, rend
       rows: rows ?? 1,
       value: context.draft,
       className: cn(
-        'block w-full min-w-0 resize-none overflow-hidden rounded-(--radius) border border-input bg-transparent px-3 py-2 text-inherit outline-none transition-colors',
+        'absolute z-10 block min-w-0 resize-none overflow-hidden rounded-(--radius) border border-input bg-background text-inherit outline-none transition-colors',
         'focus:border-ring focus:ring-[3px] focus:ring-ring/50',
-        className as string
+        className
       ),
       onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         onChange?.(event)

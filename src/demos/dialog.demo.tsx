@@ -22,7 +22,7 @@ import {
   DialogPopup,
   DialogPortal,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger as BaseDialogTrigger,
   DialogViewport,
   type DialogChangeEventDetails
 } from '@/components/ui/dialog'
@@ -70,8 +70,12 @@ const payloadDialog = createHandle<{ text: string }>()
 /* "Controlled mode with multiple triggers" */
 const controlledDialog = createHandle()
 
+function DialogTrigger(props: React.ComponentProps<typeof BaseDialogTrigger>) {
+  return <BaseDialogTrigger {...props} render={props.render ?? <Button variant='outline' />} />
+}
+
 /* "State" */
-function StateExample () {
+function StateExample() {
   const [open, setOpen] = React.useState(false)
   const [log, setLog] = React.useState<string[]>([])
 
@@ -159,7 +163,7 @@ function StateExample () {
 /* "Open from a menu" */
 const MENU_ITEMS = ['Playlist details', 'Share playlist', 'Export playlist']
 
-function OpenFromMenu () {
+function OpenFromMenu() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
   return (
@@ -206,7 +210,7 @@ function OpenFromMenu () {
 }
 
 /* "Nested dialogs" */
-function NestedDialogs () {
+function NestedDialogs() {
   return (
     <Dialog>
       <DialogTrigger render={<Button variant='outline'>View notifications</Button>} />
@@ -240,11 +244,12 @@ function NestedDialogs () {
 }
 
 /* "Close confirmation" */
-function CloseConfirmation () {
+function CloseConfirmation() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [confirmationOpen, setConfirmationOpen] = React.useState(false)
   const [textareaValue, setTextareaValue] = React.useState('')
   const titleId = React.useId()
+  const messageId = React.useId()
 
   return (
     <Dialog
@@ -271,14 +276,18 @@ function CloseConfirmation () {
               setDialogOpen(false)
             }}
           >
-            <textarea
-              aria-labelledby={titleId}
-              required
-              className='min-h-32 w-full resize-none rounded-(--radius) border border-input bg-background p-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none'
-              placeholder="What's on your mind?"
-              value={textareaValue}
-              onChange={(event) => setTextareaValue(event.target.value)}
-            />
+            <FieldRoot className='w-full'>
+              <FieldLabel htmlFor={messageId}>Message</FieldLabel>
+              <FieldControl
+                id={messageId}
+                render={<textarea />}
+                required
+                className='h-auto min-h-32 resize-none p-2'
+                placeholder="What's on your mind?"
+                value={textareaValue}
+                onChange={(event) => setTextareaValue(event.target.value)}
+              />
+            </FieldRoot>
             <DialogFooter>
               <DialogClose>Cancel</DialogClose>
               <Button type='submit'>Tweet</Button>
@@ -315,7 +324,7 @@ function CloseConfirmation () {
 }
 
 /* "Custom focus management" */
-function CustomFocusManagement () {
+function CustomFocusManagement() {
   const initialFocusRef = React.useRef<HTMLInputElement | null>(null)
   const finalFocusRef = React.useRef<HTMLButtonElement | null>(null)
 
@@ -355,7 +364,7 @@ function CustomFocusManagement () {
 }
 
 /* "Outside scroll dialog" */
-function OutsideScrollDialog () {
+function OutsideScrollDialog() {
   const popupRef = React.useRef<HTMLDivElement | null>(null)
 
   return (
@@ -406,7 +415,7 @@ function OutsideScrollDialog () {
 }
 
 /* "Inside scroll dialog" */
-function InsideScrollDialog () {
+function InsideScrollDialog() {
   return (
     <Dialog>
       <DialogTrigger>Open dialog</DialogTrigger>
@@ -446,7 +455,7 @@ function InsideScrollDialog () {
 }
 
 /* "Placing elements outside the popup" */
-function UncontainedDialog () {
+function UncontainedDialog() {
   return (
     <Dialog>
       <DialogTrigger>Open dialog</DialogTrigger>
@@ -480,7 +489,7 @@ function UncontainedDialog () {
 }
 
 /* "Controlled mode with multiple triggers" */
-function ControlledTriggers () {
+function ControlledTriggers() {
   const [open, setOpen] = React.useState(false)
   const [triggerId, setTriggerId] = React.useState<string | null>(null)
 

@@ -1,6 +1,7 @@
 import { useId, useRef, useState } from 'react'
 import { OTPField, OTPFieldInput, OTPFieldSeparator } from '@/components/ui/otp-field'
 import { Button } from '@/components/ui/button'
+import { FieldRoot, FieldLabel } from '@/components/ui/field'
 import type { DemoMeta } from '@/showcase/demo'
 
 const OTP_LENGTH = 6
@@ -10,10 +11,8 @@ function BasicOTPField() {
   const descriptionId = `${id}-description`
 
   return (
-    <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-      <label htmlFor={id} className='text-sm font-medium'>
-        Verification code
-      </label>
+    <FieldRoot className='w-full max-w-sm'>
+      <FieldLabel>Verification code</FieldLabel>
       <OTPField id={id} length={OTP_LENGTH} aria-describedby={descriptionId}>
         {Array.from({ length: OTP_LENGTH }, (_, index) => (
           <OTPFieldInput key={index} aria-label={index === 0 ? undefined : `Character ${index + 1} of ${OTP_LENGTH}`} />
@@ -22,7 +21,7 @@ function BasicOTPField() {
       <p id={descriptionId} className='m-0 text-sm text-muted-foreground'>
         Enter the {OTP_LENGTH}-character code we sent to your device.
       </p>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -32,10 +31,8 @@ function BasicOTPField() {
  */
 function LabeledOTPField() {
   return (
-    <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-      <label htmlFor='verification-code' className='text-sm font-medium'>
-        Verification code
-      </label>
+    <FieldRoot className='w-full max-w-sm'>
+      <FieldLabel>Verification code</FieldLabel>
       <OTPField id='verification-code' length={OTP_LENGTH} aria-describedby='verification-code-description'>
         <OTPFieldInput />
         <OTPFieldInput aria-label='Character 2 of 6' />
@@ -47,7 +44,7 @@ function LabeledOTPField() {
       <p id='verification-code-description' className='m-0 text-sm text-muted-foreground'>
         Enter the 6-character code we sent to your device.
       </p>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -56,10 +53,8 @@ function AlphanumericOTPField() {
   const descriptionId = `${id}-description`
 
   return (
-    <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-      <label htmlFor={id} className='text-sm font-medium'>
-        Recovery code
-      </label>
+    <FieldRoot className='w-full max-w-sm'>
+      <FieldLabel>Recovery code</FieldLabel>
       <OTPField id={id} length={OTP_LENGTH} validationType='alphanumeric' aria-describedby={descriptionId}>
         {Array.from({ length: OTP_LENGTH }, (_, index) => (
           <OTPFieldInput key={index} aria-label={index === 0 ? undefined : `Character ${index + 1} of ${OTP_LENGTH}`} />
@@ -68,7 +63,7 @@ function AlphanumericOTPField() {
       <p id={descriptionId} className='m-0 text-sm text-muted-foreground'>
         Accept letters and numbers for backup codes such as <code className='font-mono'>A7C9XZ</code>.
       </p>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -76,10 +71,8 @@ function GroupedOTPField() {
   const id = useId()
 
   return (
-    <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-      <label htmlFor={id} className='text-sm font-medium'>
-        Verification code
-      </label>
+    <FieldRoot className='w-full max-w-sm'>
+      <FieldLabel>Verification code</FieldLabel>
       <OTPField id={id} length={OTP_LENGTH}>
         <div className='flex gap-2'>
           {Array.from({ length: 3 }, (_, index) => (
@@ -96,7 +89,7 @@ function GroupedOTPField() {
           ))}
         </div>
       </OTPField>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -105,10 +98,8 @@ function PlaceholderOTPField() {
   const descriptionId = `${id}-description`
 
   return (
-    <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-      <label htmlFor={id} className='text-sm font-medium'>
-        Verification code
-      </label>
+    <FieldRoot className='w-full max-w-sm'>
+      <FieldLabel>Verification code</FieldLabel>
       <OTPField id={id} length={OTP_LENGTH} aria-describedby={descriptionId}>
         {Array.from({ length: OTP_LENGTH }, (_, index) => (
           <OTPFieldInput
@@ -122,7 +113,7 @@ function PlaceholderOTPField() {
       <p id={descriptionId} className='m-0 text-sm text-muted-foreground'>
         Placeholder hints stay visible until the active slot is focused.
       </p>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -149,10 +140,8 @@ function CustomNormalizationOTPField() {
   }
 
   return (
-    <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-      <label htmlFor={id} className='text-sm font-medium'>
-        Recovery code
-      </label>
+    <FieldRoot className='w-full max-w-sm'>
+      <FieldLabel>Recovery code</FieldLabel>
       <OTPField
         id={id}
         length={OTP_LENGTH}
@@ -179,7 +168,7 @@ function CustomNormalizationOTPField() {
       <span aria-live='polite' className='sr-only'>
         {statusMessage}
       </span>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -188,10 +177,8 @@ function MaskedOTPField() {
   const descriptionId = `${id}-description`
 
   return (
-    <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-      <label htmlFor={id} className='text-sm font-medium'>
-        Access code
-      </label>
+    <FieldRoot className='w-full max-w-sm'>
+      <FieldLabel>Access code</FieldLabel>
       <OTPField id={id} length={OTP_LENGTH} mask aria-describedby={descriptionId}>
         {Array.from({ length: OTP_LENGTH }, (_, index) => (
           <OTPFieldInput key={index} aria-label={index === 0 ? undefined : `Character ${index + 1} of ${OTP_LENGTH}`} />
@@ -200,7 +187,7 @@ function MaskedOTPField() {
       <p id={descriptionId} className='m-0 text-sm text-muted-foreground'>
         Use <code className='font-mono'>mask</code> to obscure the code on shared screens.
       </p>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -214,14 +201,17 @@ function FormOTPField() {
         event.preventDefault()
       }}
     >
-      <label htmlFor={id} className='text-sm font-medium'>
-        Verification code
-      </label>
-      <OTPField id={id} name='verificationCode' length={OTP_LENGTH} autoSubmit>
-        {Array.from({ length: OTP_LENGTH }, (_, index) => (
-          <OTPFieldInput key={index} aria-label={index === 0 ? undefined : `Character ${index + 1} of ${OTP_LENGTH}`} />
-        ))}
-      </OTPField>
+      <FieldRoot className='w-full max-w-sm' name='verificationCode'>
+        <FieldLabel>Verification code</FieldLabel>
+        <OTPField id={id} length={OTP_LENGTH} autoSubmit>
+          {Array.from({ length: OTP_LENGTH }, (_, index) => (
+            <OTPFieldInput
+              key={index}
+              aria-label={index === 0 ? undefined : `Character ${index + 1} of ${OTP_LENGTH}`}
+            />
+          ))}
+        </OTPField>
+      </FieldRoot>
       <Button type='submit' variant='outline'>
         Verify
       </Button>
@@ -234,10 +224,8 @@ function CompleteOTPField() {
   const id = useId()
 
   return (
-    <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-      <label htmlFor={id} className='text-sm font-medium'>
-        Verification code
-      </label>
+    <FieldRoot className='w-full max-w-sm'>
+      <FieldLabel>Verification code</FieldLabel>
       <OTPField
         id={id}
         length={OTP_LENGTH}
@@ -252,7 +240,7 @@ function CompleteOTPField() {
       <p className='m-0 text-sm text-muted-foreground'>
         {value.length === OTP_LENGTH ? `Submitted: ${value}` : 'Enter the code.'}
       </p>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -274,8 +262,8 @@ export const demo: DemoMeta = {
     {
       name: 'Disabled',
       render: () => (
-        <div className='flex w-full max-w-sm flex-col items-start gap-1'>
-          <span className='text-sm font-medium'>Verification code</span>
+        <FieldRoot className='w-full max-w-sm'>
+          <FieldLabel>Verification code</FieldLabel>
           <OTPField length={OTP_LENGTH} disabled defaultValue='1234'>
             {Array.from({ length: OTP_LENGTH }, (_, index) => (
               <OTPFieldInput
@@ -284,7 +272,7 @@ export const demo: DemoMeta = {
               />
             ))}
           </OTPField>
-        </div>
+        </FieldRoot>
       )
     }
   ]

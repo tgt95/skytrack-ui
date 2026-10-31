@@ -12,7 +12,7 @@ export type DemoMeta = {
   /** One-line description. */
   description: string
   /** Sidebar group. */
-  group: 'Actions' | 'Forms' | 'Overlays' | 'Menus & Navigation' | 'Data Display' | 'Layout'
+  group: 'Actions' | 'Forms' | 'Overlays' | 'Menus & Navigation' | 'Data Display' | 'Layout' | 'Patterns'
   /** Every variant/example rendered as its own block. */
   variants: { name: string; render: () => ReactNode }[]
 }

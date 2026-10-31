@@ -7,17 +7,28 @@ import {
   PreviewCardPortal,
   PreviewCardPositioner,
   PreviewCardPopup,
-  PreviewCardTrigger,
+  PreviewCardTrigger as BasePreviewCardTrigger,
   PreviewCardViewport,
   type PreviewCardChangeEventDetails
 } from '@/components/ui/preview-card'
 import type { DemoMeta } from '@/showcase/demo'
+import { cn } from '@/lib/utils'
+
+function PreviewCardTrigger(props: React.ComponentProps<typeof BasePreviewCardTrigger>) {
+  const { className, ...triggerProps } = props
+  return (
+    <BasePreviewCardTrigger
+      {...triggerProps}
+      className={cn(
+        'cursor-pointer underline decoration-border underline-offset-4 hover:text-primary focus-visible:outline-2 focus-visible:outline-ring',
+        className
+      )}
+    />
+  )
+}
 
 /* "Detached triggers" */
 const detachedCard = createHandle()
-
-/* "Multiple triggers", "Controlled mode…" and "Animating the Preview Card" */
-const payloadCard = createHandle<React.ReactElement>()
 
 const typographyCard = (
   <div className='flex flex-col gap-2 p-2'>
@@ -69,6 +80,7 @@ const artCard = (
 
 /* "Controlled mode with multiple triggers" */
 function ControlledTriggers() {
+  const [payloadCard] = React.useState(() => createHandle<React.ReactElement>())
   const [open, setOpen] = React.useState(false)
   const [triggerId, setTriggerId] = React.useState<string | null>(null)
 
@@ -139,6 +151,8 @@ function ControlledTriggers() {
 
 /* "Animating the Preview Card" and "Content" — the payload animates inside the Viewport. */
 function AnimatedCards() {
+  const [payloadCard] = React.useState(() => createHandle<React.ReactElement>())
+
   return (
     <div className='flex flex-col gap-3'>
       <p className='max-w-prose text-sm'>
@@ -168,6 +182,47 @@ function AnimatedCards() {
               <PreviewCardPopup>
                 <PreviewCardArrow />
                 <PreviewCardViewport className='transition-opacity duration-150'>{payload}</PreviewCardViewport>
+              </PreviewCardPopup>
+            </PreviewCardPositioner>
+          </PreviewCardPortal>
+        )}
+      </PreviewCard>
+    </div>
+  )
+}
+
+function MultipleTriggers() {
+  const [payloadCard] = React.useState(() => createHandle<React.ReactElement>())
+
+  return (
+    <div>
+      <p className='max-w-prose text-sm'>
+        Discover{' '}
+        <PreviewCardTrigger
+          handle={payloadCard}
+          href='https://en.wikipedia.org/wiki/Typography'
+          payload={typographyCard}
+        >
+          typography
+        </PreviewCardTrigger>
+        ,{' '}
+        <PreviewCardTrigger handle={payloadCard} href='https://en.wikipedia.org/wiki/Design' payload={designCard}>
+          design
+        </PreviewCardTrigger>
+        , or{' '}
+        <PreviewCardTrigger handle={payloadCard} href='https://en.wikipedia.org/wiki/Art' payload={artCard}>
+          art
+        </PreviewCardTrigger>
+        .
+      </p>
+
+      <PreviewCard handle={payloadCard}>
+        {({ payload }) => (
+          <PreviewCardPortal>
+            <PreviewCardPositioner sideOffset={8}>
+              <PreviewCardPopup>
+                <PreviewCardArrow />
+                {payload}
               </PreviewCardPopup>
             </PreviewCardPositioner>
           </PreviewCardPortal>
@@ -229,42 +284,7 @@ export const demo: DemoMeta = {
     },
     {
       name: 'Multiple triggers',
-      render: () => (
-        <div>
-          <p className='max-w-prose text-sm'>
-            Discover{' '}
-            <PreviewCardTrigger
-              handle={payloadCard}
-              href='https://en.wikipedia.org/wiki/Typography'
-              payload={typographyCard}
-            >
-              typography
-            </PreviewCardTrigger>
-            ,{' '}
-            <PreviewCardTrigger handle={payloadCard} href='https://en.wikipedia.org/wiki/Design' payload={designCard}>
-              design
-            </PreviewCardTrigger>
-            , or{' '}
-            <PreviewCardTrigger handle={payloadCard} href='https://en.wikipedia.org/wiki/Art' payload={artCard}>
-              art
-            </PreviewCardTrigger>
-            .
-          </p>
-
-          <PreviewCard handle={payloadCard}>
-            {({ payload }) => (
-              <PreviewCardPortal>
-                <PreviewCardPositioner sideOffset={8}>
-                  <PreviewCardPopup>
-                    <PreviewCardArrow />
-                    {payload}
-                  </PreviewCardPopup>
-                </PreviewCardPositioner>
-              </PreviewCardPortal>
-            )}
-          </PreviewCard>
-        </div>
-      )
+      render: () => <MultipleTriggers />
     },
     {
       name: 'Controlled mode with multiple triggers',

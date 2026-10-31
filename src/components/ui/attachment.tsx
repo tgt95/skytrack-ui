@@ -68,10 +68,7 @@ function Attachment({
         data-state={state}
         data-size={resolvedSize}
         data-orientation={resolvedOrientation}
-        className={cn(
-          attachmentVariants({ size: resolvedSize, orientation: resolvedOrientation, state }),
-          className as string
-        )}
+        className={cn(attachmentVariants({ size: resolvedSize, orientation: resolvedOrientation, state }), className)}
         {...props}
       />
     </AttachmentContext.Provider>
@@ -93,7 +90,7 @@ function AttachmentMedia({ variant = 'icon', className, ...props }: AttachmentMe
         size === 'sm' && variant === 'icon' && 'size-9 [&>svg]:size-4',
         size === 'xs' && variant === 'icon' && 'size-7 [&>svg]:size-4',
         orientation === 'vertical' && variant === 'image' && 'w-full',
-        className as string
+        className
       )}
       {...props}
     />
@@ -104,10 +101,7 @@ function AttachmentContent({ className, ...props }: React.ComponentProps<'div'>)
   return (
     <div
       data-slot='attachment-content'
-      className={cn(
-        'pointer-events-none relative z-10 flex min-w-0 flex-1 flex-col justify-center gap-0.5',
-        className as string
-      )}
+      className={cn('pointer-events-none relative z-10 flex min-w-0 flex-1 flex-col justify-center gap-0.5', className)}
       {...props}
     />
   )
@@ -126,7 +120,7 @@ function AttachmentTitle({ className, ...props }: React.ComponentProps<'p'>) {
         size === 'xs' && 'text-xs leading-4',
         inProgress && 'animate-pulse',
         state === 'error' && 'text-destructive',
-        className as string
+        className
       )}
       {...props}
     />
@@ -142,7 +136,7 @@ function AttachmentDescription({ className, ...props }: React.ComponentProps<'p'
         'truncate text-xs leading-4 text-muted-foreground',
         size === 'xs' && 'text-[0.6875rem] leading-4',
         state === 'error' && 'text-destructive',
-        className as string
+        className
       )}
       {...props}
     />
@@ -153,7 +147,7 @@ function AttachmentActions({ className, ...props }: React.ComponentProps<'div'>)
   return (
     <div
       data-slot='attachment-actions'
-      className={cn('relative z-20 ml-auto flex shrink-0 items-center gap-1', className as string)}
+      className={cn('relative z-20 ml-auto flex shrink-0 items-center gap-1', className)}
       {...props}
     />
   )
@@ -167,7 +161,7 @@ function AttachmentAction({ className, size = 'icon-xs', variant = 'ghost', ...p
       data-slot='attachment-action'
       variant={variant}
       size={size}
-      className={cn('relative z-20 text-muted-foreground hover:text-foreground', className as string)}
+      className={cn('relative z-20 text-muted-foreground hover:text-foreground', className)}
       {...props}
     />
   )
@@ -198,7 +192,7 @@ function AttachmentGroup({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot='attachment-group'
       className={cn(
         'flex w-full snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain pb-1 [&>*]:snap-start',
-        className as string
+        className
       )}
       {...props}
     />

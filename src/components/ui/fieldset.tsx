@@ -6,7 +6,7 @@ function FieldsetRoot({ className, ...props }: React.ComponentProps<typeof Field
   return (
     <Fieldset.Root
       data-slot='fieldset'
-      className={cn('flex w-full flex-col gap-4', 'data-[disabled]:opacity-50', className as string)}
+      className={cn('flex w-full flex-col gap-4', 'data-disabled:opacity-50', className)}
       {...props}
     />
   )
@@ -16,7 +16,7 @@ function FieldsetLegend({ className, ...props }: React.ComponentProps<typeof Fie
   return (
     <Fieldset.Legend
       data-slot='fieldset-legend'
-      className={cn('text-base leading-none font-semibold text-foreground', className as string)}
+      className={cn('text-base leading-none font-semibold text-foreground', className)}
       {...props}
     />
   )

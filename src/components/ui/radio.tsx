@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
 
 function RadioRoot({ className, children, ...props }: React.ComponentProps<typeof Radio.Root>) {
-  const newLocal = 'data-invalid:border-destructive data-[invalid]:ring-destructive/20'
+  const newLocal = 'data-invalid:border-destructive data-invalid:ring-destructive/20'
   return (
     <Radio.Root
       data-slot='radio'
@@ -16,7 +16,7 @@ function RadioRoot({ className, children, ...props }: React.ComponentProps<typeo
         'data-readonly:cursor-default',
         newLocal,
         focusRing,
-        className as string
+        className
       )}
       {...props}
     >
@@ -32,7 +32,7 @@ function RadioIndicator({ className, ...props }: React.ComponentProps<typeof Rad
       className={cn(
         'flex items-center justify-center text-current',
         'transition-all data-starting-style:scale-50 data-starting-style:opacity-0 data-ending-style:scale-50 data-ending-style:opacity-0',
-        className as string
+        className
       )}
       {...props}
     />
@@ -43,10 +43,7 @@ function RadioGroup({ className, ...props }: React.ComponentProps<typeof BaseRad
   return (
     <BaseRadioGroup
       data-slot='radio-group'
-      className={cn(
-        'flex flex-col items-start gap-2 text-sm text-foreground',
-        className as string
-      )}
+      className={cn('flex flex-col items-start gap-2 text-sm text-foreground', className)}
       {...props}
     />
   )

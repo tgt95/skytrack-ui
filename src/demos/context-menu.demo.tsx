@@ -17,21 +17,22 @@ import {
   ContextMenuSubmenuTrigger,
   ContextMenuTrigger
 } from '@/components/ui/context-menu'
+import { Button } from '@/components/ui/button'
 import { Menu, MenuItem, MenuPopup, MenuPortal, MenuPositioner, MenuSeparator, MenuTrigger } from '@/components/ui/menu'
 import type { DemoMeta } from '@/showcase/demo'
 
 const ACTIONS = ['Preview', 'Download', 'Copy link', 'Rename']
 
-function TriggerPanel({ children }: { children: React.ReactNode }) {
+function TriggerPanel ({ children }: { children: React.ReactNode }) {
   return (
-    <div className='flex h-32 w-full max-w-64 items-center justify-center rounded-(--radius) border border-dashed border-border bg-muted text-sm text-muted-foreground select-none'>
+    <div className='flex px-16 h-32 w-full max-w-64 items-center justify-center rounded-(--radius) border border-dashed border-border bg-muted text-sm text-muted-foreground select-none'>
       {children}
     </div>
   )
 }
 
 /** The same action list, rendered by either Menu or ContextMenu parts. */
-function SharedMenuItems({ type = 'menu' }: { type?: 'menu' | 'context-menu' }) {
+function SharedMenuItems ({ type = 'menu' }: { type?: 'menu' | 'context-menu' }) {
   if (type === 'context-menu') {
     return (
       <>
@@ -56,7 +57,7 @@ function SharedMenuItems({ type = 'menu' }: { type?: 'menu' | 'context-menu' }) 
 
 /* --------------------------------------------------------- Using with Menu */
 
-function ImageCardWithBothMenus() {
+function ImageCardWithBothMenus () {
   return (
     <div className='group relative w-full max-w-64 overflow-hidden rounded-(--radius) border border-border bg-card text-card-foreground select-none'>
       <ContextMenu>
@@ -82,7 +83,7 @@ function ImageCardWithBothMenus() {
       <Menu>
         <MenuTrigger
           aria-label='Image actions'
-          className='absolute top-2 right-2 opacity-0 group-hover:opacity-100 data-[popup-open]:opacity-100'
+          className='absolute top-2 right-2 opacity-0 group-hover:opacity-100 data-popup-open:opacity-100'
         >
           <DotsThreeVerticalIcon />
         </MenuTrigger>
@@ -100,11 +101,11 @@ function ImageCardWithBothMenus() {
 
 /* ----------------------------------------------------------- Nested menu */
 
-function NestedContextMenu() {
+function NestedContextMenu () {
   return (
     <ContextMenu>
-      <ContextMenuTrigger>
-        <TriggerPanel>Right click here</TriggerPanel>
+      <ContextMenuTrigger className='flex h-32 w-full max-w-64 items-center justify-center rounded-(--radius) border border-dashed border-border bg-muted text-sm text-muted-foreground select-none'>
+        Right click here
       </ContextMenuTrigger>
       <ContextMenuPortal>
         <ContextMenuPositioner>
@@ -142,7 +143,7 @@ function NestedContextMenu() {
 
 /* ----------------------------------------------------- Checkbox and radio */
 
-function SettingsContextMenu() {
+function SettingsContextMenu () {
   return (
     <ContextMenu>
       <ContextMenuTrigger>

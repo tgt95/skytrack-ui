@@ -8,7 +8,7 @@ export const toolbarButtonVariants = cva(
   cn(
     'inline-flex cursor-pointer shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-(--radius) text-sm font-medium text-foreground select-none transition-colors',
     'hover:bg-accent hover:text-accent-foreground active:bg-muted',
-    'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+    'disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
     focusRing
   ),
@@ -40,8 +40,8 @@ function Toolbar({ className, ...props }: React.ComponentProps<typeof BaseToolba
       className={cn(
         'inline-flex w-fit items-center gap-1 rounded-(--radius) border border-border bg-background p-1',
         'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
-        'data-[disabled]:opacity-50',
-        className as string
+        'data-disabled:opacity-50',
+        className
       )}
       {...props}
     />
@@ -55,7 +55,7 @@ function ToolbarGroup({ className, ...props }: React.ComponentProps<typeof BaseT
       className={cn(
         'flex items-center gap-1',
         'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
-        className as string
+        className
       )}
       {...props}
     />
@@ -70,7 +70,7 @@ function ToolbarSeparator({ className, ...props }: React.ComponentProps<typeof B
         'mx-1 my-1 shrink-0 bg-border',
         'data-[orientation=vertical]:h-5 data-[orientation=vertical]:w-px',
         'data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full',
-        className as string
+        className
       )}
       {...props}
     />
@@ -85,7 +85,7 @@ function ToolbarButton({ className, isActivated, size, ...props }: ToolbarButton
   return (
     <BaseToolbar.Button
       data-slot='toolbar-button'
-      className={cn(toolbarButtonVariants({ isActivated, size }), className as string)}
+      className={cn(toolbarButtonVariants({ isActivated, size }), className)}
       {...props}
     />
   )
@@ -99,7 +99,7 @@ function ToolbarLink({ className, ...props }: React.ComponentProps<typeof BaseTo
         'inline-flex cursor-pointer shrink-0 items-center gap-1.5 rounded-(--radius) px-2 text-sm text-muted-foreground no-underline transition-colors select-none',
         'hover:text-foreground',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     />
@@ -115,9 +115,9 @@ function ToolbarInput({ className, ...props }: React.ComponentProps<typeof BaseT
       className={cn(
         'h-8 min-w-0 flex-1 rounded-(--radius) border border-input bg-background px-2 text-sm text-foreground',
         'placeholder:text-muted-foreground',
-        'disabled:cursor-not-allowed disabled:opacity-50 data-[disabled]:opacity-50',
+        'disabled:cursor-not-allowed disabled:opacity-50 data-disabled:opacity-50',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     />

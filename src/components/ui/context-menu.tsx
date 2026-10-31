@@ -11,15 +11,15 @@ import { cn } from '@/lib/utils'
 export const contextMenuItemVariants = cva(
   cn(
     'relative flex cursor-pointer items-center gap-2 rounded-(--radius) px-2 py-1.5 text-left text-sm text-popover-foreground select-none outline-none transition-colors',
-    'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground',
-    'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+    'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
+    'data-disabled:pointer-events-none data-disabled:opacity-50',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
   ),
   {
     variants: {
       variant: {
         default: '',
-        destructive: 'text-destructive data-[highlighted]:bg-destructive data-[highlighted]:text-white'
+        destructive: 'text-destructive data-highlighted:bg-destructive data-highlighted:text-white'
       },
       inset: {
         true: 'pl-8',
@@ -39,17 +39,11 @@ function ContextMenu(props: React.ComponentProps<typeof BaseContextMenu.Root>) {
 }
 
 function ContextMenuTrigger({ className, ...props }: React.ComponentProps<typeof BaseContextMenu.Trigger>) {
-  return (
-    <BaseContextMenu.Trigger
-      data-slot='context-menu-trigger'
-      className={className}
-      {...props}
-    />
-  )
+  return <BaseContextMenu.Trigger data-slot='context-menu-trigger' className={className} {...props} />
 }
 
 function ContextMenuPortal({ className, ...props }: React.ComponentProps<typeof BaseContextMenu.Portal>) {
-  return <BaseContextMenu.Portal data-slot='context-menu-portal' className={cn(className as string)} {...props} />
+  return <BaseContextMenu.Portal data-slot='context-menu-portal' className={cn(className)} {...props} />
 }
 
 function ContextMenuBackdrop({ className, ...props }: React.ComponentProps<typeof BaseContextMenu.Backdrop>) {
@@ -58,8 +52,8 @@ function ContextMenuBackdrop({ className, ...props }: React.ComponentProps<typeo
       data-slot='context-menu-backdrop'
       className={cn(
         'fixed inset-0 z-50 bg-foreground/20 transition-opacity duration-150',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
-        className as string
+        'data-starting-style:opacity-0 data-ending-style:opacity-0',
+        className
       )}
       {...props}
     />
@@ -70,7 +64,7 @@ function ContextMenuPositioner({ className, ...props }: React.ComponentProps<typ
   return (
     <BaseContextMenu.Positioner
       data-slot='context-menu-positioner'
-      className={cn('z-50 outline-hidden', className as string)}
+      className={cn('z-50 outline-hidden', className)}
       {...props}
     />
   )
@@ -85,10 +79,10 @@ function ContextMenuPopup({ className, ...props }: React.ComponentProps<typeof B
       className={cn(
         'origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover p-1 text-popover-foreground shadow-md outline-hidden',
         'max-h-[var(--available-height)] min-w-[8rem] overflow-y-auto overscroll-contain',
-        'transition-[scale,opacity] duration-100 ease-out data-[instant]:transition-none',
-        'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
-        'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
-        className as string
+        'transition-[scale,opacity] duration-100 ease-out data-instant:transition-none',
+        'data-starting-style:scale-95 data-starting-style:opacity-0',
+        'data-ending-style:scale-95 data-ending-style:opacity-0',
+        className
       )}
       {...props}
     />
@@ -105,7 +99,7 @@ function ContextMenuArrow({ className, ...props }: React.ComponentProps<typeof B
         'data-[side=bottom]:-top-1 data-[side=bottom]:rotate-45',
         'data-[side=left]:-right-1 data-[side=left]:rotate-225',
         'data-[side=right]:-left-1 data-[side=right]:rotate-135',
-        className as string
+        className
       )}
       {...props}
     />
@@ -115,17 +109,14 @@ function ContextMenuArrow({ className, ...props }: React.ComponentProps<typeof B
 /* ------------------------------------------------------------------ Items */
 
 function ContextMenuGroup({ className, ...props }: React.ComponentProps<typeof BaseContextMenu.Group>) {
-  return <BaseContextMenu.Group data-slot='context-menu-group' className={cn(className as string)} {...props} />
+  return <BaseContextMenu.Group data-slot='context-menu-group' className={cn(className)} {...props} />
 }
 
 function ContextMenuGroupLabel({ className, ...props }: React.ComponentProps<typeof BaseContextMenu.GroupLabel>) {
   return (
     <BaseContextMenu.GroupLabel
       data-slot='context-menu-group-label'
-      className={cn(
-        'px-2 py-1.5 text-xs font-medium tracking-wide text-muted-foreground select-none',
-        className as string
-      )}
+      className={cn('px-2 py-1.5 text-xs font-medium tracking-wide text-muted-foreground select-none', className)}
       {...props}
     />
   )
@@ -135,7 +126,7 @@ function ContextMenuSeparator({ className, ...props }: React.ComponentProps<type
   return (
     <BaseContextMenu.Separator
       data-slot='context-menu-separator'
-      className={cn('-mx-1 my-1 h-px shrink-0 bg-border', className as string)}
+      className={cn('-mx-1 my-1 h-px shrink-0 bg-border', className)}
       {...props}
     />
   )
@@ -147,7 +138,7 @@ function ContextMenuItem({ className, variant, inset, ...props }: ContextMenuIte
   return (
     <BaseContextMenu.Item
       data-slot='context-menu-item'
-      className={cn(contextMenuItemVariants({ variant, inset }), className as string)}
+      className={cn(contextMenuItemVariants({ variant, inset }), className)}
       {...props}
     />
   )
@@ -159,7 +150,7 @@ function ContextMenuLinkItem({ className, variant, inset, ...props }: ContextMen
   return (
     <BaseContextMenu.LinkItem
       data-slot='context-menu-link-item'
-      className={cn(contextMenuItemVariants({ variant, inset }), className as string)}
+      className={cn(contextMenuItemVariants({ variant, inset }), className)}
       {...props}
     />
   )
@@ -180,8 +171,8 @@ function ContextMenuSubmenuTrigger({ className, children, variant, inset, ...pro
       data-slot='context-menu-submenu-trigger'
       className={cn(
         contextMenuItemVariants({ variant, inset }),
-        'justify-between data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground',
-        className as string
+        'justify-between data-popup-open:bg-accent data-popup-open:text-accent-foreground',
+        className
       )}
       {...props}
     >
@@ -195,11 +186,7 @@ function ContextMenuSubmenuTrigger({ className, children, variant, inset, ...pro
 
 function ContextMenuRadioGroup({ className, ...props }: React.ComponentProps<typeof BaseContextMenu.RadioGroup>) {
   return (
-    <BaseContextMenu.RadioGroup
-      data-slot='context-menu-radio-group'
-      className={cn('py-0.5', className as string)}
-      {...props}
-    />
+    <BaseContextMenu.RadioGroup data-slot='context-menu-radio-group' className={cn('py-0.5', className)} {...props} />
   )
 }
 
@@ -209,7 +196,7 @@ function ContextMenuRadioItem({ className, variant, inset, ...props }: ContextMe
   return (
     <BaseContextMenu.RadioItem
       data-slot='context-menu-radio-item'
-      className={cn(contextMenuItemVariants({ variant, inset }), className as string)}
+      className={cn(contextMenuItemVariants({ variant, inset }), className)}
       {...props}
     />
   )
@@ -225,8 +212,8 @@ function ContextMenuRadioItemIndicator({
       data-slot='context-menu-radio-item-indicator'
       className={cn(
         'absolute left-2 flex size-4 items-center justify-center text-current',
-        'transition-all data-[starting-style]:scale-50 data-[starting-style]:opacity-0 data-[ending-style]:scale-50 data-[ending-style]:opacity-0',
-        className as string
+        'transition-all data-starting-style:scale-50 data-starting-style:opacity-0 data-ending-style:scale-50 data-ending-style:opacity-0',
+        className
       )}
       {...props}
     >
@@ -242,7 +229,7 @@ function ContextMenuCheckboxItem({ className, variant, inset, ...props }: Contex
   return (
     <BaseContextMenu.CheckboxItem
       data-slot='context-menu-checkbox-item'
-      className={cn(contextMenuItemVariants({ variant, inset }), className as string)}
+      className={cn(contextMenuItemVariants({ variant, inset }), className)}
       {...props}
     />
   )
@@ -258,8 +245,8 @@ function ContextMenuCheckboxItemIndicator({
       data-slot='context-menu-checkbox-item-indicator'
       className={cn(
         'absolute left-2 flex size-4 items-center justify-center text-current',
-        'transition-all data-[starting-style]:scale-75 data-[starting-style]:opacity-0 data-[ending-style]:scale-75 data-[ending-style]:opacity-0',
-        className as string
+        'transition-all data-starting-style:scale-75 data-starting-style:opacity-0 data-ending-style:scale-75 data-ending-style:opacity-0',
+        className
       )}
       {...props}
     >
@@ -274,7 +261,7 @@ function ContextMenuShortcut({ className, ...props }: React.ComponentProps<'span
   return (
     <span
       data-slot='context-menu-shortcut'
-      className={cn('ml-auto text-xs tracking-widest text-muted-foreground', className as string)}
+      className={cn('ml-auto text-xs tracking-widest text-muted-foreground', className)}
       {...props}
     />
   )

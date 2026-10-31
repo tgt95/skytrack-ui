@@ -17,47 +17,52 @@ export const Default: Story = {
   render: () => <VariantBlock name={"Default"}>{demo.variants[0].render()}</VariantBlock>,
 };
 
+export const Sizes: Story = {
+  name: "Sizes",
+  render: () => <VariantBlock name={"Sizes"}>{demo.variants[1].render()}</VariantBlock>,
+};
+
 export const AsyncSearch: Story = {
   name: "Async search",
-  render: () => <VariantBlock name={"Async search"}>{demo.variants[1].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Async search"}>{demo.variants[2].render()}</VariantBlock>,
 };
 
 export const InlineAutocomplete: Story = {
   name: "Inline autocomplete",
-  render: () => <VariantBlock name={"Inline autocomplete"}>{demo.variants[2].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Inline autocomplete"}>{demo.variants[3].render()}</VariantBlock>,
 };
 
 export const Grouped: Story = {
   name: "Grouped",
-  render: () => <VariantBlock name={"Grouped"}>{demo.variants[3].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Grouped"}>{demo.variants[4].render()}</VariantBlock>,
 };
 
 export const FuzzyMatching: Story = {
   name: "Fuzzy matching",
-  render: () => <VariantBlock name={"Fuzzy matching"}>{demo.variants[4].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Fuzzy matching"}>{demo.variants[5].render()}</VariantBlock>,
 };
 
 export const LimitResults: Story = {
   name: "Limit results",
-  render: () => <VariantBlock name={"Limit results"}>{demo.variants[5].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Limit results"}>{demo.variants[6].render()}</VariantBlock>,
 };
 
 export const AutoHighlight: Story = {
   name: "Auto highlight",
-  render: () => <VariantBlock name={"Auto highlight"}>{demo.variants[6].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Auto highlight"}>{demo.variants[7].render()}</VariantBlock>,
 };
 
 export const CommandPalette: Story = {
   name: "Command palette",
-  render: () => <VariantBlock name={"Command palette"}>{demo.variants[7].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Command palette"}>{demo.variants[8].render()}</VariantBlock>,
 };
 
 export const GridLayout: Story = {
   name: "Grid layout",
-  render: () => <VariantBlock name={"Grid layout"}>{demo.variants[8].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Grid layout"}>{demo.variants[9].render()}</VariantBlock>,
 };
 
 export const Virtualized: Story = {
   name: "Virtualized",
-  render: () => <VariantBlock name={"Virtualized"}>{demo.variants[9].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Virtualized"}>{demo.variants[10].render()}</VariantBlock>,
 };

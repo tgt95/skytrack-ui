@@ -23,6 +23,7 @@ import {
   useAutocompleteFilteredItems
 } from '@/components/ui/autocomplete'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import {
   ScrollArea,
   ScrollAreaContent,
@@ -30,6 +31,7 @@ import {
   ScrollAreaThumb,
   ScrollAreaViewport
 } from '@/components/ui/scroll-area'
+import { FieldRoot, FieldLabel } from '@/components/ui/field'
 import type { DemoMeta } from '@/showcase/demo'
 
 interface Tag {
@@ -70,10 +72,10 @@ const tags: Tag[] = [
 
 function TagAutocomplete() {
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label className='text-sm font-medium'>Search tags</label>
-      <Autocomplete items={tags}>
-        <AutocompleteInput aria-label='Search tags' placeholder='e.g. feature' />
+    <FieldRoot className='w-64'>
+      <FieldLabel>Search tags</FieldLabel>
+      <Autocomplete items={tags} itemToStringValue={(tag: Tag) => tag.value}>
+        <AutocompleteInput placeholder='e.g. feature' />
         <AutocompletePortal>
           <AutocompletePositioner side='bottom' align='start' sideOffset={4}>
             <AutocompletePopup>
@@ -89,7 +91,58 @@ function TagAutocomplete() {
           </AutocompletePositioner>
         </AutocompletePortal>
       </Autocomplete>
-    </div>
+    </FieldRoot>
+  )
+}
+
+function TagAutocompletePopup() {
+  return (
+    <AutocompletePortal>
+      <AutocompletePositioner side='bottom' align='start' sideOffset={4}>
+        <AutocompletePopup>
+          <AutocompleteEmpty>No matching tags.</AutocompleteEmpty>
+          <AutocompleteList>
+            {(tag: Tag) => (
+              <AutocompleteItem key={tag.id} value={tag}>
+                {tag.value}
+              </AutocompleteItem>
+            )}
+          </AutocompleteList>
+        </AutocompletePopup>
+      </AutocompletePositioner>
+    </AutocompletePortal>
+  )
+}
+
+function SizesAutocomplete() {
+  return (
+    <>
+      {(['xs', 'sm', 'default', 'lg'] as const).map((size) => (
+        <div key={size} className='flex flex-col gap-2'>
+          <div className='flex items-center gap-2'>
+            <Button size={size}>{size}</Button>
+            <Autocomplete items={tags} itemToStringValue={(tag: Tag) => tag.value}>
+              <AutocompleteInput size={size} aria-label={`${size} autocomplete`} placeholder='Search tags' />
+              <TagAutocompletePopup />
+            </Autocomplete>
+          </div>
+          <div className='flex items-center gap-2'>
+            <Button size={size}>{size}</Button>
+            <Autocomplete items={tags} itemToStringValue={(tag: Tag) => tag.value}>
+              <AutocompleteInputGroup size={size} className='w-48'>
+                <AutocompleteInput
+                  context='group'
+                  aria-label={`${size} grouped autocomplete`}
+                  placeholder='Search tags'
+                />
+                <AutocompleteTrigger aria-label='Open suggestions' />
+              </AutocompleteInputGroup>
+              <TagAutocompletePopup />
+            </Autocomplete>
+          </div>
+        </div>
+      ))}
+    </>
   )
 }
 
@@ -164,8 +217,8 @@ function AsyncAutocomplete() {
   }
 
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label className='text-sm font-medium'>Search movies by name or year</label>
+    <FieldRoot className='w-64'>
+      <FieldLabel>Search movies by name or year</FieldLabel>
       <Autocomplete
         items={searchResults}
         value={searchValue}
@@ -197,7 +250,7 @@ function AsyncAutocomplete() {
         itemToStringValue={(item: Movie) => item.title}
         filter={null}
       >
-        <AutocompleteInput aria-label='Search movies by name or year' placeholder='e.g. Pulp Fiction or 1994' />
+        <AutocompleteInput placeholder='e.g. Pulp Fiction or 1994' />
         <AutocompletePortal hidden={!status}>
           <AutocompletePositioner side='bottom' align='start' sideOffset={4}>
             <AutocompletePopup aria-busy={isPending || undefined}>
@@ -218,7 +271,7 @@ function AsyncAutocomplete() {
           </AutocompletePositioner>
         </AutocompletePortal>
       </Autocomplete>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -226,12 +279,12 @@ function AsyncAutocomplete() {
 
 function InlineAutocomplete() {
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label className='text-sm font-medium'>Search tags</label>
-      <Autocomplete items={tags} mode='both'>
-        <AutocompleteInput aria-label='Search tags' placeholder='e.g. feature' />
+    <FieldRoot className='w-64'>
+      <FieldLabel>Search tags</FieldLabel>
+      <Autocomplete items={tags} itemToStringValue={(tag: Tag) => tag.value} mode='both'>
+        <AutocompleteInput placeholder='e.g. feature' />
         <AutocompletePortal>
-          <AutocompletePositioner side='bottom' align='start' sideOffset={4} className='data-[empty]:hidden'>
+          <AutocompletePositioner side='bottom' align='start' sideOffset={4} className='data-empty:hidden'>
             <AutocompletePopup>
               <AutocompleteList>
                 {(tag: Tag) => (
@@ -244,7 +297,7 @@ function InlineAutocomplete() {
           </AutocompletePositioner>
         </AutocompletePortal>
       </Autocomplete>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -273,10 +326,10 @@ const groupedTags: TagGroup[] = (['Type', 'Component'] as const).map((value) => 
 
 function GroupedAutocomplete() {
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label className='text-sm font-medium'>Select a tag</label>
+    <FieldRoot className='w-64'>
+      <FieldLabel>Select a tag</FieldLabel>
       <Autocomplete items={groupedTags}>
-        <AutocompleteInput aria-label='Select a tag' placeholder='e.g. feature' />
+        <AutocompleteInput placeholder='e.g. feature' />
         <AutocompletePortal>
           <AutocompletePositioner side='bottom' align='start' sideOffset={4}>
             <AutocompletePopup>
@@ -299,7 +352,7 @@ function GroupedAutocomplete() {
           </AutocompletePositioner>
         </AutocompletePortal>
       </Autocomplete>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -433,10 +486,10 @@ function highlightText(text: string, query: string): React.ReactNode {
 
 function FuzzyAutocomplete() {
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label className='text-sm font-medium'>Fuzzy search documentation</label>
+    <FieldRoot className='w-64'>
+      <FieldLabel>Fuzzy search documentation</FieldLabel>
       <Autocomplete items={fuzzyItems} filter={fuzzyFilter} itemToStringValue={(item: FuzzyItem) => item.title}>
-        <AutocompleteInput aria-label='Fuzzy search documentation' placeholder='e.g. React' />
+        <AutocompleteInput placeholder='e.g. React' />
         <AutocompletePortal>
           <AutocompletePositioner side='bottom' align='start' sideOffset={4}>
             <AutocompletePopup>
@@ -463,7 +516,7 @@ function FuzzyAutocomplete() {
           </AutocompletePositioner>
         </AutocompletePortal>
       </Autocomplete>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -486,10 +539,16 @@ function LimitAutocomplete() {
   const moreCount = Math.max(0, totalMatches - LIMIT)
 
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label className='text-sm font-medium'>Limit results to 8</label>
-      <Autocomplete items={tags} value={value} onValueChange={setValue} limit={LIMIT}>
-        <AutocompleteInput aria-label='Limit results to 8' placeholder='e.g. component' />
+    <FieldRoot className='w-64'>
+      <FieldLabel>Limit results to 8</FieldLabel>
+      <Autocomplete
+        items={tags}
+        itemToStringValue={(tag: Tag) => tag.value}
+        value={value}
+        onValueChange={setValue}
+        limit={LIMIT}
+      >
+        <AutocompleteInput placeholder='e.g. component' />
         <AutocompletePortal>
           <AutocompletePositioner side='bottom' align='start' sideOffset={4}>
             <AutocompletePopup className='max-h-[min(22.5rem,var(--available-height))] overflow-y-auto py-1'>
@@ -512,7 +571,7 @@ function LimitAutocomplete() {
           </AutocompletePositioner>
         </AutocompletePortal>
       </Autocomplete>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -520,10 +579,10 @@ function LimitAutocomplete() {
 
 function AutoHighlightAutocomplete() {
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label className='text-sm font-medium'>Auto highlight on type</label>
-      <Autocomplete items={tags} autoHighlight>
-        <AutocompleteInput aria-label='Auto highlight on type' placeholder='e.g. feature' />
+    <FieldRoot className='w-64'>
+      <FieldLabel>Auto highlight on type</FieldLabel>
+      <Autocomplete items={tags} itemToStringValue={(tag: Tag) => tag.value} autoHighlight>
+        <AutocompleteInput placeholder='e.g. feature' />
         <AutocompletePortal>
           <AutocompletePositioner side='bottom' align='start' sideOffset={4}>
             <AutocompletePopup>
@@ -539,7 +598,7 @@ function AutoHighlightAutocomplete() {
           </AutocompletePositioner>
         </AutocompletePortal>
       </Autocomplete>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -766,7 +825,11 @@ function EmojiGrid() {
             <AutocompletePositioner side='bottom' align='end' sideOffset={4}>
               <AutocompletePopup aria-label='Select emoji' className='min-w-80'>
                 <AutocompleteArrow className='absolute -top-2 right-6' />
-                <AutocompleteInput className='rounded-none border-x-0 border-t-0' placeholder='Search emojis…' />
+                <AutocompleteInput
+                  aria-label='Search emojis'
+                  className='rounded-none border-x-0 border-t-0'
+                  placeholder='Search emojis…'
+                />
                 <div className='border-t border-border'>
                   <AutocompleteEmpty>No emojis found</AutocompleteEmpty>
                   <AutocompleteList className='max-h-64'>
@@ -819,16 +882,18 @@ const OVERSCAN = 12
 
 function VirtualizedAutocomplete() {
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label className='text-sm font-medium'>Search 10,000 items</label>
+    <FieldRoot className='w-64'>
+      <FieldLabel>Search 10,000 items</FieldLabel>
       <Autocomplete
         virtualized
         items={virtualizedItems}
         openOnInputClick
         itemToStringValue={(item: VirtualizedItem) => item.name}
       >
-        <AutocompleteInput aria-label='Search 10,000 items' placeholder='e.g. Item 0042' />
-        <AutocompleteClear aria-label='Clear' />
+        <AutocompleteInputGroup className='w-64'>
+          <AutocompleteInput context='group' placeholder='e.g. Item 0042' />
+          <AutocompleteClear aria-label='Clear' />
+        </AutocompleteInputGroup>
         <AutocompletePortal>
           <AutocompletePositioner side='bottom' align='start' sideOffset={4}>
             <AutocompletePopup>
@@ -840,7 +905,7 @@ function VirtualizedAutocomplete() {
           </AutocompletePositioner>
         </AutocompletePortal>
       </Autocomplete>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -903,6 +968,7 @@ export const demo: DemoMeta = {
   group: 'Forms',
   variants: [
     { name: 'Default', render: () => <TagAutocomplete /> },
+    { name: 'Sizes', render: () => <SizesAutocomplete /> },
     { name: 'Async search', render: () => <AsyncAutocomplete /> },
     { name: 'Inline autocomplete', render: () => <InlineAutocomplete /> },
     { name: 'Grouped', render: () => <GroupedAutocomplete /> },

@@ -13,8 +13,8 @@ function Menubar({ className, ...props }: React.ComponentProps<typeof BaseMenuba
       className={cn(
         'flex items-center gap-1 rounded-(--radius) border border-border bg-background p-1',
         'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
-        'data-[disabled]:opacity-50',
-        className as string
+        'data-disabled:opacity-50',
+        className
       )}
       {...props}
     />

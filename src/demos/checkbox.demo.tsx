@@ -12,68 +12,75 @@ export const demo: DemoMeta = {
     {
       name: 'Default',
       render: () => (
-        <label className='flex items-center gap-2 text-sm text-foreground'>
-          <CheckboxRoot defaultChecked />
-          Enable notifications
-        </label>
+        <FieldRoot className='flex-row items-center gap-2'>
+          <FieldLabel className='flex items-center gap-2'>
+            <CheckboxRoot defaultChecked />
+            Enable notifications
+          </FieldLabel>
+        </FieldRoot>
       )
     },
     {
       name: 'Indeterminate',
       render: () => (
-        <label className='flex items-center gap-2 text-sm text-foreground'>
-          <CheckboxRoot indeterminate />
-          Mixed selection
-        </label>
+        <FieldRoot className='flex-row items-center gap-2'>
+          <FieldLabel className='flex items-center gap-2'>
+            <CheckboxRoot indeterminate />
+            Mixed selection
+          </FieldLabel>
+        </FieldRoot>
       )
     },
     {
       name: 'Disabled',
       render: () => (
         <>
-          <label className='flex items-center gap-2 text-sm text-foreground'>
-            <CheckboxRoot disabled />
-            Disabled unchecked
-          </label>
-          <label className='flex items-center gap-2 text-sm text-foreground'>
-            <CheckboxRoot disabled defaultChecked />
-            Disabled checked
-          </label>
+          <FieldRoot className='flex-row items-center gap-2'>
+            <FieldLabel className='flex items-center gap-2'>
+              <CheckboxRoot disabled />
+              Disabled unchecked
+            </FieldLabel>
+          </FieldRoot>
+          <FieldRoot className='flex-row items-center gap-2'>
+            <FieldLabel className='flex items-center gap-2'>
+              <CheckboxRoot disabled defaultChecked />
+              Disabled checked
+            </FieldLabel>
+          </FieldRoot>
         </>
       )
     },
     {
       name: 'Labeling a checkbox',
       render: () => (
-        <label className='flex items-center gap-2 text-sm text-foreground'>
-          <CheckboxRoot />
-          Accept terms and conditions
-        </label>
+        <FieldRoot className='flex-row items-center gap-2'>
+          <FieldLabel className='flex items-center gap-2'>
+            <CheckboxRoot />
+            Accept terms and conditions
+          </FieldLabel>
+        </FieldRoot>
       )
     },
     {
       name: 'Rendering as a native button',
       render: () => (
-        <div className='flex items-center gap-2 text-sm'>
-          <label htmlFor='notifications-checkbox' className='text-foreground'>
-            Enable notifications
-          </label>
+        <FieldRoot className='flex-row items-center gap-2'>
           <CheckboxRoot id='notifications-checkbox' nativeButton render={<button />} />
-        </div>
+          <FieldLabel nativeLabel={false} render={<span />}>
+            Enable notifications
+          </FieldLabel>
+        </FieldRoot>
       )
     },
     {
       name: 'Render callback',
       render: () => (
-        <CheckboxRoot
-          nativeButton
-          render={(buttonProps) => (
-            <label className='flex items-center gap-2 text-sm text-foreground'>
-              <button {...buttonProps} />
-              Enable notifications
-            </label>
-          )}
-        />
+        <FieldRoot className='flex-row items-center gap-2'>
+          <CheckboxRoot nativeButton render={(buttonProps) => <button {...buttonProps} />} />
+          <FieldLabel nativeLabel={false} render={<span />}>
+            Enable notifications
+          </FieldLabel>
+        </FieldRoot>
       )
     },
     {

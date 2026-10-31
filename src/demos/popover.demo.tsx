@@ -52,10 +52,16 @@ function ProfileBody() {
         <span className='text-sm text-muted-foreground'>Pro plan</span>
       </div>
       <div className='flex flex-col'>
-        <a className='rounded-(--radius) px-2 py-1 text-sm text-primary underline-offset-4 hover:underline' href='#popover'>
+        <a
+          className='rounded-(--radius) px-2 py-1 text-sm text-primary underline-offset-4 hover:underline'
+          href='#popover'
+        >
           Profile settings
         </a>
-        <a className='rounded-(--radius) px-2 py-1 text-sm text-primary underline-offset-4 hover:underline' href='#popover'>
+        <a
+          className='rounded-(--radius) px-2 py-1 text-sm text-primary underline-offset-4 hover:underline'
+          href='#popover'
+        >
           Log out
         </a>
       </div>
@@ -66,20 +72,17 @@ function ProfileBody() {
 /* "Detached triggers" */
 const detachedPopover = createHandle()
 
-/* "Multiple triggers" + "Animating the Popover" */
-const panelPopover = createHandle<React.ComponentType>()
-
 /* "Controlled mode with multiple triggers" */
 const controlledPopover = createHandle()
 
 const animatedPositioner = cn(
   'transition-[top,left,right,bottom,transform] duration-[350ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
-  'data-[instant]:transition-none'
+  'data-instant:transition-none'
 )
 
 const animatedPopup = cn(
   'transition-[width,height] duration-[350ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
-  'data-[instant]:transition-none'
+  'data-instant:transition-none'
 )
 
 const viewportContentTransition =
@@ -111,9 +114,21 @@ function ControlledTriggers() {
 
   return (
     <div className='flex flex-wrap items-center gap-3'>
-      <PopoverTrigger handle={controlledPopover} id='trigger-1' render={<Button variant='secondary'>Trigger 1</Button>} />
-      <PopoverTrigger handle={controlledPopover} id='trigger-2' render={<Button variant='secondary'>Trigger 2</Button>} />
-      <PopoverTrigger handle={controlledPopover} id='trigger-3' render={<Button variant='secondary'>Trigger 3</Button>} />
+      <PopoverTrigger
+        handle={controlledPopover}
+        id='trigger-1'
+        render={<Button variant='secondary'>Trigger 1</Button>}
+      />
+      <PopoverTrigger
+        handle={controlledPopover}
+        id='trigger-2'
+        render={<Button variant='secondary'>Trigger 2</Button>}
+      />
+      <PopoverTrigger
+        handle={controlledPopover}
+        id='trigger-3'
+        render={<Button variant='secondary'>Trigger 3</Button>}
+      />
       <Button
         variant='outline'
         onClick={() => {
@@ -141,12 +156,26 @@ function ControlledTriggers() {
 
 /* "Animating the Popover" and "Content" — content transitions through the Viewport. */
 function AnimatedContent() {
+  const [panelPopover] = React.useState(() => createHandle<React.ComponentType>())
+
   return (
     <div className='flex flex-col gap-3'>
       <div className='flex flex-wrap gap-3'>
-        <PopoverTrigger handle={panelPopover} payload={NotificationsBody} render={<Button variant='secondary'>Notifications</Button>} />
-        <PopoverTrigger handle={panelPopover} payload={ActivityBody} render={<Button variant='secondary'>Activity</Button>} />
-        <PopoverTrigger handle={panelPopover} payload={ProfileBody} render={<Button variant='secondary'>Profile</Button>} />
+        <PopoverTrigger
+          handle={panelPopover}
+          payload={NotificationsBody}
+          render={<Button variant='secondary'>Notifications</Button>}
+        />
+        <PopoverTrigger
+          handle={panelPopover}
+          payload={ActivityBody}
+          render={<Button variant='secondary'>Activity</Button>}
+        />
+        <PopoverTrigger
+          handle={panelPopover}
+          payload={ProfileBody}
+          render={<Button variant='secondary'>Profile</Button>}
+        />
       </div>
 
       <Popover handle={panelPopover}>
@@ -169,11 +198,23 @@ function AnimatedContent() {
 
 /* "Position and Size" — the Positioner moves, the Popup animates its own size. */
 function AnimatedPositionAndSize() {
+  const [panelPopover] = React.useState(() => createHandle<React.ComponentType>())
+
   return (
     <div className='flex flex-col gap-3'>
       <div className='flex flex-wrap gap-3'>
-        <PopoverTrigger handle={panelPopover} payload={NotificationsBody} className='min-w-24 justify-start' render={<Button variant="secondary">Notifications</Button>} />
-        <PopoverTrigger handle={panelPopover} payload={ProfileBody} className='min-w-40 justify-center' render={<Button variant="secondary">Profile</Button>} />
+        <PopoverTrigger
+          handle={panelPopover}
+          payload={NotificationsBody}
+          className='min-w-24 justify-start'
+          render={<Button variant='secondary'>Notifications</Button>}
+        />
+        <PopoverTrigger
+          handle={panelPopover}
+          payload={ProfileBody}
+          className='min-w-40 justify-center'
+          render={<Button variant='secondary'>Profile</Button>}
+        />
       </div>
 
       <Popover handle={panelPopover}>
@@ -183,6 +224,46 @@ function AnimatedPositionAndSize() {
               <PopoverPopup className={animatedPopup}>
                 <PopoverArrow />
                 {Payload !== undefined && <Payload />}
+              </PopoverPopup>
+            </PopoverPositioner>
+          </PopoverPortal>
+        )}
+      </Popover>
+    </div>
+  )
+}
+
+function MultipleTriggers() {
+  const [panelPopover] = React.useState(() => createHandle<React.ComponentType>())
+
+  return (
+    <div className='flex flex-wrap items-center gap-3'>
+      <PopoverTrigger
+        handle={panelPopover}
+        payload={NotificationsBody}
+        render={<Button variant='secondary'>Trigger 1</Button>}
+      />
+      <PopoverTrigger
+        handle={panelPopover}
+        payload={ActivityBody}
+        render={<Button variant='secondary'>Trigger 2</Button>}
+      />
+      <PopoverTrigger
+        handle={panelPopover}
+        payload={ProfileBody}
+        render={<Button variant='secondary'>Trigger 3</Button>}
+      />
+
+      <Popover handle={panelPopover}>
+        {({ payload: Payload }) => (
+          <PopoverPortal>
+            <PopoverPositioner sideOffset={8}>
+              <PopoverPopup>
+                <PopoverArrow />
+                <PopoverTitle>Popover</PopoverTitle>
+                {Payload !== undefined && (
+                  <PopoverDescription>This has been opened by a detached trigger</PopoverDescription>
+                )}
               </PopoverPopup>
             </PopoverPositioner>
           </PopoverPortal>
@@ -203,7 +284,7 @@ export const demo: DemoMeta = {
       name: 'Default',
       render: () => (
         <Popover>
-          <PopoverTrigger render={<Button variant="secondary">Notifications</Button>} />
+          <PopoverTrigger render={<Button variant='secondary'>Notifications</Button>} />
           <PopoverPortal>
             <PopoverPositioner sideOffset={8}>
               <PopoverPopup>
@@ -220,7 +301,7 @@ export const demo: DemoMeta = {
       name: 'Opening on hover',
       render: () => (
         <Popover>
-          <PopoverTrigger openOnHover delay={200} render={<Button variant="secondary">Notifications</Button>} />
+          <PopoverTrigger openOnHover delay={200} render={<Button variant='secondary'>Notifications</Button>} />
           <PopoverPortal>
             <PopoverPositioner sideOffset={8}>
               <PopoverPopup>
@@ -237,7 +318,7 @@ export const demo: DemoMeta = {
       name: 'Detached triggers',
       render: () => (
         <div className='flex flex-wrap items-center gap-3'>
-          <PopoverTrigger handle={detachedPopover} render={<Button variant="secondary">View notifications</Button>} />
+          <PopoverTrigger handle={detachedPopover} render={<Button variant='secondary'>View notifications</Button>} />
 
           <Popover handle={detachedPopover}>
             <PopoverPortal>
@@ -255,29 +336,7 @@ export const demo: DemoMeta = {
     },
     {
       name: 'Multiple triggers',
-      render: () => (
-        <div className='flex flex-wrap items-center gap-3'>
-          <PopoverTrigger handle={panelPopover} payload={NotificationsBody} render={<Button variant="secondary">Trigger 1</Button>} />
-          <PopoverTrigger handle={panelPopover} payload={ActivityBody} render={<Button variant="secondary">Trigger 2</Button>} />
-          <PopoverTrigger handle={panelPopover} payload={ProfileBody} render={<Button variant="secondary">Trigger 3</Button>} />
-
-          <Popover handle={panelPopover}>
-            {({ payload: Payload }) => (
-              <PopoverPortal>
-                <PopoverPositioner sideOffset={8}>
-                  <PopoverPopup>
-                    <PopoverArrow />
-                    <PopoverTitle>Popover</PopoverTitle>
-                    {Payload !== undefined && (
-                      <PopoverDescription>This has been opened by a detached trigger</PopoverDescription>
-                    )}
-                  </PopoverPopup>
-                </PopoverPositioner>
-              </PopoverPortal>
-            )}
-          </Popover>
-        </div>
-      )
+      render: () => <MultipleTriggers />
     },
     {
       name: 'Controlled mode with multiple triggers',

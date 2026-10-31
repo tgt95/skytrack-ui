@@ -5,23 +5,21 @@ import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
 
 function Accordion({ className, ...props }: React.ComponentProps<typeof BaseAccordion.Root>) {
-  return (
-    <BaseAccordion.Root data-slot='accordion' className={cn('flex w-full flex-col', className as string)} {...props} />
-  )
+  return <BaseAccordion.Root data-slot='accordion' className={cn('flex w-full flex-col', className)} {...props} />
 }
 
 function AccordionItem({ className, ...props }: React.ComponentProps<typeof BaseAccordion.Item>) {
   return (
     <BaseAccordion.Item
       data-slot='accordion-item'
-      className={cn('border-b border-border last:border-b-0', className as string)}
+      className={cn('border-b border-border last:border-b-0', className)}
       {...props}
     />
   )
 }
 
 function AccordionHeader({ className, ...props }: React.ComponentProps<typeof BaseAccordion.Header>) {
-  return <BaseAccordion.Header data-slot='accordion-header' className={cn('flex', className as string)} {...props} />
+  return <BaseAccordion.Header data-slot='accordion-header' className={cn('flex', className)} {...props} />
 }
 
 function AccordionTrigger({ className, children, ...props }: React.ComponentProps<typeof BaseAccordion.Trigger>) {
@@ -31,11 +29,11 @@ function AccordionTrigger({ className, children, ...props }: React.ComponentProp
       className={cn(
         'flex w-full flex-1 cursor-pointer items-center justify-between gap-4 rounded-(--radius) py-4 text-left text-sm font-medium text-foreground transition-colors select-none',
         'hover:underline',
-        'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50',
         '[&[data-panel-open]>svg]:rotate-180',
         "[&>svg]:pointer-events-none [&>svg]:shrink-0 [&>svg:not([class*='size-'])]:size-4",
         focusRing,
-        className as string
+        className
       )}
       {...props}
     >
@@ -54,8 +52,8 @@ function accordionContent(dataSlot: string, { className, ...props }: React.Compo
       data-slot={dataSlot}
       className={cn(
         'h-[var(--accordion-panel-height)] overflow-hidden text-sm transition-[height] duration-200 ease-out',
-        'data-[ending-style]:h-0 data-[starting-style]:h-0',
-        className as string
+        'data-ending-style:h-0 data-starting-style:h-0',
+        className
       )}
       {...props}
     />

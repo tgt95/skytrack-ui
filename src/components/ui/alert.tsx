@@ -18,23 +18,12 @@ export const alertVariants = cva('relative flex w-full items-start gap-3 rounded
 export type AlertProps = React.ComponentProps<'div'> & VariantProps<typeof alertVariants>
 
 function Alert({ className, variant, role = 'alert', ...props }: AlertProps) {
-  return (
-    <div
-      data-slot='alert'
-      role={role}
-      className={cn(alertVariants({ variant }), className as string)}
-      {...props}
-    />
-  )
+  return <div data-slot='alert' role={role} className={cn(alertVariants({ variant }), className)} {...props} />
 }
 
 function AlertTitle({ className, ...props }: React.ComponentProps<'h5'>) {
   return (
-    <div
-      data-slot='alert-title'
-      className={cn('font-medium tracking-tight text-foreground', className as string)}
-      {...props}
-    />
+    <div data-slot='alert-title' className={cn('font-medium tracking-tight text-foreground', className)} {...props} />
   )
 }
 
@@ -42,14 +31,14 @@ function AlertDescription({ className, ...props }: React.ComponentProps<'div'>) 
   return (
     <div
       data-slot='alert-description'
-      className={cn('text-sm text-muted-foreground [&_p]:leading-relaxed', className as string)}
+      className={cn('text-sm text-muted-foreground [&_p]:leading-relaxed', className)}
       {...props}
     />
   )
 }
 
 function AlertAction({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot='alert-action' className={cn('ml-auto shrink-0 self-center', className as string)} {...props} />
+  return <div data-slot='alert-action' className={cn('ml-auto shrink-0 self-center', className)} {...props} />
 }
 
 export { Alert, AlertTitle, AlertDescription, AlertAction }

@@ -8,6 +8,9 @@ local tarball, and no npm registry destination has been chosen yet. See
 [Publishing](#publishing--still-an-open-owner-decision). **Building UI with this library?**
 Read the agent/handbook guide: [AGENT_GUIDE.md](AGENT_GUIDE.md).
 
+For component-specific purpose, selection, anatomy, variants, states, accessibility, and verified
+examples, use the [component knowledge index](knowledge/README.md).
+
 ## Live site (GitHub Pages)
 
 Published to the `gh-pages` branch by `npm run deploy:pages`:
@@ -52,13 +55,14 @@ npm run pack:local   # build:lib + npm pack
 Install it in a consumer app:
 
 ```bash
-npm install /path/to/designs/components/skytrack-ui/dist-lib-tarball/skytrack-ui-0.1.3.tgz
+npm install /path/to/designs/components/skytrack-ui/dist-lib-tarball/skytrack-ui-0.1.5.tgz
 ```
 
 `react` and `react-dom` are **peer dependencies** (`^19.0.0`) — the consumer installs and
 owns them, so there is exactly one React copy at runtime. The other runtime dependencies
-(`@base-ui/react`, `class-variance-authority`, `clsx`, `tailwind-merge`,
-`@phosphor-icons/react`, `zod`) are installed automatically as regular dependencies.
+(`@base-ui/react`, `@tanstack/react-table`, `class-variance-authority`, `clsx`, `cmdk`,
+`react-day-picker`, `recharts`, `tailwind-merge`, `@phosphor-icons/react`, `zod`) are installed
+automatically as regular dependencies.
 
 ## Usage
 
@@ -87,12 +91,59 @@ component's own helper names unchanged (e.g. `createHandle`):
 import { Tooltip, TooltipPopup, TooltipPositioner, TooltipProvider, TooltipTrigger } from 'skytrack-ui/tooltip'
 ```
 
-There are 38 subpaths, one per component: `accordion`, `alert-dialog`, `autocomplete`,
-`avatar`, `button`, `checkbox`, `checkbox-group`, `collapsible`, `combobox`, `context-menu`,
-`dialog`, `drawer`, `field`, `fieldset`, `form`, `input`, `menu`, `menubar`, `meter`,
-`navigation-menu`, `number-field`, `otp-field`, `popover`, `preview-card`, `progress`,
-`radio`, `scroll-area`, `select`, `separator`, `slider`, `switch`, `tabs`, `toast`, `toggle`,
-`toggle-group`, `toolbar`, `tooltip`.
+### Sidebar
+
+Compose a full-height app shell with an icon-collapsible sidebar. `SidebarProvider` owns the
+desktop and mobile state; `SidebarTrigger` and `SidebarRail` toggle it. The keyboard shortcut is
+<kbd>⌘ B</kbd> on macOS or <kbd>Ctrl B</kbd> elsewhere.
+
+```tsx
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger
+} from 'skytrack-ui/sidebar'
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <Sidebar collapsible='icon'>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive>Overview</SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+      <SidebarInset>
+        <header className='flex h-12 items-center px-3'>
+          <SidebarTrigger />
+        </header>
+        <main>{children}</main>
+      </SidebarInset>
+    </SidebarProvider>
+  )
+}
+```
+
+There are 51 component subpaths: `accordion`, `alert`, `alert-dialog`, `attachment`,
+`autocomplete`, `avatar`, `badge`, `breadcrumb`, `button`, `calendar`, `chart`, `checkbox`,
+`checkbox-group`, `collapsible`, `combobox`, `command`, `context-menu`, `data-table`, `date-picker`,
+`dialog`, `drawer`, `dropzone`, `field`, `fieldset`, `form`, `inline-edit`, `input`, `menu`,
+`menubar`, `meter`, `navigation-menu`, `number-field`, `otp-field`, `page-header`, `pagination`,
+`popover`, `preview-card`, `progress`, `radio`, `scroll-area`, `select`, `separator`, `sidebar`,
+`slider`, `switch`, `tabs`, `toast`, `toggle`, `toggle-group`, `toolbar`, `tooltip`.
 
 ### Aliased root exports
 

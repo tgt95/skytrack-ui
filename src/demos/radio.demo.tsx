@@ -8,23 +8,31 @@ import type { DemoMeta } from '@/showcase/demo'
 function BasicRadioGroup() {
   const id = useId()
   return (
-    <RadioGroup aria-labelledby={id} defaultValue='fuji-apple'>
-      <div className='text-sm font-semibold' id={id}>
+    <FieldRoot className='w-full gap-2'>
+      <FieldLabel nativeLabel={false} render={<div />} id={id} className='font-semibold'>
         Best apple
-      </div>
-      <label className='flex items-center gap-2 text-sm'>
-        <RadioRoot value='fuji-apple' />
-        Fuji
-      </label>
-      <label className='flex items-center gap-2 text-sm'>
-        <RadioRoot value='gala-apple' />
-        Gala
-      </label>
-      <label className='flex items-center gap-2 text-sm'>
-        <RadioRoot value='granny-smith-apple' />
-        Granny Smith
-      </label>
-    </RadioGroup>
+      </FieldLabel>
+      <RadioGroup aria-labelledby={id} defaultValue='fuji-apple'>
+        <FieldItem>
+          <FieldLabel className='flex items-center gap-2 font-normal'>
+            <RadioRoot value='fuji-apple' />
+            Fuji
+          </FieldLabel>
+        </FieldItem>
+        <FieldItem>
+          <FieldLabel className='flex items-center gap-2 font-normal'>
+            <RadioRoot value='gala-apple' />
+            Gala
+          </FieldLabel>
+        </FieldItem>
+        <FieldItem>
+          <FieldLabel className='flex items-center gap-2 font-normal'>
+            <RadioRoot value='granny-smith-apple' />
+            Granny Smith
+          </FieldLabel>
+        </FieldItem>
+      </RadioGroup>
+    </FieldRoot>
   )
 }
 
@@ -33,20 +41,26 @@ function ControlledRadioGroup() {
   const [value, setValue] = useState('ssd')
 
   return (
-    <RadioGroup aria-labelledby={id} value={value} onValueChange={(next) => setValue(String(next))}>
-      <div className='text-sm font-semibold' id={id}>
+    <FieldRoot className='w-full gap-2'>
+      <FieldLabel nativeLabel={false} render={<div />} id={id} className='font-semibold'>
         Storage type
-      </div>
-      <label className='flex items-center gap-2 text-sm'>
-        <RadioRoot value='ssd' />
-        SSD
-      </label>
-      <label className='flex items-center gap-2 text-sm'>
-        <RadioRoot value='hdd' />
-        HDD
-      </label>
+      </FieldLabel>
+      <RadioGroup aria-labelledby={id} value={value} onValueChange={(next) => setValue(String(next))}>
+        <FieldItem>
+          <FieldLabel className='flex items-center gap-2 font-normal'>
+            <RadioRoot value='ssd' />
+            SSD
+          </FieldLabel>
+        </FieldItem>
+        <FieldItem>
+          <FieldLabel className='flex items-center gap-2 font-normal'>
+            <RadioRoot value='hdd' />
+            HDD
+          </FieldLabel>
+        </FieldItem>
+      </RadioGroup>
       <p className='text-sm text-muted-foreground'>Selected: {value}</p>
-    </RadioGroup>
+    </FieldRoot>
   )
 }
 
@@ -60,77 +74,73 @@ export const demo: DemoMeta = {
     {
       name: 'Labeling a radio group',
       render: () => (
-        <>
-          <div id='storage-type-label' className='text-sm font-semibold'>
+        <FieldRoot className='w-full gap-2'>
+          <FieldLabel nativeLabel={false} render={<div />} id='storage-type-label' className='font-semibold'>
             Storage type
-          </div>
+          </FieldLabel>
           <RadioGroup aria-labelledby='storage-type-label' defaultValue='ssd'>
-            <label className='flex items-center gap-2 text-sm'>
-              <RadioRoot value='ssd' />
-              SSD
-            </label>
-            <label className='flex items-center gap-2 text-sm'>
-              <RadioRoot value='hdd' />
-              HDD
-            </label>
+            <FieldItem>
+              <FieldLabel className='flex items-center gap-2 font-normal'>
+                <RadioRoot value='ssd' />
+                SSD
+              </FieldLabel>
+            </FieldItem>
+            <FieldItem>
+              <FieldLabel className='flex items-center gap-2 font-normal'>
+                <RadioRoot value='hdd' />
+                HDD
+              </FieldLabel>
+            </FieldItem>
           </RadioGroup>
-        </>
+        </FieldRoot>
       )
     },
     {
       name: 'Rendering as a native button',
       render: () => (
-        <>
-          <div id='storage-type' className='text-sm font-semibold'>
+        <FieldRoot className='w-full gap-2'>
+          <FieldLabel nativeLabel={false} render={<div />} id='storage-type' className='font-semibold'>
             Storage type
-          </div>
+          </FieldLabel>
           <RadioGroup defaultValue='ssd' aria-labelledby='storage-type'>
-            <div className='flex items-center gap-2 text-sm'>
-              <label htmlFor='storage-type-ssd' className='text-foreground'>
+            <FieldItem>
+              <FieldLabel nativeLabel={false} render={<span />}>
                 SSD
-              </label>
+              </FieldLabel>
               <RadioRoot value='ssd' id='storage-type-ssd' nativeButton render={<button />} />
-            </div>
-            <div className='flex items-center gap-2 text-sm'>
-              <label htmlFor='storage-type-hdd' className='text-foreground'>
+            </FieldItem>
+            <FieldItem>
+              <FieldLabel nativeLabel={false} render={<span />}>
                 HDD
-              </label>
+              </FieldLabel>
               <RadioRoot value='hdd' id='storage-type-hdd' nativeButton render={<button />} />
-            </div>
+            </FieldItem>
           </RadioGroup>
-        </>
+        </FieldRoot>
       )
     },
     {
       name: 'Render callback',
       render: () => (
-        <>
-          <div id='storage-type-cb' className='text-sm font-semibold'>
+        <FieldRoot className='w-full gap-2'>
+          <FieldLabel nativeLabel={false} render={<div />} id='storage-type-cb' className='font-semibold'>
             Storage type
-          </div>
+          </FieldLabel>
           <RadioGroup defaultValue='ssd' aria-labelledby='storage-type-cb'>
-            <RadioRoot
-              value='ssd'
-              nativeButton
-              render={(buttonProps) => (
-                <label className='flex items-center gap-2 text-sm text-foreground'>
-                  <button {...buttonProps} />
-                  SSD
-                </label>
-              )}
-            />
-            <RadioRoot
-              value='hdd'
-              nativeButton
-              render={(buttonProps) => (
-                <label className='flex items-center gap-2 text-sm text-foreground'>
-                  <button {...buttonProps} />
-                  HDD
-                </label>
-              )}
-            />
+            <FieldItem>
+              <RadioRoot value='ssd' nativeButton render={(buttonProps) => <button {...buttonProps} />} />
+              <FieldLabel nativeLabel={false} render={<span />} className='font-normal'>
+                SSD
+              </FieldLabel>
+            </FieldItem>
+            <FieldItem>
+              <RadioRoot value='hdd' nativeButton render={(buttonProps) => <button {...buttonProps} />} />
+              <FieldLabel nativeLabel={false} render={<span />} className='font-normal'>
+                HDD
+              </FieldLabel>
+            </FieldItem>
           </RadioGroup>
-        </>
+        </FieldRoot>
       )
     },
     {
@@ -162,26 +172,38 @@ export const demo: DemoMeta = {
       name: 'Disabled and read-only',
       render: () => (
         <>
-          <RadioGroup aria-label='Disabled group' disabled defaultValue='ssd'>
-            <label className='flex items-center gap-2 text-sm'>
-              <RadioRoot value='ssd' />
-              SSD
-            </label>
-            <label className='flex items-center gap-2 text-sm'>
-              <RadioRoot value='hdd' />
-              HDD
-            </label>
-          </RadioGroup>
-          <RadioGroup aria-label='Read-only group' readOnly defaultValue='ssd'>
-            <label className='flex items-center gap-2 text-sm'>
-              <RadioRoot value='ssd' />
-              SSD
-            </label>
-            <label className='flex items-center gap-2 text-sm'>
-              <RadioRoot value='hdd' />
-              HDD
-            </label>
-          </RadioGroup>
+          <FieldRoot className='w-full'>
+            <RadioGroup aria-label='Disabled group' disabled defaultValue='ssd'>
+              <FieldItem>
+                <FieldLabel className='flex items-center gap-2 font-normal'>
+                  <RadioRoot value='ssd' />
+                  SSD
+                </FieldLabel>
+              </FieldItem>
+              <FieldItem>
+                <FieldLabel className='flex items-center gap-2 font-normal'>
+                  <RadioRoot value='hdd' />
+                  HDD
+                </FieldLabel>
+              </FieldItem>
+            </RadioGroup>
+          </FieldRoot>
+          <FieldRoot className='w-full'>
+            <RadioGroup aria-label='Read-only group' readOnly defaultValue='ssd'>
+              <FieldItem>
+                <FieldLabel className='flex items-center gap-2 font-normal'>
+                  <RadioRoot value='ssd' />
+                  SSD
+                </FieldLabel>
+              </FieldItem>
+              <FieldItem>
+                <FieldLabel className='flex items-center gap-2 font-normal'>
+                  <RadioRoot value='hdd' />
+                  HDD
+                </FieldLabel>
+              </FieldItem>
+            </RadioGroup>
+          </FieldRoot>
         </>
       )
     }

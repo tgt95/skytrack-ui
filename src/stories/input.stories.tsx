@@ -22,12 +22,17 @@ export const States: Story = {
   render: () => <VariantBlock name={"States"}>{demo.variants[1].render()}</VariantBlock>,
 };
 
+export const Sizes: Story = {
+  name: "Sizes",
+  render: () => <VariantBlock name={"Sizes"}>{demo.variants[2].render()}</VariantBlock>,
+};
+
 export const Types: Story = {
   name: "Types",
-  render: () => <VariantBlock name={"Types"}>{demo.variants[2].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Types"}>{demo.variants[3].render()}</VariantBlock>,
 };
 
 export const Adornment: Story = {
   name: "Adornment",
-  render: () => <VariantBlock name={"Adornment"}>{demo.variants[3].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Adornment"}>{demo.variants[4].render()}</VariantBlock>,
 };

@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { CaretRightIcon } from '@phosphor-icons/react'
+import { Button } from '@/components/ui/button'
 import {
   NavigationMenu,
   NavigationMenuArrow,
@@ -11,13 +12,17 @@ import {
   NavigationMenuPopup,
   NavigationMenuPortal,
   NavigationMenuPositioner,
-  NavigationMenuTrigger,
+  NavigationMenuTrigger as BaseNavigationMenuTrigger,
   NavigationMenuViewport
 } from '@/components/ui/navigation-menu'
 import { ScrollArea, ScrollAreaContent, ScrollAreaThumb, ScrollAreaViewport } from '@/components/ui/scroll-area'
 import type { DemoMeta } from '@/showcase/demo'
 
 type LinkEntry = { title: string; href: string; description: string }
+
+function NavigationMenuTrigger(props: React.ComponentProps<typeof BaseNavigationMenuTrigger>) {
+  return <BaseNavigationMenuTrigger {...props} render={props.render ?? <Button variant='outline' />} />
+}
 
 const OVERVIEW_LINKS: LinkEntry[] = [
   {

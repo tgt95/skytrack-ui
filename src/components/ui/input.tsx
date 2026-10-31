@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Input as BaseInput } from '@base-ui/react/input'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
+import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/components/ui/control-sizes'
 
 type InputAdornmentProps = React.ComponentProps<'span'> & {
   position: 'start' | 'end'
@@ -21,48 +22,56 @@ function InputAdornment({ className, position, ...props }: InputAdornmentProps) 
       className={cn(
         'flex h-9 shrink-0 items-center text-muted-foreground',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className as string
+        className
       )}
       {...props}
     />
   )
 }
 
-type InputProps = React.ComponentProps<typeof BaseInput> & {
+type InputProps = Omit<React.ComponentProps<typeof BaseInput>, 'size'> & {
+  size?: ControlSize
   startAdornment?: React.ReactNode
   endAdornment?: React.ReactNode
 }
 
-function Input({ className, startAdornment, endAdornment, ...props }: InputProps) {
+function Input({ className, size = 'default', startAdornment, endAdornment, ...props }: InputProps) {
   if (startAdornment == null && endAdornment == null) {
     return (
       <BaseInput
         data-slot='input'
+        data-size={size}
         className={cn(
-          'flex h-9 w-full min-w-0 rounded-(--radius) border border-input bg-background px-3 py-1 text-sm text-foreground shadow-xs transition-colors',
+          'flex w-full min-w-0 rounded-(--radius) border border-input bg-background px-3 py-1 text-foreground shadow-xs transition-colors',
+          CONTROL_SIZE_CLASSES[size],
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
-          'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
-          'data-[invalid]:border-destructive data-[invalid]:ring-destructive/20',
+          'data-disabled:cursor-not-allowed data-disabled:opacity-50',
+          'data-invalid:border-destructive data-invalid:ring-destructive/20',
           focusRing,
-          className as string
+          className
         )}
         {...props}
       />
     )
   }
+  const inputClassName = typeof className === 'function' ? className : undefined
+  const wrapperClassName = typeof className === 'function' ? undefined : className
+
   return (
     <span
       data-slot='input-root'
+      data-size={size}
       className={cn(
-        'flex h-9 w-full items-center rounded-(--radius) border border-input bg-background transition-colors',
+        'flex w-full items-center rounded-(--radius) border border-input bg-background transition-colors',
+        CONTROL_SIZE_CLASSES[size],
         // The border, background and focus ring live on the wrapper so the adornment
         // sits inside the box, matching MUI. `focus-within` replaces the input's own
         // `focus-visible` ring, and `has-*` carries validation and disabled states.
         'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
         'has-[[data-invalid]]:border-destructive has-[[data-invalid]]:ring-destructive/20',
         'has-[[data-disabled]]:cursor-not-allowed has-[[data-disabled]]:opacity-50',
-        className as string
+        wrapperClassName
       )}
     >
       {startAdornment != null && (
@@ -72,10 +81,12 @@ function Input({ className, startAdornment, endAdornment, ...props }: InputProps
       )}
       <BaseInput
         data-slot='input'
+        data-size={size}
         className={cn(
           'flex h-full min-w-0 flex-1 rounded-(--radius) bg-transparent px-3 py-1 text-sm text-foreground outline-hidden transition-colors',
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
+          inputClassName,
           startAdornment != null && 'pl-2',
           endAdornment != null && 'pr-2'
         )}

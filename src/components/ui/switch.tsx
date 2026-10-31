@@ -8,7 +8,7 @@ export const switchVariants = cva(
   cn(
     'inline-flex cursor-pointer shrink-0 items-center rounded-(--radius) border border-input bg-muted p-0.5 transition-colors',
     'data-checked:bg-primary data-checked:border-primary',
-    'disabled:cursor-not-allowed disabled:opacity-50 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
+    'disabled:cursor-not-allowed disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50',
     focusRing
   ),
   {
@@ -39,7 +39,7 @@ const SwitchSizeContext = React.createContext<SwitchSize>('default')
 function Switch({ className, size, ...props }: SwitchProps) {
   return (
     <SwitchSizeContext.Provider value={size ?? 'default'}>
-      <BaseSwitch.Root data-slot='switch' className={cn(switchVariants({ size }), className as string)} {...props} />
+      <BaseSwitch.Root data-slot='switch' className={cn(switchVariants({ size }), className)} {...props} />
     </SwitchSizeContext.Provider>
   )
 }
@@ -51,7 +51,7 @@ function SwitchThumb({ className, size, ...props }: SwitchThumbProps) {
   return (
     <BaseSwitch.Thumb
       data-slot='switch-thumb'
-      className={cn(switchThumbVariants({ size: size ?? inheritedSize }), className as string)}
+      className={cn(switchThumbVariants({ size: size ?? inheritedSize }), className)}
       {...props}
     />
   )

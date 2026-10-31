@@ -21,17 +21,11 @@ type TooltipChangeEventDetails = Parameters<
 >[1]
 
 function TooltipTrigger({ className, ...props }: React.ComponentProps<typeof BaseTooltip.Trigger>) {
-  return (
-    <BaseTooltip.Trigger
-      data-slot='tooltip-trigger'
-      className={className}
-      {...props}
-    />
-  )
+  return <BaseTooltip.Trigger data-slot='tooltip-trigger' className={className} {...props} />
 }
 
 function TooltipPortal({ className, ...props }: React.ComponentProps<typeof BaseTooltip.Portal>) {
-  return <BaseTooltip.Portal data-slot='tooltip-portal' className={cn('z-50', className as string)} {...props} />
+  return <BaseTooltip.Portal data-slot='tooltip-portal' className={cn('z-50', className)} {...props} />
 }
 
 function TooltipPositioner({ className, ...props }: React.ComponentProps<typeof BaseTooltip.Positioner>) {
@@ -40,7 +34,7 @@ function TooltipPositioner({ className, ...props }: React.ComponentProps<typeof 
       data-slot='tooltip-positioner'
       className={cn(
         'z-50 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)]',
-        className as string
+        className
       )}
       {...props}
     />
@@ -54,10 +48,10 @@ function TooltipPopup({ className, ...props }: React.ComponentProps<typeof BaseT
       className={cn(
         'z-50 flex w-[var(--popup-width,auto)] max-w-64 origin-[var(--transform-origin)] items-center rounded-(--radius) bg-foreground px-3 py-1.5 text-xs text-background',
         'transition-[scale,opacity] duration-100 ease-out',
-        'data-[starting-style]:scale-90 data-[starting-style]:opacity-0',
-        'data-[ending-style]:scale-90 data-[ending-style]:opacity-0',
-        'data-[instant]:transition-none',
-        className as string
+        'data-starting-style:scale-90 data-starting-style:opacity-0',
+        'data-ending-style:scale-90 data-ending-style:opacity-0',
+        'data-instant:transition-none',
+        className
       )}
       {...props}
     />
@@ -102,7 +96,7 @@ function TooltipArrow({ className, children, ...props }: React.ComponentProps<ty
         'data-[side=top]:bottom-[-5px] data-[side=top]:rotate-180',
         'data-[side=left]:right-[-5px] data-[side=left]:rotate-90',
         'data-[side=right]:left-[-5px] data-[side=right]:-rotate-90',
-        className as string
+        className
       )}
       {...props}
     >
@@ -115,7 +109,7 @@ function TooltipViewport({ className, ...props }: React.ComponentProps<typeof Ba
   return (
     <BaseTooltip.Viewport
       data-slot='tooltip-viewport'
-      className={cn('relative h-full w-full overflow-clip', className as string)}
+      className={cn('relative h-full w-full overflow-clip', className)}
       {...props}
     />
   )

@@ -14,13 +14,13 @@ export const demo: DemoMeta = {
       name: 'Single',
       render: () => (
         <ToggleGroup aria-label='Text alignment' defaultValue={['left']}>
-          <Toggle aria-label='Align left' value='left'>
+          <Toggle size='icon' aria-label='Align left' value='left'>
             <TextAlignLeftIcon />
           </Toggle>
-          <Toggle aria-label='Align center' value='center'>
+          <Toggle size='icon' aria-label='Align center' value='center'>
             <TextAlignCenterIcon />
           </Toggle>
-          <Toggle aria-label='Align right' value='right'>
+          <Toggle size='icon' aria-label='Align right' value='right'>
             <TextAlignRightIcon />
           </Toggle>
         </ToggleGroup>
@@ -42,13 +42,13 @@ export const demo: DemoMeta = {
       name: 'Outline',
       render: () => (
         <ToggleGroup aria-label='Text alignment' variant='outline' defaultValue={['left']}>
-          <Toggle aria-label='Align left' value='left'>
+          <Toggle size='icon' aria-label='Align left' value='left'>
             <TextAlignLeftIcon />
           </Toggle>
-          <Toggle aria-label='Align center' value='center'>
+          <Toggle size='icon' aria-label='Align center' value='center'>
             <TextAlignCenterIcon />
           </Toggle>
-          <Toggle aria-label='Align right' value='right'>
+          <Toggle size='icon' aria-label='Align right' value='right'>
             <TextAlignRightIcon />
           </Toggle>
         </ToggleGroup>
@@ -67,13 +67,13 @@ export const demo: DemoMeta = {
       name: 'Vertical',
       render: () => (
         <ToggleGroup aria-label='Text alignment' orientation='vertical' defaultValue={['center']}>
-          <Toggle aria-label='Align left' value='left'>
+          <Toggle size='icon' aria-label='Align left' value='left'>
             <TextAlignLeftIcon />
           </Toggle>
-          <Toggle aria-label='Align center' value='center'>
+          <Toggle size='icon' aria-label='Align center' value='center'>
             <TextAlignCenterIcon />
           </Toggle>
-          <Toggle aria-label='Align right' value='right'>
+          <Toggle size='icon' aria-label='Align right' value='right'>
             <TextAlignRightIcon />
           </Toggle>
         </ToggleGroup>

@@ -256,25 +256,31 @@ function ImperativeValidationForm() {
       </FieldRoot>
 
       <FieldRoot name='plan'>
-        <FieldLabel>Plan</FieldLabel>
+        <FieldLabel nativeLabel={false} render={<div />}>
+          Plan
+        </FieldLabel>
         <RadioGroup value={plan} onValueChange={(next) => setPlan(next as string)}>
-          <label className='flex items-center gap-2 text-sm'>
-            <RadioRoot value='team' />
-            Team
-          </label>
-          <label className='flex items-center gap-2 text-sm'>
-            <RadioRoot value='enterprise' />
-            Enterprise
-          </label>
+          <FieldItem>
+            <FieldLabel className='flex items-center gap-2 font-normal'>
+              <RadioRoot value='team' />
+              Team
+            </FieldLabel>
+          </FieldItem>
+          <FieldItem>
+            <FieldLabel className='flex items-center gap-2 font-normal'>
+              <RadioRoot value='enterprise' />
+              Enterprise
+            </FieldLabel>
+          </FieldItem>
         </RadioGroup>
       </FieldRoot>
 
       <FieldRoot name='notifications'>
         <FieldItem>
-          <label className='flex items-center gap-2 text-sm'>
+          <FieldLabel className='flex items-center gap-2 font-normal'>
             <CheckboxRoot />
             Email me product updates
-          </label>
+          </FieldLabel>
         </FieldItem>
       </FieldRoot>
 

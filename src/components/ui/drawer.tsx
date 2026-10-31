@@ -44,8 +44,8 @@ export const drawerPopupVariants = cva(
   cn(
     'flex max-h-dvh w-full flex-col overflow-y-auto overscroll-contain rounded-(--radius) border border-border bg-background text-foreground shadow-lg outline-none',
     'transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform',
-    'data-[swiping]:select-none',
-    'data-[ending-style]:duration-[calc(var(--drawer-swipe-strength,0)*400ms)]',
+    'data-swiping:select-none',
+    'data-ending-style:duration-[calc(var(--drawer-swipe-strength,0)*400ms)]',
     'motion-reduce:transition-none'
   ),
   {
@@ -54,24 +54,24 @@ export const drawerPopupVariants = cva(
         bottom: cn(
           'max-h-[80vh] rounded-b-none border-b-0 px-6 py-4 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]',
           '[transform:translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y,0px)))]',
-          'data-[starting-style]:[transform:translateY(100%)] data-[ending-style]:[transform:translateY(100%)]'
+          'data-starting-style:[transform:translateY(100%)] data-ending-style:[transform:translateY(100%)]'
         ),
         top: cn(
           'max-h-[80vh] rounded-t-none border-t-0 px-6 py-4 pt-[calc(1.5rem+env(safe-area-inset-top,0px))]',
           '[transform:translateY(calc(var(--drawer-snap-point-offset,0px)*-1+var(--drawer-swipe-movement-y,0px)))]',
-          'data-[starting-style]:[transform:translateY(-100%)] data-[ending-style]:[transform:translateY(-100%)]'
+          'data-starting-style:[transform:translateY(-100%)] data-ending-style:[transform:translateY(-100%)]'
         ),
         left: cn(
           'h-full max-w-[calc(100vw-3rem)] rounded-r-none border-r-0 py-6 pr-6 pl-[calc(1.5rem+env(safe-area-inset-left,0px))]',
           'w-[20rem]',
           '[transform:translateX(calc(var(--drawer-snap-point-offset,0px)*-1+var(--drawer-swipe-movement-x,0px)))]',
-          'data-[starting-style]:[transform:translateX(-100%)] data-[ending-style]:[transform:translateX(-100%)]'
+          'data-starting-style:[transform:translateX(-100%)] data-ending-style:[transform:translateX(-100%)]'
         ),
         right: cn(
           'h-full max-w-[calc(100vw-3rem)] rounded-l-none border-l-0 py-6 pl-6 pr-[calc(1.5rem+env(safe-area-inset-right,0px))]',
           'w-[20rem]',
           '[transform:translateX(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-x,0px)))]',
-          'data-[starting-style]:[transform:translateX(100%)] data-[ending-style]:[transform:translateX(100%)]'
+          'data-starting-style:[transform:translateX(100%)] data-ending-style:[transform:translateX(100%)]'
         )
       }
     },
@@ -81,17 +81,8 @@ export const drawerPopupVariants = cva(
 
 export type DrawerSideProps = VariantProps<typeof drawerSideVariants>
 
-function DrawerTrigger({
-  className,
-  ...props
-}: React.ComponentProps<typeof BaseDrawer.Trigger>) {
-  return (
-    <BaseDrawer.Trigger
-      data-slot='drawer-trigger'
-      className={className}
-      {...props}
-    />
-  )
+function DrawerTrigger({ className, ...props }: React.ComponentProps<typeof BaseDrawer.Trigger>) {
+  return <BaseDrawer.Trigger data-slot='drawer-trigger' className={className} {...props} />
 }
 
 function DrawerSwipeArea({ className, ...props }: React.ComponentProps<typeof BaseDrawer.SwipeArea>) {
@@ -104,8 +95,8 @@ function DrawerSwipeArea({ className, ...props }: React.ComponentProps<typeof Ba
         'data-[swipe-direction=up]:inset-x-0 bottom-0 h-10',
         'data-[swipe-direction=left]:inset-y-0 left-0 w-10',
         'data-[swipe-direction=right]:inset-y-0 right-0 w-10',
-        'data-[disabled]:pointer-events-none data-[disabled]:opacity-0',
-        className as string
+        'data-disabled:pointer-events-none data-disabled:opacity-0',
+        className
       )}
       {...props}
     />
@@ -113,7 +104,7 @@ function DrawerSwipeArea({ className, ...props }: React.ComponentProps<typeof Ba
 }
 
 function DrawerPortal({ className, ...props }: React.ComponentProps<typeof BaseDrawer.Portal>) {
-  return <BaseDrawer.Portal data-slot='drawer-portal' className={cn('z-50', className as string)} {...props} />
+  return <BaseDrawer.Portal data-slot='drawer-portal' className={cn('z-50', className)} {...props} />
 }
 
 function DrawerBackdrop({ className, ...props }: React.ComponentProps<typeof BaseDrawer.Backdrop>) {
@@ -123,9 +114,9 @@ function DrawerBackdrop({ className, ...props }: React.ComponentProps<typeof Bas
       className={cn(
         'fixed inset-0 min-h-dvh bg-black/70 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]',
         'supports-[-webkit-touch-callout:none]:absolute',
-        'data-[swiping]:duration-0',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[closed]:pointer-events-none',
-        className as string
+        'data-swiping:duration-0',
+        'data-starting-style:opacity-0 data-ending-style:opacity-0 data-closed:pointer-events-none',
+        className
       )}
       {...props}
     />
@@ -140,7 +131,7 @@ function DrawerViewport({
   return (
     <BaseDrawer.Viewport
       data-slot='drawer-viewport'
-      className={cn('fixed inset-0 z-50 flex', drawerSideVariants({ side }), className as string)}
+      className={cn('fixed inset-0 z-50 flex', drawerSideVariants({ side }), className)}
       {...props}
     />
   )
@@ -148,11 +139,7 @@ function DrawerViewport({
 
 function DrawerPopup({ className, side, ...props }: React.ComponentProps<typeof BaseDrawer.Popup> & DrawerSideProps) {
   return (
-    <BaseDrawer.Popup
-      data-slot='drawer-popup'
-      className={cn(drawerPopupVariants({ side }), className as string)}
-      {...props}
-    />
+    <BaseDrawer.Popup data-slot='drawer-popup' className={cn(drawerPopupVariants({ side }), className)} {...props} />
   )
 }
 
@@ -160,27 +147,21 @@ function DrawerContent({ className, ...props }: React.ComponentProps<typeof Base
   return (
     <BaseDrawer.Content
       data-slot='drawer-content'
-      className={cn('flex w-full max-w-lg flex-col gap-4 text-sm outline-none', className as string)}
+      className={cn('flex w-full max-w-lg flex-col gap-4 text-sm outline-none', className)}
       {...props}
     />
   )
 }
 
 function DrawerTitle({ className, ...props }: React.ComponentProps<typeof BaseDrawer.Title>) {
-  return (
-    <BaseDrawer.Title
-      data-slot='drawer-title'
-      className={cn('h5', className as string)}
-      {...props}
-    />
-  )
+  return <BaseDrawer.Title data-slot='drawer-title' className={cn('h5', className)} {...props} />
 }
 
 function DrawerDescription({ className, ...props }: React.ComponentProps<typeof BaseDrawer.Description>) {
   return (
     <BaseDrawer.Description
       data-slot='drawer-description'
-      className={cn('text-sm text-muted-foreground', className as string)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   )
@@ -195,7 +176,7 @@ function DrawerClose({
   return (
     <BaseDrawer.Close
       data-slot='drawer-close'
-      className={cn(buttonVariants({ variant: variant ?? 'outline', size }), className as string)}
+      className={cn(buttonVariants({ variant: variant ?? 'outline', size }), className)}
       {...props}
     />
   )
@@ -205,7 +186,7 @@ function DrawerIndentBackground({ className, ...props }: React.ComponentProps<ty
   return (
     <BaseDrawer.IndentBackground
       data-slot='drawer-indent-background'
-      className={cn('fixed inset-0 -z-10 bg-background', className as string)}
+      className={cn('fixed inset-0 -z-10 bg-background', className)}
       {...props}
     />
   )
@@ -223,7 +204,7 @@ function DrawerIndent({ className, ...props }: React.ComponentProps<typeof BaseD
         'data-active:transform-[scale(calc(0.98+(0.02*var(--drawer-swipe-progress,0))))_translateY(calc(0.5rem*(1-var(--drawer-swipe-progress,0))))]',
         'rounded-tl-[var(--radius)] rounded-tr-[var(--radius)]',
         'motion-reduce:transition-none',
-        className as string
+        className
       )}
       {...props}
     />

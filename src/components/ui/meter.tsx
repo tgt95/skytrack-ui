@@ -6,7 +6,7 @@ function Meter({ className, ...props }: React.ComponentProps<typeof BaseMeter.Ro
   return (
     <BaseMeter.Root
       data-slot='meter'
-      className={cn('grid w-60 max-w-full grid-cols-2 gap-y-2', className as string)}
+      className={cn('grid w-60 max-w-full grid-cols-2 gap-y-2', className)}
       {...props}
     />
   )
@@ -16,7 +16,7 @@ function MeterLabel({ className, ...props }: React.ComponentProps<typeof BaseMet
   return (
     <BaseMeter.Label
       data-slot='meter-label'
-      className={cn('text-sm font-normal text-foreground', className as string)}
+      className={cn('text-sm font-normal text-foreground', className)}
       {...props}
     />
   )
@@ -26,7 +26,7 @@ function MeterValue({ className, ...props }: React.ComponentProps<typeof BaseMet
   return (
     <BaseMeter.Value
       data-slot='meter-value'
-      className={cn('text-right text-sm text-foreground', className as string)}
+      className={cn('text-right text-sm text-foreground', className)}
       {...props}
     />
   )
@@ -36,7 +36,7 @@ function MeterTrack({ className, ...props }: React.ComponentProps<typeof BaseMet
   return (
     <BaseMeter.Track
       data-slot='meter-track'
-      className={cn('col-span-2 h-3 overflow-hidden bg-muted', className as string)}
+      className={cn('col-span-2 h-3 overflow-hidden bg-muted', className)}
       {...props}
     />
   )
@@ -46,7 +46,7 @@ function MeterIndicator({ className, ...props }: React.ComponentProps<typeof Bas
   return (
     <BaseMeter.Indicator
       data-slot='meter-indicator'
-      className={cn('bg-primary transition-[width] duration-500', className as string)}
+      className={cn('bg-primary transition-[width] duration-500', className)}
       {...props}
     />
   )

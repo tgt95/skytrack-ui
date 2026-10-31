@@ -88,21 +88,27 @@ export const demo: DemoMeta = {
       render: () => (
         <Tabs defaultValue='overview' className='max-w-sm'>
           <ScrollArea className='relative overflow-hidden'>
-            <TabsList
-              render={<ScrollAreaViewport />}
-              className='flex w-full gap-1 border-b border-border'
-              indicatorClassName='z-20 rounded-none bg-transparent shadow-none [border-bottom:2px_solid_var(--primary)]'
-            >
-              <TabsTab value='overview' className='flex-none px-3'>
-                Overview
-              </TabsTab>
-              <TabsTab value='projects' className='flex-none px-3'>
-                Projects
-              </TabsTab>
-              <TabsTab value='account' className='flex-none px-3'>
-                Account
-              </TabsTab>
-            </TabsList>
+            <ScrollAreaViewport>
+              <ScrollAreaContent className='w-max min-w-full flex-row gap-1 border-b border-border p-0'>
+                <TabsList
+                  className='w-max min-w-full gap-1 border-0'
+                  indicatorClassName='z-20 rounded-none bg-transparent shadow-none [border-bottom:2px_solid_var(--primary)]'
+                >
+                  <TabsTab value='overview' className='flex-none px-3'>
+                    Overview
+                  </TabsTab>
+                  <TabsTab value='projects' className='flex-none px-3'>
+                    Projects
+                  </TabsTab>
+                  <TabsTab value='account' className='flex-none px-3'>
+                    Account
+                  </TabsTab>
+                </TabsList>
+              </ScrollAreaContent>
+            </ScrollAreaViewport>
+            <ScrollAreaScrollbar orientation='horizontal'>
+              <ScrollAreaThumb />
+            </ScrollAreaScrollbar>
           </ScrollArea>
           <TabsPanel value='overview'>
             <p className='m-0'>Workspace stats and activity.</p>

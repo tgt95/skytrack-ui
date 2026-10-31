@@ -11,14 +11,32 @@ exact commands to verify your work honestly.
 `skytrack-ui` is a **private React component library** built on
 [Base UI](https://base-ui.com) + Tailwind CSS v4, themed with IBM Plex Sans / IBM Plex Mono.
 
-- It is `"private": true`, version `0.1.4`, consumed as a **local tarball**
-  (`dist-lib-tarball/skytrack-ui-0.1.4.tgz`).
+- It is `"private": true`, version `0.1.5`, consumed as a **local tarball**
+  (`dist-lib-tarball/skytrack-ui-0.1.5.tgz`).
 - **No npm registry destination has been chosen.** Never write code that assumes
   `npm install skytrack-ui`, a registry scope, or a Git URL.
 - **Browser audits exist (cycle 0, Oct 2026).** Rendered appearance, focus, cursor, overflow and
   ARIA wiring were probed in a real browser; reports live under
   `_tasks/2026-10-07-design-system-audit/`. Nothing below may be reported as "looks right"
   unless you personally rendered it and looked at the screenshot.
+
+## Owner-approved implementation policy
+
+Read [UI_RULES.md](UI_RULES.md) and its linked portable implementation rules for UI work.
+Those rules reflect the Owner's current implementation policy. Heading/padding scales
+below are defaults: explicit visual references may override them using DS tokens and
+Tailwind utilities while preserving valid component composition and accessibility.
+Research and analyze Information Architecture before implementation using the IA outline
+and review rules in `UI_RULES.md`; mode controls whether the outline is shown before coding.
+For charts, also follow the chart-choice and rendered-legibility criteria in `UI_RULES.md` and
+the portable implementation guide; do not treat a tiny preview as an analytical chart.
+For creative work, establish whether a reference means faithful reproduction or inspiration.
+Use the design-system-delivery skill for STRICT/YOLO workflow selection.
+
+For source-verified, component-specific usage, anatomy, variants, states, accessibility, and
+examples, start from the [component knowledge index](knowledge/README.md). Treat each page as
+the detailed companion to this implementation guide; verify its linked source, types, demo, and
+package version again when using it in code.
 
 ## 2. Inspect before you write
 
@@ -32,6 +50,141 @@ Never code from memory or from this guide alone. The installed version is the so
 
 If the installed version disagrees with this guide, the installed version wins — say so.
 
+### Library-first decision gate
+
+Before each UI implementation decision involving a control, pattern, interaction, or visual variant,
+inspect the installed `skytrack-ui` version, exports, source/types, and closest matching demo. Decide
+whether the library already provides a component or supported composition that meets the requirement.
+Use that API and composition when it does; customize through documented props, `className`, or
+`style`.
+
+Create a local component or custom UI after identifying the concrete library gap or substantially
+different visual composition. Token-based custom CSS may be broad; reuse supported library parts. A gap means the needed component, part, behavior, or supported styling is absent from
+the installed exports/source/types, or the documented API cannot satisfy the required behavior or
+accessibility. Before implementing the fallback, state the missing capability and why existing
+parts cannot compose it. Keep fallback scope minimal and preserve library components around it.
+Do not add the fallback to the shared library unless that change is in scope.
+
+### Match the documented component composition
+
+Before implementing a component, find its closest example in `src/demos/<component>.demo.tsx`
+and inspect `src/components/ui/<component>.tsx` plus its exported types. Use the demo as the
+composition pattern only after confirming that it matches the package version used by the app.
+
+- In the library source checkout, the current component implementation, types, and `package.json`
+  exports define the available API; the matching demo shows the intended composition.
+- In a consumer app, the installed package version, exports, and types define the available API.
+  A source-checkout demo is only applicable if it matches that installed version.
+- Preserve the verified part names, nesting, portal/positioner layers, and semantic elements.
+  Do not invent parts or props, swap in native HTML, or hand-build a substitute for a component
+  that the library already provides.
+- Apply visual differences through supported variants, `className`, and `style`. Do not copy a
+  component's internals into screen markup.
+- For headings, choose the semantic HTML element from the document outline; choose visual
+  typography from the role rules below. A bare `h1`–`h6` element does not receive SkyTrack UI
+  heading styles. Use the default heading class when it fits. An explicit reference may require a different
+  visual scale using DS tokens and Tailwind utilities.
+- If no matching demo exists, derive the composition from the implementation and types. If a
+  required part or behavior still cannot be verified, state the gap instead of guessing.
+
+### Heading roles
+
+Use semantic heading tags that preserve the document outline, independently of visual size. For
+example, a page title is usually `<h1 className='h3'>` because page titles use the `.h3` visual
+style. Do not change heading semantics just to match a visual class.
+For a marketing site or landing page, the Hero title uses the display style
+`@apply text-5xl lg:text-7xl heading`. This is a context-specific exception to the `.h3` page-title
+default. Keep the Hero title semantic (usually `<h1>`); apply the display style through the page's
+stylesheet and existing Hero selector.
+
+| Role                                                      | Visual style                                       |
+| --------------------------------------------------------- | -------------------------------------------------- |
+| Page title                                                | `.h3`                                              |
+| Card title — Level 1                                      | `.h4`                                              |
+| Card title — Level 2: group title grouping Field controls | `@apply text-lg font-medium text-(--foreground)`   |
+| Card title — Level 3: subgroup title                      | `@apply text-base font-medium text-(--foreground)` |
+
+Use the Level 2 and Level 3 declarations in a named CSS class with `@apply`; when the component is
+styled inline, use the equivalent Tailwind utilities. Keep each title as a semantic heading element
+at the level required by the page outline.
+
+### Container padding and form spacing
+
+Use these default inner paddings for cards and content containers, based on their nesting level:
+
+| Level                               | Default padding | Tailwind |
+| ----------------------------------- | --------------: | -------- |
+| 1 — outer section or top-level card |            24px | `p-6`    |
+| 2 — nested card or content group    |            16px | `p-4`    |
+| 3 — nested subgroup                 |            12px | `p-3`    |
+| 4 — compact nested content          |             8px | `p-2`    |
+
+Levels describe nesting within a screen, not fixed component variants. Start with 24px for a
+standalone top-level card. Reduce padding as content nests. Use a smaller level only when the
+content density or verified design calls for it; do not add padding to a component that already
+owns its internal spacing.
+
+Apply this padding scale only to a visual surface: a card or section with its own background,
+border, or other visible boundary. Layout-only wrappers used for grid, flex, alignment, or spacing
+must not receive padding by default. Avoid adding padding when a component already owns its internal
+spacing.
+
+Within a card, separate distinct content groups by 24px (`gap-6` or `space-y-6`). Keep a group
+heading 12–16px from its content (`gap-3` or `gap-4`), choosing the smaller gap for compact layouts.
+Do not add this group spacing between individual fields; field spacing follows the form rule below.
+
+Use 16px (`gap-4`) as the default spacing between fields in a form, both vertically and
+horizontally. Use a responsive grid: one column on narrow screens and one to two columns as the
+desktop baseline. When short, same-level fields benefit from higher density, allow up to four
+columns. Set each field's span from its control type and expected content length; do not force equal
+columns when content needs different widths. Keep logical mobile order. Keep spacing inside each
+field separate from the gap between fields; follow the field component's verified composition for
+label, control, description, and error spacing.
+
+For visual work, run the focused typecheck and inspect the rendered state in the existing browser
+session. Check the states that affect the requested composition, such as multiline values, open
+menus, validation, focus, and disabled controls.
+
+### Implementing from a visual reference
+
+For faithful reproduction, treat the supplied screenshot or mockup as the source of truth for
+visual appearance, page content, and structure. For inspiration work, follow the agreed interpretation.
+Before coding, map its visible hierarchy, section order, labels, table columns, filters, density,
+alignment, and selected/error states. Preserve those details. Apply `skytrack-ui` components,
+variants, styles, and tokens to that structure; do not replace the reference with a generic page
+that happens to use the same domain or component library.
+
+When another agent implements the screen, pass the actual reference image as an attachment or a
+local image file it can open. A short text summary alone is not an equivalent visual input. Name
+the exact route, identify each image separately, and give a checkable structure/content checklist.
+If the image is unavailable to the implementing agent, stop before inventing its layout and ask for
+the image or an approved written specification. Before handback, render the route and compare it
+against the supplied reference at a similar viewport; report any unverified visual check.
+
+### Semantic data-table pattern
+
+The current `skytrack-ui` package exports `DataTable` from `skytrack-ui/data-table` and the root
+entry. It composes a headless TanStack table with semantic HTML and SkyTrack controls. Inspect the
+installed version's types/source before use; do not invent a generic `Table` import. Use
+`DataTable` when its supported API fits the task. Use semantic HTML `<table>`, `<thead>`, `<tbody>`,
+`<tr>`, `<th>`, and `<td>` for a local table pattern only when a requirement is outside that API,
+and compose supported SkyTrack controls around or inside it.
+
+Use the [`DataTable` demo](src/demos/data-table.demo.tsx) for search, column visibility, sorting,
+optional row selection, pagination, row actions, and token styling. For a custom semantic table,
+use the [Invoice table example](src/showcase/overview-style.tsx) for markup and token styling; the
+standalone [`table-pattern` demo](src/demos/table-pattern.demo.tsx) shows a denser records table
+composed with `Tabs`, `CheckboxRoot`, `Badge`, `Input`, and `Button`. Check that the chosen demo
+matches the installed package version before composing a table in a consumer app.
+
+Keep the reference's exact visible column labels and order, row content/density, filter labels,
+toolbar grouping, selection controls, and pagination. Put wide tables in a local `overflow-x-auto`
+wrapper. Use `border-border`, `bg-muted`, `text-muted-foreground`, and other semantic tokens;
+use `tabular-nums` for numeric values and the library's `Badge` for status values. Use `TabsList`
+with the variant that matches the reference (`filled` for a segmented group, `line` for underline
+tabs); do not select a variant by habit. Use `InlineEdit` or the relevant supported field control
+for editable cells. Keep semantic table markup even when the library provides its controls.
+
 ## 3. Install (consumer app)
 
 ```bash
@@ -40,7 +193,7 @@ npm install
 npm run pack:local        # build:lib + npm pack -> dist-lib-tarball/skytrack-ui-<version>.tgz
 
 # In the consuming app:
-npm install /abs/path/to/designs/components/skytrack-ui/dist-lib-tarball/skytrack-ui-0.1.4.tgz
+npm install /abs/path/to/designs/components/skytrack-ui/dist-lib-tarball/skytrack-ui-0.1.5.tgz
 ```
 
 Pin the exact tarball path you were given. `react` and `react-dom` are **peer dependencies**
@@ -77,12 +230,12 @@ import {
 } from 'skytrack-ui/tooltip'
 ```
 
-There are 38 subpaths, one per component: `accordion`, `alert-dialog`, `autocomplete`, `avatar`,
-`badge`, `button`, `checkbox`, `checkbox-group`, `collapsible`, `combobox`, `context-menu`, `dialog`,
-`drawer`, `field`, `fieldset`, `form`, `input`, `menu`, `menubar`, `meter`, `navigation-menu`,
-`number-field`, `otp-field`, `popover`, `preview-card`, `progress`, `radio`, `scroll-area`,
-`select`, `separator`, `slider`, `switch`, `tabs`, `toast`, `toggle`, `toggle-group`, `toolbar`,
-`tooltip`.
+There are 44 subpaths, one per component: `accordion`, `alert`, `alert-dialog`, `attachment`,
+`autocomplete`, `avatar`, `badge`, `breadcrumb`, `button`, `checkbox`, `checkbox-group`,
+`collapsible`, `combobox`, `context-menu`, `dialog`, `drawer`, `dropzone`, `field`, `fieldset`,
+`form`, `inline-edit`, `input`, `menu`, `menubar`, `meter`, `navigation-menu`, `number-field`,
+`otp-field`, `popover`, `preview-card`, `progress`, `radio`, `scroll-area`, `select`, `separator`,
+`sidebar`, `slider`, `switch`, `tabs`, `toast`, `toggle`, `toggle-group`, `toolbar`, `tooltip`.
 
 **Root aliases.** `createHandle` is exported by six components, so the root does **not** export
 that bare name. Use the stable aliases: `createAlertDialogHandle`, `createDialogHandle`,
@@ -133,6 +286,14 @@ Style with the semantic utilities that map to the CSS custom properties: `bg-bac
 the light and dark themes work. Use `success`, `warning`, and `info` for status meaning; use
 `favorite` for favorited or starred state, not for warnings.
 
+### Use shorthand for boolean data variants
+
+Write Tailwind's named data variant for boolean attributes: use `data-filled:` instead of
+`data-[filled]:`, and `group-data-filled/field:` instead of
+`group-data-[filled]/field:`. This avoids Tailwind's arbitrary-variant warning and keeps state
+selectors consistent. Keep bracket syntax when matching an attribute value, such as
+`data-[orientation=vertical]:` or `data-[side=left]:`.
+
 ### Dark mode is class-based
 
 Dark mode is wired as `@custom-variant dark (&:is(.dark *))`. Add `dark` to `<html>` (or any
@@ -177,6 +338,11 @@ resolve in your favour:
 <Button variant="outline" size="sm" className="w-full justify-start">Save</Button>
 <Input className="max-w-xs" />
 ```
+
+Base UI parts also accept `className` callbacks that receive the part state. Keep those callbacks
+working when composing defaults: pass them through `cn` without converting them to strings.
+`cn` evaluates callback classes with Base UI's state before merging. Do not write
+`className as string` to silence a type mismatch.
 
 Pass composition helpers (`className`, `style`) rather than forking a wrapper into a local
 component. Prefer shared components over copying wrappers into your app: the wrappers hold the
@@ -408,17 +574,53 @@ export function RenameDialog({ open, onOpenChange }: { open: boolean; onOpenChan
 }
 ```
 
-`FieldControl` reacts to `data-[filled]`, `data-[disabled]` and `data-[invalid]`, so borders,
+`FieldControl` reacts to `data-filled`, `data-disabled` and `data-invalid`, so borders,
 opacity and the destructive ring update automatically. Put `disabled` on `FieldRoot` to disable the
 whole field. Use `Input` instead for a standalone input with no label.
 
+### Labelled controls and validation messages
+
+When a UI control needs a visible label, description, or validation message, compose it inside the
+SkyTrack `Field` pattern. Use the styled exports from `skytrack-ui/field`: `FieldRoot`, `FieldLabel`,
+`FieldDescription`, `FieldItem`, `FieldError`, and `FieldValidity`. Follow `src/demos/field.demo.tsx`
+and the relevant control demo for exact nesting and supported props.
+
+Base UI's raw compound syntax is `<Field.Root>`, `<Field.Label>`, `<Field.Control>`,
+`<Field.Description>`, `<Field.Item>`, `<Field.Error>`, and `<Field.Validity>`. SkyTrack exports
+styled equivalents as named parts: `FieldRoot`, `FieldLabel`, `FieldControl`, `FieldDescription`,
+`FieldItem`, `FieldError`, and `FieldValidity`. Use these styled equivalents in product screens so
+the library's spacing, typography, and invalid-state styles apply. `FieldControl` wraps
+`Field.Control` for compatible basic controls. For Select,
+Combobox, Autocomplete, NumberField, and other compound controls, place their own verified control
+parts inside `FieldRoot`; do not replace a trigger/input with `FieldControl` or invent a composition.
+
+Use only needed parts: `FieldLabel` for the visible label, `FieldDescription` for helper text,
+`FieldError` for validation feedback, `FieldItem` for a grouped label/control row, and `FieldValidity`
+for custom validity details. Put `name`, validation props, and disabled state on `FieldRoot` as shown
+in the demo. Bare `FieldError` displays the active validation message. Do not hand-build a label/error
+wrapper when this field pattern fits.
+When a secondary label is visually subordinate to the main `FieldLabel`, use
+`className='text-xs sub-heading'` (or CSS `@apply text-xs sub-heading`). SkyTrack already defines
+`.sub-heading` in `src/index.css`; do not recreate its typography locally.
+
+### Shared control heights — inline with Button
+
+`Input`, `FieldControl`, `SelectTrigger`, `ComboboxInputGroup`, `ComboboxTriggerButton`,
+`AutocompleteInput`, `AutocompleteInputGroup`, `AutocompleteTriggerButton`, and `NumberFieldGroup`
+accept `size='xs' | 'sm' | 'default' | 'lg'`. Their outer control heights match text Button sizes:
+24px, 32px, 36px, and 40px. Pass the same size to `NumberFieldGroup` and `NumberFieldInput` so
+both the group and its input match Button. `NumberFieldInput` also accepts these sizes standalone.
+Its existing `compact` size remains available for 26px inputs.
+
 ### NumberField — sizes and inline inputs
 
-`NumberFieldInput` supports `size`: `default` | `compact` | `xs`.
+`NumberFieldInput` supports `size`: `xs` | `sm` | `default` | `lg` | `compact`.
 
-- `default`: standard 36px (`h-full` in `NumberFieldGroup`), left-aligned, text-sm.
+- `default`: standard 36px (`h-9`), left-aligned, text-sm.
+- `sm`: 32px (`h-8`), right-aligned, text-sm.
+- `lg`: 40px (`h-10`), right-aligned, text-sm.
 - `compact`: 26px (`h-[26px]`), right-aligned, text-xs, full width within its container.
-- `xs`: 24px (`h-6`), right-aligned, text-xs, full width within its container. Pairs with `Button` `size='icon-xs'`.
+- `xs`: 24px (`h-6`), right-aligned, text-xs, full width within its container. Pairs with `Button` `size='xs'`.
 
 ```tsx
 import { NumberField, NumberFieldInput } from 'skytrack-ui/number-field'
@@ -458,7 +660,7 @@ until `npm run pack:local` runs again. Consumer verification selects the tarball
 current `package.json` version, so older tarballs cannot be tested accidentally.
 
 **Upgrade workflow is versioned, and manual.** The tarball filename carries the version
-(`skytrack-ui-0.1.4.tgz`) and consumers pin the tarball path they were given. To ship a change:
+(`skytrack-ui-0.1.5.tgz`) and consumers pin the tarball path they were given. To ship a change:
 bump the version (`npm version`), `npm run pack:local`, then have each consumer install the _new_
 tarball path explicitly and re-run its type check and build. Never assume consumers pick up a new
 tarball automatically, and never run a broad dependency upgrade across a consumer's `package.json`.

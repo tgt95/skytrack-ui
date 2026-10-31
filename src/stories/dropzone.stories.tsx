@@ -27,7 +27,17 @@ export const Disabled: Story = {
   render: () => <VariantBlock name={"Disabled"}>{demo.variants[2].render()}</VariantBlock>,
 };
 
+export const UploadSuccessCenterToast: Story = {
+  name: "Upload success (center toast)",
+  render: () => <VariantBlock name={"Upload success (center toast)"}>{demo.variants[3].render()}</VariantBlock>,
+};
+
+export const UploadFailureFieldError: Story = {
+  name: "Upload failure (field error)",
+  render: () => <VariantBlock name={"Upload failure (field error)"}>{demo.variants[4].render()}</VariantBlock>,
+};
+
 export const SelectedFiles: Story = {
   name: "Selected files",
-  render: () => <VariantBlock name={"Selected files"}>{demo.variants[3].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Selected files"}>{demo.variants[5].render()}</VariantBlock>,
 };

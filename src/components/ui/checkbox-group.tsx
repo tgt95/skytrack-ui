@@ -6,10 +6,7 @@ function CheckboxGroup({ className, ...props }: React.ComponentProps<typeof Base
   return (
     <BaseCheckboxGroup
       data-slot='checkbox-group'
-      className={cn(
-        'flex flex-col items-start gap-2 text-sm text-foreground',
-        className as string
-      )}
+      className={cn('flex flex-col items-start gap-2 text-sm text-foreground', className)}
       {...props}
     />
   )

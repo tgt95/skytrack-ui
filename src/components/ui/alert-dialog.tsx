@@ -20,23 +20,12 @@ type AlertDialogChangeEventDetails = Parameters<
   NonNullable<React.ComponentProps<typeof BaseAlertDialog.Root>['onOpenChange']>
 >[1]
 
-function AlertDialogTrigger({
-  className,
-  ...props
-}: React.ComponentProps<typeof BaseAlertDialog.Trigger>) {
-  return (
-    <BaseAlertDialog.Trigger
-      data-slot='alert-dialog-trigger'
-      className={className}
-      {...props}
-    />
-  )
+function AlertDialogTrigger({ className, ...props }: React.ComponentProps<typeof BaseAlertDialog.Trigger>) {
+  return <BaseAlertDialog.Trigger data-slot='alert-dialog-trigger' className={className} {...props} />
 }
 
 function AlertDialogPortal({ className, ...props }: React.ComponentProps<typeof BaseAlertDialog.Portal>) {
-  return (
-    <BaseAlertDialog.Portal data-slot='alert-dialog-portal' className={cn('z-50', className as string)} {...props} />
-  )
+  return <BaseAlertDialog.Portal data-slot='alert-dialog-portal' className={cn('z-50', className)} {...props} />
 }
 
 function AlertDialogBackdrop({ className, ...props }: React.ComponentProps<typeof BaseAlertDialog.Backdrop>) {
@@ -46,8 +35,8 @@ function AlertDialogBackdrop({ className, ...props }: React.ComponentProps<typeo
       className={cn(
         'fixed inset-0 z-50 min-h-dvh bg-black/20 transition-opacity duration-150',
         'supports-[-webkit-touch-callout:none]:absolute',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[closed]:pointer-events-none',
-        className as string
+        'data-starting-style:opacity-0 data-ending-style:opacity-0 data-closed:pointer-events-none',
+        className
       )}
       {...props}
     />
@@ -63,7 +52,7 @@ function AlertDialogViewport({ className, ...props }: React.ComponentProps<typeo
   return (
     <BaseAlertDialog.Viewport
       data-slot='alert-dialog-viewport'
-      className={cn('fixed inset-0 z-50 overflow-y-auto overscroll-contain', className as string)}
+      className={cn('fixed inset-0 z-50 overflow-y-auto overscroll-contain', className)}
       {...props}
     />
   )
@@ -76,10 +65,10 @@ function AlertDialogPopup({ className, ...props }: React.ComponentProps<typeof B
       className={cn(
         'fixed top-1/2 left-1/2 z-50 flex w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-(--radius) border border-border bg-background p-6 text-foreground shadow-lg sm:max-w-lg',
         'transition-[scale,opacity] duration-100 ease-out',
-        'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
-        'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
+        'data-starting-style:scale-95 data-starting-style:opacity-0',
+        'data-ending-style:scale-95 data-ending-style:opacity-0',
         'motion-reduce:transition-none',
-        className as string
+        className
       )}
       {...props}
     />
@@ -101,20 +90,14 @@ function AlertDialogFooter({ className, ...props }: React.ComponentProps<'div'>)
 }
 
 function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof BaseAlertDialog.Title>) {
-  return (
-    <BaseAlertDialog.Title
-      data-slot='alert-dialog-title'
-      className={cn('h5', className as string)}
-      {...props}
-    />
-  )
+  return <BaseAlertDialog.Title data-slot='alert-dialog-title' className={cn('h5', className)} {...props} />
 }
 
 function AlertDialogDescription({ className, ...props }: React.ComponentProps<typeof BaseAlertDialog.Description>) {
   return (
     <BaseAlertDialog.Description
       data-slot='alert-dialog-description'
-      className={cn('text-sm text-muted-foreground', className as string)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   )
@@ -129,7 +112,7 @@ function AlertDialogClose({
   return (
     <BaseAlertDialog.Close
       data-slot='alert-dialog-close'
-      className={cn(buttonVariants({ variant: variant ?? 'outline', size }), className as string)}
+      className={cn(buttonVariants({ variant: variant ?? 'outline', size }), className)}
       {...props}
     />
   )

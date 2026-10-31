@@ -98,8 +98,7 @@ import {
   SelectPositioner,
   SelectTrigger,
   SelectValue,
-  SelectIcon,
-  SelectLabel
+  SelectIcon
 } from '@/components/ui/select'
 import { Slider, SliderControl, SliderIndicator, SliderThumb, SliderTrack } from '@/components/ui/slider'
 import { Switch, SwitchThumb } from '@/components/ui/switch'
@@ -1323,7 +1322,7 @@ export function OverviewStyle () {
             ].map((o) => (
               <label
                 key={o.v}
-                className='flex items-start gap-3 border border-border p-3 text-sm has-data-[checked]:border-primary'
+                className='flex items-start gap-3 border border-border p-3 text-sm has-data-checked:border-primary'
               >
                 <RadioRoot value={o.v} aria-label={o.t} className='mt-0.5' />
                 <span>

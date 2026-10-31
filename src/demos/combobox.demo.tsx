@@ -42,6 +42,7 @@ import {
   DialogPortal,
   DialogTitle
 } from '@/components/ui/dialog'
+import { FieldRoot, FieldLabel } from '@/components/ui/field'
 import type { DemoMeta } from '@/showcase/demo'
 
 /* ------------------------------------------------------------------ hero -- */
@@ -80,38 +81,35 @@ const fruits: Fruit[] = [
 ]
 
 function FruitCombobox() {
-  const id = React.useId()
   return (
-    <Combobox items={fruits}>
-      <div className='flex w-56 flex-col gap-1'>
-        <label htmlFor={id} className='text-sm leading-none font-medium'>
-          Choose a fruit
-        </label>
+    <FieldRoot className='flex w-56 flex-col gap-1'>
+      <FieldLabel className='leading-none'>Choose a fruit</FieldLabel>
+      <Combobox items={fruits}>
         <ComboboxInputGroup>
-          <ComboboxInput id={id} placeholder='e.g. Apple' />
+          <ComboboxInput placeholder='e.g. Apple' />
           <ComboboxClear aria-label='Clear selection' />
           <ComboboxTrigger aria-label='Open popup' />
         </ComboboxInputGroup>
-      </div>
 
-      <ComboboxPortal>
-        <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-          <ComboboxPopup>
-            <ComboboxEmpty>No fruits found.</ComboboxEmpty>
-            <ComboboxList>
-              {(item: Fruit) => (
-                <ComboboxItem key={item.value} value={item}>
-                  <ComboboxItemIndicator>
-                    <CheckIcon className='size-4' />
-                  </ComboboxItemIndicator>
-                  <span className='col-start-2'>{item.label}</span>
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxPopup>
-        </ComboboxPositioner>
-      </ComboboxPortal>
-    </Combobox>
+        <ComboboxPortal>
+          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+            <ComboboxPopup>
+              <ComboboxEmpty>No fruits found.</ComboboxEmpty>
+              <ComboboxList>
+                {(item: Fruit) => (
+                  <ComboboxItem key={item.value} value={item}>
+                    <ComboboxItemIndicator>
+                      <CheckIcon className='size-4' />
+                    </ComboboxItemIndicator>
+                    <span className='col-start-2'>{item.label}</span>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxPopup>
+          </ComboboxPositioner>
+        </ComboboxPortal>
+      </Combobox>
+    </FieldRoot>
   )
 }
 
@@ -150,27 +148,30 @@ const countries: Country[] = [
 
 function TypedWrapperCombobox() {
   return (
-    <MyCombobox<string> items={countries} defaultValue='france'>
-      <ComboboxTriggerButton className='w-56'>
-        <ComboboxValue />
-      </ComboboxTriggerButton>
-      <ComboboxPortal>
-        <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-          <ComboboxPopup>
-            <ComboboxList>
-              {(country: Country) => (
-                <ComboboxItem key={country.code} value={country.value}>
-                  <ComboboxItemIndicator>
-                    <CheckIcon className='size-4' />
-                  </ComboboxItemIndicator>
-                  <span className='col-start-2'>{country.label}</span>
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxPopup>
-        </ComboboxPositioner>
-      </ComboboxPortal>
-    </MyCombobox>
+    <FieldRoot className='w-fit'>
+      <MyCombobox<string> items={countries} defaultValue='france'>
+        <ComboboxLabel>Country</ComboboxLabel>
+        <ComboboxTriggerButton className='w-56'>
+          <ComboboxValue />
+        </ComboboxTriggerButton>
+        <ComboboxPortal>
+          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+            <ComboboxPopup>
+              <ComboboxList>
+                {(country: Country) => (
+                  <ComboboxItem key={country.code} value={country.value}>
+                    <ComboboxItemIndicator>
+                      <CheckIcon className='size-4' />
+                    </ComboboxItemIndicator>
+                    <span className='col-start-2'>{country.label}</span>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxPopup>
+          </ComboboxPositioner>
+        </ComboboxPortal>
+      </MyCombobox>
+    </FieldRoot>
   )
 }
 
@@ -236,40 +237,38 @@ const userItems = createComboboxItems(users, {
 })
 
 function IdValueCombobox() {
-  const id = React.useId()
   return (
-    <Combobox items={userItems} defaultValue='daniel-kim'>
-      <div className='flex w-64 flex-col gap-1'>
-        <label htmlFor={id} className='text-sm leading-none font-medium'>
-          Reviewer
-        </label>
+    <FieldRoot className='flex w-64 flex-col gap-1'>
+      <FieldLabel className='leading-none'>Reviewer</FieldLabel>
+      <Combobox items={userItems} defaultValue='daniel-kim'>
         <ComboboxInputGroup>
-          <ComboboxInput id={id} placeholder='e.g. Michael' />
+          <ComboboxInput placeholder='e.g. Michael' />
           <ComboboxClear aria-label='Clear selection' />
           <ComboboxTrigger aria-label='Open popup' />
         </ComboboxInputGroup>
-      </div>
-      <ComboboxPortal>
-        <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-          <ComboboxPopup>
-            <ComboboxEmpty>No people found.</ComboboxEmpty>
-            <ComboboxList>
-              {(user: DirectoryUser) => (
-                <ComboboxItem key={user.id} value={user.id}>
-                  <ComboboxItemIndicator>
-                    <CheckIcon className='size-4' />
-                  </ComboboxItemIndicator>
-                  <span className='col-start-2 flex flex-col'>
-                    <span className='font-medium'>{user.name}</span>
-                    <span className='text-xs text-muted-foreground'>{user.title}</span>
-                  </span>
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxPopup>
-        </ComboboxPositioner>
-      </ComboboxPortal>
-    </Combobox>
+
+        <ComboboxPortal>
+          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+            <ComboboxPopup>
+              <ComboboxEmpty>No people found.</ComboboxEmpty>
+              <ComboboxList>
+                {(user: DirectoryUser) => (
+                  <ComboboxItem key={user.id} value={user.id}>
+                    <ComboboxItemIndicator>
+                      <CheckIcon className='size-4' />
+                    </ComboboxItemIndicator>
+                    <span className='col-start-2 flex flex-col'>
+                      <span className='font-medium'>{user.name}</span>
+                      <span className='text-xs text-muted-foreground'>{user.title}</span>
+                    </span>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxPopup>
+          </ComboboxPositioner>
+        </ComboboxPortal>
+      </Combobox>
+    </FieldRoot>
   )
 }
 
@@ -295,13 +294,10 @@ const langs: ProgrammingLanguage[] = [
 ]
 
 function MultipleCombobox() {
-  const id = React.useId()
   return (
-    <Combobox<ProgrammingLanguage, true> items={langs} multiple>
-      <div className='flex w-80 max-w-full flex-col gap-1'>
-        <label htmlFor={id} className='text-sm leading-none font-medium'>
-          Programming languages
-        </label>
+    <FieldRoot className='flex w-80 max-w-full flex-col gap-1'>
+      <FieldLabel className='leading-none'>Programming languages</FieldLabel>
+      <Combobox<ProgrammingLanguage, true> items={langs} multiple>
         <ComboboxInputGroup shape='chips'>
           <ComboboxValue>
             {(value: ProgrammingLanguage[]) => (
@@ -312,31 +308,31 @@ function MultipleCombobox() {
                     <ComboboxChipRemove aria-label={`Remove ${language.value}`} />
                   </ComboboxChip>
                 ))}
-                <ComboboxInput id={id} placeholder={value.length > 0 ? '' : 'e.g. TypeScript'} />
+                <ComboboxInput placeholder={value.length > 0 ? '' : 'e.g. TypeScript'} />
               </ComboboxChips>
             )}
           </ComboboxValue>
         </ComboboxInputGroup>
-      </div>
 
-      <ComboboxPortal>
-        <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-          <ComboboxPopup>
-            <ComboboxEmpty>No languages found.</ComboboxEmpty>
-            <ComboboxList>
-              {(language: ProgrammingLanguage) => (
-                <ComboboxItem key={language.id} value={language}>
-                  <ComboboxItemIndicator>
-                    <CheckIcon className='size-4' />
-                  </ComboboxItemIndicator>
-                  <span className='col-start-2'>{language.value}</span>
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxPopup>
-        </ComboboxPositioner>
-      </ComboboxPortal>
-    </Combobox>
+        <ComboboxPortal>
+          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+            <ComboboxPopup>
+              <ComboboxEmpty>No languages found.</ComboboxEmpty>
+              <ComboboxList>
+                {(language: ProgrammingLanguage) => (
+                  <ComboboxItem key={language.id} value={language}>
+                    <ComboboxItemIndicator>
+                      <CheckIcon className='size-4' />
+                    </ComboboxItemIndicator>
+                    <span className='col-start-2'>{language.value}</span>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxPopup>
+          </ComboboxPositioner>
+        </ComboboxPortal>
+      </Combobox>
+    </FieldRoot>
   )
 }
 
@@ -344,7 +340,7 @@ function MultipleCombobox() {
 
 function PopupInputCombobox() {
   return (
-    <div className='flex flex-col items-start gap-1'>
+    <FieldRoot className='w-fit'>
       <Combobox items={countries}>
         <ComboboxLabel>Country</ComboboxLabel>
         <ComboboxTriggerButton className='w-48'>
@@ -355,6 +351,7 @@ function PopupInputCombobox() {
             <ComboboxPopup aria-label='Select country' className='min-w-72'>
               <ComboboxArrow className='absolute -top-2 left-1/2 -translate-x-1/2' />
               <ComboboxInput
+                aria-label='Search countries'
                 className='h-9 w-full min-w-72 rounded-none border-0 border-b border-border bg-transparent px-2 text-sm outline-hidden placeholder:text-muted-foreground'
                 placeholder='e.g. United Kingdom'
               />
@@ -373,7 +370,7 @@ function PopupInputCombobox() {
           </ComboboxPositioner>
         </ComboboxPortal>
       </Combobox>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -411,44 +408,42 @@ const groupedProduce: ProduceGroup[] = (['Fruits', 'Vegetables'] as const).map((
 }))
 
 function GroupedCombobox() {
-  const id = React.useId()
   return (
-    <Combobox items={groupedProduce}>
-      <div className='flex w-64 flex-col gap-1'>
-        <label htmlFor={id} className='text-sm leading-none font-medium'>
-          Select produce
-        </label>
+    <FieldRoot className='flex w-64 flex-col gap-1'>
+      <FieldLabel className='leading-none'>Select produce</FieldLabel>
+      <Combobox items={groupedProduce}>
         <ComboboxInputGroup>
-          <ComboboxInput id={id} placeholder='e.g. Mango' />
+          <ComboboxInput placeholder='e.g. Mango' />
           <ComboboxClear aria-label='Clear selection' />
           <ComboboxTrigger aria-label='Open popup' />
         </ComboboxInputGroup>
-      </div>
-      <ComboboxPortal>
-        <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-          <ComboboxPopup>
-            <ComboboxEmpty>No produce found.</ComboboxEmpty>
-            <ComboboxList>
-              {(group: ProduceGroup) => (
-                <ComboboxGroup key={group.value} items={group.items}>
-                  <ComboboxGroupLabel>{group.value}</ComboboxGroupLabel>
-                  <ComboboxCollection>
-                    {(item: Produce) => (
-                      <ComboboxItem key={item.id} value={item}>
-                        <ComboboxItemIndicator>
-                          <CheckIcon className='size-4' />
-                        </ComboboxItemIndicator>
-                        <span className='col-start-2'>{item.label}</span>
-                      </ComboboxItem>
-                    )}
-                  </ComboboxCollection>
-                </ComboboxGroup>
-              )}
-            </ComboboxList>
-          </ComboboxPopup>
-        </ComboboxPositioner>
-      </ComboboxPortal>
-    </Combobox>
+
+        <ComboboxPortal>
+          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+            <ComboboxPopup>
+              <ComboboxEmpty>No produce found.</ComboboxEmpty>
+              <ComboboxList>
+                {(group: ProduceGroup) => (
+                  <ComboboxGroup key={group.value} items={group.items}>
+                    <ComboboxGroupLabel>{group.value}</ComboboxGroupLabel>
+                    <ComboboxCollection>
+                      {(item: Produce) => (
+                        <ComboboxItem key={item.id} value={item}>
+                          <ComboboxItemIndicator>
+                            <CheckIcon className='size-4' />
+                          </ComboboxItemIndicator>
+                          <span className='col-start-2'>{item.label}</span>
+                        </ComboboxItem>
+                      )}
+                    </ComboboxCollection>
+                  </ComboboxGroup>
+                )}
+              </ComboboxList>
+            </ComboboxPopup>
+          </ComboboxPositioner>
+        </ComboboxPortal>
+      </Combobox>
+    </FieldRoot>
   )
 }
 
@@ -475,7 +470,6 @@ async function searchUsers(
 }
 
 function AsyncSingleCombobox() {
-  const id = React.useId()
   const [searchResults, setSearchResults] = React.useState<DirectoryUser[]>([])
   const [selectedValue, setSelectedValue] = React.useState<DirectoryUser | null>(null)
   const [searchValue, setSearchValue] = React.useState('')
@@ -514,98 +508,96 @@ function AsyncSingleCombobox() {
     trimmed === '' || isPending || searchResults.length > 0 || error ? null : 'Try a different search term.'
 
   return (
-    <Combobox
-      items={items}
-      itemToStringLabel={(user: DirectoryUser) => user.name}
-      isItemEqualToValue={(item, value) => item.id === value.id}
-      filter={null}
-      onOpenChangeComplete={(open) => {
-        if (!open && selectedValue) {
-          setSearchResults([selectedValue])
-        }
-      }}
-      onValueChange={(next: DirectoryUser | null) => {
-        setSelectedValue(next)
-        setSearchValue('')
-        setError(null)
-      }}
-      onInputValueChange={(next: string, { reason }) => {
-        setSearchValue(next)
-
-        if (next === '') {
-          setSearchResults([])
+    <FieldRoot className='flex w-80 max-w-full flex-col gap-1'>
+      <FieldLabel className='leading-none'>Assign reviewer</FieldLabel>
+      <Combobox
+        items={items}
+        itemToStringLabel={(user: DirectoryUser) => user.name}
+        isItemEqualToValue={(item, value) => item.id === value.id}
+        filter={null}
+        onOpenChangeComplete={(open) => {
+          if (!open && selectedValue) {
+            setSearchResults([selectedValue])
+          }
+        }}
+        onValueChange={(next: DirectoryUser | null) => {
+          setSelectedValue(next)
+          setSearchValue('')
           setError(null)
-          return
-        }
+        }}
+        onInputValueChange={(next: string, { reason }) => {
+          setSearchValue(next)
 
-        if (reason === 'item-press') {
-          return
-        }
-
-        const controller = new AbortController()
-        abortControllerRef.current?.abort()
-        abortControllerRef.current = controller
-
-        startTransition(async () => {
-          setError(null)
-          const result = await searchUsers(next, contains)
-          if (controller.signal.aborted) {
+          if (next === '') {
+            setSearchResults([])
+            setError(null)
             return
           }
-          startTransition(() => {
-            setSearchResults(result.users)
-            setError(result.error)
+
+          if (reason === 'item-press') {
+            return
+          }
+
+          const controller = new AbortController()
+          abortControllerRef.current?.abort()
+          abortControllerRef.current = controller
+
+          startTransition(async () => {
+            setError(null)
+            const result = await searchUsers(next, contains)
+            if (controller.signal.aborted) {
+              return
+            }
+            startTransition(() => {
+              setSearchResults(result.users)
+              setError(result.error)
+            })
           })
-        })
-      }}
-    >
-      <div className='flex w-80 max-w-full flex-col gap-1'>
-        <label htmlFor={id} className='text-sm leading-none font-medium'>
-          Assign reviewer
-        </label>
+        }}
+      >
         <ComboboxInputGroup>
-          <ComboboxInput id={id} placeholder='e.g. Michael' />
+          <ComboboxInput placeholder='e.g. Michael' />
           <ComboboxClear aria-label='Clear selection' />
           <ComboboxTrigger aria-label='Open popup' />
         </ComboboxInputGroup>
-      </div>
-      <ComboboxPortal>
-        <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-          <ComboboxPopup aria-busy={isPending || undefined}>
-            <ComboboxStatus>
-              {status ? (
-                <div className='flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground'>{status}</div>
-              ) : null}
-            </ComboboxStatus>
-            <ComboboxEmpty>{emptyMessage ? <div className='px-2 py-2'>{emptyMessage}</div> : null}</ComboboxEmpty>
-            <ComboboxList>
-              {(user: DirectoryUser) => (
-                <ComboboxItem key={user.id} value={user} className='items-start'>
-                  <ComboboxItemIndicator className='mt-1'>
-                    <CheckIcon className='size-4' />
-                  </ComboboxItemIndicator>
-                  <span className='col-start-2 flex flex-col'>
-                    <span className='font-medium'>{user.name}</span>
-                    <span className='text-xs text-muted-foreground'>{user.email}</span>
-                    <span className='flex flex-wrap gap-2 text-xs text-muted-foreground'>
-                      <span>@{user.username}</span>
-                      <span>{user.title}</span>
+
+        <ComboboxPortal>
+          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+            <ComboboxPopup aria-busy={isPending || undefined}>
+              <ComboboxStatus>
+                {status ? (
+                  <div className='flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground'>{status}</div>
+                ) : null}
+              </ComboboxStatus>
+              <ComboboxEmpty>{emptyMessage ? <div className='px-2 py-2'>{emptyMessage}</div> : null}</ComboboxEmpty>
+              <ComboboxList>
+                {(user: DirectoryUser) => (
+                  <ComboboxItem key={user.id} value={user} className='items-start'>
+                    <ComboboxItemIndicator className='mt-1'>
+                      <CheckIcon className='size-4' />
+                    </ComboboxItemIndicator>
+                    <span className='col-start-2 flex flex-col'>
+                      <span className='font-medium'>{user.name}</span>
+                      <span className='text-xs text-muted-foreground'>{user.email}</span>
+                      <span className='flex flex-wrap gap-2 text-xs text-muted-foreground'>
+                        <span>@{user.username}</span>
+                        <span>{user.title}</span>
+                      </span>
                     </span>
-                  </span>
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxPopup>
-        </ComboboxPositioner>
-      </ComboboxPortal>
-    </Combobox>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxPopup>
+          </ComboboxPositioner>
+        </ComboboxPortal>
+      </Combobox>
+    </FieldRoot>
   )
 }
 
 /* --------------------------------------------------------- async multiple -- */
 
 function AsyncMultipleCombobox() {
-  const id = React.useId()
   const [searchResults, setSearchResults] = React.useState<DirectoryUser[]>([])
   const [selectedValues, setSelectedValues] = React.useState<DirectoryUser[]>([])
   const [searchValue, setSearchValue] = React.useState('')
@@ -651,58 +643,56 @@ function AsyncMultipleCombobox() {
     trimmed === '' || isPending || searchResults.length > 0 || error ? null : 'Try a different search term.'
 
   return (
-    <Combobox
-      items={items}
-      itemToStringLabel={(user: DirectoryUser) => user.name}
-      isItemEqualToValue={(item, value) => item.id === value.id}
-      multiple
-      filter={null}
-      onOpenChangeComplete={(open) => {
-        if (!open) {
-          setSearchResults(selectedValuesRef.current)
-        }
-      }}
-      onValueChange={(next: DirectoryUser[]) => {
-        selectedValuesRef.current = next
-        setSelectedValues(next)
-        setSearchValue('')
-        setError(null)
-        setSearchResults(next.length === 0 ? [] : selectedValuesRef.current)
-      }}
-      onInputValueChange={(next: string, { reason }) => {
-        setSearchValue(next)
-
-        const controller = new AbortController()
-        abortControllerRef.current?.abort()
-        abortControllerRef.current = controller
-
-        if (next === '') {
-          setSearchResults(selectedValuesRef.current)
+    <FieldRoot className='flex w-80 max-w-full flex-col gap-1'>
+      <FieldLabel className='leading-none'>Assign reviewers</FieldLabel>
+      <Combobox
+        items={items}
+        itemToStringLabel={(user: DirectoryUser) => user.name}
+        isItemEqualToValue={(item, value) => item.id === value.id}
+        multiple
+        filter={null}
+        onOpenChangeComplete={(open) => {
+          if (!open) {
+            setSearchResults(selectedValuesRef.current)
+          }
+        }}
+        onValueChange={(next: DirectoryUser[]) => {
+          selectedValuesRef.current = next
+          setSelectedValues(next)
+          setSearchValue('')
           setError(null)
-          return
-        }
+          setSearchResults(next.length === 0 ? [] : selectedValuesRef.current)
+        }}
+        onInputValueChange={(next: string, { reason }) => {
+          setSearchValue(next)
 
-        if (reason === 'item-press') {
-          return
-        }
+          const controller = new AbortController()
+          abortControllerRef.current?.abort()
+          abortControllerRef.current = controller
 
-        startTransition(async () => {
-          setError(null)
-          const result = await searchUsers(next, contains)
-          if (controller.signal.aborted) {
+          if (next === '') {
+            setSearchResults(selectedValuesRef.current)
+            setError(null)
             return
           }
-          startTransition(() => {
-            setSearchResults(result.users)
-            setError(result.error)
+
+          if (reason === 'item-press') {
+            return
+          }
+
+          startTransition(async () => {
+            setError(null)
+            const result = await searchUsers(next, contains)
+            if (controller.signal.aborted) {
+              return
+            }
+            startTransition(() => {
+              setSearchResults(result.users)
+              setError(result.error)
+            })
           })
-        })
-      }}
-    >
-      <div className='flex w-80 max-w-full flex-col gap-1'>
-        <label htmlFor={id} className='text-sm leading-none font-medium'>
-          Assign reviewers
-        </label>
+        }}
+      >
         <ComboboxInputGroup shape='chips'>
           <ComboboxValue>
             {(value: DirectoryUser[]) => (
@@ -713,42 +703,43 @@ function AsyncMultipleCombobox() {
                     <ComboboxChipRemove aria-label={`Remove ${user.name}`} />
                   </ComboboxChip>
                 ))}
-                <ComboboxInput id={id} placeholder={value.length > 0 ? '' : 'e.g. Michael'} />
+                <ComboboxInput placeholder={value.length > 0 ? '' : 'e.g. Michael'} />
               </ComboboxChips>
             )}
           </ComboboxValue>
         </ComboboxInputGroup>
-      </div>
-      <ComboboxPortal>
-        <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-          <ComboboxPopup aria-busy={isPending || undefined}>
-            <ComboboxStatus>
-              {status ? (
-                <div className='flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground'>{status}</div>
-              ) : null}
-            </ComboboxStatus>
-            <ComboboxEmpty>{emptyMessage ? <div className='px-2 py-2'>{emptyMessage}</div> : null}</ComboboxEmpty>
-            <ComboboxList>
-              {(user: DirectoryUser) => (
-                <ComboboxItem key={user.id} value={user} className='items-start'>
-                  <ComboboxItemIndicator className='mt-1'>
-                    <CheckIcon className='size-4' />
-                  </ComboboxItemIndicator>
-                  <span className='col-start-2 flex flex-col'>
-                    <span className='font-medium'>{user.name}</span>
-                    <span className='text-xs text-muted-foreground'>{user.email}</span>
-                    <span className='flex flex-wrap gap-2 text-xs text-muted-foreground'>
-                      <span>@{user.username}</span>
-                      <span>{user.title}</span>
+
+        <ComboboxPortal>
+          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+            <ComboboxPopup aria-busy={isPending || undefined}>
+              <ComboboxStatus>
+                {status ? (
+                  <div className='flex items-center gap-2 px-2 py-1.5 text-sm text-muted-foreground'>{status}</div>
+                ) : null}
+              </ComboboxStatus>
+              <ComboboxEmpty>{emptyMessage ? <div className='px-2 py-2'>{emptyMessage}</div> : null}</ComboboxEmpty>
+              <ComboboxList>
+                {(user: DirectoryUser) => (
+                  <ComboboxItem key={user.id} value={user} className='items-start'>
+                    <ComboboxItemIndicator className='mt-1'>
+                      <CheckIcon className='size-4' />
+                    </ComboboxItemIndicator>
+                    <span className='col-start-2 flex flex-col'>
+                      <span className='font-medium'>{user.name}</span>
+                      <span className='text-xs text-muted-foreground'>{user.email}</span>
+                      <span className='flex flex-wrap gap-2 text-xs text-muted-foreground'>
+                        <span>@{user.username}</span>
+                        <span>{user.title}</span>
+                      </span>
                     </span>
-                  </span>
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxPopup>
-        </ComboboxPositioner>
-      </ComboboxPortal>
-    </Combobox>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxPopup>
+          </ComboboxPositioner>
+        </ComboboxPortal>
+      </Combobox>
+    </FieldRoot>
   )
 }
 
@@ -769,7 +760,6 @@ const initialLabels: LabelItem[] = [
 ]
 
 function CreatableCombobox() {
-  const id = React.useId()
   const [labels, setLabels] = React.useState<LabelItem[]>(initialLabels)
   const [selected, setSelected] = React.useState<LabelItem[]>([])
   const [query, setQuery] = React.useState('')
@@ -821,29 +811,27 @@ function CreatableCombobox() {
 
   return (
     <div className='flex w-80 max-w-full flex-col gap-2'>
-      <Combobox
-        items={itemsForView}
-        multiple
-        value={selected}
-        inputValue={query}
-        onInputValueChange={setQuery}
-        onValueChange={(next: LabelItem[]) => {
-          const creatableSelection = next.find(
-            (item) => item.creatable && !selected.some((current) => current.id === item.id)
-          )
-          if (creatableSelection?.creatable) {
-            setPendingCreate(creatableSelection.creatable)
-            setCreateName(creatableSelection.creatable)
-            return
-          }
-          setSelected(next.filter((i) => !i.creatable))
-          setQuery('')
-        }}
-      >
-        <div className='flex flex-col gap-1'>
-          <label htmlFor={id} className='text-sm leading-none font-medium'>
-            Labels
-          </label>
+      <FieldRoot className='flex flex-col gap-1'>
+        <FieldLabel className='leading-none'>Labels</FieldLabel>
+        <Combobox
+          items={itemsForView}
+          multiple
+          value={selected}
+          inputValue={query}
+          onInputValueChange={setQuery}
+          onValueChange={(next: LabelItem[]) => {
+            const creatableSelection = next.find(
+              (item) => item.creatable && !selected.some((current) => current.id === item.id)
+            )
+            if (creatableSelection?.creatable) {
+              setPendingCreate(creatableSelection.creatable)
+              setCreateName(creatableSelection.creatable)
+              return
+            }
+            setSelected(next.filter((i) => !i.creatable))
+            setQuery('')
+          }}
+        >
           <ComboboxInputGroup shape='chips'>
             <ComboboxValue>
               {(value: LabelItem[]) => (
@@ -855,7 +843,6 @@ function CreatableCombobox() {
                     </ComboboxChip>
                   ))}
                   <ComboboxInput
-                    id={id}
                     placeholder={value.length > 0 ? '' : 'e.g. bug'}
                     onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                       if (event.key === 'Enter' && pendingCreate === null) {
@@ -871,42 +858,42 @@ function CreatableCombobox() {
               )}
             </ComboboxValue>
           </ComboboxInputGroup>
-        </div>
 
-        <ComboboxPortal>
-          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-            <ComboboxPopup>
-              <ComboboxEmpty>No labels found.</ComboboxEmpty>
-              <ComboboxList>
-                {(item: LabelItem) =>
-                  item.creatable ? (
-                    <ComboboxItem
-                      key={item.id}
-                      value={item}
-                      onClick={() => {
-                        setPendingCreate(item.creatable ?? null)
-                        setCreateName(item.creatable ?? '')
-                      }}
-                    >
-                      <span className='col-start-1 flex items-center justify-center'>
-                        <PlusIcon className='size-4' />
-                      </span>
-                      <span className='col-start-2'>Create "{item.creatable}"</span>
-                    </ComboboxItem>
-                  ) : (
-                    <ComboboxItem key={item.id} value={item}>
-                      <ComboboxItemIndicator>
-                        <CheckIcon className='size-4' />
-                      </ComboboxItemIndicator>
-                      <span className='col-start-2'>{item.value}</span>
-                    </ComboboxItem>
-                  )
-                }
-              </ComboboxList>
-            </ComboboxPopup>
-          </ComboboxPositioner>
-        </ComboboxPortal>
-      </Combobox>
+          <ComboboxPortal>
+            <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+              <ComboboxPopup>
+                <ComboboxEmpty>No labels found.</ComboboxEmpty>
+                <ComboboxList>
+                  {(item: LabelItem) =>
+                    item.creatable ? (
+                      <ComboboxItem
+                        key={item.id}
+                        value={item}
+                        onClick={() => {
+                          setPendingCreate(item.creatable ?? null)
+                          setCreateName(item.creatable ?? '')
+                        }}
+                      >
+                        <span className='col-start-1 flex items-center justify-center'>
+                          <PlusIcon className='size-4' />
+                        </span>
+                        <span className='col-start-2'>Create "{item.creatable}"</span>
+                      </ComboboxItem>
+                    ) : (
+                      <ComboboxItem key={item.id} value={item}>
+                        <ComboboxItemIndicator>
+                          <CheckIcon className='size-4' />
+                        </ComboboxItemIndicator>
+                        <span className='col-start-2'>{item.value}</span>
+                      </ComboboxItem>
+                    )
+                  }
+                </ComboboxList>
+              </ComboboxPopup>
+            </ComboboxPositioner>
+          </ComboboxPortal>
+        </Combobox>
+      </FieldRoot>
 
       <Dialog
         open={pendingCreate !== null}
@@ -965,13 +952,10 @@ const ROW_HEIGHT = 32
 const OVERSCAN = 12
 
 function VirtualizedCombobox() {
-  const id = React.useId()
   const [open, setOpen] = React.useState(false)
   return (
-    <div className='flex w-64 flex-col gap-1'>
-      <label htmlFor={id} className='text-sm leading-none font-medium'>
-        Search 10,000 items
-      </label>
+    <FieldRoot className='flex w-64 flex-col gap-1'>
+      <FieldLabel className='leading-none'>Search 10,000 items</FieldLabel>
       <Combobox
         virtualized
         items={virtualizedItems}
@@ -980,7 +964,7 @@ function VirtualizedCombobox() {
         itemToStringLabel={(item: VirtualizedItem) => item.name}
       >
         <ComboboxInputGroup>
-          <ComboboxInput id={id} placeholder='e.g. Item 0042' />
+          <ComboboxInput placeholder='e.g. Item 0042' />
           <ComboboxClear aria-label='Clear selection' />
           <ComboboxTrigger aria-label='Open popup' />
         </ComboboxInputGroup>
@@ -995,7 +979,7 @@ function VirtualizedCombobox() {
           </ComboboxPositioner>
         </ComboboxPortal>
       </Combobox>
-    </div>
+    </FieldRoot>
   )
 }
 
@@ -1054,51 +1038,41 @@ function VirtualizedList() {
 
 /* ------------------------------------------------------------- variants -- */
 
+function SizedCombobox({ size }: { size: 'xs' | 'sm' | 'default' | 'lg' }) {
+  return (
+    <div className='flex items-center gap-2'>
+      <Button size={size}>{size}</Button>
+      <Combobox items={fruits}>
+        <ComboboxInputGroup size={size} className='w-48'>
+          <ComboboxInput aria-label={`${size} combobox`} placeholder={size} />
+          <ComboboxClear aria-label='Clear selection' />
+          <ComboboxTrigger aria-label='Open popup' />
+        </ComboboxInputGroup>
+        <ComboboxPortal>
+          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
+            <ComboboxPopup>
+              <ComboboxList>
+                {(item: Fruit) => (
+                  <ComboboxItem key={item.value} value={item}>
+                    <ComboboxItemIndicator />
+                    <span className='col-start-2'>{item.label}</span>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxPopup>
+          </ComboboxPositioner>
+        </ComboboxPortal>
+      </Combobox>
+    </div>
+  )
+}
+
 function SizesCombobox() {
   return (
     <>
-      <Combobox items={fruits}>
-        <ComboboxInputGroup size='sm' className='w-48'>
-          <ComboboxInput aria-label='Small' placeholder='Small' />
-          <ComboboxClear aria-label='Clear selection' />
-          <ComboboxTrigger aria-label='Open popup' />
-        </ComboboxInputGroup>
-        <ComboboxPortal>
-          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-            <ComboboxPopup>
-              <ComboboxList>
-                {(item: Fruit) => (
-                  <ComboboxItem key={item.value} value={item}>
-                    <ComboboxItemIndicator />
-                    <span className='col-start-2'>{item.label}</span>
-                  </ComboboxItem>
-                )}
-              </ComboboxList>
-            </ComboboxPopup>
-          </ComboboxPositioner>
-        </ComboboxPortal>
-      </Combobox>
-      <Combobox items={fruits}>
-        <ComboboxInputGroup className='w-48'>
-          <ComboboxInput aria-label='Default' placeholder='Default' />
-          <ComboboxClear aria-label='Clear selection' />
-          <ComboboxTrigger aria-label='Open popup' />
-        </ComboboxInputGroup>
-        <ComboboxPortal>
-          <ComboboxPositioner side='bottom' align='start' sideOffset={4}>
-            <ComboboxPopup>
-              <ComboboxList>
-                {(item: Fruit) => (
-                  <ComboboxItem key={item.value} value={item}>
-                    <ComboboxItemIndicator />
-                    <span className='col-start-2'>{item.label}</span>
-                  </ComboboxItem>
-                )}
-              </ComboboxList>
-            </ComboboxPopup>
-          </ComboboxPositioner>
-        </ComboboxPortal>
-      </Combobox>
+      {(['xs', 'sm', 'default', 'lg'] as const).map((size) => (
+        <SizedCombobox key={size} size={size} />
+      ))}
     </>
   )
 }

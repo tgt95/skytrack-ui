@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { CheckCircleIcon, CircleNotchIcon, FileIcon, ImageIcon, XIcon } from '@phosphor-icons/react'
 import {
   Attachment,
@@ -11,6 +11,17 @@ import {
   type AttachmentState
 } from '@/components/ui/attachment'
 import { Dropzone } from '@/components/ui/dropzone'
+import { FieldDescription, FieldError, FieldLabel, FieldRoot } from '@/components/ui/field'
+import {
+  ToastContent,
+  ToastDescription,
+  ToastPortal,
+  ToastProvider,
+  ToastRoot,
+  ToastTitle,
+  ToastViewport,
+  useToastManager
+} from '@/components/ui/toast'
 import type { DemoMeta } from '@/showcase/demo'
 
 export const demo: DemoMeta = {
@@ -39,10 +50,146 @@ export const demo: DemoMeta = {
       render: () => <Dropzone disabled className='w-full max-w-md' />
     },
     {
+      name: 'Upload success (center toast)',
+      render: () => <SuccessfulUploadDemo />
+    },
+    {
+      name: 'Upload failure (field error)',
+      render: () => <FailedUploadDemo />
+    },
+    {
       name: 'Selected files',
       render: () => <SelectedFilesDemo />
     }
   ]
+}
+
+function SuccessfulUploadDemo() {
+  return (
+    <ToastProvider>
+      <SuccessfulUploadField />
+      <CenteredToastList />
+    </ToastProvider>
+  )
+}
+
+function SuccessfulUploadField() {
+  const toastManager = useToastManager()
+  const labelId = useId()
+  const descriptionId = useId()
+  const sequence = useRef(0)
+  const [uploads, setUploads] = useState<Array<{ id: number; file: File }>>([])
+
+  return (
+    <FieldRoot className='w-full max-w-md'>
+      <FieldLabel id={labelId}>Upload files</FieldLabel>
+      <Dropzone
+        multiple
+        accept='image/*,.pdf'
+        hint='Choose images or PDF files, or drag them here.'
+        aria-labelledby={labelId}
+        aria-describedby={descriptionId}
+        onFilesSelected={(files) => {
+          const additions = files.map((file) => ({ id: ++sequence.current, file }))
+          setUploads((current) => [...current, ...additions])
+          const description =
+            files.length === 1
+              ? `${files[0].name} uploaded successfully.`
+              : `${files.length} files uploaded successfully.`
+          toastManager.add({ type: 'success', title: 'Upload complete', description })
+        }}
+      />
+      <FieldDescription id={descriptionId}>Demo upload completes as soon as files are selected.</FieldDescription>
+      {uploads.length > 0 && (
+        <div role='list' aria-label='Uploaded files' className='flex w-full flex-col gap-2'>
+          {uploads.map(({ id, file }) => (
+            <Attachment key={id} role='listitem' state='done' className='w-full'>
+              <AttachmentMedia>{file.type.startsWith('image/') ? <ImageIcon /> : <FileIcon />}</AttachmentMedia>
+              <AttachmentContent>
+                <AttachmentTitle>{file.name}</AttachmentTitle>
+                <AttachmentDescription>{formatFileSize(file.size)} · Uploaded</AttachmentDescription>
+              </AttachmentContent>
+              <AttachmentActions>
+                <CheckCircleIcon aria-label='Upload complete' className='size-4 text-success' />
+                <AttachmentAction
+                  aria-label={`Remove ${file.name}`}
+                  onClick={() => setUploads((current) => current.filter((upload) => upload.id !== id))}
+                >
+                  <XIcon />
+                </AttachmentAction>
+              </AttachmentActions>
+            </Attachment>
+          ))}
+        </div>
+      )}
+    </FieldRoot>
+  )
+}
+
+function CenteredToastList() {
+  const { toasts } = useToastManager()
+
+  return (
+    <ToastPortal>
+      <ToastViewport className='top-10 right-auto bottom-auto left-1/2 -translate-x-1/2'>
+        {toasts.map((toast) => (
+          <ToastRoot key={toast.id} toast={toast} className='top-0 right-0 bottom-auto left-0 mx-auto'>
+            <ToastContent>
+              <CheckCircleIcon aria-hidden='true' className='mt-0.5 size-5 shrink-0 text-success' />
+              <div className='grid min-w-0 flex-1 gap-1'>
+                <ToastTitle />
+                <ToastDescription />
+              </div>
+            </ToastContent>
+          </ToastRoot>
+        ))}
+      </ToastViewport>
+    </ToastPortal>
+  )
+}
+
+function FailedUploadDemo() {
+  const [error, setError] = useState<string | null>(null)
+  const labelId = useId()
+  const descriptionId = useId()
+  const errorId = useId()
+
+  return (
+    <FieldRoot className='w-full max-w-md' invalid={Boolean(error)}>
+      <FieldLabel id={labelId}>Upload an image or PDF</FieldLabel>
+      <Dropzone
+        multiple
+        accept='*/*'
+        hint='Drop a different file type or a file over 5 MB to see validation.'
+        aria-labelledby={labelId}
+        aria-describedby={error ? `${descriptionId} ${errorId}` : descriptionId}
+        onFilesSelected={(files) => {
+          const invalidFile = files.find((file) => {
+            const supported =
+              file.type.startsWith('image/') ||
+              file.type === 'application/pdf' ||
+              file.name.toLowerCase().endsWith('.pdf')
+            return !supported || file.size > 5 * 1024 * 1024
+          })
+
+          if (!invalidFile) {
+            setError(null)
+            return
+          }
+
+          setError(
+            invalidFile.size > 5 * 1024 * 1024
+              ? `${invalidFile.name} exceeds the 5 MB limit.`
+              : `${invalidFile.name} is not an image or PDF.`
+          )
+        }}
+      />
+      <FieldDescription id={descriptionId}>Accepted: images and PDF files up to 5 MB.</FieldDescription>
+      <FieldError id={errorId} match={Boolean(error)}>
+        {error}
+      </FieldError>
+    </FieldRoot>
+  )
 }
 
 function SelectedFilesDemo() {

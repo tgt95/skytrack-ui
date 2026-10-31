@@ -4,6 +4,7 @@ import { CaretDownIcon, CaretUpDownIcon, CheckIcon, XIcon } from '@phosphor-icon
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/components/ui/button'
+import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/components/ui/control-sizes'
 
 /** Props of the `Combobox` root, generic over value type, `multiple` mode and item type. */
 export type ComboboxRootProps<
@@ -22,7 +23,7 @@ function ComboboxLabel({ className, ...props }: React.ComponentProps<typeof Base
   return (
     <BaseCombobox.Label
       data-slot='combobox-label'
-      className={cn('cursor-default text-sm leading-none font-medium text-foreground', className as string)}
+      className={cn('cursor-default text-sm leading-none font-medium text-foreground', className)}
       {...props}
     />
   )
@@ -33,20 +34,27 @@ export const comboboxInputGroupVariants = cva(
     'relative flex w-full items-center gap-1 rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
     'has-[button]:px-1',
-    'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
-    'data-[invalid]:border-destructive data-[invalid]:ring-destructive/20'
+    'data-disabled:cursor-not-allowed data-disabled:opacity-50',
+    'data-invalid:border-destructive data-invalid:ring-destructive/20'
   ),
   {
     variants: {
       size: {
-        default: 'min-h-9 px-2 py-1',
-        sm: 'min-h-8 px-2 py-0.5 text-xs'
+        xs: 'min-h-6 px-2',
+        sm: 'min-h-8 px-2',
+        default: 'min-h-9 px-2',
+        lg: 'min-h-10 px-2'
       },
       shape: {
         input: '',
         chips: 'flex-wrap items-center'
       }
     },
+    compoundVariants: (['xs', 'sm', 'default', 'lg'] as const).map((size) => ({
+      size,
+      shape: 'input' as const,
+      class: CONTROL_SIZE_CLASSES[size]
+    })),
     defaultVariants: { size: 'default', shape: 'input' }
   }
 )
@@ -58,7 +66,8 @@ function ComboboxInputGroup({ className, size, shape, ...props }: ComboboxInputG
   return (
     <BaseCombobox.InputGroup
       data-slot='combobox-input-group'
-      className={cn(comboboxInputGroupVariants({ size, shape }), className as string)}
+      data-size={size ?? 'default'}
+      className={cn(comboboxInputGroupVariants({ size, shape }), className)}
       {...props}
     />
   )
@@ -71,7 +80,7 @@ function ComboboxInput({ className, ...props }: React.ComponentProps<typeof Base
       className={cn(
         'h-full min-w-0 flex-1 border-0 bg-transparent px-1 text-sm outline-hidden',
         'placeholder:text-muted-foreground',
-        className as string
+        className
       )}
       {...props}
     />
@@ -85,10 +94,10 @@ function ComboboxTrigger({ className, children, ...props }: React.ComponentProps
       className={cn(
         'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
-        'data-[pressed]:bg-accent data-[pressed]:text-accent-foreground',
-        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'data-pressed:bg-accent data-pressed:text-accent-foreground',
+        'data-disabled:pointer-events-none data-disabled:opacity-50',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     >
@@ -103,19 +112,20 @@ function ComboboxTriggerButton({
   size,
   children,
   ...props
-}: React.ComponentProps<typeof BaseCombobox.Trigger> & VariantProps<typeof comboboxInputGroupVariants>) {
+}: React.ComponentProps<typeof BaseCombobox.Trigger> & { size?: ControlSize }) {
   return (
     <BaseCombobox.Trigger
       data-slot='combobox-trigger-button'
+      data-size={size ?? 'default'}
       className={cn(
         'flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-(--radius) border border-input bg-background px-3 text-sm text-foreground shadow-xs transition-colors',
-        'data-[placeholder]:text-muted-foreground',
-        'hover:not-data-[disabled]:bg-accent hover:not-data-[disabled]:text-accent-foreground',
-        'data-[pressed]:bg-accent data-[pressed]:text-accent-foreground',
-        'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
-        size === 'sm' ? 'h-8 text-xs' : 'h-9',
+        'data-placeholder:text-muted-foreground',
+        'hover:not-data-disabled:bg-accent hover:not-data-disabled:text-accent-foreground',
+        'data-pressed:bg-accent data-pressed:text-accent-foreground',
+        'data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        CONTROL_SIZE_CLASSES[size ?? 'default'],
         focusRing,
-        className as string
+        className
       )}
       {...props}
     >
@@ -128,7 +138,7 @@ function ComboboxIcon({ className, children, ...props }: React.ComponentProps<ty
   return (
     <BaseCombobox.Icon
       data-slot='combobox-icon'
-      className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className as string)}
+      className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className)}
       {...props}
     >
       {children ?? <CaretUpDownIcon className='size-4' />}
@@ -143,9 +153,9 @@ function ComboboxClear({ className, children, ...props }: React.ComponentProps<t
       className={cn(
         'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
-        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'data-disabled:pointer-events-none data-disabled:opacity-50',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     >
@@ -163,7 +173,7 @@ function ComboboxChips({ className, ...props }: React.ComponentProps<typeof Base
   return (
     <BaseCombobox.Chips
       data-slot='combobox-chips'
-      className={cn('flex w-full flex-wrap items-center gap-1', className as string)}
+      className={cn('flex w-full flex-wrap items-center gap-1', className)}
       {...props}
     />
   )
@@ -175,9 +185,9 @@ function ComboboxChip({ className, ...props }: React.ComponentProps<typeof BaseC
       data-slot='combobox-chip'
       className={cn(
         'flex min-h-6 cursor-pointer items-center gap-1 overflow-hidden rounded-(--radius) bg-secondary py-0 pr-1 pl-1.5 text-sm leading-none text-secondary-foreground select-none',
-        'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground',
-        'data-[focused]:bg-accent data-[focused]:text-accent-foreground',
-        className as string
+        'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
+        'data-focused:bg-accent data-focused:text-accent-foreground',
+        className
       )}
       {...props}
     />
@@ -191,7 +201,7 @@ function ComboboxChipRemove({ className, children, ...props }: React.ComponentPr
       className={cn(
         'flex size-4 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-current transition-colors hover:bg-accent',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     >
@@ -201,7 +211,7 @@ function ComboboxChipRemove({ className, children, ...props }: React.ComponentPr
 }
 
 function ComboboxPortal({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Portal>) {
-  return <BaseCombobox.Portal data-slot='combobox-portal' className={cn(className as string)} {...props} />
+  return <BaseCombobox.Portal data-slot='combobox-portal' className={cn(className)} {...props} />
 }
 
 function ComboboxBackdrop({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Backdrop>) {
@@ -209,8 +219,8 @@ function ComboboxBackdrop({ className, ...props }: React.ComponentProps<typeof B
     <BaseCombobox.Backdrop
       data-slot='combobox-backdrop'
       className={cn(
-        'fixed inset-0 z-50 bg-black/20 transition-opacity data-[starting-style]:opacity-0 data-[ending-style]:opacity-0',
-        className as string
+        'fixed inset-0 z-50 bg-black/20 transition-opacity data-starting-style:opacity-0 data-ending-style:opacity-0',
+        className
       )}
       {...props}
     />
@@ -221,7 +231,7 @@ function ComboboxPositioner({ className, ...props }: React.ComponentProps<typeof
   return (
     <BaseCombobox.Positioner
       data-slot='combobox-positioner'
-      className={cn('z-50 outline-hidden', className as string)}
+      className={cn('z-50 outline-hidden', className)}
       {...props}
     />
   )
@@ -234,9 +244,9 @@ function ComboboxPopup({ className, ...props }: React.ComponentProps<typeof Base
       className={cn(
         'w-[var(--anchor-width)] max-w-[var(--available-width)] origin-[var(--transform-origin)] rounded-(--radius) border border-border bg-popover text-popover-foreground shadow-md',
         'transition-[transform,scale,opacity] duration-150 ease-out',
-        'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
-        'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
-        className as string
+        'data-starting-style:scale-95 data-starting-style:opacity-0',
+        'data-ending-style:scale-95 data-ending-style:opacity-0',
+        className
       )}
       {...props}
     />
@@ -247,7 +257,7 @@ function ComboboxArrow({ className, children, ...props }: React.ComponentProps<t
   return (
     <BaseCombobox.Arrow
       data-slot='combobox-arrow'
-      className={cn('flex size-4 items-center justify-center text-muted-foreground', className as string)}
+      className={cn('flex size-4 items-center justify-center text-muted-foreground', className)}
       {...props}
     >
       {children ?? <CaretDownIcon className='size-3 rotate-180' />}
@@ -256,16 +266,14 @@ function ComboboxArrow({ className, children, ...props }: React.ComponentProps<t
 }
 
 function ComboboxStatus({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Status>) {
-  return (
-    <BaseCombobox.Status data-slot='combobox-status' className={cn('empty:hidden', className as string)} {...props} />
-  )
+  return <BaseCombobox.Status data-slot='combobox-status' className={cn('empty:hidden', className)} {...props} />
 }
 
 function ComboboxEmpty({ className, children, ...props }: React.ComponentProps<typeof BaseCombobox.Empty>) {
   return (
     <BaseCombobox.Empty
       data-slot='combobox-empty'
-      className={cn('px-2 py-3 text-sm leading-none text-muted-foreground empty:hidden', className as string)}
+      className={cn('px-2 py-3 text-sm leading-none text-muted-foreground empty:hidden', className)}
       {...props}
     >
       {children === undefined ? 'No results found.' : children}
@@ -278,8 +286,8 @@ function ComboboxList({ className, ...props }: React.ComponentProps<typeof BaseC
     <BaseCombobox.List
       data-slot='combobox-list'
       className={cn(
-        'max-h-[min(22.5rem,var(--available-height))] scroll-py-1 overflow-y-auto overscroll-contain py-1 outline-hidden data-[empty]:p-0',
-        className as string
+        'max-h-[min(22.5rem,var(--available-height))] scroll-py-1 overflow-y-auto overscroll-contain py-1 outline-hidden data-empty:p-0',
+        className
       )}
       {...props}
     />
@@ -287,7 +295,7 @@ function ComboboxList({ className, ...props }: React.ComponentProps<typeof BaseC
 }
 
 function ComboboxRow({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Row>) {
-  return <BaseCombobox.Row data-slot='combobox-row' className={cn(className as string)} {...props} />
+  return <BaseCombobox.Row data-slot='combobox-row' className={cn(className)} {...props} />
 }
 
 function ComboboxItem({ className, children, ...props }: React.ComponentProps<typeof BaseCombobox.Item>) {
@@ -296,11 +304,11 @@ function ComboboxItem({ className, children, ...props }: React.ComponentProps<ty
       data-slot='combobox-item'
       className={cn(
         'relative grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 rounded-(--radius) px-2 py-1.5 text-sm select-none',
-        'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground',
-        'data-[selected]:font-medium',
-        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'data-highlighted:bg-accent data-highlighted:text-accent-foreground',
+        'data-selected:font-medium',
+        'data-disabled:pointer-events-none data-disabled:opacity-50',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     >
@@ -319,8 +327,8 @@ function ComboboxItemIndicator({
       data-slot='combobox-item-indicator'
       className={cn(
         'col-start-1 flex items-center justify-center',
-        'transition-transform data-[starting-style]:scale-50 data-[ending-style]:scale-50',
-        className as string
+        'transition-transform data-starting-style:scale-50 data-ending-style:scale-50',
+        className
       )}
       {...props}
     >
@@ -330,20 +338,14 @@ function ComboboxItemIndicator({
 }
 
 function ComboboxGroup({ className, ...props }: React.ComponentProps<typeof BaseCombobox.Group>) {
-  return (
-    <BaseCombobox.Group
-      data-slot='combobox-group'
-      className={cn('block pb-1 last:pb-0', className as string)}
-      {...props}
-    />
-  )
+  return <BaseCombobox.Group data-slot='combobox-group' className={cn('block pb-1 last:pb-0', className)} {...props} />
 }
 
 function ComboboxGroupLabel({ className, ...props }: React.ComponentProps<typeof BaseCombobox.GroupLabel>) {
   return (
     <BaseCombobox.GroupLabel
       data-slot='combobox-group-label'
-      className={cn('px-2 py-1.5 text-xs leading-5 font-medium text-muted-foreground select-none', className as string)}
+      className={cn('px-2 py-1.5 text-xs leading-5 font-medium text-muted-foreground select-none', className)}
       {...props}
     />
   )
@@ -353,7 +355,7 @@ function ComboboxSeparator({ className, ...props }: React.ComponentProps<typeof 
   return (
     <BaseCombobox.Separator
       data-slot='combobox-separator'
-      className={cn('-mx-1 my-1 h-px bg-border', className as string)}
+      className={cn('-mx-1 my-1 h-px bg-border', className)}
       {...props}
     />
   )

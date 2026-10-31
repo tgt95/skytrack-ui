@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { FieldRoot, FieldLabel } from '@/components/ui/field'
 import {
   NumberField,
   NumberFieldGroup,
@@ -14,21 +15,21 @@ import type { DemoMeta } from '@/showcase/demo'
 function BasicNumberField() {
   const id = useId()
   return (
-    <NumberField id={id} defaultValue={100}>
-      <NumberFieldScrubArea className='flex items-center gap-1'>
-        <label htmlFor={id} className='cursor-ew-resize text-sm font-medium'>
-          Amount
-        </label>
-        <NumberFieldScrubAreaCursor>
-          <ArrowsHorizontal />
-        </NumberFieldScrubAreaCursor>
-      </NumberFieldScrubArea>
-      <NumberFieldGroup>
-        <NumberFieldDecrement aria-label='Decrease amount' />
-        <NumberFieldInput aria-label='Amount' />
-        <NumberFieldIncrement aria-label='Increase amount' />
-      </NumberFieldGroup>
-    </NumberField>
+    <FieldRoot className='w-64'>
+      <NumberField id={id} defaultValue={100}>
+        <NumberFieldScrubArea className='flex items-center gap-1'>
+          <FieldLabel className='cursor-ew-resize'>Amount</FieldLabel>
+          <NumberFieldScrubAreaCursor>
+            <ArrowsHorizontal />
+          </NumberFieldScrubAreaCursor>
+        </NumberFieldScrubArea>
+        <NumberFieldGroup>
+          <NumberFieldDecrement aria-label='Decrease amount' />
+          <NumberFieldInput />
+          <NumberFieldIncrement aria-label='Increase amount' />
+        </NumberFieldGroup>
+      </NumberField>
+    </FieldRoot>
   )
 }
 
@@ -43,54 +44,66 @@ function ArrowsHorizontal() {
 function ControlledNumberField() {
   const [value, setValue] = useState<number | null>(5)
   return (
-    <div className='flex flex-col gap-2'>
+    <FieldRoot className='w-64 gap-2'>
       <NumberField value={value} onValueChange={(next) => setValue(next)} min={0} max={10}>
         <NumberFieldScrubArea className='flex items-center gap-1'>
-          <span className='text-sm font-medium'>Seats</span>
+          <FieldLabel>Seats</FieldLabel>
           <NumberFieldScrubAreaCursor>
             <ArrowsHorizontal />
           </NumberFieldScrubAreaCursor>
         </NumberFieldScrubArea>
         <NumberFieldGroup>
           <NumberFieldDecrement aria-label='Decrease seats' />
-          <NumberFieldInput aria-label='Seats' />
+          <NumberFieldInput />
           <NumberFieldIncrement aria-label='Increase seats' />
         </NumberFieldGroup>
       </NumberField>
       <p className='m-0 text-sm text-muted-foreground'>Controlled value: {value === null ? 'empty' : value}</p>
-    </div>
+    </FieldRoot>
   )
 }
 
 function SteppedNumberField() {
   const id = useId()
   return (
-    <NumberField id={id} defaultValue={400} min={100} max={900} step={100} largeStep={200}>
-      <label htmlFor={id} className='text-sm font-medium'>
-        Playback speed
-      </label>
-      <NumberFieldGroup>
-        <NumberFieldDecrement aria-label='Decrease playback speed' />
-        <NumberFieldInput aria-label='Playback speed' className='w-24 text-center' />
-        <NumberFieldIncrement aria-label='Increase playback speed' />
-      </NumberFieldGroup>
-    </NumberField>
-  )
-}
-
-function CompactNumberField() {
-  return (
-    <NumberField defaultValue={12.5} min={0} max={100} step={0.5} className='w-24'>
-      <NumberFieldInput size='compact' aria-label='Compact value' />
-    </NumberField>
+    <FieldRoot className='w-64'>
+      <NumberField id={id} defaultValue={400} min={100} max={900} step={100} largeStep={200}>
+        <FieldLabel>Playback speed</FieldLabel>
+        <NumberFieldGroup>
+          <NumberFieldDecrement aria-label='Decrease playback speed' />
+          <NumberFieldInput className='w-24 text-center' />
+          <NumberFieldIncrement aria-label='Increase playback speed' />
+        </NumberFieldGroup>
+      </NumberField>
+    </FieldRoot>
   )
 }
 
 function XsNumberField() {
   return (
-    <NumberField defaultValue={12.5} min={0} max={100} step={0.5} className='w-24'>
-      <NumberFieldInput size='xs' aria-label='Extra small value' />
-    </NumberField>
+    <div className='flex flex-col items-start gap-2'>
+      <span className='text-xs text-muted-foreground'>24px · xs</span>
+      <NumberField defaultValue={12.5} min={0} max={100} step={0.5} className='w-24'>
+        <NumberFieldInput size='xs' aria-label='XS value' />
+      </NumberField>
+    </div>
+  )
+}
+
+function ButtonAlignedNumberFields() {
+  return (
+    <>
+      {(['xs', 'sm', 'default', 'lg'] as const).map((size) => (
+        <div key={size} className='flex items-center gap-2'>
+          <Button size={size}>{size}</Button>
+          <NumberField defaultValue={12} min={0} max={100} className='w-20'>
+            <NumberFieldGroup size={size}>
+              <NumberFieldInput size={size} aria-label={`${size} number field`} />
+            </NumberFieldGroup>
+          </NumberField>
+        </div>
+      ))}
+    </>
   )
 }
 
@@ -103,16 +116,16 @@ function FormNumberField() {
         event.preventDefault()
       }}
     >
-      <NumberField id={id} name='amount' defaultValue={42} required>
-        <label htmlFor={id} className='text-sm font-medium'>
-          Amount
-        </label>
-        <NumberFieldGroup>
-          <NumberFieldDecrement aria-label='Decrease amount' />
-          <NumberFieldInput aria-label='Amount' />
-          <NumberFieldIncrement aria-label='Increase amount' />
-        </NumberFieldGroup>
-      </NumberField>
+      <FieldRoot className='w-64' name='amount'>
+        <NumberField id={id} defaultValue={42} required>
+          <FieldLabel>Amount</FieldLabel>
+          <NumberFieldGroup>
+            <NumberFieldDecrement aria-label='Decrease amount' />
+            <NumberFieldInput />
+            <NumberFieldIncrement aria-label='Increase amount' />
+          </NumberFieldGroup>
+        </NumberField>
+      </FieldRoot>
       <Button type='submit' variant='outline'>
         Submit
       </Button>
@@ -129,32 +142,36 @@ export const demo: DemoMeta = {
     { name: 'Demo', render: () => <BasicNumberField /> },
     { name: 'Controlled', render: () => <ControlledNumberField /> },
     { name: 'Min, max and step', render: () => <SteppedNumberField /> },
-    { name: 'Compact inline', render: () => <CompactNumberField /> },
     { name: 'XS inline', render: () => <XsNumberField /> },
+    { name: 'Button-aligned sizes', render: () => <ButtonAlignedNumberFields /> },
     {
       name: 'Disabled',
       render: () => (
-        <NumberField defaultValue={100} disabled>
-          <span className='text-sm font-medium'>Amount</span>
-          <NumberFieldGroup>
-            <NumberFieldDecrement aria-label='Decrease amount' />
-            <NumberFieldInput aria-label='Amount' />
-            <NumberFieldIncrement aria-label='Increase amount' />
-          </NumberFieldGroup>
-        </NumberField>
+        <FieldRoot className='w-64' disabled>
+          <NumberField defaultValue={100} disabled>
+            <FieldLabel>Amount</FieldLabel>
+            <NumberFieldGroup>
+              <NumberFieldDecrement aria-label='Decrease amount' />
+              <NumberFieldInput />
+              <NumberFieldIncrement aria-label='Increase amount' />
+            </NumberFieldGroup>
+          </NumberField>
+        </FieldRoot>
       )
     },
     {
       name: 'Read only',
       render: () => (
-        <NumberField defaultValue={100} readOnly>
-          <span className='text-sm font-medium'>Amount</span>
-          <NumberFieldGroup>
-            <NumberFieldDecrement aria-label='Decrease amount' />
-            <NumberFieldInput aria-label='Amount' />
-            <NumberFieldIncrement aria-label='Increase amount' />
-          </NumberFieldGroup>
-        </NumberField>
+        <FieldRoot className='w-64'>
+          <NumberField defaultValue={100} readOnly>
+            <FieldLabel>Amount</FieldLabel>
+            <NumberFieldGroup>
+              <NumberFieldDecrement aria-label='Decrease amount' />
+              <NumberFieldInput />
+              <NumberFieldIncrement aria-label='Increase amount' />
+            </NumberFieldGroup>
+          </NumberField>
+        </FieldRoot>
       )
     },
     { name: 'Form integration', render: () => <FormNumberField /> }

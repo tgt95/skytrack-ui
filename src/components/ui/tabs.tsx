@@ -8,13 +8,13 @@ type TabsRootProps = React.ComponentProps<typeof BaseTabs.Root>
 
 const TabsOrientationContext = React.createContext<'horizontal' | 'vertical'>('horizontal')
 
-function Tabs ({ className, orientation = 'horizontal', ...props }: TabsRootProps) {
+function Tabs({ className, orientation = 'horizontal', ...props }: TabsRootProps) {
   return (
     <TabsOrientationContext.Provider value={orientation}>
       <BaseTabs.Root
         data-slot='tabs'
         orientation={orientation}
-        className={cn('flex w-full flex-col gap-2', className as string)}
+        className={cn('flex w-full flex-col gap-2', className)}
         {...props}
       />
     </TabsOrientationContext.Provider>
@@ -61,7 +61,7 @@ type TabsListProps = React.ComponentProps<typeof BaseTabs.List> &
     size?: TabsSize
   }
 
-function TabsList ({
+function TabsList({
   children,
   className,
   indicatorClassName,
@@ -73,6 +73,7 @@ function TabsList ({
   ...props
 }: TabsListProps) {
   const resolvedVariant = variant ?? 'line'
+  const indicatorVariant = resolvedVariant === 'line' ? 'line' : 'pill'
   const orientation = React.useContext(TabsOrientationContext)
   const orientationClassName = orientation === 'vertical' ? 'h-auto self-start flex-col items-stretch' : undefined
   return (
@@ -85,17 +86,13 @@ function TabsList ({
             data-indicator-side={indicatorSide}
             data-orientation={orientation}
             data-size={size}
-            className={cn(
-              tabsListVariants({ variant: resolvedVariant, width, size }),
-              orientationClassName,
-              className as string
-            )}
+            className={cn(tabsListVariants({ variant: resolvedVariant, width, size }), orientationClassName, className)}
             {...props}
           >
             {children}
-            {resolvedVariant === 'line' && showIndicator && (
+            {showIndicator && (
               <TabsIndicator
-                data-variant='line'
+                variant={indicatorVariant}
                 data-side={indicatorSide}
                 className={indicatorClassName}
               />
@@ -113,16 +110,15 @@ const tabsTabVariants = cva(
   cn(
     'relative z-10 inline-flex h-full cursor-pointer flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-(--radius) font-medium transition-colors select-none',
     'hover:text-foreground',
-    'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+    'disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50',
     focusRing
   ),
   {
     variants: {
       variant: {
-        line: 'rounded-none data-[active]:text-primary',
-        filled:
-          'data-[active]:border data-[active]:border-border data-[active]:bg-background data-[active]:text-foreground',
-        pill: 'data-[active]:bg-secondary data-[active]:text-secondary-foreground dark:hover:bg-secondary/40 hover:bg-secondary/80'
+        line: 'rounded-none data-active:text-primary',
+        filled: 'data-active:border data-active:border-border data-active:bg-background data-active:text-foreground',
+        pill: 'data-active:bg-secondary data-active:text-secondary-foreground dark:hover:bg-secondary/40 hover:bg-secondary/80'
       },
       size: {
         xs: 'px-2 py-0.5 text-xs',
@@ -138,7 +134,7 @@ const tabsTabVariants = cva(
 
 export type TabsTabVariantProps = VariantProps<typeof tabsTabVariants>
 
-function TabsTab ({
+function TabsTab({
   className,
   style,
   variant,
@@ -153,6 +149,16 @@ function TabsTab ({
   const resolvedSize = size ?? listSize
   const verticalLine = resolvedVariant === 'line' && orientation === 'vertical'
   const verticalFilled = resolvedVariant === 'filled' && orientation === 'vertical'
+  const verticalStyle: React.CSSProperties | undefined = verticalLine
+    ? {
+        justifyContent: indicatorSide === 'right' ? 'flex-end' : 'flex-start',
+        textAlign: indicatorSide === 'right' ? 'right' : 'left'
+      }
+    : undefined
+  const mergedStyle =
+    typeof style === 'function'
+      ? (state: Parameters<typeof style>[0]) => ({ ...style(state), ...verticalStyle })
+      : { ...style, ...verticalStyle }
 
   return (
     <BaseTabs.Tab
@@ -163,17 +169,9 @@ function TabsTab ({
       className={cn(
         tabsTabVariants({ variant: resolvedVariant, size: resolvedSize }),
         verticalFilled && 'transition-[color,border-color]',
-        className as string
+        className
       )}
-      style={{
-        ...style,
-        ...(verticalLine
-          ? {
-              justifyContent: indicatorSide === 'right' ? 'flex-end' : 'flex-start',
-              textAlign: indicatorSide === 'right' ? 'right' : 'left'
-            }
-          : {})
-      }}
+      style={mergedStyle}
       {...props}
     />
   )
@@ -197,7 +195,7 @@ const tabsIndicatorVariants = cva(
 
 export type TabsIndicatorVariantProps = VariantProps<typeof tabsIndicatorVariants>
 
-function TabsIndicator ({
+function TabsIndicator({
   className,
   variant,
   ...props
@@ -206,7 +204,7 @@ function TabsIndicator ({
     <BaseTabs.Indicator
       data-slot='tabs-indicator'
       data-variant={variant ?? 'line'}
-      className={cn(tabsIndicatorVariants({ variant }), className as string)}
+      className={cn(tabsIndicatorVariants({ variant }), className)}
       {...props}
     />
   )
@@ -214,15 +212,15 @@ function TabsIndicator ({
 
 /* ----------------------------------------------------------------- Panel */
 
-function TabsPanel ({ className, ...props }: React.ComponentProps<typeof BaseTabs.Panel>) {
+function TabsPanel({ className, ...props }: React.ComponentProps<typeof BaseTabs.Panel>) {
   return (
     <BaseTabs.Panel
       data-slot='tabs-panel'
       className={cn(
         'flex-1 outline-none',
-        'transition-opacity duration-150 ease-out data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 motion-reduce:transition-none',
+        'transition-opacity duration-150 ease-out data-starting-style:opacity-0 data-ending-style:opacity-0 motion-reduce:transition-none',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     />

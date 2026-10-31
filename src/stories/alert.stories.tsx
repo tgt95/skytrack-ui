@@ -21,3 +21,8 @@ export const WithAction: Story = {
   name: "With action",
   render: () => <VariantBlock name={"With action"}>{demo.variants[1].render()}</VariantBlock>,
 };
+
+export const ActionBelowDescription: Story = {
+  name: "Action below description",
+  render: () => <VariantBlock name={"Action below description"}>{demo.variants[2].render()}</VariantBlock>,
+};

@@ -47,10 +47,10 @@ function Dropzone({
       data-disabled={disabled ? '' : undefined}
       aria-describedby={hintId}
       className={cn(
-        'flex min-h-40 flex-col items-center justify-center gap-3 border border-dashed border-border bg-muted/30 p-6 text-center transition-colors',
-        'data-[dragging]:border-primary data-[dragging]:bg-primary/5',
-        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-        className as string
+        'flex min-h-40 flex-col items-center justify-center gap-3 rounded-(--radius) border border-dashed border-border bg-muted/30 p-6 text-center transition-colors hover:border-primary',
+        'data-dragging:border-primary data-dragging:bg-primary/5',
+        'data-disabled:pointer-events-none data-disabled:opacity-50',
+        className
       )}
       onDragEnter={(event) => {
         event.preventDefault()

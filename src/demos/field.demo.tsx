@@ -9,6 +9,9 @@ import {
   FieldItem,
   FieldGroup
 } from '@/components/ui/field'
+import { CheckboxRoot } from '@/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import type { DemoMeta } from '@/showcase/demo'
 
@@ -44,12 +47,17 @@ export const demo: DemoMeta = {
     {
       name: 'Default',
       render: () => (
-        <FieldRoot className='w-64'>
-          <FieldLabel>Name</FieldLabel>
-          <FieldControl required placeholder='Required' />
-          <FieldError match='valueMissing'>Please enter your name</FieldError>
-          <FieldDescription>Visible on your profile</FieldDescription>
-        </FieldRoot>
+        <Form className='w-64' onSubmit={(event) => event.preventDefault()}>
+          <FieldRoot name='name'>
+            <FieldLabel className={(state) => (state.valid === false ? 'text-destructive' : undefined)}>
+              Name
+            </FieldLabel>
+            <FieldControl required placeholder='Required' />
+            <FieldError match='valueMissing'>Please enter your name</FieldError>
+            <FieldDescription>Visible on your profile</FieldDescription>
+          </FieldRoot>
+          <Button type='submit'>Submit</Button>
+        </Form>
       )
     },
     {
@@ -59,16 +67,19 @@ export const demo: DemoMeta = {
     {
       name: 'Validity',
       render: () => (
-        <FieldRoot name='age' className='w-64'>
+        <FieldRoot name='age' className='w-64' validationMode='onChange'>
           <FieldLabel>Age</FieldLabel>
-          <FieldControl type='number' placeholder='Enter age' />
+          <FieldControl type='number' required min={0} max={120} placeholder='Enter age' />
           <FieldValidity>
             {(state) => {
               if (state.validity.valueMissing) {
                 return <span className='text-muted-foreground'>An age is required.</span>
               }
               if (state.validity.rangeOverflow) {
-                return <span className='text-muted-foreground'>Pick a smaller number.</span>
+                return <span className='text-destructive'>Pick an age below 120.</span>
+              }
+              if (state.validity.rangeUnderflow) {
+                return <span className='text-destructive'>Age must be 0 or higher.</span>
               }
               if (state.errors.length > 0) {
                 return <span className='text-destructive'>{state.errors.join(', ')}</span>
@@ -93,11 +104,12 @@ export const demo: DemoMeta = {
       name: 'Field.Item',
       render: () => (
         <FieldGroup className='w-64'>
-          <FieldRoot>
+          <FieldRoot name='contactUpdates'>
             <FieldItem>
-              <FieldLabel>Contact</FieldLabel>
-              <FieldControl placeholder='you@example.com' />
-              <span className='text-sm text-muted-foreground'>@skytrack.io</span>
+              <FieldLabel className='flex items-center gap-2 font-normal'>
+                <CheckboxRoot value='email' />
+                Email me product updates
+              </FieldLabel>
             </FieldItem>
           </FieldRoot>
         </FieldGroup>

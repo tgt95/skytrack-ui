@@ -64,7 +64,7 @@ function DefaultToolbar() {
           render={<Toggle />}
           value='bold'
           aria-label='Bold'
-          className='border-0 text-base font-semibold data-[pressed]:bg-accent data-[pressed]:text-accent-foreground'
+          className='border-0 text-base font-semibold data-pressed:bg-accent data-pressed:text-accent-foreground'
         >
           B
         </ToolbarButton>
@@ -72,7 +72,7 @@ function DefaultToolbar() {
           render={<Toggle />}
           value='italic'
           aria-label='Italic'
-          className='border-0 text-base italic data-[pressed]:bg-accent data-[pressed]:text-accent-foreground'
+          className='border-0 text-base italic data-pressed:bg-accent data-pressed:text-accent-foreground'
         >
           I
         </ToolbarButton>

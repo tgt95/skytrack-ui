@@ -20,17 +20,11 @@ type PopoverChangeEventDetails = Parameters<
 >[1]
 
 function PopoverTrigger({ className, ...props }: React.ComponentProps<typeof BasePopover.Trigger>) {
-  return (
-    <BasePopover.Trigger
-      data-slot='popover-trigger'
-      className={className}
-      {...props}
-    />
-  )
+  return <BasePopover.Trigger data-slot='popover-trigger' className={className} {...props} />
 }
 
 function PopoverPortal({ className, ...props }: React.ComponentProps<typeof BasePopover.Portal>) {
-  return <BasePopover.Portal data-slot='popover-portal' className={cn('z-50', className as string)} {...props} />
+  return <BasePopover.Portal data-slot='popover-portal' className={cn('z-50', className)} {...props} />
 }
 
 function PopoverBackdrop({ className, ...props }: React.ComponentProps<typeof BasePopover.Backdrop>) {
@@ -39,8 +33,8 @@ function PopoverBackdrop({ className, ...props }: React.ComponentProps<typeof Ba
       data-slot='popover-backdrop'
       className={cn(
         'fixed inset-0 z-50 bg-black/20 transition-opacity duration-150',
-        'data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[closed]:pointer-events-none',
-        className as string
+        'data-starting-style:opacity-0 data-ending-style:opacity-0 data-closed:pointer-events-none',
+        className
       )}
       {...props}
     />
@@ -53,7 +47,7 @@ function PopoverPositioner({ className, ...props }: React.ComponentProps<typeof 
       data-slot='popover-positioner'
       className={cn(
         'z-50 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)]',
-        className as string
+        className
       )}
       {...props}
     />
@@ -67,10 +61,10 @@ function PopoverPopup({ className, ...props }: React.ComponentProps<typeof BaseP
       className={cn(
         'relative z-50 flex w-[var(--popup-width,auto)] max-w-80 origin-[var(--transform-origin)] flex-col gap-1 rounded-(--radius) border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none',
         'transition-[scale,opacity] duration-100 ease-out',
-        'data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
-        'data-[ending-style]:scale-95 data-[ending-style]:opacity-0',
-        'data-[instant]:transition-none',
-        className as string
+        'data-starting-style:scale-95 data-starting-style:opacity-0',
+        'data-ending-style:scale-95 data-ending-style:opacity-0',
+        'data-instant:transition-none',
+        className
       )}
       {...props}
     />
@@ -108,7 +102,7 @@ function PopoverArrow({ className, children, ...props }: React.ComponentProps<ty
         'data-[side=bottom]:top-[-9px]',
         'data-[side=left]:right-[-14px] data-[side=left]:rotate-90',
         'data-[side=right]:left-[-14px] data-[side=right]:-rotate-90',
-        className as string
+        className
       )}
       {...props}
     >
@@ -121,7 +115,7 @@ function PopoverTitle({ className, ...props }: React.ComponentProps<typeof BaseP
   return (
     <BasePopover.Title
       data-slot='popover-title'
-      className={cn('text-lg heading font-medium text-popover-foreground', className as string)}
+      className={cn('text-lg heading font-medium text-popover-foreground', className)}
       {...props}
     />
   )
@@ -131,7 +125,7 @@ function PopoverDescription({ className, ...props }: React.ComponentProps<typeof
   return (
     <BasePopover.Description
       data-slot='popover-description'
-      className={cn('text-sm text-muted-foreground', className as string)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   )
@@ -144,9 +138,9 @@ function PopoverClose({ className, ...props }: React.ComponentProps<typeof BaseP
       className={cn(
         'absolute top-2 right-2 inline-flex size-6 cursor-pointer items-center justify-center rounded-(--radius) text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
-        'disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50',
         focusRing,
-        className as string
+        className
       )}
       {...props}
     />
@@ -157,7 +151,7 @@ function PopoverViewport({ className, ...props }: React.ComponentProps<typeof Ba
   return (
     <BasePopover.Viewport
       data-slot='popover-viewport'
-      className={cn('relative h-full w-full overflow-clip', className as string)}
+      className={cn('relative h-full w-full overflow-clip', className)}
       {...props}
     />
   )

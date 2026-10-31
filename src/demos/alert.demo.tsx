@@ -1,9 +1,4 @@
-import {
-  CheckCircleIcon,
-  InfoIcon,
-  WarningCircleIcon,
-  WarningIcon
-} from '@phosphor-icons/react'
+import { CheckCircleIcon, InfoIcon, WarningCircleIcon, WarningIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertAction, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import type { DemoMeta } from '@/showcase/demo'
@@ -70,6 +65,23 @@ export const demo: DemoMeta = {
               Settings
             </Button>
           </AlertAction>
+        </Alert>
+      )
+    },
+    {
+      name: 'Action below description',
+      render: () => (
+        <Alert variant='info' className='max-w-xl'>
+          <InfoIcon className='size-5 shrink-0' aria-hidden='true' />
+          <div className='grid min-w-0 flex-1 gap-1'>
+            <AlertTitle>Dark mode is available</AlertTitle>
+            <AlertDescription>Choose your preferred appearance in workspace settings.</AlertDescription>
+            <AlertAction className='ml-0 mt-2 self-start'>
+              <Button variant='outline' size='sm'>
+                Settings
+              </Button>
+            </AlertAction>
+          </div>
         </Alert>
       )
     }

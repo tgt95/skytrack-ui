@@ -23,6 +23,8 @@ export const badgeVariants = cva('uppercase tracking-wide', {
 
 export type BadgeProps = React.ComponentProps<'span'> &
   VariantProps<typeof badgeVariants> & {
+    /** Visual variant alias for standalone badges. */
+    variant?: 'default' | 'outline'
     /** Count rendered inside the pill. Omit it when using `dot`. */
     count?: React.ReactNode
     /** A numeric count above this renders as `{maxCount}+`. Default 99. */
@@ -52,6 +54,7 @@ function formatCount(count: React.ReactNode, maxCount: number): React.ReactNode 
 function Badge({
   className,
   status,
+  variant,
   size,
   count,
   maxCount = 99,
@@ -61,9 +64,10 @@ function Badge({
   children,
   ...props
 }: BadgeProps) {
-  const value = formatCount(count, maxCount)
+  const standaloneVariant = variant !== undefined && count == null
+  const value = formatCount(count ?? (standaloneVariant ? children : undefined), maxCount)
   const visible = dot || (value != null && (showZero || value !== 0))
-  if (!visible) return <>{children}</> // no badge: render the anchor alone, zero DOM change
+  if (!visible) return standaloneVariant ? null : <>{children}</> // no badge: render the anchor alone, zero DOM change
   const pill = (
     <span
       data-slot='badge-count'
@@ -72,18 +76,16 @@ function Badge({
         // Dot keeps the status color but drops the size variant so `size-1.5` wins.
         dot
           ? cn('size-1.5 p-0 rounded-full', badgeVariants({ status, size: null }))
-          : cn('', badgeVariants({ status, size })),
-        className as string
+          : cn('', badgeVariants({ status: variant === 'outline' ? 'outline' : status, size })),
+        className
       )}
       {...props}
     >
       {dot ? null : value}
-      {animationPing ? (
-        <span aria-hidden className='absolute inset-0 animate-ping bg-primary/40' />
-      ) : null}
+      {animationPing ? <span aria-hidden className='absolute inset-0 animate-ping bg-primary/40' /> : null}
     </span>
   )
-  if (children == null) return pill // standalone: inline pill, NOT absolute
+  if (children == null || standaloneVariant) return pill // standalone: inline pill, NOT absolute
   return (
     // anchored: supra top-end, RTL-safe logical props
     <span data-slot='badge' className='relative inline-flex shrink-0'>

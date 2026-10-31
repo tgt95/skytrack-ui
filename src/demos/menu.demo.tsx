@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { DotsThreeIcon, PencilSimpleIcon, TrashIcon } from '@phosphor-icons/react'
+import { CopyIcon, DotsThreeIcon, PencilSimpleIcon, PlayIcon, QueueIcon, TrashIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import {
   Menu,
@@ -20,7 +20,7 @@ import {
   MenuShortcut,
   MenuSubmenuRoot,
   MenuSubmenuTrigger,
-  MenuTrigger,
+  MenuTrigger as BaseMenuTrigger,
   MenuViewport,
   createMenuHandle
 } from '@/components/ui/menu'
@@ -37,6 +37,10 @@ import {
 } from '@/components/ui/dialog'
 import type { DemoMeta } from '@/showcase/demo'
 import { cn } from '@/lib/utils'
+
+function MenuTrigger<Payload = unknown>(props: React.ComponentProps<typeof BaseMenuTrigger<Payload>>) {
+  return <BaseMenuTrigger<Payload> {...props} render={props.render ?? <Button variant='outline' />} />
+}
 
 /* ------------------------------------------------- shared demo scaffolding */
 
@@ -245,9 +249,9 @@ function AnimatingMenu() {
             <MenuPositioner
               sideOffset={8}
               align='start'
-              className='h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)] transition-[top,left,right,bottom] duration-300 ease-out data-[instant]:transition-none'
+              className='h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)] transition-[top,left,right,bottom] duration-300 ease-out data-instant:transition-none'
             >
-              <MenuPopup className='h-[var(--popup-height,auto)] w-[var(--popup-width,auto)] transition-[width,height] duration-300 ease-out data-[instant]:transition-none'>
+              <MenuPopup className='h-[var(--popup-height,auto)] w-[var(--popup-width,auto)] transition-[width,height] duration-300 ease-out data-instant:transition-none'>
                 <MenuViewport
                   className={cn(
                     'relative h-full w-full overflow-hidden',
@@ -301,10 +305,16 @@ export const demo: DemoMeta = {
                   <PencilSimpleIcon /> Edit
                   <MenuShortcut>⌘E</MenuShortcut>
                 </MenuItem>
-                <MenuItem>Duplicate</MenuItem>
+                <MenuItem>
+                  <CopyIcon /> Duplicate
+                </MenuItem>
                 <MenuSeparator />
-                <MenuItem>Play Next</MenuItem>
-                <MenuItem>Play Last</MenuItem>
+                <MenuItem>
+                  <PlayIcon /> Play Next
+                </MenuItem>
+                <MenuItem>
+                  <QueueIcon /> Play Last
+                </MenuItem>
                 <MenuSeparator />
                 <MenuItem variant='destructive'>
                   <TrashIcon /> Delete
@@ -347,7 +357,9 @@ export const demo: DemoMeta = {
                 Show status bar
               </MenuCheckboxItem>
               <MenuCheckboxItem inset>Show minimap</MenuCheckboxItem>
-              <MenuCheckboxItem disabled inset>Show word wrap (locked)</MenuCheckboxItem>
+              <MenuCheckboxItem disabled inset>
+                Show word wrap (locked)
+              </MenuCheckboxItem>
             </MenuGroup>
             <MenuSeparator />
             <MenuCheckboxItem closeOnClick inset>

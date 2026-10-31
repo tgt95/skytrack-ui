@@ -21,6 +21,7 @@ import {
   type SelectRootProps
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { FieldRoot } from '@/components/ui/field'
 import type { DemoMeta } from '@/showcase/demo'
 
 interface Apple {
@@ -36,31 +37,41 @@ const apples: Apple[] = [
   { label: 'Pink Lady', value: 'pink-lady' }
 ]
 
-function AppleSelect({ size, disabled }: { size?: 'sm' | 'default'; disabled?: boolean }) {
+function AppleSelect({
+  size,
+  disabled,
+  hideLabel = false
+}: {
+  size?: 'xs' | 'sm' | 'default' | 'lg'
+  disabled?: boolean
+  hideLabel?: boolean
+}) {
   return (
-    <Select items={apples} disabled={disabled}>
-      <SelectLabel>Apple</SelectLabel>
-      <SelectTrigger size={size} className='w-48'>
-        <SelectValue placeholder='Select apple' />
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectPortal>
-        <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
-          <SelectPopup>
-            <SelectScrollUpArrow />
-            <SelectList>
-              {apples.map((apple) => (
-                <SelectItem key={apple.value} value={apple.value}>
-                  <SelectItemIndicator />
-                  <SelectItemText>{apple.label}</SelectItemText>
-                </SelectItem>
-              ))}
-            </SelectList>
-            <SelectScrollDownArrow />
-          </SelectPopup>
-        </SelectPositioner>
-      </SelectPortal>
-    </Select>
+    <FieldRoot className='w-fit'>
+      <Select items={apples} disabled={disabled}>
+        <SelectLabel className={hideLabel ? 'sr-only' : undefined}>Apple</SelectLabel>
+        <SelectTrigger size={size} className='w-48'>
+          <SelectValue placeholder='Select apple' />
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
+            <SelectPopup>
+              <SelectScrollUpArrow />
+              <SelectList>
+                {apples.map((apple) => (
+                  <SelectItem key={apple.value} value={apple.value}>
+                    <SelectItemIndicator />
+                    <SelectItemText>{apple.label}</SelectItemText>
+                  </SelectItem>
+                ))}
+              </SelectList>
+              <SelectScrollDownArrow />
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </FieldRoot>
   )
 }
 
@@ -172,27 +183,29 @@ function LookupMapSelect() {
 
 function LabeledSelect() {
   return (
-    <Select items={themeItems}>
-      <SelectLabel>Theme</SelectLabel>
-      <SelectTrigger className='w-48'>
-        <SelectValue placeholder='Select theme' />
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectPortal>
-        <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
-          <SelectPopup>
-            <SelectList>
-              {themeItems.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  <SelectItemIndicator />
-                  <SelectItemText>{item.label}</SelectItemText>
-                </SelectItem>
-              ))}
-            </SelectList>
-          </SelectPopup>
-        </SelectPositioner>
-      </SelectPortal>
-    </Select>
+    <FieldRoot className='w-fit'>
+      <Select items={themeItems}>
+        <SelectLabel>Theme</SelectLabel>
+        <SelectTrigger className='w-48'>
+          <SelectValue placeholder='Select theme' />
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
+            <SelectPopup>
+              <SelectList>
+                {themeItems.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    <SelectItemIndicator />
+                    <SelectItemText>{item.label}</SelectItemText>
+                  </SelectItem>
+                ))}
+              </SelectList>
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </FieldRoot>
   )
 }
 
@@ -236,53 +249,57 @@ const clearableItems = [
 
 function PlaceholderSelect() {
   return (
-    <Select items={placeholderItems}>
-      <SelectLabel>Theme</SelectLabel>
-      <SelectTrigger className='w-48'>
-        <SelectValue placeholder='Select theme' />
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectPortal>
-        <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
-          <SelectPopup>
-            <SelectList>
-              {placeholderItems.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  <SelectItemIndicator />
-                  <SelectItemText>{item.label}</SelectItemText>
-                </SelectItem>
-              ))}
-            </SelectList>
-          </SelectPopup>
-        </SelectPositioner>
-      </SelectPortal>
-    </Select>
+    <FieldRoot className='w-fit'>
+      <Select items={placeholderItems}>
+        <SelectLabel>Theme</SelectLabel>
+        <SelectTrigger className='w-48'>
+          <SelectValue placeholder='Select theme' />
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
+            <SelectPopup>
+              <SelectList>
+                {placeholderItems.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    <SelectItemIndicator />
+                    <SelectItemText>{item.label}</SelectItemText>
+                  </SelectItem>
+                ))}
+              </SelectList>
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </FieldRoot>
   )
 }
 
 function ClearableSelect() {
   return (
-    <Select items={clearableItems} defaultValue={null}>
-      <SelectLabel>Theme</SelectLabel>
-      <SelectTrigger className='w-48'>
-        <SelectValue />
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectPortal>
-        <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
-          <SelectPopup>
-            <SelectList>
-              {clearableItems.map((item) => (
-                <SelectItem key={String(item.value)} value={item.value}>
-                  <SelectItemIndicator />
-                  <SelectItemText>{item.label}</SelectItemText>
-                </SelectItem>
-              ))}
-            </SelectList>
-          </SelectPopup>
-        </SelectPositioner>
-      </SelectPortal>
-    </Select>
+    <FieldRoot className='w-fit'>
+      <Select items={clearableItems} defaultValue={null}>
+        <SelectLabel>Theme</SelectLabel>
+        <SelectTrigger className='w-48'>
+          <SelectValue />
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
+            <SelectPopup>
+              <SelectList>
+                {clearableItems.map((item) => (
+                  <SelectItem key={String(item.value)} value={item.value}>
+                    <SelectItemIndicator />
+                    <SelectItemText>{item.label}</SelectItemText>
+                  </SelectItem>
+                ))}
+              </SelectList>
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </FieldRoot>
   )
 }
 
@@ -314,29 +331,31 @@ function renderLanguages(value: Language[]) {
 
 function MultipleSelect() {
   return (
-    <Select<string, true> multiple items={languages} defaultValue={['javascript', 'typescript']}>
-      <SelectLabel>Languages</SelectLabel>
-      <SelectTrigger className='w-56'>
-        <SelectValue>{(value: Language[]) => renderLanguages(value ?? [])}</SelectValue>
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectPortal>
-        <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
-          <SelectPopup>
-            <SelectList>
-              {languageValues.map((value) => (
-                <SelectItem key={value} value={value}>
-                  <SelectItemIndicator>
-                    <CheckIcon className='size-4' />
-                  </SelectItemIndicator>
-                  <SelectItemText>{languages[value]}</SelectItemText>
-                </SelectItem>
-              ))}
-            </SelectList>
-          </SelectPopup>
-        </SelectPositioner>
-      </SelectPortal>
-    </Select>
+    <FieldRoot className='w-fit'>
+      <Select<string, true> multiple items={languages} defaultValue={['javascript', 'typescript']}>
+        <SelectLabel>Languages</SelectLabel>
+        <SelectTrigger className='w-56'>
+          <SelectValue>{(value: Language[]) => renderLanguages(value ?? [])}</SelectValue>
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
+            <SelectPopup>
+              <SelectList>
+                {languageValues.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    <SelectItemIndicator>
+                      <CheckIcon className='size-4' />
+                    </SelectItemIndicator>
+                    <SelectItemText>{languages[value]}</SelectItemText>
+                  </SelectItem>
+                ))}
+              </SelectList>
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </FieldRoot>
   )
 }
 
@@ -360,43 +379,45 @@ const shippingMethods: ShippingMethod[] = [
 
 function ObjectValueSelect() {
   return (
-    <Select<ShippingMethod> defaultValue={shippingMethods[0]} itemToStringValue={(method) => method.id}>
-      <SelectLabel>Shipping method</SelectLabel>
-      <SelectTrigger className='w-64'>
-        <SelectValue>
-          {(method: ShippingMethod) => (
-            <span className='flex flex-col items-start gap-0.5'>
-              <span className='text-sm'>{method.name}</span>
-              <span className='text-xs text-muted-foreground'>
-                {method.duration} ({method.price})
+    <FieldRoot className='w-fit'>
+      <Select<ShippingMethod> defaultValue={shippingMethods[0]} itemToStringValue={(method) => method.id}>
+        <SelectLabel>Shipping method</SelectLabel>
+        <SelectTrigger className='h-auto min-h-14 w-64 py-2'>
+          <SelectValue className='overflow-visible whitespace-normal'>
+            {(method: ShippingMethod) => (
+              <span className='flex flex-col items-start gap-0.5'>
+                <span className='text-sm'>{method.name}</span>
+                <span className='text-xs text-muted-foreground'>
+                  {method.duration} ({method.price})
+                </span>
               </span>
-            </span>
-          )}
-        </SelectValue>
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectPortal>
-        <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
-          <SelectPopup>
-            <SelectScrollUpArrow />
-            <SelectList>
-              {shippingMethods.map((method) => (
-                <SelectItem key={method.id} value={method} className='items-start'>
-                  <SelectItemIndicator className='relative top-[0.4em]' />
-                  <SelectItemText className='flex flex-col gap-0.5'>
-                    <span className='text-sm'>{method.name}</span>
-                    <span className='text-xs text-muted-foreground'>
-                      {method.duration} ({method.price})
-                    </span>
-                  </SelectItemText>
-                </SelectItem>
-              ))}
-            </SelectList>
-            <SelectScrollDownArrow />
-          </SelectPopup>
-        </SelectPositioner>
-      </SelectPortal>
-    </Select>
+            )}
+          </SelectValue>
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
+            <SelectPopup>
+              <SelectScrollUpArrow />
+              <SelectList>
+                {shippingMethods.map((method) => (
+                  <SelectItem key={method.id} value={method} className='items-start'>
+                    <SelectItemIndicator className='relative top-[0.4em]' />
+                    <SelectItemText className='flex flex-col gap-0.5'>
+                      <span className='text-sm'>{method.name}</span>
+                      <span className='text-xs text-muted-foreground'>
+                        {method.duration} ({method.price})
+                      </span>
+                    </SelectItemText>
+                  </SelectItem>
+                ))}
+              </SelectList>
+              <SelectScrollDownArrow />
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </FieldRoot>
   )
 }
 
@@ -442,37 +463,39 @@ const groupedProduce: ProduceGroup[] = [
 
 function GroupedSelect() {
   return (
-    <Select items={groupedProduce}>
-      <SelectLabel>Produce</SelectLabel>
-      <SelectTrigger className='w-48'>
-        <SelectValue placeholder='Select produce' />
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectPortal>
-        <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
-          <SelectPopup>
-            <SelectScrollUpArrow />
-            <SelectList>
-              {groupedProduce.map((group, index) => (
-                <React.Fragment key={group.value}>
-                  <SelectGroup>
-                    <SelectGroupLabel>{group.value}</SelectGroupLabel>
-                    {group.items.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
-                        <SelectItemIndicator />
-                        <SelectItemText>{item.label}</SelectItemText>
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                  {index < groupedProduce.length - 1 ? <SelectSeparator /> : null}
-                </React.Fragment>
-              ))}
-            </SelectList>
-            <SelectScrollDownArrow />
-          </SelectPopup>
-        </SelectPositioner>
-      </SelectPortal>
-    </Select>
+    <FieldRoot className='w-fit'>
+      <Select items={groupedProduce}>
+        <SelectLabel>Produce</SelectLabel>
+        <SelectTrigger className='w-48'>
+          <SelectValue placeholder='Select produce' />
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4} alignItemWithTrigger={false}>
+            <SelectPopup>
+              <SelectScrollUpArrow />
+              <SelectList>
+                {groupedProduce.map((group, index) => (
+                  <React.Fragment key={group.value}>
+                    <SelectGroup>
+                      <SelectGroupLabel>{group.value}</SelectGroupLabel>
+                      {group.items.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          <SelectItemIndicator />
+                          <SelectItemText>{item.label}</SelectItemText>
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                    {index < groupedProduce.length - 1 ? <SelectSeparator /> : null}
+                  </React.Fragment>
+                ))}
+              </SelectList>
+              <SelectScrollDownArrow />
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </FieldRoot>
   )
 }
 
@@ -491,8 +514,12 @@ export const demo: DemoMeta = {
       name: 'Sizes',
       render: () => (
         <>
-          <AppleSelect size='sm' />
-          <AppleSelect />
+          {(['xs', 'sm', 'default', 'lg'] as const).map((size) => (
+            <div key={size} className='flex items-center gap-2'>
+              <Button size={size}>{size}</Button>
+              <AppleSelect size={size} hideLabel />
+            </div>
+          ))}
         </>
       )
     },

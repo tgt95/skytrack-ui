@@ -1,7 +1,14 @@
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { TextBIcon, TextItalicIcon, TextUnderlineIcon } from '@phosphor-icons/react'
+import {
+  HeadphonesIcon,
+  TextBIcon,
+  TextItalicIcon,
+  TextUnderlineIcon,
+  TimerIcon,
+  TrashIcon
+} from '@phosphor-icons/react'
 import {
   createHandle,
   Tooltip,
@@ -25,78 +32,17 @@ const HINTS = [
 /* "Detached triggers" */
 const detachedTooltip = createHandle()
 
-/* "Multiple triggers" and "Animating the Tooltip" */
-const payloadTooltip = createHandle<React.ReactNode>()
-
 /* "Controlled mode with multiple triggers" */
 const controlledTooltip = createHandle()
 
-function HeadphonesIcon(props: React.ComponentProps<'svg'>) {
-  return (
-    <svg
-      width='16'
-      height='16'
-      viewBox='0 0 16 16'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='1.5'
-      aria-hidden='true'
-      {...props}
-    >
-      <path strokeLinecap='round' d='M1.5 11V7.5c0-2.5 2.5-6 6.5-6s6.5 3.5 6.5 6V11' />
-      <path d='M12 7.5c1.3807 0 2.5 1.11929 2.5 2.5v2c0 1.3807-1.1193 2.5-2.5 2.5h-1.5v-7zm-8 0h1.5v7H4c-1.38071 0-2.5-1.1193-2.5-2.5v-2c0-1.38071 1.11929-2.5 2.5-2.5Z' />
-    </svg>
-  )
-}
-
-function StopwatchIcon(props: React.ComponentProps<'svg'>) {
-  return (
-    <svg
-      width='16'
-      height='16'
-      viewBox='0 0 16 16'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='1.5'
-      aria-hidden='true'
-      {...props}
-    >
-      <circle cx='8' cy='8.5' r='6' />
-      <path strokeLinecap='square' strokeLinejoin='round' d='M8 9.5v-5m0-2v-2m-2 0h4M12 4l1.5-1.5' />
-    </svg>
-  )
-}
-
-function TrashIcon(props: React.ComponentProps<'svg'>) {
-  return (
-    <svg
-      width='16'
-      height='16'
-      viewBox='0 0 16 16'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='1.5'
-      aria-hidden='true'
-      {...props}
-    >
-      <path strokeLinecap='square' d='M2.5 4h11' />
-      <path strokeLinecap='round' d='M6.5 4V3c0-.82843.67157-1.5 1.5-1.5s1.5.67157 1.5 1.5v1' />
-      <path
-        strokeLinecap='square'
-        d='m3.5 4 .87069 9.1422c.07332.7699.7199 1.3578 1.49324 1.3578h4.27217c.7733 0 1.4199-.5879 1.4932-1.3578L12.5 4'
-      />
-    </svg>
-  )
-}
-
 const animatedPositioner = cn(
   'transition-[top,left,right,bottom,transform] duration-[350ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
-  'data-[instant]:transition-none'
+  'data-instant:transition-none'
 )
 
 const animatedPopup = cn(
   'transition-[width,height] duration-[350ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
-  'data-[instant]:transition-none'
+  'data-instant:transition-none'
 )
 
 const viewportContentTransition =
@@ -166,6 +112,8 @@ function ControlledTriggers() {
 
 /* "Animating the Tooltip" and "Content" — the popup moves and its content swaps. */
 function AnimatedTooltips() {
+  const [payloadTooltip] = React.useState(() => createHandle<React.ReactNode>())
+
   return (
     <TooltipProvider>
       <div className='flex flex-wrap items-center gap-3'>
@@ -173,7 +121,7 @@ function AnimatedTooltips() {
           <HeadphonesIcon />
         </TooltipTrigger>
         <TooltipTrigger handle={payloadTooltip} payload='Set a timer' aria-label='Set a timer'>
-          <StopwatchIcon />
+          <TimerIcon />
         </TooltipTrigger>
         <TooltipTrigger
           handle={payloadTooltip}
@@ -191,6 +139,39 @@ function AnimatedTooltips() {
               <TooltipPopup className={animatedPopup}>
                 <TooltipArrow />
                 <TooltipViewport className={viewportContentTransition}>{payload}</TooltipViewport>
+              </TooltipPopup>
+            </TooltipPositioner>
+          </TooltipPortal>
+        )}
+      </Tooltip>
+    </TooltipProvider>
+  )
+}
+
+function MultipleTriggers() {
+  const [payloadTooltip] = React.useState(() => createHandle<React.ReactNode>())
+
+  return (
+    <TooltipProvider>
+      <div className='flex items-center gap-2'>
+        <TooltipTrigger handle={payloadTooltip} payload='Bold' aria-label='Bold'>
+          <TextBIcon />
+        </TooltipTrigger>
+        <TooltipTrigger handle={payloadTooltip} payload='Italic' aria-label='Italic'>
+          <TextItalicIcon />
+        </TooltipTrigger>
+        <TooltipTrigger handle={payloadTooltip} payload='Underline' aria-label='Underline'>
+          <TextUnderlineIcon />
+        </TooltipTrigger>
+      </div>
+
+      <Tooltip handle={payloadTooltip}>
+        {({ payload }) => (
+          <TooltipPortal>
+            <TooltipPositioner sideOffset={11}>
+              <TooltipPopup>
+                <TooltipArrow />
+                {payload}
               </TooltipPopup>
             </TooltipPositioner>
           </TooltipPortal>
@@ -262,34 +243,7 @@ export const demo: DemoMeta = {
     },
     {
       name: 'Multiple triggers',
-      render: () => (
-        <TooltipProvider>
-          <div className='flex items-center gap-2'>
-            <TooltipTrigger handle={payloadTooltip} payload='Bold' aria-label='Bold'>
-              <TextBIcon />
-            </TooltipTrigger>
-            <TooltipTrigger handle={payloadTooltip} payload='Italic' aria-label='Italic'>
-              <TextItalicIcon />
-            </TooltipTrigger>
-            <TooltipTrigger handle={payloadTooltip} payload='Underline' aria-label='Underline'>
-              <TextUnderlineIcon />
-            </TooltipTrigger>
-          </div>
-
-          <Tooltip handle={payloadTooltip}>
-            {({ payload }) => (
-              <TooltipPortal>
-                <TooltipPositioner sideOffset={11}>
-                  <TooltipPopup>
-                    <TooltipArrow />
-                    {payload}
-                  </TooltipPopup>
-                </TooltipPositioner>
-              </TooltipPortal>
-            )}
-          </Tooltip>
-        </TooltipProvider>
-      )
+      render: () => <MultipleTriggers />
     },
     {
       name: 'Controlled mode with multiple triggers',

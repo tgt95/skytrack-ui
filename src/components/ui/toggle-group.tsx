@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 type ToggleGroupContextValue = {
   variant?: 'default' | 'outline' | 'segmented' | 'brand' | null
-  size?: 'xs' | 'sm' | 'default' | 'lg' | null
+  size?: 'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg' | null
 }
 
 export const ToggleGroupContext = React.createContext<ToggleGroupContextValue | null>(null)
@@ -19,8 +19,9 @@ function ToggleGroup({ className, variant, size, ...props }: ToggleGroupProps) {
         className={cn(
           'flex items-center rounded-(--radius) border border-border',
           variant === 'segmented' && 'gap-1 bg-background p-0.5',
+          variant === 'outline' && '[&>[data-slot=toggle]]:border-0',
           'data-[orientation=vertical]:flex-col',
-          className as string
+          className
         )}
         {...props}
       />

@@ -11,21 +11,20 @@ const TABS = [
 ]
 
 /**
- * Browser-style card tabs. The nested close button matches browser-tab UX
- * practice; arrow-key tab navigation is unaffected and each XIcon stays
- * Tab-reachable with an accessible name.
+ * Render the tab trigger as a div so its separate close button is not nested
+ * inside a native button. Base UI still supplies tab semantics and keyboard handling.
  */
-function ClosableTabsExample () {
+function ClosableTabsExample() {
   const [tabs, setTabs] = useState(['Tab 1', 'Tab 2', 'Tab 3'])
   const [value, setValue] = useState('Tab 1')
 
-  function addTab () {
+  function addTab() {
     const next = `Tab ${tabs.reduce((max, tab) => Math.max(max, Number.parseInt(tab.slice(4), 10) || 0), 0) + 1}`
     setTabs([...tabs, next])
     setValue(next)
   }
 
-  function closeTab (tab: string) {
+  function closeTab(tab: string) {
     const index = tabs.indexOf(tab)
     const remaining = tabs.filter((t) => t !== tab)
     setTabs(remaining)
@@ -44,7 +43,9 @@ function ClosableTabsExample () {
           <TabsTab
             key={tab}
             value={tab}
-            className="rounded-b-none rounded-t-[var(--radius)] border border-b-0 border-transparent -mb-px data-[active]:border-border data-[active]:bg-background data-[active]:after:absolute data-[active]:after:inset-x-px data-[active]:after:-bottom-px data-[active]:after:h-0.5 data-[active]:after:bg-background data-[active]:after:content-[''] data-[active]:after:pointer-events-none"
+            render={<div />}
+            nativeButton={false}
+            className="rounded-b-none rounded-t-[var(--radius)] border border-b-0 border-transparent -mb-px data-active:border-border data-active:bg-background data-active:after:absolute data-active:after:inset-x-px data-active:after:-bottom-px data-active:after:h-0.5 data-active:after:bg-background data-active:after:content-[''] data-active:after:pointer-events-none"
           >
             {tab}
             <button
@@ -232,7 +233,7 @@ export const demo: DemoMeta = {
             ))}
           </Tabs>
           <Tabs defaultValue='overview' className='max-w-xl mx-auto'>
-          <TabsList variant='pill'>
+            <TabsList variant='pill'>
               {TABS.map((tab) => (
                 <TabsTab key={tab.value} value={tab.value}>
                   {tab.label}

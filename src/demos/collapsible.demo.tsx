@@ -12,9 +12,9 @@ export const demo: DemoMeta = {
       name: 'Default',
       render: () => (
         <Collapsible className='min-h-36'>
-          <CollapsibleTrigger>
+          <CollapsibleTrigger className='flex w-full flex-row items-center justify-between gap-1 border border-(--border) px-3 py-2'>
             Recovery keys
-            <CaretRightIcon className='transition-transform duration-100 ease-out group-data-[panel-open]:rotate-90' />
+            <CaretRightIcon className='transition-transform duration-100 ease-out group-data-panel-open:rotate-90' />
           </CollapsibleTrigger>
           <CollapsiblePanel>
             <div className='flex flex-col gap-2 border border-t-0 border-border px-3.5 py-2'>
@@ -30,9 +30,9 @@ export const demo: DemoMeta = {
       name: 'Hidden until found',
       render: () => (
         <Collapsible>
-          <CollapsibleTrigger>
+          <CollapsibleTrigger className='flex w-full flex-row items-center justify-between gap-1 px-3 py-2'>
             Shipping details
-            <CaretRightIcon className='transition-transform duration-100 ease-out group-data-[panel-open]:rotate-90' />
+            <CaretRightIcon className='transition-transform duration-100 ease-out group-data-panel-open:rotate-90' />
           </CollapsibleTrigger>
           <CollapsiblePanel hiddenUntilFound>
             <div className='border border-t-0 border-border px-3.5 py-2'>

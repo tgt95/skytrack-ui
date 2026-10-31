@@ -25,17 +25,20 @@ export const demo: DemoMeta = {
       )
     },
     {
-      name: 'Fallback only',
+      name: 'Sizes',
       render: () => (
         <div className='flex gap-4'>
-          <Avatar>
+          <Avatar size='xs'>
             <AvatarFallback>AB</AvatarFallback>
           </Avatar>
-          <Avatar className='size-12'>
+          <Avatar size='sm'>
             <AvatarFallback>SK</AvatarFallback>
           </Avatar>
-          <Avatar className='size-6'>
-            <AvatarFallback className='text-xs'>T</AvatarFallback>
+          <Avatar size='default'>
+            <AvatarFallback>TT</AvatarFallback>
+          </Avatar>
+          <Avatar size='lg'>
+            <AvatarFallback>JL</AvatarFallback>
           </Avatar>
         </div>
       )

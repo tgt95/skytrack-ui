@@ -75,7 +75,15 @@
       "BreadcrumbSeparator",
       "Button",
       "buttonVariants",
+      "controlSizeClasses",
       "focusRing",
+      "Calendar",
+      "ChartContainer",
+      "ChartLegend",
+      "ChartLegendContent",
+      "ChartTooltip",
+      "ChartTooltipContent",
+      "useChart",
       "CheckboxIndicator",
       "CheckboxRoot",
       "CheckboxGroup",
@@ -113,6 +121,15 @@
       "createComboboxItems",
       "useComboboxFilter",
       "useComboboxFilteredItems",
+      "Command",
+      "CommandDialog",
+      "CommandEmpty",
+      "CommandGroup",
+      "CommandInput",
+      "CommandItem",
+      "CommandList",
+      "CommandSeparator",
+      "CommandShortcut",
       "ContextMenu",
       "ContextMenuArrow",
       "ContextMenuBackdrop",
@@ -134,6 +151,8 @@
       "ContextMenuSubmenuTrigger",
       "ContextMenuTrigger",
       "contextMenuItemVariants",
+      "DataTable",
+      "DatePicker",
       "Dialog",
       "DialogBackdrop",
       "DialogClose",
@@ -236,6 +255,14 @@
       "OTPField",
       "OTPFieldInput",
       "OTPFieldSeparator",
+      "PageHeader",
+      "Pagination",
+      "PaginationContent",
+      "PaginationEllipsis",
+      "PaginationItem",
+      "PaginationLink",
+      "PaginationNext",
+      "PaginationPrevious",
       "Popover",
       "PopoverArrow",
       "PopoverBackdrop",
@@ -292,6 +319,32 @@
       "SelectValue",
       "selectTriggerVariants",
       "Separator",
+      "SIDEBAR_KEYBOARD_SHORTCUT",
+      "SIDEBAR_WIDTH",
+      "SIDEBAR_WIDTH_ICON",
+      "SIDEBAR_WIDTH_MOBILE",
+      "Sidebar",
+      "SidebarContent",
+      "SidebarFooter",
+      "SidebarGroup",
+      "SidebarGroupAction",
+      "SidebarGroupContent",
+      "SidebarGroupLabel",
+      "SidebarHeader",
+      "SidebarInset",
+      "SidebarMenu",
+      "SidebarMenuAction",
+      "SidebarMenuBadge",
+      "SidebarMenuButton",
+      "SidebarMenuItem",
+      "SidebarMenuSkeleton",
+      "SidebarMenuSub",
+      "SidebarMenuSubButton",
+      "SidebarMenuSubItem",
+      "SidebarProvider",
+      "SidebarRail",
+      "SidebarTrigger",
+      "useSidebar",
       "Slider",
       "SliderControl",
       "SliderIndicator",
@@ -359,8 +412,15 @@
       "AutocompleteRootProps",
       "BadgeProps",
       "ButtonProps",
+      "ControlSize",
+      "CalendarProps",
+      "ChartConfig",
+      "ChartContainerProps",
       "ComboboxRootProps",
       "ContextMenuItemVariantProps",
+      "DataTableColumnDef",
+      "DataTableProps",
+      "DatePickerProps",
       "DialogButtonProps",
       "DialogChangeEventDetails",
       "DrawerButtonProps",
@@ -375,11 +435,16 @@
       "InputProps",
       "MenuItemVariantProps",
       "MenuRootHandle",
+      "PageHeaderProps",
       "PopoverChangeEventDetails",
       "PopoverTriggerProps",
       "PreviewCardChangeEventDetails",
       "PreviewCardTriggerProps",
       "SelectRootProps",
+      "SidebarMenuButtonProps",
+      "SidebarMenuSubButtonProps",
+      "SidebarProps",
+      "SidebarProviderProps",
       "TabsIndicatorVariantProps",
       "TabsListVariantProps",
       "TabsTabVariantProps",
@@ -537,12 +602,38 @@
       "values": [
         "Button",
         "buttonVariants",
+        "controlSizeClasses",
         "focusRing"
       ],
       "types": [
-        "ButtonProps"
+        "ButtonProps",
+        "ControlSize"
       ],
       "prefix": "Button"
+    },
+    "./calendar": {
+      "values": [
+        "Calendar"
+      ],
+      "types": [
+        "CalendarProps"
+      ],
+      "prefix": "Calendar"
+    },
+    "./chart": {
+      "values": [
+        "ChartContainer",
+        "ChartLegend",
+        "ChartLegendContent",
+        "ChartTooltip",
+        "ChartTooltipContent",
+        "useChart"
+      ],
+      "types": [
+        "ChartConfig",
+        "ChartContainerProps"
+      ],
+      "prefix": "Chart"
     },
     "./checkbox": {
       "values": [
@@ -607,6 +698,21 @@
       ],
       "prefix": "Combobox"
     },
+    "./command": {
+      "values": [
+        "Command",
+        "CommandDialog",
+        "CommandEmpty",
+        "CommandGroup",
+        "CommandInput",
+        "CommandItem",
+        "CommandList",
+        "CommandSeparator",
+        "CommandShortcut"
+      ],
+      "types": [],
+      "prefix": "Command"
+    },
     "./context-menu": {
       "values": [
         "ContextMenu",
@@ -635,6 +741,25 @@
         "ContextMenuItemVariantProps"
       ],
       "prefix": "ContextMenu"
+    },
+    "./data-table": {
+      "values": [
+        "DataTable"
+      ],
+      "types": [
+        "DataTableColumnDef",
+        "DataTableProps"
+      ],
+      "prefix": "DataTable"
+    },
+    "./date-picker": {
+      "values": [
+        "DatePicker"
+      ],
+      "types": [
+        "DatePickerProps"
+      ],
+      "prefix": "DatePicker"
     },
     "./dialog": {
       "values": [
@@ -842,6 +967,28 @@
       "types": [],
       "prefix": "OTPField"
     },
+    "./page-header": {
+      "values": [
+        "PageHeader"
+      ],
+      "types": [
+        "PageHeaderProps"
+      ],
+      "prefix": "PageHeader"
+    },
+    "./pagination": {
+      "values": [
+        "Pagination",
+        "PaginationContent",
+        "PaginationEllipsis",
+        "PaginationItem",
+        "PaginationLink",
+        "PaginationNext",
+        "PaginationPrevious"
+      ],
+      "types": [],
+      "prefix": "Pagination"
+    },
     "./popover": {
       "values": [
         "Popover",
@@ -947,6 +1094,43 @@
       ],
       "types": [],
       "prefix": "Separator"
+    },
+    "./sidebar": {
+      "values": [
+        "SIDEBAR_KEYBOARD_SHORTCUT",
+        "SIDEBAR_WIDTH",
+        "SIDEBAR_WIDTH_ICON",
+        "SIDEBAR_WIDTH_MOBILE",
+        "Sidebar",
+        "SidebarContent",
+        "SidebarFooter",
+        "SidebarGroup",
+        "SidebarGroupAction",
+        "SidebarGroupContent",
+        "SidebarGroupLabel",
+        "SidebarHeader",
+        "SidebarInset",
+        "SidebarMenu",
+        "SidebarMenuAction",
+        "SidebarMenuBadge",
+        "SidebarMenuButton",
+        "SidebarMenuItem",
+        "SidebarMenuSkeleton",
+        "SidebarMenuSub",
+        "SidebarMenuSubButton",
+        "SidebarMenuSubItem",
+        "SidebarProvider",
+        "SidebarRail",
+        "SidebarTrigger",
+        "useSidebar"
+      ],
+      "types": [
+        "SidebarMenuButtonProps",
+        "SidebarMenuSubButtonProps",
+        "SidebarProps",
+        "SidebarProviderProps"
+      ],
+      "prefix": "Sidebar"
     },
     "./slider": {
       "values": [
