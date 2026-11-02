@@ -22,12 +22,7 @@ Use Fieldset to group related form controls. In a menu, add a divider only when 
 
 ## Types
 
-Separator supports two structural orientations:
-
-- **Horizontal:** Separates stacked sections or groups.
-- **Vertical:** Separates adjacent groups in a horizontal layout.
-
-**Live demo variant:** `Vertical`
+Match divider direction to the layout: horizontal for stacked groups and vertical for adjacent groups.
 
 ## Layout
 

@@ -12,8 +12,10 @@
 
 ## Usage
 
-Use Form when people need to enter or update related information and submit it as one task, such as creating a project, changing preferences, or inviting a team member.
+Use Form when people need to enter or update related information and submit it as one task, such as creating a record, changing settings, or inviting a team member.
 
+- **Data minimization:** Collect only necessary information required to complete the task. Avoid asking for non-essential or redundant data.
+- **Progressive disclosure:** Reveal dependent fields only when relevant based on prior selections, keeping the initial form compact and focused.
 - **Fit:** Cohesive data entry workflows requiring validation before submission.
 - **Avoid:** Search that filters results as people type (use Command or Autocomplete), or navigation links.
 - **Best alternative:** For a single searchable choice, use Autocomplete.
@@ -22,13 +24,7 @@ Use Form when people need to enter or update related information and submit it a
 
 ## Types
 
-A form collects related answers and provides feedback when information is missing or invalid.
-
-- **Submit:** Collect related answers and submit them together.
-- **Validation:** Check that each answer is acceptable before submission.
-- **Pending state:** Make it clear when submission is in progress and prevent accidental repeat submissions.
-
-**Live demo variant:** `Submit form values as a JavaScript object`
+Choose a validation presentation that identifies which values need attention and what people should do next.
 
 ## Behavior
 
@@ -52,15 +48,16 @@ Arrange fields so people can follow the task and compare related answers:
 
 ## Accessibility
 
-Make required information and errors clear. After failed submission, help users find the first field that needs attention. Enter should submit when expected.
+Make required information and errors clear. When every field in a form is required, communicate that requirement once before the form instead of repeating markers on each field. After failed submission, help users find the first field that needs attention. Enter should submit when expected.
 
 **Live demo variant:** `Imperative validation (actionsRef)`
 
 ## Content
 
-Form titles should clearly describe the task in sentence case (e.g., “Create project”, “Invite a team member”).
+Form titles should clearly describe the task in sentence case (e.g., "Create record", "Invite team member").
 
-- **Submit button:** Use a specific action label (e.g., “Save project”, “Invite team member”) instead of “Submit”.
+- **Submit button:** Use a specific action label (e.g., "Save record", "Invite team member") instead of "Submit".
+- **Required fields:** Mark mandatory fields individually using SkyTrack’s required-field indicator convention (e.g., an asterisk or “(required)”). Exception: if every field in a form is required, state that once before the form (e.g., “All fields are required”) instead of repeating markers across every field. Keep the convention consistent for similar forms. Do not adopt Carbon’s optional-marker strategy as a new SkyTrack rule.
 - **Validation messages:** Provide clear, actionable error text explaining how to resolve invalid values.
 
 **Live demo variant:** `Submit with a Server Function`

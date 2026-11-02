@@ -12,7 +12,7 @@
 
 ## Usage
 
-Use Sidebar for persistent, primary navigation across deep application areas (e.g. Project Studio, Asset Management, Access Rules Maps, System Settings), or for persistent right-hand contextual inspector panels.
+Use Sidebar for persistent primary navigation across application areas (e.g., Records, Files, Settings). A right-side Sidebar can instead keep contextual details beside the current work. Choose one role for each Sidebar instance.
 
 Avoid Sidebar for transient dropdown actions (use Menu) or lightweight temporary flyout sheets (use Drawer).
 
@@ -22,13 +22,7 @@ The best alternative for transient slide-out panels that open on demand is Drawe
 
 ## Types
 
-Sidebar can use several navigation treatments:
-
-- **Expanded:** Shows icons, labels, and section headings in a persistent panel.
-- **Collapsed:** Saves space but requires clear labels on hover or focus so icons remain understandable.
-- **Off-canvas:** Keeps navigation hidden until people open it on a narrow screen.
-
-**Live demo variant:** `Inset layout`
+Choose expanded, collapsed, or inset navigation according to available space and the need to keep labels visible.
 
 ## Behavior
 
@@ -58,8 +52,8 @@ Name the navigation area and make the current page clear. Give collapsed icon co
 
 ## Content
 
-Navigation labels should use clear, scannable nouns in title case (e.g., "Project Planner", "Asset Activity", "Incident Logs").
+Navigation labels should use clear, scannable nouns in sentence case (e.g., “Records”, “File activity”, “Team logs”).
 
-Keep labels concise (1–3 words) to prevent truncation in expanded view.
+Keep labels concise enough to scan and prevent truncation in the expanded view.
 
 **Live demo variant:** `Inset layout`

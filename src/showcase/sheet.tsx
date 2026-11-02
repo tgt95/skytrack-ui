@@ -84,8 +84,19 @@ const TOKEN_GROUPS: { id: string; title: string; description: string; tokens: st
   {
     id: 'chart',
     title: 'Data viz',
-    description: 'Sequential ramp for charts. chart-1 is the lightest step, chart-5 the darkest.',
-    tokens: ['--chart-1', '--chart-2', '--chart-3', '--chart-4', '--chart-5']
+    description: 'Categorical series colors for charts, with two shades each of blue, orange, teal, purple, and pink.',
+    tokens: [
+      '--chart-1',
+      '--chart-2',
+      '--chart-3',
+      '--chart-4',
+      '--chart-5',
+      '--chart-6',
+      '--chart-7',
+      '--chart-8',
+      '--chart-9',
+      '--chart-10'
+    ]
   },
   {
     id: 'sidebar',

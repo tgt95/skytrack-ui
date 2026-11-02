@@ -197,7 +197,7 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
                       </div>
                       {requestedVariantName && <Badge size='sm' count={tabKey} />}
                     </div>
-                    <div className='flex min-h-36 flex-wrap items-center justify-center gap-4 p-4 bg-muted/5'>
+                    <div className='flex min-h-36 w-full min-w-0 flex-wrap items-center justify-center gap-4 overflow-x-auto p-4 bg-muted/5'>
                       {activeVariant ? (
                         <SheetDemoErrorBoundary key={activeVariant.name} name={activeVariant.name}>
                           {activeVariant.render()}

@@ -379,7 +379,7 @@ function OutsideScrollDialog() {
                 <DialogPopup
                   ref={popupRef}
                   initialFocus={popupRef}
-                  className='relative mx-auto my-16 max-w-lg translate-x-0 translate-y-0 scale-100'
+                  className='relative top-auto left-auto mx-auto my-16 max-w-[calc(100vw-2rem)] translate-x-0 translate-y-0 scale-100 sm:max-w-lg'
                 >
                   <div className='relative flex flex-col gap-1 pr-8'>
                     <DialogTitle>Dialog</DialogTitle>
@@ -388,7 +388,7 @@ function OutsideScrollDialog() {
                     </DialogDescription>
                     <DialogClose
                       aria-label='Close'
-                      className='absolute -top-1 -right-1 size-8 border-0 bg-transparent p-0 hover:bg-accent'
+                      className='absolute -top-1 -right-1 z-10 size-8 border-0 bg-transparent p-0 hover:bg-accent'
                     >
                       <XIcon />
                     </DialogClose>

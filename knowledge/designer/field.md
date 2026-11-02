@@ -22,16 +22,7 @@ Use Field to keep a control’s visible label, supporting instructions, and vali
 
 ## Types
 
-A field brings together the control, its label, and any supporting or error text:
-
-- **Field group:** Keeps the label, control, and messages together.
-- **Label:** Names the value people should enter or choose.
-- **Control:** The input or choice the person interacts with.
-- **Supporting text:** Explains the expected value or choice.
-- **Error message:** Explains what needs to be corrected.
-- **Choice item:** Keeps an option and its label together.
-
-**Live demo variant:** `With Input`
+Keep the control, label, and supporting or error message together as one field.
 
 ## Behavior
 
@@ -51,7 +42,7 @@ Field coordinates validation states dynamically:
 
 Separate fields by 16px so labels, controls, and supporting text remain easy to scan.
 
-- **Multi-column grids:** On desktop, fields arrange in 1-column or 2-column grids (up to 4 columns for compact peer fields like coordinates).
+- **Multi-column grids:** On desktop, fields arrange in 1-column or 2-column grids (up to 4 columns for compact peer fields like dates, units, or codes).
 - **Secondary labels:** Place a short supporting hint below the field label in a quieter text style.
 - **Mobile viewports:** Forms collapse to a single column with 16px gaps, keeping labels positioned above inputs.
 
@@ -59,7 +50,7 @@ Separate fields by 16px so labels, controls, and supporting text remain easy to 
 
 ## Accessibility
 
-Keep labels, instructions, and errors close to the control they describe. Explain invalid input in text and do not rely on color alone.
+Keep labels, instructions, and errors close to the control they describe. Clearly communicate required fields, either per field or with a single form-level notice when all entries are required. Explain invalid input in text and do not rely on color alone.
 
 **Live demo variant:** `Disabled`
 
@@ -67,7 +58,7 @@ Keep labels, instructions, and errors close to the control they describe. Explai
 
 Labels should be concise noun phrases in sentence case (e.g., “Email address”, “Maximum quantity”).
 
-- **Required indicator:** Indicate mandatory fields clearly (e.g. Red asterisk or "(required)").
+- **Required indicator:** Indicate mandatory fields clearly on each field (e.g., an asterisk or “(required)”). When every field in a form is mandatory, state that once before the form instead of repeating markers on individual fields, in accordance with the Form guideline.
 - **Error messaging:** Error copy should state what was wrong and how to fix it (e.g., “Value must be between 50 and 400”).
 
 **Live demo variant:** `Validity`

@@ -24,9 +24,9 @@ Use Progress for an activity that is underway. Use Slider when people need to ad
 
 Meter displays a passive, bounded graphical fill that updates smoothly as activity data values change. It does not accept direct user interaction.
 
-When values enter sub-optimum or warning thresholds (e.g. resource level falling below 20%), the fill color changes to reflect the threshold severity.
+When a warning or critical range matters to the task, make the status clear with text or another non-color cue as well as the meter value; the component does not switch colors automatically by threshold.
 
-**Live demo variant:** `Resource level`
+**Live demo variant:** `Battery level`
 
 ## Layout
 
@@ -44,12 +44,12 @@ Keep the meter visually proportional to its context, with enough separation from
 
 Show the exact value, unit, and range in text alongside the visual indicator. Do not use color as the only cue for status.
 
-**Live demo variant:** `Resource level`
+**Live demo variant:** `Battery level`
 
 ## Content
 
 Labels should clearly state what is measured (e.g., “Storage used”, “Capacity remaining”).
 
-Always display both the current value and the maximum bound with units (e.g., "48.5 / 64.0 GB") so users understand capacity context at a glance.
+Show the current value, bound, and units when that context helps people understand the measured capacity (e.g., “48.5 / 64.0 GB”).
 
 **Live demo variant:** `Storage used`

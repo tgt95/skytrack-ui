@@ -20,11 +20,15 @@ Use page-level scrolling for the main content. Use Pagination when a long collec
 
 **Live demo variant:** `Demo`
 
+## Types
+
+Use scrollbars for direct control and a fade only to indicate that more content continues beyond the visible area.
+
 ## Behavior
 
 Scrollbars appear smoothly when content overflows and the user hovers over the container or scrolls via trackpad or mouse wheel.
 
-Dragging the scrollbar thumb scrolls content proportionally. Gradient scroll fades smoothly transition as content reaches container boundaries.
+Dragging the scrollbar thumb scrolls content proportionally. Optional gradient scroll fades can be composed using CSS mask styling to indicate when content reaches container boundaries.
 
 **Live demo variant:** `Both scrollbars`
 
@@ -32,7 +36,7 @@ Dragging the scrollbar thumb scrolls content proportionally. Gradient scroll fad
 
 Use Scroll Area when a section has a defined space and its content can extend beyond that space.
 
-Ensure internal content has appropriate padding (12–16px) so that text and clickable controls do not abut the scrollbar thumb. Use gradient scroll fades at top and bottom boundaries to visually indicate hidden overflowing content.
+Ensure internal content has appropriate padding (12–16px) so that text and clickable controls do not abut the scrollbar thumb. Callers can compose gradient scroll fades with CSS masks at boundaries to visually indicate hidden overflowing content.
 
 | Do                                                         | Don't                                                  | Why                                              |
 | ---------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------ |

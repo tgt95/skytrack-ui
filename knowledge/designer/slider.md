@@ -22,13 +22,7 @@ The best alternative for strict numeric precision is Number Field. For selecting
 
 ## Types
 
-Slider supports single-value controls and two-thumb range controls:
-
-- **Continuous slider:** Smooth dragging across continuous floating-point or integer values.
-- **Stepped:** Moves between defined increments (e.g., 5, 10, 25).
-- **Range:** Sets a minimum and maximum within a defined scale.
-
-**Live demo variant:** `Range slider`
+Use one thumb for a single value, two for a bounded range, and steps when only defined values are valid.
 
 ## Behavior
 
@@ -58,7 +52,7 @@ Label the setting and unit. Show the current value and range. Arrow keys adjust;
 
 ## Content
 
-Labels should clearly state the parameter and unit (e.g., "Image angle (°)", "Map opacity (%)").
+Labels should clearly state the parameter and unit (e.g., “Image angle (°)”, “Opacity (%)”).
 
 Always display the current numeric value with units alongside the control.
 

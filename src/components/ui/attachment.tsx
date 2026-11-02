@@ -47,7 +47,7 @@ const attachmentVariants = cva(
 export type AttachmentProps = React.ComponentProps<'div'> &
   VariantProps<typeof attachmentVariants> & { state?: AttachmentState }
 
-function Attachment({
+function Attachment ({
   className,
   size = 'default',
   orientation = 'horizontal',
@@ -77,18 +77,18 @@ function Attachment({
 
 export type AttachmentMediaProps = React.ComponentProps<'div'> & { variant?: 'icon' | 'image' }
 
-function AttachmentMedia({ variant = 'icon', className, ...props }: AttachmentMediaProps) {
+function AttachmentMedia ({ variant = 'icon', className, ...props }: AttachmentMediaProps) {
   const { size, orientation } = React.useContext(AttachmentContext)
   return (
     <div
       data-slot='attachment-media'
       data-variant={variant}
       className={cn(
-        'pointer-events-none relative z-10 flex shrink-0 items-center justify-center overflow-hidden rounded-(--radius) bg-muted text-muted-foreground [&>svg]:size-5 [&>svg]:shrink-0',
-        variant === 'icon' && 'size-10',
+        'relative z-10 flex shrink-0 items-center justify-center overflow-hidden rounded-(--radius) bg-muted text-muted-foreground [&>svg]:size-5 [&>svg]:shrink-0',
+        variant === 'icon' && 'size-12',
         variant === 'image' && 'aspect-square w-16 [&>img]:size-full [&>img]:object-cover',
-        size === 'sm' && variant === 'icon' && 'size-9 [&>svg]:size-4',
-        size === 'xs' && variant === 'icon' && 'size-7 [&>svg]:size-4',
+        size === 'sm' && variant === 'icon' && 'size-11',
+        size === 'xs' && variant === 'icon' && 'size-10',
         orientation === 'vertical' && variant === 'image' && 'w-full',
         className
       )}
@@ -97,17 +97,22 @@ function AttachmentMedia({ variant = 'icon', className, ...props }: AttachmentMe
   )
 }
 
-function AttachmentContent({ className, ...props }: React.ComponentProps<'div'>) {
+function AttachmentContent ({ className, ...props }: React.ComponentProps<'div'>) {
+  const { size } = React.useContext(AttachmentContext)
   return (
     <div
       data-slot='attachment-content'
-      className={cn('pointer-events-none relative z-10 flex min-w-0 flex-1 flex-col justify-center gap-0.5', className)}
+      className={cn(
+        'pointer-events-none relative z-10 flex min-w-0 flex-1 flex-col justify-center gap-1',
+        size === 'xs' ? 'gap-0.5' : 'gap-1',
+        className
+      )}
       {...props}
     />
   )
 }
 
-function AttachmentTitle({ className, ...props }: React.ComponentProps<'p'>) {
+function AttachmentTitle ({ className, ...props }: React.ComponentProps<'p'>) {
   const { state, size } = React.useContext(AttachmentContext)
   const inProgress = state === 'uploading' || state === 'processing'
 
@@ -116,10 +121,10 @@ function AttachmentTitle({ className, ...props }: React.ComponentProps<'p'>) {
       data-slot='attachment-title'
       data-state={state}
       className={cn(
-        'truncate text-sm font-medium leading-5 text-foreground',
-        size === 'xs' && 'text-xs leading-4',
+        'truncate font-medium text-base leading-6 text-foreground',
         inProgress && 'animate-pulse',
-        state === 'error' && 'text-destructive',
+        size == 'default' || size == 'sm' ? 'text-base leading-5' : size == 'xs' && 'text-sm leading-5',
+        // state === 'error' && 'text-destructive',
         className
       )}
       {...props}
@@ -127,14 +132,14 @@ function AttachmentTitle({ className, ...props }: React.ComponentProps<'p'>) {
   )
 }
 
-function AttachmentDescription({ className, ...props }: React.ComponentProps<'p'>) {
+function AttachmentDescription ({ className, ...props }: React.ComponentProps<'p'>) {
   const { state, size } = React.useContext(AttachmentContext)
   return (
     <p
       data-slot='attachment-description'
       className={cn(
-        'truncate text-xs leading-4 text-muted-foreground',
-        size === 'xs' && 'text-[0.6875rem] leading-4',
+        'truncate text-sm leading-5 text-muted-foreground',
+        size == 'xs' && 'text-sm leading-5',
         state === 'error' && 'text-destructive',
         className
       )}
@@ -143,7 +148,7 @@ function AttachmentDescription({ className, ...props }: React.ComponentProps<'p'
   )
 }
 
-function AttachmentActions({ className, ...props }: React.ComponentProps<'div'>) {
+function AttachmentActions ({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot='attachment-actions'
@@ -155,7 +160,7 @@ function AttachmentActions({ className, ...props }: React.ComponentProps<'div'>)
 
 type AttachmentActionProps = Omit<ButtonProps, 'size'> & { size?: ButtonProps['size'] }
 
-function AttachmentAction({ className, size = 'icon-xs', variant = 'ghost', ...props }: AttachmentActionProps) {
+function AttachmentAction ({ className, size = 'icon-xs', variant = 'ghost', ...props }: AttachmentActionProps) {
   return (
     <Button
       data-slot='attachment-action'
@@ -169,7 +174,7 @@ function AttachmentAction({ className, size = 'icon-xs', variant = 'ghost', ...p
 
 export type AttachmentTriggerProps = React.ComponentProps<'button'> & { render?: React.ReactElement }
 
-function AttachmentTrigger({ className, render, ...props }: AttachmentTriggerProps) {
+function AttachmentTrigger ({ className, render, ...props }: AttachmentTriggerProps) {
   const triggerClassName = cn(
     'absolute inset-0 z-0 cursor-pointer rounded-(--radius) outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
     className
@@ -186,7 +191,7 @@ function AttachmentTrigger({ className, render, ...props }: AttachmentTriggerPro
   return <button data-slot='attachment-trigger' type='button' className={triggerClassName} {...props} />
 }
 
-function AttachmentGroup({ className, ...props }: React.ComponentProps<'div'>) {
+function AttachmentGroup ({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot='attachment-group'

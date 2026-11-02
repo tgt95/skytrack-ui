@@ -12,7 +12,7 @@
 
 ## Usage
 
-Use Fieldset to semantically group related form controls that serve a common purpose—such as grouping account preferences, notification settings, or access options.
+Use Fieldset to semantically group related form controls that serve a common purpose—such as grouping records, notifications, or settings.
 
 - **Fit:** Organizing multi-field sections within complex forms before wrapping them in visual cards.
 - **Avoid:** Single isolated inputs (use Field), or top-level page tab views (use Tabs).
@@ -22,23 +22,18 @@ Use Fieldset to semantically group related form controls that serve a common pur
 
 ## Types
 
-Fieldset supports two visual legend styles:
-
-- **Standard Fieldset (`Default`):** Renders a prominent legend title with a subtle horizontal divider line separating the section header from its child fields.
-- **Legend Without Divider (`Legend without divider`):** A minimalist presentation that displays the legend heading without a horizontal border rule, ideal for dense forms.
-
-**Live demo variant:** `Legend without divider`
+Choose a visible divider when the group boundary needs emphasis; omit it when the form structure is already clear.
 
 ## Behavior
 
 Fieldset provides unified container behavior:
 
 - **Unavailable group:** When a whole group cannot be changed, make that clear across all of its choices and explain why when useful.
-- **Validation grouping:** Errors across child fields roll up logically under the fieldset context.
+- **Validation:** Each contained Field displays its own validation state and error message; Fieldset provides the semantic group container.
 
-| Do                                                                                                | Don't                                                                                      | Why                                                                                      |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| Group logically related form inputs with Fieldset so screen readers announce the section context. | Present a flat 20-field form without grouping related parameters under meaningful headers. | Unstructured long forms increase cognitive fatigue and lead to misconfigured parameters. |
+| Do                                                                                                       | Don't                                                                     | Why                                                                              |
+| -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Group related form inputs so assistive technology and sighted users can understand their shared context. | Present a long form as one flat list without meaningful section headings. | Clear sections help people scan the form and understand how its controls relate. |
 
 **Live demo variant:** `Default`
 
@@ -60,9 +55,9 @@ Give each group a clear heading that helps people understand the related control
 
 ## Content
 
-Legends should be concise category titles in sentence case or title case (e.g., "Fail-safe Return Parameters", "Activity Data Channels", "Emergency Contacts").
+Legends should be concise category titles in sentence case (e.g., “Contact details”, “Notification channels”, “Account settings”).
 
-- **Length:** Keep legend titles to 2–4 words.
+- **Length:** Keep legend titles concise and scannable.
 - **Helper copy:** If a group needs context, place one explanatory sentence below its title in a secondary text style.
 
 **Live demo variant:** `Default`

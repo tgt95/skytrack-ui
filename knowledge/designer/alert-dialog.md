@@ -22,13 +22,7 @@ Use Alert Dialog when an action carries high user or data risk, irreversibly des
 
 ## Types
 
-Alert Dialogs are modal surfaces with fixed roles:
-
-- **Destructive confirmation:** A clearly emphasized danger action paired with a neutral, safe way to cancel.
-- **Detached Triggers:** Opened via external action buttons or table row context menus.
-- **Programmatically Controlled:** Managed via application state during project cancellation sequences.
-
-**Live demo variant:** `Controlled mode with multiple triggers`
+Use the blocking confirmation pattern for high-impact decisions. Keep consequences explicit and provide a safe way to cancel.
 
 ## Behavior
 

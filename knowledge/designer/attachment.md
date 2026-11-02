@@ -12,7 +12,7 @@
 
 ## Usage
 
-Use Attachment to represent individual uploaded files, documents, images, or activity reports with metadata and contextual actions.
+Use Attachment to represent individual uploaded files, documents, images, or reports with metadata and contextual actions.
 
 - **Fit:** Displaying uploaded files, monitoring progress, and managing attached documents.
 - **Avoid:** The drag-and-drop target itself (use Dropzone), or simple download links.
@@ -22,21 +22,15 @@ Use Attachment to represent individual uploaded files, documents, images, or act
 
 ## Types
 
-Attachment supports three size variants:
-
-- **Compact:** Dense lists and table rows.
-- **Standard:** General file lists.
-- **Preview:** Image files that benefit from a visual thumbnail.
-
-**Live demo variant:** `Sizes`
+Choose file size and grouping to balance density with the amount of file detail people need.
 
 ## Behavior
 
-Cards reflect upload lifecycles dynamically:
+Set the attachment state to match the file's upload lifecycle:
 
-- **Uploading:** Displays an animated progress bar and upload percentage.
-- **Completed:** Shows file size, format icon, and contextual actions (preview, download, remove).
-- **Error:** Displays a destructive border, failure notice, and retry trigger.
+- **Uploading or processing:** The title pulses. Compose Progress or status text separately when people need more detail.
+- **Done:** Compose file metadata and available actions as content; Attachment does not generate them automatically.
+- **Error:** The root uses destructive styling. Add a clear failure message and a retry action when retry is supported.
 
 | Do                                                                                      | Don't                                                                                   | Why                                                                                                                  |
 | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |

@@ -26,6 +26,7 @@ import {
   SelectPortal,
   SelectPositioner,
   SelectTrigger,
+  SelectIcon,
   SelectValue
 } from '@/components/ui/select'
 import { FieldLabel, FieldRoot } from '@/components/ui/field'
@@ -38,6 +39,7 @@ export function SelectDemo() {
       <Select defaultValue='on-time'>
         <SelectTrigger>
           <SelectValue placeholder='Select status' />
+          <SelectIcon />
         </SelectTrigger>
         <SelectPortal>
           <SelectPositioner side='bottom' align='start' sideOffset={4}>
@@ -83,7 +85,7 @@ Select is composed of the following exported parts:
 
 1. `Select` (Root provider managing selection, open state, and items)
 2. `SelectLabel` (Dedicated label part rendered inside select tree)
-3. `SelectTrigger` (Button trigger opening the menu; renders caret icon automatically)
+3. `SelectTrigger` (Button trigger opening the menu; compose with `SelectIcon` to show the caret)
 4. `SelectValue` (Displays selected value or fallback placeholder)
 5. `SelectPortal` (Portals menu overlay to avoid overflow clipping)
 6. `SelectPositioner` (Positions popup aligned to the trigger)
@@ -93,6 +95,7 @@ Select is composed of the following exported parts:
 10. `SelectGroup` & `SelectGroupLabel` (Category grouping and headers)
 11. `SelectSeparator` (Divider between groups)
 12. `SelectScrollUpArrow` & `SelectScrollDownArrow` (Optional scroll indicators)
+13. `SelectIcon` (Caret icon shown at the trailing edge of the standard trigger composition)
 
 **Live demo variant:** `Default`
 

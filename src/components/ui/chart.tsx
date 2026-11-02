@@ -70,7 +70,7 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        'grid min-w-32 gap-1.5 rounded-(--radius) border border-border bg-popover px-3 py-2 text-xs text-popover-foreground shadow-md',
+        'grid min-w-32 gap-1.5 border border-border bg-popover px-3 py-2 text-xs text-popover-foreground shadow-md',
         className
       )}
     >
@@ -85,7 +85,7 @@ function ChartTooltipContent({
               {Icon ? (
                 <Icon className='size-3.5' />
               ) : (
-                <span className='size-2.5 rounded-sm' style={{ backgroundColor: item.color ?? entry?.color }} />
+                <span className='size-2.5' style={{ backgroundColor: item.color ?? entry?.color }} />
               )}
               <span className='flex-1 text-muted-foreground'>{entry?.label ?? item.name ?? key}</span>
               <span className='font-mono font-medium tabular-nums'>{item.value}</span>
@@ -118,7 +118,7 @@ function ChartLegendContent({
             {Icon ? (
               <Icon className='size-3.5' />
             ) : (
-              <span className='size-2.5 rounded-sm' style={{ backgroundColor: item.color ?? entry?.color }} />
+              <span className='size-2.5' style={{ backgroundColor: item.color ?? entry?.color }} />
             )}
             {entry?.label ?? item.value ?? key}
           </span>

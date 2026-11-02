@@ -22,25 +22,19 @@ The best alternative for grouping multiple mutually exclusive toggles is Toggle 
 
 ## Types
 
-Toggle supports two styling variants and standard size scales:
-
-- **Default:** Ghost-style unbordered button when unpressed; fills with accent background when pressed.
-- **Outlined:** A bordered style that distinguishes the toggle from nearby actions.
-- **Sizing:** Choose a size that matches nearby controls and remains comfortable to activate.
-
-**Live demo variant:** `Sizes`
+Use a quiet or outlined toggle according to the emphasis and boundary needed in its context.
 
 ## Behavior
 
 Selecting the control changes its state between on and off. Make the active state visually clear.
 
-Visual background and border styling transition immediately to reflect the new state. Disabled toggles reject clicks and appear at 50% opacity.
+Visual background and border styling transition immediately to reflect the new state. Disabled toggles reject interaction and appear visually muted.
 
 **Live demo variant:** `Outline`
 
 ## Layout
 
-Place Toggle alongside other action buttons or utility tools inside toolbars, map overlays, or card header actions. Sizing options align directly with standard button scales.
+Place Toggle alongside related action buttons or utility tools inside toolbars, workspace controls, or card headers. Use a size that fits the surrounding actions.
 
 Maintain 4–8px spacing between adjacent toggle buttons. On mobile touch viewports, ensure the toggle hit target is at least 44x44px so users can activate it reliably with a thumb.
 

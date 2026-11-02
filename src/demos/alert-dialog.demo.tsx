@@ -253,7 +253,7 @@ export const demo: DemoMeta = {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogClose>Cancel</AlertDialogClose>
-                <AlertDialogClose className='border-destructive bg-destructive text-white hover:bg-destructive/90'>
+                <AlertDialogClose variant='destructive'>
                   Discard
                 </AlertDialogClose>
               </AlertDialogFooter>

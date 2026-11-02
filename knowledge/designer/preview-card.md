@@ -22,7 +22,7 @@ The best alternative for interactive floating panels with form inputs is Popover
 
 ## Behavior
 
-Hovering or focusing the trigger link opens the preview card after a brief intentional delay (200–300ms). Moving the cursor onto the card keeps it open for inspection.
+Hovering over or focusing the trigger opens the preview. Keep it open while people move the pointer from the trigger into the card.
 
 Moving the cursor away from both trigger and card closes the popup smoothly. Clicking the trigger link executes standard navigation directly to the target entity page.
 
@@ -32,7 +32,7 @@ Moving the cursor away from both trigger and card closes the popup smoothly. Cli
 
 Show Preview Card as a distinct surface above nearby content.
 
-Keep dimensions compact (260–320px width) with 12–16px internal padding. Anchor the card 8px away from the trigger link with pointer arrow alignment. On touchscreens where hover is unavailable, navigate directly on tap.
+Keep the card compact, with enough room for its summary and a clear relationship to the trigger. Keep it within the viewport. On touchscreens where hover is unavailable, navigate directly on tap.
 
 | Do                                                                                                      | Don't                                                                            | Why                                                                                                                          |
 | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -48,7 +48,7 @@ Keep the underlying link usable by keyboard and assistive technology without nee
 
 ## Content
 
-Content should be concise and scannable: an avatar or icon, entity name in `.h4` font, status badge, and 1–2 key metrics.
+Content should be concise and scannable: an avatar or icon, entity name, status badge, and only the key metrics needed to identify the linked item.
 
 Avoid long paragraphs or fine print in the card body.
 

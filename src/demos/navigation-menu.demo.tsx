@@ -75,14 +75,14 @@ function LinkCards({ links, heading }: { links: LinkEntry[]; heading?: string })
   return (
     <ul className='m-0 grid list-none grid-cols-1 gap-1 p-0 sm:grid-cols-2'>
       {heading && (
-        <li className='col-span-full px-2 pt-1 pb-0.5 text-xs font-medium tracking-wide text-muted-foreground'>
+        <li className='col-span-full px-2 pt-1 pb-0.5 text-xs sub-heading'>
           {heading}
         </li>
       )}
       {links.map((link) => (
         <li key={link.href}>
           <NavigationMenuLink href={link.href}>
-            <h3 className='h6 sub-heading m-0 mb-1'>{link.title}</h3>
+            <div className='text-xs sub-heading mb-2'>{link.title}</div>
             <p className='m-0 text-sm text-muted-foreground'>{link.description}</p>
           </NavigationMenuLink>
         </li>

@@ -22,13 +22,7 @@ Use Accordion when people need to scan related topics and reveal details without
 
 ## Types
 
-An accordion can allow one section or several sections to stay open at the same time.
-
-- **Default:** Standard text triggers with rotating indicator chevrons.
-- **Compact:** A denser presentation for secondary content that people scan quickly.
-- **Disabled item:** Make a section unavailable only when its content truly cannot be accessed; explain why where possible.
-
-**Live demo variant:** `Demo`
+Choose a single-open, multi-open, or compact disclosure according to whether people need to compare sections or focus on one at a time.
 
 ## Behavior
 
@@ -50,7 +44,7 @@ Let the accordion fill its content area so section labels and revealed content h
 - **Spacing:** Separate items with subtle dividers. Give revealed content 12–16px of vertical breathing room.
 - **Mobile viewports:** Stacks vertically in a single column with minimum 44px tap targets on triggers.
 
-**Live demo variant:** `account FAQ`
+**Live demo variant:** `Demo`
 
 ## Accessibility
 
@@ -60,9 +54,9 @@ Make open sections easy to identify and connect each section control with the co
 
 ## Content
 
-Trigger labels should be short, specific noun phrases in sentence case (e.g., “Account details”, “Notification preferences”).
+Trigger labels should be short, specific noun phrases in sentence case (e.g., "Account details", "Notification preferences").
 
-- **Length:** Keep headers under 5 words.
+- **Length:** Keep headers concise and scannable. Context determines appropriate length; avoid arbitrary word limits.
 - **Secondary text:** Add a brief supporting hint below a label only when it helps people decide whether to open the section.
 
 **Live demo variant:** `Hidden until found`

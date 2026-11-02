@@ -12,7 +12,7 @@
 
 ## Usage
 
-Use Date Picker when people need to choose a date and benefit from seeing a calendar, such as setting a project start date or filtering a record history.
+Use Date Picker when people need to choose a date and benefit from seeing a calendar, such as setting a start date or filtering a record history.
 
 - **Fit:** Form fields requiring date entry with visual day-of-week context.
 - **Avoid:** Screens dedicated primarily to timeline planning or multi-day schedule browsing where an inline calendar is preferred (use Calendar), or distant dates like birthdates where direct typing is faster (use Input).
@@ -22,12 +22,7 @@ Use Date Picker when people need to choose a date and benefit from seeing a cale
 
 ## Types
 
-Date Picker combines an input trigger with an interactive calendar popover:
-
-- **Single Date Picker:** The standard trigger button displays the selected date formatted locally and opens a single-month calendar.
-- **Calendar Mode:** When configured as an inline standalone calendar without a popover trigger, it renders directly on the page.
-
-**Live demo variant:** `CALENDAR`
+Use an input-triggered calendar for field entry and an inline calendar when date navigation is the main task.
 
 ## Behavior
 

@@ -14,7 +14,7 @@
 
 Use Checkbox Group when people can choose several related options, such as selecting notification types, filtering activity by status, or completing a checklist.
 
-- **Fit:** Multi-select options within a cohesive group (e.g. "Select alert channels: Email, SMS, Radio").
+- **Fit:** Multi-select options within a cohesive group (e.g., “Select notification channels: Email, SMS, Push”).
 - **Avoid:** Mutually exclusive choices where only one option is permitted (use Radio Group), or standalone binary toggles (use Checkbox or Switch).
 - **Best alternative:** For mutually exclusive choices, use Radio Group.
 
@@ -22,12 +22,7 @@ Use Checkbox Group when people can choose several related options, such as selec
 
 ## Types
 
-Checkbox Group presents related choices together. A select-all choice can represent the group, including when only some options are selected.
-
-- **Standard group:** Uniform list of checkboxes with a shared group label.
-- **Select all:** A group-level choice can select or clear all options and indicate when only some are selected.
-
-**Live demo variant:** `Labeling a checkbox group`
+Use a labeled group for related independent choices and a parent control only when it accurately represents its children.
 
 ## Behavior
 
@@ -46,7 +41,7 @@ Selecting an option changes its state. The select-all choice can select or clear
 
 Stack choices vertically with 12–16px between them so each label is easy to scan.
 
-- **Horizontal layout:** Only use horizontal layouts when choices are few (2–3 items) and labels are short.
+- **Horizontal layout:** Prefer vertical stacking. Use horizontal layouts only when choices are few and labels are short enough to fit without wrapping.
 - **Form placement:** Give the group a visible label and add supporting or error text when it helps people make or correct a choice.
 - **Mobile:** Keep vertical stacking on mobile viewports to provide clear, uninterrupted 44px tap targets.
 
@@ -62,7 +57,7 @@ Give the group a clear label. Users can reach each choice with Tab and toggle it
 
 Provide a clear group-level label (e.g., “Notification types”, “Report sections”) indicating whether selection is optional or required.
 
-- **Item labels:** Keep individual checkbox labels concise (1–4 words) in sentence case.
+- **Item labels:** Keep individual checkbox labels concise and scannable in sentence case.
 - **Helper text:** Put any supporting detail beside the choice it explains, using a quieter text style.
 
 **Live demo variant:** `Form integration`

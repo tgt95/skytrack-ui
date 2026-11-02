@@ -22,13 +22,7 @@ Use Calendar when people need an always-visible month view to review dates, comp
 
 ## Types
 
-Calendar supports three primary selection modes:
-
-- **Single Date:** Selecting an individual project date.
-- **Multiple Dates:** Picking non-consecutive patrol days.
-- **Date Range:** Highlighting continuous maintenance windows with a connected background pill.
-
-**Live demo variant:** `CALENDAR`
+Present a calendar within a form flow or inline when calendar navigation is the main task.
 
 ## Behavior
 
@@ -46,7 +40,7 @@ Clicking an enabled day selects or toggles it. In range mode, clicking start and
 
 Calendar acts as a major visual surface, usually placed inside a dedicated scheduling card or split-view workspace.
 
-- **Grid:** Structured 7-column grid with 32–36px day cells balancing desktop density with touch precision.
+- **Grid:** Structured 7-column grid with day cells sized to balance desktop density with touch precision.
 - **Mobile viewports:** Scales to fill card width while preserving square day cells. Navigation buttons provide at least 44px tap targets.
 
 **Live demo variant:** `CALENDAR`

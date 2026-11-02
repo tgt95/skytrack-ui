@@ -5,7 +5,7 @@
 
 Use these guides to choose a component, place it in a clear information hierarchy, and design its states and content. The showcase opens on **Designer**; select **Developer** for implementation details.
 
-Each guide includes the topics that matter for that component:
+Each guide includes the topics that matter for that component. **Types** appears when the component has a distinct design-facing choice; its examples are grouped by the decision they support. A topic is omitted when the existing component and demo do not establish a separate useful design choice.
 
 1. **Usage** — when it helps, when it does not, and which pattern fits better.
 2. **Types** — the available visual or functional choices and when to use them.
@@ -15,6 +15,14 @@ Each guide includes the topics that matter for that component:
 6. **Content** — labels, messages, and values that make the interface understandable.
 
 Guides pair these topics with interactive examples. Where a comparison helps explain a practice, the **Do** and **Don't** examples show the visual difference and a short reason. Guidance stays concise and is grounded in the component’s supported design choices and relevant official references.
+
+### Interface copy
+
+Use sentence case for visible labels, headings, actions, and messages. Preserve established brand and product names; use another casing only when a documented SkyTrack convention requires it.
+
+### Page-level accessibility review baseline
+
+When conducting page and layout reviews, verify that screens reflow cleanly down to a 320px viewport at up to 400% zoom without loss of content or function, and support 200% text zoom without clipping text. Two-dimensional layouts (such as data tables and analytical charts) may preserve local horizontal scrolling where the page as a whole remains navigable. Treat this as an overall page review baseline rather than a requirement to repeat in every individual component guide.
 
 ## Component guides
 

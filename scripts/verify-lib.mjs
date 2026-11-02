@@ -139,6 +139,11 @@ if (!fs.existsSync(cssPath)) {
     'styles.css is missing one of the IBM Plex font families'
   )
   check(
+    /Host Grotesk Variable/.test(css) && /--font-heading:/.test(css) && /font-family:var\(--font-heading\)/.test(css),
+    'styles.css ships the heading font and maps heading classes to --font-heading',
+    'styles.css is missing the heading font face or heading family mapping'
+  )
+  check(
     /--primary:/.test(css) && /\.dark/.test(css),
     'styles.css carries the theme tokens and the class-based dark variant',
     'styles.css is missing theme tokens or the .dark variant'
@@ -207,6 +212,11 @@ for (const file of fs.readdirSync(uiDir).sort()) {
       }
     }
   }
+}
+// `group` and `peer` (including named markers) annotate DOM nodes for descendant
+// variant selectors; they are not standalone utilities and intentionally emit no rule.
+for (const token of candidates) {
+  if (/^(group|peer)(\/[-\w]+)?$/.test(token)) candidates.delete(token)
 }
 if (!fs.existsSync(cssPath)) {
   bad('cannot check utility coverage: styles.css missing')

@@ -1,6 +1,6 @@
 # Select
 
-> A field for choosing one value from a predefined list.
+> A field for choosing one or more values from a predefined list.
 
 - Package version: `0.1.5`
 - Public export: `skytrack-ui/select`
@@ -12,31 +12,28 @@
 
 ## Usage
 
-Use Select when people need to choose one value from a short, known list (e.g., account type, notification frequency, or date format).
+Use Select when people need to choose from a compact, predefined list of options (e.g., account type, notification frequency, or export format). Single selection is the default.
 
-Keep a short list visible with Radio Group or Toggle Group. Use Combobox or Autocomplete when people need to search a long list.
+SkyTrack UI's Select supports multiple selection (`multiple` prop) as a local component capability. Official Carbon Select is strictly single-select (Carbon provides a separate Multiselect component for multiple values), but SkyTrack allows multi-selection directly in Select when space is constrained.
 
-The best alternative for small sets of 2 to 4 visible choices is Radio Group. For large, searchable option lists (like national airport registries), choose Combobox.
+When choosing between selection components:
+- **Radio Group vs. Single Select:** Use Radio Group when a short set of mutually exclusive options fits comfortably and benefits from being visible at once. Use single Select when space is limited or people need to choose from a longer list.
+- **Checkbox Group vs. Multi-Select:** Use Checkbox Group when the choices fit comfortably together and people benefit from comparing them without opening a dropdown. Use multi-select Select when space constraints make a visible group impractical.
+- **Combobox vs. Select:** Use Combobox (or Autocomplete for single-item lookups) when the list is long, dynamic, or requires keyword search and filtering. Select does not provide built-in search.
 
 **Live demo variant:** `Default`
 
 ## Types
 
-Select supports three control heights matching standard form inputs:
+Select supports single selection (default) and multiple selection (`multiple` mode). Group options by category only when that structure helps users scan and navigate related choices.
 
-- **Compact:** Use in dense filters when the selected value remains readable.
-- **Standard:** Use for common forms and dialogs.
-- **Large:** Use when a larger touch target or greater prominence is needed.
-
-Group options under concise headings when categories help people scan the list.
-
-**Live demo variant:** `Sizes`
+**Live demo variant:** `Multiple selection`
 
 ## Behavior
 
 Clicking the trigger opens the popup menu. Moving the cursor or using arrow keys highlights options.
 
-Selecting an option updates the trigger value immediately and dismisses the menu. Pressing `Escape` closes the menu and returns focus to the trigger.
+In single-select mode, selecting an option updates the trigger value immediately and dismisses the menu. In multi-select mode, the menu stays open to allow batch selections until dismissed. Pressing `Escape` closes the menu and returns focus to the trigger.
 
 **Live demo variant:** `Default`
 
@@ -60,7 +57,7 @@ Label the field and make its open and selected states clear. Enter, Space, or Ar
 
 ## Content
 
-Option labels should be concise, scannable noun phrases written in sentence case (e.g., "Optical Zoom (4K)", "Thermal Infrared Radiometric").
+Option labels should be concise, scannable noun phrases written in sentence case (e.g., “Standard quality”, “High quality”).
 
 Placeholder copy should state the action (e.g., “Choose an account type”).
 

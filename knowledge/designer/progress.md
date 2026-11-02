@@ -14,7 +14,7 @@
 
 Use Progress to communicate the duration and completion state of an active, ongoing system operation (e.g. uploading documents, generating a report, or exporting records).
 
-Avoid Progress for static capacity or measurement readouts like remaining resource level percentage or disk usage (use Meter instead), or for instant operations that complete in under 1 second.
+Avoid Progress for static capacity or measurement readouts like remaining resource level percentage or disk usage (use Meter instead), or for operations that finish before progress feedback would be useful.
 
 The best alternative for static scalar measurements like resource level capacity or disk space is Meter. For discrete multi-step guided workflows, use a step indicator.
 
@@ -22,18 +22,13 @@ The best alternative for static scalar measurements like resource level capacity
 
 ## Types
 
-Progress communicates whether work is underway and how much is complete:
-
-- **Known progress:** Show a percentage or amount when the total work is known.
-- **Unknown progress:** Show that work is underway without implying a completion estimate.
-
-**Live demo variant:** `Complete and indeterminate`
+Show a measured amount only when the total is known; otherwise indicate progress without implying an estimate.
 
 ## Behavior
 
 In determinate mode, the progress indicator animates smoothly as progress values increase. When reaching 100%, the track fills completely and can transition to a completed state.
 
-If the operation encounters a network error, the indicator fill shifts to destructive styling.
+If an error occurs, communicate it using a separate alert or error message; the progress indicator itself maintains a primary fill and does not include built-in error color logic.
 
 **Live demo variant:** `Live value`
 

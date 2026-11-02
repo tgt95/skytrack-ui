@@ -12,7 +12,7 @@
 
 ## Usage
 
-Use Alert for persistent, in-context messages that users need to see while interacting with a page or form—such as resource level health warnings, location boundary boundary alerts, or activity data fallback modes.
+Use Alert for persistent, in-context messages that people need to see while interacting with a page or form—such as system warnings, unsaved changes across records, or data synchronization notices.
 
 - **Fit:** Persistent inline notices that explain an issue, important status, or required response.
 - **Avoid:** Brief status updates (use Toast), confirmations that block progress (use Alert Dialog), or field-specific validation errors (use Field).
@@ -22,20 +22,13 @@ Use Alert for persistent, in-context messages that users need to see while inter
 
 ## Types
 
-Alert supports five semantic variants:
-
-- **Default / Informative:** Neutral slate or blue for general notices and status updates.
-- **Success:** Emerald green for completed operations or system readiness checks.
-- **Warning:** Amber for non-critical issues that need attention (e.g. a deadline is approaching).
-- **Error:** A clear error treatment for failures that need attention.
-
-**Live demo variant:** `Semantic variants`
+Choose an alert treatment by message severity; add an action only when it helps resolve the message.
 
 ## Behavior
 
 Alerts are static inline callouts that remain visible until conditions resolve or the user takes corrective action.
 
-- **Actionable alerts:** Can embed inline buttons to trigger immediate diagnostic routines or dismiss resolved notices.
+- **Actionable alerts:** Can include inline buttons to resolve an issue immediately or dismiss a resolved notice.
 
 | Do                                                                      | Don't                                                             | Why                                                               |
 | ----------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- |
@@ -48,7 +41,7 @@ Alerts are static inline callouts that remain visible until conditions resolve o
 Position alerts directly above the relevant section, form, or card content that they describe.
 
 - **Spacing:** Use 16px internal padding and 16–24px between the alert and surrounding content. Align the status icon with the title.
-- **Mobile viewports:** Expands to full width; actions wrap below description to preserve 44px tap targets.
+- **Mobile viewports:** Expands to full width; actions wrap below description to preserve touch targets of at least 44px.
 
 **Live demo variant:** `Action below description`
 
@@ -63,6 +56,6 @@ Make urgent alerts noticeable without interrupting users for routine updates. Ke
 Titles should be brief, declarative statements in sentence case (e.g., “Connection interrupted”).
 
 - **Description:** Use one or two sentences to explain the cause and recommended action.
-- **Action buttons:** Use concise action verbs (e.g. "Recalibrate", "Retry Link").
+- **Action buttons:** Use concise action verbs in sentence case (e.g., “Retry sync” or “Review settings”).
 
 **Live demo variant:** `Action below description`

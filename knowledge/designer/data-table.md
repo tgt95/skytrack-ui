@@ -22,20 +22,13 @@ Use Data Table when people need to scan, compare, sort, filter, or act on a dens
 
 ## Types
 
-Use these choices to help people inspect and manage records:
-
-- **Interactive headers:** Column headers with sort arrows (ascending, descending, neutral).
-- **Selection column:** Checkbox column supporting individual row selection and "select-all" header checkbox.
-- **Column visibility:** Toggleable column menus to customize view density.
-- **Pagination controls:** Page size selectors and page jump buttons integrated at the table footer.
-
-**Live demo variant:** `CUSTOMER RECORDS`
+Use dense tabular presentation when people compare record attributes and act on rows or selections.
 
 ## Behavior
 
 Sorting, filtering, and row selection respond instantly. Clicking a sortable column header cycles through sort states.
 
-- **Batch actions:** Selecting rows reveals relevant actions (e.g., “Export selected”, “Assign owner”).
+- **Batch actions:** The table supports multi-row selection and selected counts; consuming applications can compose a batch action toolbar (e.g., “Export selected”, “Assign owner”) triggered by row selection.
 - **Row feedback:** Give a row a subtle visual highlight on pointer hover, while keeping selected and focused rows distinct.
 
 **Live demo variant:** `CUSTOMER RECORDS`
@@ -45,8 +38,8 @@ Sorting, filtering, and row selection respond instantly. Clicking a sortable col
 Data tables typically occupy the primary content area within an analytical workspace.
 
 - **Cell alignment:** Left-align textual columns; right-align numerical values, timestamps, and currency for rapid vertical comparison. Center status badges and action menus.
-- **Horizontal scroll:** When columns exceed the available width, keep horizontal scrolling within the table and preserve access to the row identifier.
-- **Mobile viewports:** Keep the table’s columns available in a horizontally scrollable region. Keep the record identifier easy to find and preserve clear row-to-column relationships.
+- **Horizontal scroll:** When columns exceed the available width, keep horizontal scrolling within the table container and preserve access to the primary row identifier.
+- **Mobile viewports:** Adapt mobile table treatment to the task rather than assuming a single pattern fits all screens. Where multi-attribute comparison is required, preserve horizontal scrolling within the table container and keep the row identifier accessible; where quick record scanning or triage is the primary task, consider responsive stacked list items or prioritizing essential columns.
 
 | Do                                                                                               | Don't                                            | Why                                                                                           |
 | ------------------------------------------------------------------------------------------------ | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
@@ -64,7 +57,7 @@ Keep column headings, values, and sort direction understandable to assistive tec
 
 Column headers should be concise and descriptive (e.g., “Customer”, “Status”, “Owner”, “Last updated”). Use row actions such as “Export selected” or “Assign owner” only when they support the task.
 
-- **Empty states:** Display an explicit empty table state with an illustration and actionable guidance when filters match zero rows.
+- **Empty states:** Display an explicit empty table state with clear explanation and next steps (e.g., clearing active filters or adding records) when no rows match. Include an illustration when it helps explain the state or guide recovery, but keep it optional rather than requiring one for every routine empty or filtered table.
 - **Loading states:** Show that records are loading while preserving enough of the table structure to keep people oriented.
 
 **Live demo variant:** `CUSTOMER RECORDS`

@@ -20,6 +20,10 @@ The best alternative for top-level application navigation is Navigation Menu. Fo
 
 **Live demo variant:** `Default`
 
+## Types
+
+Choose a horizontal menu bar for familiar top-level commands; use vertical orientation only when the workspace calls for it.
+
 ## Behavior
 
 Clicking any menubar item opens its dropdown menu. Once any menu is open, moving the pointer over sibling menubar items immediately opens them without requiring additional clicks.
@@ -48,8 +52,8 @@ Give each menu a clear name. Arrow keys move between menus and open their option
 
 ## Content
 
-Top-level triggers must be short, single-word nouns in title case (File, Edit, View, Project, Help).
+Use familiar, concise labels for top-level menus (e.g., “File”, “Edit”, “View”, and “Help”).
 
-Submenu items should use concise sentence-case action verbs ("New project sequence", "Export activity data log", "Save as draft").
+Submenu items should use concise sentence-case action verbs ("New project", "Export data", "Save draft").
 
 **Live demo variant:** `Default`

@@ -46,7 +46,7 @@ Use Accordions when users need an overview of multiple related content sections 
 
 Do not use Accordions for primary navigation (use `skytrack-ui/navigation-menu`), solitary collapsible blocks (use `skytrack-ui/collapsible`), or tabbed workflows where only one pane is viewed at a time in full screen (use `skytrack-ui/tabs`). Avoid placing critical flight alarms or safety-blocking actions inside collapsed panels where they could be missed.
 
-**Live demo variant:** `SkyTrack account FAQ`
+**Live demo variant:** `Demo`
 
 ## Anatomy
 

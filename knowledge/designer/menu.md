@@ -22,14 +22,7 @@ The best alternative for selecting a value in a form is Select. For rich interac
 
 ## Types
 
-Menu supports several distinct item types to handle diverse application tasks:
-
-- **Actions:** Direct commands such as “Duplicate project” or “Export records”.
-- **Independent options:** Choices people can turn on or off, such as showing additional details.
-- **Single-choice options:** Mutually exclusive choices such as a date format.
-- **Submenus:** A small set of closely related secondary actions.
-
-**Live demo variant:** `Checkbox items`
+Choose direct actions, independent options, single-choice options, or a short submenu according to the task.
 
 ## Behavior
 
@@ -59,7 +52,7 @@ Use clear action names and visible focus. Arrow keys move through options; Enter
 
 ## Content
 
-Item labels should use concise verb-noun phrasing in sentence case (e.g., "Export activity data", "Duplicate project", "Delete location").
+Item labels should use concise verb-noun phrasing in sentence case (e.g., “Export data”, “Duplicate record”, “Delete item”).
 
 Give irreversible actions a clear danger treatment. Use specific labels rather than broad terms like “Manage”.
 

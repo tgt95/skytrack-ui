@@ -22,13 +22,7 @@ Use Badge to communicate a brief status (“In progress”, “Scheduled”, “
 
 ## Types
 
-Badge supports two primary presentations:
-
-- **Status:** A short label that communicates a known state, such as “Ready”, “In progress”, or “Needs attention”.
-- **Anchored Badges:** Overlaying notification icons or avatars at the top-right corner.
-- **Dot Badges:** Minimal circular pulse indicators for subtle presence or state.
-
-**Live demo variant:** `Sizes`
+Use a labeled status for meaning, a count for quantity, and a dot only when the exact value is unnecessary.
 
 ## Behavior
 

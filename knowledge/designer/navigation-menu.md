@@ -20,6 +20,10 @@ The best alternative for multi-tiered application module navigation is Sidebar. 
 
 **Live demo variant:** `Default`
 
+## Types
+
+Choose direct links for a short hierarchy, nested navigation for deeper paths, or an expanded menu for related destinations.
+
 ## Behavior
 
 Use the trigger and popup to expose related destinations. Keep navigation choices as links; put task controls in the page or an action menu.
@@ -48,7 +52,7 @@ Use meaningful destination names and preserve predictable keyboard and focus beh
 
 ## Content
 
-Link text should be concise, scannable noun phrases (e.g., "Active Projects", "Asset Activity", "Access Rules Authorizations").
+Link text should be concise, scannable noun phrases (e.g., “Projects”, “Reports”, “Access settings”).
 
 Keep supporting descriptions short and specific to their destinations.
 

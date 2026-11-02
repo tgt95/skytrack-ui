@@ -22,14 +22,7 @@ The best alternative for sequential linear workflows is a multi-step form wizard
 
 ## Types
 
-Tabs supports two visual treatments:
-
-- **Line:** A subtle active indicator for related content within the same page.
-- **Filled:** A contained treatment for a small set of closely related views or modes.
-
-Tabs can be arranged horizontally or vertically when the content hierarchy supports it.
-
-**Live demo variant:** `Variants`
+Use tabs for related peer views; choose treatment, orientation, and closability to match their shared context.
 
 ## Behavior
 
@@ -41,13 +34,13 @@ Panel transitions can be animated with smooth cross-fade styling. Disabled tabs 
 
 ## Layout
 
-Position tabs directly above their corresponding tab panels, maintaining 16–24px separation. Keep tab lists concise, ideally between 2 and 6 tabs.
+Position tabs directly above their corresponding panels with enough separation to associate each control with its content. Keep the set concise; if people need to scan many destinations, consider another navigation pattern.
 
 For vertical tabs, place the labels beside their panel. On narrow screens, let long tab rows scroll rather than clipping or wrapping labels.
 
-| Do                                                                                               | Don't                                                                                | Why                                                                                                       |
-| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| Use concise, scannable 1- or 2-word labels for tab triggers (e.g. Overview, Activity, Settings). | Nest horizontal tab bars directly inside other horizontal tab bars on the same page. | Multi-tier horizontal tabs create severe visual ambiguity about which bar controls which content surface. |
+| Do                                                                                  | Don't                                                                                | Why                                                                                                       |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| Use concise, scannable labels for tab triggers (e.g. Overview, Activity, Settings). | Nest horizontal tab bars directly inside other horizontal tab bars on the same page. | Multi-tier horizontal tabs create severe visual ambiguity about which bar controls which content surface. |
 
 **Live demo variant:** `Vertical`
 
@@ -59,7 +52,7 @@ Give each tab group a clear name and make the selected tab and its panel underst
 
 ## Content
 
-Tab titles must be written in sentence or title case and remain brief (e.g., “Projects”, “Locations”, “Settings”).
+Tab titles must be written in sentence case and remain brief (e.g., "Projects", "Locations", "Settings").
 
 Badge counters can be appended to show item counts (e.g. "Locations (12)").
 

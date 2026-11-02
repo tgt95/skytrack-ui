@@ -22,24 +22,28 @@ Use Chart to help people compare values, see a pattern, or understand change ove
 
 ## Types
 
-Choose the chart form that makes the comparison easiest to read:
+Match the chart to the relationship people need to understand:
 
-- **Bar chart:** Compare a small set of categories (e.g. orders by month).
-- **Line / Area Chart:** Show a trend over a continuous period (for example, monthly revenue or weekly sign-ups).
-- **Labels and legend:** Name each series clearly. Use a legend when direct labels would clutter the chart.
+- **Bar:** Compare values across discrete categories; use a horizontal bar when ranking or longer category labels need room.
+- **Stacked bar:** Compare totals and their parts across a small set of categories.
+- **Line:** Follow change over time; show only series people can distinguish. Filter or split the chart when lines or legend entries become hard to match.
+- **Area:** Show how a value or total changes over time when the filled shape helps communicate magnitude.
+- **Stacked area:** Show how parts contribute to a changing total over time, with few distinguishable series.
+- **Pie:** Show parts of one whole only when slices and labels remain easy to distinguish. Use bars or a table when categories are numerous or close in value.
+- **Scatter:** Explore how two numeric measures vary together; describe association without implying causation.
 
-**Live demo variant:** `BAR CHART`
+The examples show category comparison and ranking, category composition, trends and magnitude over time, a small part-to-whole set, and the relationship between two measures.
 
 ## Behavior
 
-Charts can reveal additional values on hover, focus, or tap. Keep key comparisons visible without requiring a tooltip.
+Keep the metric, period, and main comparison visible without requiring hover. Use tooltips only for supporting values that benefit from closer inspection.
 
-- **Interaction:** Hovering or focusing a mark reveals its value; selecting a legend item can hide or show a series.
+- **Interaction:** Make marks and their values available to pointer and keyboard users when the chart supports interactive detail (such as tooltips). Keep series names visible in a clear, static legend.
 - **Responsiveness:** Keep the chart and its labels readable as the available space changes.
 
-| Do                                                               | Don't                                                                    | Why                                                                            |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Keep the number of series low enough to distinguish and compare. | Put many overlapping series in one chart without a way to separate them. | Too much visual density makes patterns hard to see and values easy to confuse. |
+| Do                                                                                | Don't                                                                  | Why                                                                            |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Keep only as many series as people can distinguish, and filter or split the rest. | Overlay series when lines or legend entries cannot be matched clearly. | Too much visual density makes patterns hard to see and values easy to confuse. |
 
 **Live demo variant:** `BAR CHART`
 
@@ -47,14 +51,16 @@ Charts can reveal additional values on hover, focus, or tap. Keep key comparison
 
 Place charts in a clearly titled section with enough spacing to separate the data from surrounding content.
 
-- **Size:** Give the chart enough space for its marks, labels, and legend to remain readable. Check it at the actual size and viewport where people will use it.
-- **Mobile adaptation:** Ensure axes labels remain legible on narrow screens; rotate labels or reduce tick density rather than clipping text.
+- **Rendered check:** At the actual chart size and desktop and narrow viewports, can people identify the measure, units and time context, read labels and legend without overlap or clipping, compare the marks, and access exact values without relying on color or hover alone?
+- **When it fails:** Choose a chart type that better fits the comparison, give it more space, simplify the labels, filter or split the data, use small multiples, or provide a table or summary linked to the full data. Do not use one universal pixel minimum.
+- **Mobile adaptation:** Keep axis labels legible; reduce tick density or choose a different chart rather than clipping or shrinking text.
+- **Decision reference:** Apply [SkyTrack's chart-choice and rendered-legibility criteria](../../UI_RULES.md#chart-choice-and-legibility).
 
 **Live demo variant:** `BAR CHART`
 
 ## Accessibility
 
-Do not rely on color or hover alone. Use labels or patterns to distinguish series and provide a concise text summary or accessible table for the data and takeaway.
+Do not rely on color or hover alone. Use labels or patterns to distinguish series, maintain stable category and semantic color meanings across views, and provide a concise text summary or accessible table for the data and takeaway.
 
 **Live demo variant:** `BAR CHART`
 
@@ -63,6 +69,8 @@ Do not rely on color or hover alone. Use labels or patterns to distinguish serie
 Chart titles should state the measure and time period when relevant (e.g., “Orders per month, January–June”).
 
 - **Axes:** Label measures and units when they are not obvious (e.g., “Revenue (USD)” or “Completion (%)”).
-- **Legends:** Keep series labels short (1–3 words) and position legends above or below the plot area.
+- **Legends:** Keep series labels concise and position legends above or below the plot area.
+- **Formatting:** Format numbers, currencies, percentages, and dates according to the user's locale so values and timestamps are unambiguous.
+- **Color consistency:** Map a category to the same `--chart-1` through `--chart-10` token across related charts. The shared palette offers two shades of blue, orange, teal, purple, and pink; reserve functional status colors (e.g., success, warning, destructive) for actual status indicators rather than generic categories.
 
 **Live demo variant:** `BAR CHART`

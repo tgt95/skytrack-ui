@@ -15,30 +15,25 @@
 Use Collapsible when users need to progressively disclose a single isolated section of advanced parameters or optional details without leaving the current view.
 
 - **Fit:** A single secondary section, such as “Advanced settings”, “Additional details”, or “Activity history”.
-- **Avoid:** Multiple stacked disclosure items (use Accordion), or top-level workspace views (use Tabs). Never bury mandatory safety-critical parameters behind collapsed panels.
+- **Avoid:** Multiple stacked disclosure items (use Accordion), or top-level workspace views (use Tabs). Never bury required fields or critical information behind collapsed panels.
 - **Best alternative:** For multiple stacked sections with coordinated open/close states, use Accordion.
 
 **Live demo variant:** `Default`
 
 ## Types
 
-Collapsible reveals or hides one related block of secondary content.
-
-- **Inline Disclosure:** Placed inside forms or cards to tuck away advanced or infrequently used inputs.
-- **Findable content:** Keep section labels descriptive so people can identify the information they can reveal.
-
-**Live demo variant:** `Default`
+Reveal related secondary content in place when people benefit from progressive disclosure.
 
 ## Behavior
 
 Clicking the trigger toggles panel visibility with a smooth vertical height animation.
 
-- **Chevron indicator:** The disclosure icon rotates 180 degrees to indicate open state.
+- **Chevron indicator:** A disclosure icon (such as a chevron or caret) can be composed with the trigger and styled to rotate when opened.
 - **Initial state:** Keep content open when people need it to complete the current task; collapse it when it is secondary.
 
-| Do                                                                                      | Don't                                                 | Why                                                                         |
-| --------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
-| Default secondary or advanced settings to collapsed so the main task remains scannable. | Hide required access fields inside a collapsed panel. | Hiding mandatory fields causes form submission errors and frustrates users. |
+| Do                                                                                      | Don't                                          | Why                                                                         |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------- |
+| Default secondary or advanced settings to collapsed so the main task remains scannable. | Hide required fields inside a collapsed panel. | Hiding mandatory fields causes form submission errors and frustrates users. |
 
 **Live demo variant:** `Hidden until found`
 

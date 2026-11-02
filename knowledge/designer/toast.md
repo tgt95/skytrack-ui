@@ -14,7 +14,7 @@
 
 Use Toast for brief, non-critical feedback that confirms the outcome of an action without interrupting the current task (e.g., “Changes saved”, “Link copied”, “Item deleted”).
 
-Avoid Toast for critical system errors, mandatory security alerts, or warnings that require immediate user action before continuing (use persistent Alert or modal Alert Dialog).
+Avoid Toast for critical system errors, mandatory security alerts, or warnings that require immediate user action before continuing (use persistent Alert or modal Alert Dialog). Do not use Toast as the sole record of information that must be referenced later; store durable details in an activity log, history panel, or notification center.
 
 The best alternative for urgent errors requiring immediate attention is Alert. For critical confirmations requiring an explicit decision before proceeding, choose Alert Dialog.
 
@@ -22,13 +22,19 @@ The best alternative for urgent errors requiring immediate attention is Alert. F
 
 ## Types
 
-Toast supports status styling for `success`, `error`, `warning`, and `loading` messages. Its default `stacked` layout collapses older toasts behind the newest; `flat` displays them as a list.
+Match the toast pattern and lifetime to its operational role:
 
-**Live demo variant:** `Undo action`
+- **Confirmation:** Brief status feedback for completed user actions (e.g., “File uploaded”, “Link copied”). It dismisses automatically after a short timeout so people can continue working uninterrupted.
+- **Progress:** Status feedback for ongoing asynchronous operations (e.g., “Exporting report…”). It remains visible until the process finishes or fails, then updates to a confirmation or error message.
+- **Communication and actionable:** Informational updates that provide useful context or immediate undo recovery (e.g., “Item moved to trash” with an “Undo” button). Use a longer reading window or manual dismissal so people have time to take action.
 
 ## Behavior
 
-The provider queues toasts and uses a 5-second default timeout; set a different timeout when a message or action needs more or less time. The underlying Base UI toast pauses its timer while hovered or focused. Promise toasts can update through loading, success, and error states.
+Tailor message duration to content complexity and task type rather than applying a single uniform timeout across all toasts. Give people enough time to read the text and trigger any interactive action.
+
+- **Dismissal and timeouts:** Dismiss simple confirmations automatically after a few seconds. Keep progress toasts visible until complete, and provide an explicit close control for any toast requiring action or longer reading time.
+- **Persistent retrieval:** Because toasts disappear, any information users may need to review later—such as detailed error logs, asynchronous job results, or audit summaries—must be permanently retrievable in a notification center, activity feed, or system log.
+- **Pause and resume:** Pause automatic dismissal on hover or focus so people do not lose the message while reading or attempting to click an action.
 
 **Live demo variant:** `Default`
 
@@ -36,9 +42,12 @@ The provider queues toasts and uses a 5-second default timeout; set a different 
 
 Place brief notifications where they are noticeable without covering important content. On narrow screens, let them fit the available width and leave space between stacked messages.
 
-| Do                                                                                                                   | Don't                                                                                                       | Why                                                                                                               |
-| -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Include an immediate inline "Undo" action for reversible operations like deleting a location or archiving a project. | Pack lengthy multi-paragraph instructions, complex forms, or critical error logs into a disappearing toast. | Users cannot read long messages before the toast automatically dismisses, leading to missed critical information. |
+- **Stacking and competing notifications:** Avoid triggering multiple competing toasts simultaneously or overloading the screen. When multiple events occur close together, batch or deduplicate repetitive alerts. Keep messages readable and prevent competing stacks instead of enforcing a universal count.
+
+| Do                                                                                                               | Don't                                                                                                       | Why                                                                                                               |
+| ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Include an immediate inline "Undo" action for reversible operations like deleting a record or archiving an item. | Pack lengthy multi-paragraph instructions, complex forms, or critical error logs into a disappearing toast. | Users cannot read long messages before the toast automatically dismisses, leading to missed critical information. |
+| Provide a persistent log or notification center for messages users may need to revisit after dismissal.          | Fire multiple competing toasts simultaneously that cover the workspace and overwhelm the user.              | Competing stacks cause visual clutter and increase the risk that users miss important feedback.                   |
 
 **Live demo variant:** `Anchored toasts`
 

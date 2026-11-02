@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { MagnifyingGlassIcon, MoonIcon, SunIcon, XIcon } from '@phosphor-icons/react'
+import { MagnifyingGlassIcon, MoonIcon, SunIcon, XIcon, PaletteIcon, CodeIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { VariantBlock, type DemoMeta } from './demo'
 import { Sheet } from './sheet'
@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Toggle } from '@/components/ui/toggle'
 import { ToggleGroup } from '@/components/ui/toggle-group'
 import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
 import {
   Sidebar,
   SidebarContent,
@@ -17,13 +18,21 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar'
+import {
+  Tooltip,
+  TooltipArrow,
+  TooltipPopup,
+  TooltipPortal,
+  TooltipPositioner,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import {
   ComponentGuidelineSheet,
   designerGuidelinesBySlug,
@@ -84,15 +93,15 @@ const VIEWS = [
   ['dashboard', 'Dashboard']
 ] as const
 
-type View = typeof VIEWS[number][0]
+type View = (typeof VIEWS)[number][0]
 type Audience = 'designer' | 'developer'
 
-function readViewFromUrl (): View {
+function readViewFromUrl(): View {
   const route = new URLSearchParams(window.location.search).get('view')
   return VIEWS.some(([id]) => id === route) ? (route as View) : 'components'
 }
 
-export function App () {
+export function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
   const [query, setQuery] = useState('')
   const [view, setView] = useState<View>(readViewFromUrl)
@@ -172,7 +181,7 @@ export function App () {
 
   const renderViewContent = (selectedAudience: Audience) =>
     view === 'components' ? (
-      <div className='mx-auto max-w-6xl space-y-16 px-6 sm:px-8 py-10'>
+      <div className='mx-auto max-w-7xl space-y-16 px-6 sm:px-8 py-10'>
         <h1 className='sr-only'>SkyTrack UI component showcase</h1>
         {filtered.length === 0 && <p className='text-sm text-muted-foreground'>No components match “{query}”.</p>}
         {filtered.map((d) => {
@@ -185,9 +194,9 @@ export function App () {
               className={cn('scroll-mt-20 space-y-6 pb-12 border-b border-border/40 last:border-b-0')}
             >
               <div className='flex flex-col gap-2'>
-                <h2 className='h4 heading'>{d.title}</h2>
+                <h2 className='h2'>{d.title}</h2>
                 <p className='text-base text-muted-foreground'>
-                  {selectedAudience === 'designer' ? designerGuideline?.description ?? d.description : d.description}
+                  {selectedAudience === 'designer' ? (designerGuideline?.description ?? d.description) : d.description}
                 </p>
               </div>
 
@@ -204,18 +213,20 @@ export function App () {
                     <ComponentGuidelineSheet guideline={developerGuideline} demo={d} allDemos={demosMap} />
                   )}
 
-              <div className='space-y-3 pt-2'>
-                <div className='text-xs font-semibold sub-heading uppercase tracking-wider text-muted-foreground'>
-                  {developerGuideline ? 'All Demo Variants' : 'Pattern Specimens'}
+              {(selectedAudience === 'developer' || (!developerGuideline && !designerGuideline)) && (
+                <div className='space-y-3 pt-2'>
+                  <div className='text-xs font-semibold sub-heading uppercase tracking-wider text-muted-foreground'>
+                    {developerGuideline ? 'All Demo Variants' : 'Pattern Specimens'}
+                  </div>
+                  <div className='grid gap-4'>
+                    {d.variants.map((v) => (
+                      <div key={v.name} className='min-w-0 max-w-full overflow-x-auto'>
+                        <VariantBlock name={v.name}>{v.render()}</VariantBlock>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className='grid gap-4'>
-                  {d.variants.map((v) => (
-                    <div key={v.name} className='min-w-0 max-w-full overflow-x-auto'>
-                      <VariantBlock name={v.name}>{v.render()}</VariantBlock>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              )}
             </section>
           )
         })}
@@ -240,43 +251,6 @@ export function App () {
                 aria-label={`${componentCount} components · ${patternCount} pattern · ${variantCount} variants`}
               />
               <Badge count='ui' status='outline'></Badge>
-            </div>
-            {/* <SidebarMenuButton
-              size='default'
-              tooltip='SkyTrack workspace'
-              className='group-data-[icon-collapsed=true]/sidebar:p-0'
-            >
-              <span className='flex min-w-0 flex-1 flex-col items-start gap-0.5 group-data-[icon-collapsed=true]/sidebar:hidden'>
-                <span
-                  aria-hidden='true'
-                  className='block h-5 [&>svg]:block [&>svg]:h-full [&>svg]:w-full'
-                  dangerouslySetInnerHTML={{ __html: skytrackLogo }}
-                />
-              </span>
-              <img
-                src='/skytrack-logo-full.svg'
-                alt=''
-                className='hidden size-5 object-cover object-left group-data-[icon-collapsed=true]/sidebar:block'
-              />
-            </SidebarMenuButton> */}
-            <div className='border-b border-sidebar-border p-3'>
-              <Input
-                ref={filterInputRef}
-                startAdornment={<MagnifyingGlassIcon />}
-                endAdornment={
-                  <>
-                    <Badge size='sm' count='⌘ K' />
-                    {query !== '' && (
-                      <Button size='icon-xs' variant='ghost' aria-label='Clear filter' onClick={() => setQuery('')}>
-                        <XIcon />
-                      </Button>
-                    )}
-                  </>
-                }
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder='Filter components'
-              />
             </div>
           </SidebarHeader>
           <SidebarContent className='gap-0 p-3 text-sm'>
@@ -310,10 +284,10 @@ export function App () {
         onValueChange={(value) => setAudience(value as Audience)}
         className='w-full min-w-0 flex-1 gap-0'
       >
-        <header className='w-full sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-background/90 px-3 backdrop-blur sm:gap-4 md:z-999'>
+        <header className='w-full sticky top-0 z-1 flex h-14 items-center gap-1 border-b border-border bg-background/90 px-3 backdrop-blur sm:gap-4 md:z-40'>
           {view === 'components' && <SidebarTrigger />}
           <ToggleGroup
-            className='w-full min-w-0 flex-1 gap-1 overflow-x-auto border-none'
+            className='w-18 shrink-0 gap-1 overflow-x-auto border-none sm:w-full sm:min-w-0 sm:flex-1'
             variant='default'
             aria-label='Showcase views'
             value={[view]}
@@ -324,15 +298,85 @@ export function App () {
               </Toggle>
             ))}
           </ToggleGroup>
-          <TabsList variant='filled' width='hug' aria-label='Guidance audience' className='shrink-0'>
-            <TabsTab value='designer'>Designer</TabsTab>
-            <TabsTab value='developer'>Developer</TabsTab>
-          </TabsList>
+          <Input
+            ref={filterInputRef}
+            startAdornment={<MagnifyingGlassIcon />}
+            endAdornment={
+              <>
+                <Badge size='sm' count='⌘ K' />
+                {query !== '' && (
+                  <Button size='icon-xs' variant='ghost' aria-label='Clear filter' onClick={() => setQuery('')}>
+                    <XIcon />
+                  </Button>
+                )}
+              </>
+            }
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder='Search components'
+            className='w-full min-w-0 max-w-28 sm:max-w-60'
+          />
+          <Separator orientation='vertical' className='h-[calc(100%-var(--spacing)*8)]' />
+          <div className='flex flex-row items-center gap-2'>
+            <div className='hidden text-xs text-muted-foreground sm:block'>View as:</div>
+            <TabsList variant='filled' width='hug' aria-label='Guidance audience' className='shrink-0'>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <TabsTab
+                        value='designer'
+                        render={
+                          <Button size='icon' variant='ghost'>
+                            <PaletteIcon />
+                          </Button>
+                        }
+                      />
+                    }
+                    aria-label='Designer'
+                  />
+                  <TooltipPortal>
+                    <TooltipPositioner sideOffset={8}>
+                      <TooltipPopup>
+                        Designer
+                        <TooltipArrow />
+                      </TooltipPopup>
+                    </TooltipPositioner>
+                  </TooltipPortal>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <TabsTab
+                        value='developer'
+                        render={
+                          <Button size='icon' variant='ghost'>
+                            <CodeIcon />
+                          </Button>
+                        }
+                      />
+                    }
+                    aria-label='Developer'
+                  />
+                  <TooltipPortal>
+                    <TooltipPositioner sideOffset={8}>
+                      <TooltipPopup>
+                        Developer
+                        <TooltipArrow />
+                      </TooltipPopup>
+                    </TooltipPositioner>
+                  </TooltipPortal>
+                </Tooltip>
+              </TooltipProvider>
+            </TabsList>
+          </div>
           <Button onClick={() => setDark((d) => !d)} aria-label='Toggle theme' size='icon' variant='outline'>
             {dark ? <SunIcon className='size-4' /> : <MoonIcon className='size-4' />}
           </Button>
         </header>
-        <TabsPanel value='designer' className='min-w-0 outline-none'>
+        <TabsPanel value='designer' className={`min-w-0 outline-none ${view === 'style-overview' && 'bg-muted'}`}>
           {renderViewContent('designer')}
         </TabsPanel>
         <TabsPanel value='developer' className='min-w-0 outline-none'>

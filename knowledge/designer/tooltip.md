@@ -12,7 +12,7 @@
 
 ## Usage
 
-Use Tooltip to display a brief text label, clarification hint, or keyboard shortcut when an user hovers over or focuses an icon-only button, truncated text label, or compact data badge.
+Use Tooltip to add a brief clarification when people hover over or focus a control whose purpose may otherwise be unclear.
 
 Avoid Tooltip for critical information required to complete a primary task, for multi-sentence instructions, or for content containing interactive links or buttons (use Popover or visible inline copy instead).
 
@@ -34,9 +34,9 @@ Place the tooltip close to the control it describes, with enough contrast to rea
 
 Keep tooltip text brief and narrow enough to scan. Do not cover the control it describes or hide an essential label behind a tooltip, especially on touch screens.
 
-| Do                                                                                                   | Don't                                                                                         | Why                                                                                                        |
-| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Keep tooltip text concise (1 to 5 words) and non-redundant (e.g. "Add location (W)" on a plus icon). | Place interactive links, buttons, or lengthy multi-paragraph manuals inside a tooltip bubble. | Tooltips disappear when the pointer leaves the trigger, making interactive content completely unreachable. |
+| Do                                                                                 | Don't                                                                                         | Why                                                                                                        |
+| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Keep tooltip text brief and useful (e.g. “Show details” for an unlabeled control). | Place interactive links, buttons, or lengthy multi-paragraph manuals inside a tooltip bubble. | Tooltips disappear when the pointer leaves the trigger, making interactive content completely unreachable. |
 
 **Live demo variant:** `Position and Size`
 
@@ -48,8 +48,8 @@ Keep the trigger understandable without the tooltip. Escape dismisses the hint w
 
 ## Content
 
-Text should be written in sentence case and remain extremely brief (1–5 words).
+Text should be written in sentence case and stay brief enough to scan quickly.
 
-For actions, include the keyboard shortcut in parentheses (e.g. "Zoom in (Z)").
+For actions, include the keyboard shortcut in parentheses (e.g. "Zoom in (Z)") when relevant and concise.
 
 **Live demo variant:** `Content`

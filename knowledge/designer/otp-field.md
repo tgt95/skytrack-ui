@@ -20,6 +20,10 @@ The best alternative for standard password entry or alphanumeric tokens with var
 
 **Live demo variant:** `Demo`
 
+## Types
+
+Match the code format and grouping to the verification task; mask entry only when it meaningfully improves privacy.
+
 ## Behavior
 
 Move people through the code as they type, and let Backspace return to the previous character.

@@ -8,7 +8,7 @@
 - Public type declaration: [`dist-lib/components/ui/inline-edit.d.ts`](../../dist-lib/components/ui/inline-edit.d.ts)
 - Showcase demo id: `inline-edit`
 - Closest demo: [`src/demos/inline-edit.demo.tsx`](../../src/demos/inline-edit.demo.tsx)
-- Official guidance: [Carbon Design System Text Input & Inline Edit](https://carbondesignsystem.com/components/text-input/usage/)
+- Official guidance: [Carbon Design System Text Input Usage](https://carbondesignsystem.com/components/text-input/usage/) (related guidance only; NOT COMPARABLE)
 
 ## Usage
 
@@ -16,7 +16,7 @@ Use Inline Edit when users need to make quick, in-place corrections to names, la
 
 Avoid Inline Edit for initial record creation or complex multi-field entities requiring batch validation; use a dedicated form sheet or Form instead.
 
-The best alternative for read-only text paired with an explicit action button is standard typography with a standalone Button variant `ghost`.
+The best alternative for read-only text paired with an explicit action is static text with a separate, low-emphasis button.
 
 **Live demo variant:** `Headless trigger`
 
@@ -30,7 +30,7 @@ Committing changes occurs on Enter or blur, while Escape reverts the field to it
 
 ## Layout
 
-In layout, the trigger element should inherit surrounding typography (such as an `h3` heading or table cell) without causing layout shift when transitioning to an input.
+In layout, the trigger should inherit the surrounding typography, such as a page heading or table cell, without causing layout shift when it becomes an input.
 
 Give the edit affordance enough surrounding space to discover and activate. On touch screens, make the target at least 44px tall.
 
@@ -50,6 +50,6 @@ Give the edit action a clear name. Move focus into the field when editing starts
 
 Display the committed value or an empty placeholder hint (e.g., "Add project name..."). Use sentence case for placeholder copy.
 
-Keep editable strings concise (under 40 characters). For longer narrative copy or notes, use a dedicated textarea or sheet.
+Keep editable strings concise (typically single-line titles or names). For longer narrative copy or notes, use a dedicated multi-line text field, dialog, or form.
 
 **Live demo variant:** `Custom trigger via render`

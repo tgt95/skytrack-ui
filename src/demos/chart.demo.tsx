@@ -36,8 +36,8 @@ function MissionChart() {
           <XAxis dataKey='month' tickLine={false} axisLine={false} tickMargin={8} />
           <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey='planned' fill='var(--color-planned)' radius={4} />
-          <Bar dataKey='completed' fill='var(--color-completed)' radius={4} />
+          <Bar dataKey='planned' fill='var(--color-planned)' />
+          <Bar dataKey='completed' fill='var(--color-completed)' />
         </BarChart>
       </ChartContainer>
     </div>

@@ -22,12 +22,7 @@ Use Command when people need a fast, keyboard-driven way to find a destination o
 
 ## Types
 
-Command supports two primary display modes:
-
-- **Command dialog:** A searchable action list that opens over the current page, often from a keyboard shortcut.
-- **Inline command list:** A persistent searchable action list embedded in a page or navigation area.
-
-**Live demo variant:** `INLINE`
+Keep searchable commands in a dialog or inline where they belong in the current page.
 
 ## Behavior
 
@@ -46,9 +41,9 @@ Center the command dialog and keep it wide enough to show matching destinations 
 - **Separators:** Separate distinct groups only when the boundary helps people scan them.
 - **Mobile:** Renders full-width with the input pinned to the top, ensuring comfortable touch scrolling.
 
-| Do                                                                                   | Don't                                                         | Why                                                                                      |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Provide clear group titles (e.g., "Quick Actions", "Navigation", "System Settings"). | Dump 30 uncategorized commands into a single monolithic list. | Meaningful group headers help users scan and find relevant actions significantly faster. |
+| Do                                                                                             | Don't                                                          | Why                                                                                      |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Provide clear group titles in sentence case (e.g., “Quick actions”, “Navigation”, “Settings”). | Dump dozens of uncategorized commands into a single flat list. | Meaningful group headers help users scan and find relevant actions significantly faster. |
 
 **Live demo variant:** `INLINE`
 
@@ -60,7 +55,7 @@ Make search results and selection changes understandable to assistive technology
 
 ## Content
 
-Action labels should start with a direct verb (e.g., “Create project”, “View activity”, “Change theme”).
+Action labels should start with a direct verb in sentence case (e.g., “Create project”, “View records”, “Change theme”).
 
 - **Shortcuts:** Show familiar keys clearly (e.g., ⌘K or Ctrl+K).
 - **Empty feedback:** Explain when no results match and suggest a useful next step.

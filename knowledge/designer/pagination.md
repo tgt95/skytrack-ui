@@ -14,9 +14,9 @@
 
 Use Pagination when users need to browse large, structured collections of records (e.g. activity history, asset inventories, access review records) divided into discrete, manageable pages.
 
-Avoid Pagination for short data sets under 15–20 items, or for real-time live streaming feeds where continuous scrolling or an explicit "Load more" button is more appropriate.
+Avoid Pagination for short data sets that can be displayed inline, or for real-time live streaming feeds where continuous scrolling or an explicit "Load more" button is more appropriate.
 
-The best alternative for continuous infinite feeds or streaming activity data is an explicit "Load more" Button or virtualized list.
+For a continuous or streaming feed, use a feed pattern with a clear way to load more content.
 
 **Live demo variant:** `INTERACTIVE`
 
@@ -36,9 +36,9 @@ Combine pagination controls with a total count summary (e.g. “Showing 1–25 o
 
 On mobile screens, collapse intermediate page numbers to display only "Previous", "Next", and a compact indicator ("Page 3 of 12").
 
-| Do                                                                                                          | Don't                                                                                             | Why                                                                                             |
-| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Clearly highlight the current active page button with high-contrast active styling and aria-current='page'. | Completely remove or hide the "Previous" or "Next" buttons on the first or last page of the list. | Removing buttons causes layout shifting, causing users to accidentally click the wrong element. |
+| Do                                                                                  | Don't                                                                      | Why                                                                                                       |
+| ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Make the current page visually distinct and understandable to assistive technology. | Remove or hide the "Previous" or "Next" buttons on the first or last page. | Keeping the controls in a consistent position helps people find them as they move through the collection. |
 
 **Live demo variant:** `INTERACTIVE`
 

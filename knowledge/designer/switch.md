@@ -22,18 +22,13 @@ The best alternative for batch form submission is Checkbox. For two mutually exc
 
 ## Types
 
-Switch supports two standardized sizes:
-
-- **Compact:** Use in dense settings lists when the label remains easy to read.
-- **Standard:** Use for common settings and forms.
-
-**Live demo variant:** `Sizes`
+Choose a switch size that fits the density of its settings row while keeping its label clear.
 
 ## Behavior
 
 Clicking or keyboard-activating the switch toggles state immediately. The thumb animates across the track with a smooth slide transition.
 
-The track shifts color from muted grey (off) to primary brand color (on). Disabled switches reject clicks and appear at 50% opacity.
+The track shifts color between the off and on states. Disabled switches reject interaction and appear visually muted.
 
 **Live demo variant:** `Form integration`
 

@@ -12,7 +12,7 @@
 
 ## Usage
 
-Use Drawer when users need to inspect object details, edit secondary settings, or review logs without navigating away from the primary screen or map view.
+Use Drawer when users need to inspect object details, edit secondary settings, or review logs without navigating away from the primary screen.
 
 - **Fit:** A detail panel people need to view beside the current page, or a focused panel on a narrow screen.
 - **Avoid:** Destructive alert confirmations (use Alert Dialog), or simple dropdown choices (use Menu).
@@ -22,25 +22,19 @@ Use Drawer when users need to inspect object details, edit secondary settings, o
 
 ## Types
 
-Drawer supports multiple positions and sheet configurations:
-
-- **Placement:** Choose the opening edge based on the panel’s relationship to the content and the available screen space.
-- **Action Sheets:** Bottom-aligned drawer with isolated destructive actions for rapid thumb operation on tablets or mobile phones.
-- **Modal vs Non-modal:** Modal drawers lock background clicks with an overlay; non-modal drawers allow users to interact with background map coordinates while keeping the inspector open.
-
-**Live demo variant:** `Position`
+Choose placement, modal behavior, and partial expansion according to how much context people need to keep visible.
 
 ## Behavior
 
 Drawers feature smooth fluid transitions and gesture support:
 
 - **Swipe-to-dismiss:** Touch and pointer drag gestures allow users to swipe the drawer closed.
-- **Snap points:** Supports multiple height snap points (e.g., 25% preview, 50% summary, 90% full-screen inspection).
+- **Snap points:** Can support fractional height snap points (such as preview, summary, or expanded inspection) as a local layout choice when task and mobile viewports require it.
 - **Dismissal:** Clicking the backdrop overlay or pressing `Escape` closes the drawer.
 
-| Do                                                                                   | Don't                                                              | Why                                                                                             |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| Use bottom slide-in drawers with snap points on mobile for activity data inspection. | Force centered desktop modal dialogs onto narrow mobile viewports. | Bottom drawers are ergonomically designed for thumb reach and allow progressive content reveal. |
+| Do                                                                            | Don't                                                              | Why                                                                                             |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| Use bottom slide-in drawers with snap points on mobile for detail inspection. | Force centered desktop modal dialogs onto narrow mobile viewports. | Bottom drawers are ergonomically designed for thumb reach and allow progressive content reveal. |
 
 **Live demo variant:** `Snap points`
 
@@ -65,6 +59,6 @@ Clearly name the panel and its purpose. For a modal drawer, keep keyboard focus 
 Titles should identify the item or task (e.g., “Customer details”, “Edit profile”).
 
 - **Descriptions:** Add one concise sentence to explain what the panel contains when the title alone is not enough.
-- **Action buttons:** Use explicit verb labels ("Apply Changes", "Dismiss").
+- **Action buttons:** Use explicit verb labels in sentence case (e.g., “Apply changes”, “Dismiss”).
 
 **Live demo variant:** `Mobile navigation`

@@ -33,7 +33,7 @@ function AlertDialogBackdrop({ className, ...props }: React.ComponentProps<typeo
     <BaseAlertDialog.Backdrop
       data-slot='alert-dialog-backdrop'
       className={cn(
-        'fixed inset-0 z-50 min-h-dvh bg-black/20 transition-opacity duration-150',
+        'fixed inset-0 z-50 min-h-dvh bg-black/60 transition-opacity duration-150',
         'supports-[-webkit-touch-callout:none]:absolute',
         'data-starting-style:opacity-0 data-ending-style:opacity-0 data-closed:pointer-events-none',
         className
@@ -97,7 +97,7 @@ function AlertDialogDescription({ className, ...props }: React.ComponentProps<ty
   return (
     <BaseAlertDialog.Description
       data-slot='alert-dialog-description'
-      className={cn('text-sm text-muted-foreground', className)}
+      className={cn('text-base text-muted-foreground', className)}
       {...props}
     />
   )

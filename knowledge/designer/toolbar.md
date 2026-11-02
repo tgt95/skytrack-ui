@@ -20,6 +20,10 @@ Use Menubar for application-wide commands and Page Header for page titles and pr
 
 **Live demo variant:** `Default`
 
+## Types
+
+Group related frequent actions and choose a horizontal or vertical arrangement that fits the work area.
+
 ## Behavior
 
 Buttons inside the toolbar respond immediately to click and keyboard activation.
@@ -30,15 +34,15 @@ Toolbars support embedded menus, tooltips, and stepper fields. Active tools disp
 
 ## Layout
 
-Toolbar floats directly over or sits immediately adjacent to the primary workspace canvas (e.g. pinned horizontally across the top of the map view or vertically along the canvas edge).
+Toolbar floats over or sits beside the primary work surface, such as along its top or side edge.
 
 Group related tools (e.g., selection, editing, and history) and separate distinct groups. Keep controls close enough to read as one toolbar without crowding.
 
 On mobile screens, collapse secondary or infrequent tools into an overflow menu button within the toolbar to maintain a clean single-row layout without overflowing the screen.
 
-| Do                                                                                                                         | Don't                                                                                                  | Why                                                                                               |
-| -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| Pair every icon-only toolbar button with an informative Tooltip and standard keyboard shortcut (e.g. "Location tool (W)"). | Pack dozens of un-grouped, un-labeled icons into an uninterrupted horizontal strip without separators. | Unorganized walls of icons cause severe visual fatigue and slow down critical user interventions. |
+| Do                                                                                                                | Don't                                                                                      | Why                                                                             |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| Give icon-only controls clear accessible names; add a tooltip when it helps people discover an unfamiliar action. | Pack ungrouped, unlabeled icons into an uninterrupted horizontal strip without separators. | Clear names and grouping help people find and understand the available actions. |
 
 **Live demo variant:** `Vertical`
 
@@ -50,8 +54,8 @@ Give the toolbar a clear name. Tab enters and leaves; arrow keys move between it
 
 ## Content
 
-Buttons should use standardized, recognizable iconography with tooltips that clearly describe the tool action.
+Buttons should use recognizable iconography and direct labels. Add a tooltip or shortcut hint when it makes an unfamiliar action easier to discover.
 
-Include keyboard shortcuts in tooltips where supported (e.g. "Undo (⌘Z)").
+Include a keyboard shortcut when it is available and useful to the task (e.g. “Undo (⌘Z)”).
 
 **Live demo variant:** `Using with Menu`

@@ -20,6 +20,10 @@ The best alternative for modal or off-canvas container headers is Dialog header 
 
 **Live demo variant:** `With Tabs and Toolbar`
 
+## Types
+
+Choose a header composition that establishes page location and keeps related page-level navigation and actions together.
+
 ## Layout
 
 Page Header resides immediately below the global app header or beside the persistent sidebar navigation.
@@ -40,7 +44,7 @@ Use a clear page heading. Mark the current location in the breadcrumb, and give 
 
 ## Content
 
-Page titles should be clear, scannable nouns or noun phrases in title case (e.g., "Active Project Planning", "Asset Activity Diagnostics").
+Page titles should be clear, scannable nouns or noun phrases in sentence case (e.g., "Active project planning", "Asset activity diagnostics").
 
 Action button labels should use direct action verbs ("Launch project", "Export report"). Breadcrumb labels should mirror the title of the parent page exactly.
 

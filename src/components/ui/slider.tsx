@@ -55,7 +55,7 @@ function SliderTrack({ className, ...props }: React.ComponentProps<typeof BaseSl
     <BaseSlider.Track
       data-slot='slider-track'
       className={cn(
-        'h-1.5 w-full rounded-full bg-muted select-none',
+        'h-1.5 w-full rounded-(--radius) bg-muted select-none',
         'data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5',
         className
       )}

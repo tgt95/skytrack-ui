@@ -1,12 +1,13 @@
 # AGENT_GUIDE — building UI with `skytrack-ui`
 
-This guide is for agents (and people) who are about to write UI code that uses the
-`skytrack-ui` package. It states the rules that keep SkyTrack screens consistent, and the
-exact commands to verify your work honestly.
+This is a detailed package reference, not a required full read for every UI task. Follow the root
+[`AGENTS.md`](../../../AGENTS.md) router: scan the component decision index, open only shortlisted
+component guidance, and consult only the heading below that answers a package-wide question. Do not
+load the full guide by default.
 
 ---
 
-## 1. Current status — read this first
+## 1. Package status snapshot — verify for the target
 
 `skytrack-ui` is a **private React component library** built on
 [Base UI](https://base-ui.com) + Tailwind CSS v4, themed with IBM Plex Sans / IBM Plex Mono.
@@ -22,21 +23,11 @@ exact commands to verify your work honestly.
 
 ## Owner-approved implementation policy
 
-Read [UI_RULES.md](UI_RULES.md) and its linked portable implementation rules for UI work.
-Those rules reflect the Owner's current implementation policy. Heading/padding scales
-below are defaults: explicit visual references may override them using DS tokens and
-Tailwind utilities while preserving valid component composition and accessibility.
-Research and analyze Information Architecture before implementation using the IA outline
-and review rules in `UI_RULES.md`; mode controls whether the outline is shown before coding.
-For charts, also follow the chart-choice and rendered-legibility criteria in `UI_RULES.md` and
-the portable implementation guide; do not treat a tiny preview as an analytical chart.
-For creative work, establish whether a reference means faithful reproduction or inspiration.
-Use the design-system-delivery skill for STRICT/YOLO workflow selection.
-
-For source-verified, component-specific usage, anatomy, variants, states, accessibility, and
-examples, start from the [component knowledge index](knowledge/README.md). Treat each page as
-the detailed companion to this implementation guide; verify its linked source, types, demo, and
-package version again when using it in code.
+Product and visual decisions are owned by [UI_RULES.md](UI_RULES.md); implementation workflow is
+owned by [`agents/design-system-implementation.md`](../../../agents/design-system-implementation.md).
+This guide supplies package-specific detail only. For component decisions, start at the active
+[component decision index](knowledge/COMPONENT_ROUTING.md), then read only the matching audience
+page and relevant guide heading. Verify API facts against the target package's source and types.
 
 ## 2. Inspect before you write
 
@@ -48,21 +39,92 @@ Never code from memory or from this guide alone. The installed version is the so
 3. Confirm every export you use exists. The root entry lists names explicitly with no `export *`,
    so a missing name is a compile error, not a silent `undefined`.
 
+### Load the installed theme before implementation
+
+Import `skytrack-ui/styles.css` exactly once from the consumer app entry point. Confirm that
+`node_modules/skytrack-ui/package.json` exports `./styles.css`, open the installed CSS and its
+referenced font assets, and record those reads in delegated work. This import supplies the package
+tokens, compiled component utilities, global base styles, and fonts; importing Tailwind alone or
+copying CSS from the repository source does not replace it. Before attributing a heading-font or
+component-style defect to the library, verify the stylesheet import and computed browser styles.
+
 If the installed version disagrees with this guide, the installed version wins — say so.
 
 ### Library-first decision gate
 
-Before each UI implementation decision involving a control, pattern, interaction, or visual variant,
-inspect the installed `skytrack-ui` version, exports, source/types, and closest matching demo. Decide
-whether the library already provides a component or supported composition that meets the requirement.
-Use that API and composition when it does; customize through documented props, `className`, or
-`style`.
+Before coding, list each distinct visible UI need in a concise component-coverage map: control,
+status, data presentation, or interaction; include nested visuals such as a meter or badge inside a
+table cell. A parent card/table does not cover its child needs. For each candidate record the
+installed version/export, declaration path, actual runtime implementation path, compatible demo,
+read-log entries, and decision. Group repeated instances. For a single isolated repair, keep the map
+inline in working notes. A router scan is discovery only and does not complete the map.
 
-Create a local component or custom UI after identifying the concrete library gap or substantially
-different visual composition. Token-based custom CSS may be broad; reuse supported library parts. A gap means the needed component, part, behavior, or supported styling is absent from
-the installed exports/source/types, or the documented API cannot satisfy the required behavior or
-accessibility. Before implementing the fallback, state the missing capability and why existing
-parts cannot compose it. Keep fallback scope minimal and preserve library components around it.
+In a consumer app, inspect `node_modules/skytrack-ui/package.json` and the files resolved by its
+exports. The installed artifact is the API authority. A same-version source checkout or guide does
+not prove that a rebuilt tarball contains the same exports or implementation. If source docs and
+the installed artifact differ, record both exact paths and the mismatch; do not use the missing
+source API in the consumer or silently replace the dependency. For a test explicitly using a local
+tarball, record its exact path and SHA-256, then verify the installed package against that artifact.
+Name the exact export subpath and confirm it exists in the installed manifest. Declaration/runtime
+evidence must resolve inside the installed package; a same-version source checkout is not a
+substitute. Use the closest demo as a composition reference only after checking every used part and
+prop against the installed types and runtime.
+
+For delegated UI implementation and Owner-requested rule probes, keep a chronological
+FILE-READ-LOG.md. Open each auditable file through
+`node agents/scripts/read-and-log.mjs --path <file> --reason <why>` from the assigned workspace;
+for a multi-section guide, use `--heading "<exact heading>"` or a narrow `--lines` range to display
+only relevant content while the helper hashes the full file. The helper logs its timestamp,
+content SHA-256, logger method, and read scope. A full-file read of this guide fails preflight for
+ordinary UI implementation and rule-probe tasks; read only the heading(s) needed for the routed
+decision. For a task explicitly auditing the entire guide, pass `--allow-full-guide-read` to both
+preflight and final checker commands.
+Include instruction, router, guide, package, declaration, runtime implementation, and demo files.
+Do not use separate reads followed by manually reconstructed rows. A coverage-map row is verified
+only when its exact evidence reads appear in the log; the final code review must also confirm that
+the mapped candidate is actually used. Run the shared `audit-ui-handoff.mjs --stage preflight` gate
+before writing UI for those needs. A failed or skipped gate blocks implementation; a
+component/export/version change requires fresh evidence and a gate rerun. Save the generated
+`PREFLIGHT-GATE-RESULT.md`; final audit checks its hashes and confirms application source changed
+after the recorded PASS.
+
+Use DataTable when search, sorting, row selection, pagination, or column comparison fit the task.
+Use a semantic native table only for a small static lookup when interactive DataTable behavior is
+unnecessary or its verified API cannot meet a stated requirement; give each native table its own
+map row, compare it with DataTable, and record the concrete reason. Count authored semantic markup
+accurately; do not report zero custom tables when hand-written table markup exists. For every inline bar/range indicator, separately compare installed
+Meter, Progress, and Chart candidates; do not hand-build a filled div/span when one fits the meaning.
+For historical, comparative, aggregate, or distribution data, use the installed Chart composition
+when it fits. Do not replace it with hand-built bars or Progress.
+Map each distinct chart question as its own need. A time trend and a category/outcome distribution
+remain separate rows even when both use ChartContainer/BarChart; reconcile each to the exact JSX
+range that renders it. MeterIndicator derives fill from Meter.value; never add a second width to it.
+
+Before coding, open and log the applicable root router, implementation guide, this package guide,
+`UI_RULES.md`, and component routing index. The shared `--stage preflight` checker requires these
+chronological reads and rejects app source changed before them; a guide read after coding cannot
+retroactively pass. For a pinned local-tarball consumer/probe, pass its exact artifact with
+`--package-tarball`. The checker compares installed and archived file sets in both directions,
+compares each file byte-for-byte, and records the artifact hash before preflight and final review.
+Never edit the installed package in
+`node_modules`; investigate an install mismatch in a fresh case instead.
+
+Run the gate and stop if it fails. At handoff, run `--stage final` with component-typography,
+semantic-color, radius audits, the same preflight record, and the same `--package-tarball`. A native
+HTML table is a separate need even when the same screen also uses `DataTable`. Check that chart data colors are consumed by the actual mark props;
+declared but unused color fields do not count. A failed audit or code/map/report mismatch blocks
+completion.
+
+In `IMPLEMENTATION-RECONCILIATION.md`, add a `Component map reconciliation` table with one source
+and DOM row per numbered coverage row. Name the implementation actually rendered, cite its source
+line, and describe the element/role the coordinator must verify in the browser.
+
+Create a local component or custom UI only after identifying a concrete unmet requirement. A visual
+preference alone does not justify replacing an available component. Fix a confirmed appearance
+defect through a verified prop, slot, class, or composition first. A fallback is justified only when
+required behavior, semantics, accessibility, or a visual constraint cannot be met by the installed
+component or its verified parts. Record the gap and why the supported composition fails. Keep the
+fallback minimal and preserve library components around it.
 Do not add the fallback to the shared library unless that change is in scope.
 
 ### Match the documented component composition
@@ -86,6 +148,10 @@ composition pattern only after confirming that it matches the package version us
   visual scale using DS tokens and Tailwind utilities.
 - If no matching demo exists, derive the composition from the implementation and types. If a
   required part or behavior still cannot be verified, state the gap instead of guessing.
+- Preserve the heading role class (`.h3`, `.h4`, or documented group-heading style) unless a
+  reference justifies a visual override. When a browser is available, verify computed `font-family`
+  and that the heading font loaded. If it does not, inspect the stylesheet import and emitted font
+  assets before changing size or adding a local font workaround.
 
 ### Heading roles
 
@@ -107,6 +173,119 @@ stylesheet and existing Hero selector.
 Use the Level 2 and Level 3 declarations in a named CSS class with `@apply`; when the component is
 styled inline, use the equivalent Tailwind utilities. Keep each title as a semantic heading element
 at the level required by the page outline.
+
+Before coding, record every visible heading in the IA outline with its text, parent, semantic
+element/level, visual hierarchy level, and required class. Visual role follows the content outline,
+not the HTML tag: a heading directly inside a Level 1 card is Level 2 and uses `text-lg`, even when
+the semantic element is `<h3>`. Its nested subgroup is Level 3 and uses `text-base`. Check every
+inventory entry against implementation; do not assign a visual role from the tag name alone.
+
+Each page route also needs one semantic `<main>` landmark. Record all landmarks in the IA outline.
+For delegated/substantive UI work, map each outline landmark and heading to its source location and
+rendered DOM tag/role in `IMPLEMENTATION-RECONCILIATION.md`. An outline row without implementation
+evidence is a handoff failure.
+
+### Default text size and hierarchy
+
+Use `text-base` for ordinary interface copy, data labels, table cells, and chart labels. Use smaller
+named sizes only when the text is clearly subordinate, such as metadata, helper copy, or a compact
+secondary label. Apply the smaller size to that text only; do not put `text-xs` or another small size
+on a parent that also contains primary text. Audit inherited sizes and every text-bearing library
+descendant, including chart/SVG ticks, legend and tooltip content, select trigger/options, field
+labels, button labels, badges, and table headers/cells. A library default or size prop below `text-base`
+does not qualify as an exception by itself; use a supported size/class override unless the actual
+text has a clear subordinate role. Keep ordinary action/field/select labels, chart labels/tooltips,
+and table content at `text-base`. Use `.sub-heading` only for page/section eyebrows, secondary
+assistive field labels, sidebar group titles, and option-menu group titles. Table column headers stay
+`text-base`; `.sub-heading` is not a general exception. Avoid arbitrary sizes such as `text-[11px]` unless a
+verified reference requires them and standard sizes cannot match.
+
+Never assume a parent class overrides a text-bearing descendant's own class. If the installed
+component applies a smaller default, set `text-base` on that slot with a supported prop. Examples
+for the verified API include:
+
+```tsx
+<Badge count="Warning" status="warning" className="text-base rounded-(--radius)" />
+<SelectItem value="all" className="text-base">...</SelectItem>
+<SelectValue>{selectedHumanReadableLabel}</SelectValue>
+<ChartTooltipContent className="text-base rounded-(--radius)" />
+<ChartLegendContent className="text-base" />
+```
+
+For a `DataTable`, render ordinary column labels through a base-sized element inside the verified
+header composition, while preserving its sort button. An app-level header helper is fine; do not
+invent an exported `skytrack-ui` part. Verify the installed component source and types first. A
+visible Badge status is decision data, not metadata. Set a readable selected label in `SelectValue`
+rather than exposing a machine value such as `all`.
+
+The installed DataTable may set a smaller default on the table. String-only column headers inherit
+that size; render each ordinary header through a supported JSX header composition with a text-base
+child, and confirm the override reaches the visible label without removing sorting or accessibility.
+
+Before handoff, scan for inherited small text on ordinary data, raw palette colors on semantic
+states, heading-role mismatches, and arbitrary sizes. Inventory each visible below-base or
+arbitrary-pixel text occurrence with its exact element/code location, effective size, subordinate
+role, and reason; remove exceptions without a clear hierarchy or verified reference. Use `.h3` for
+page titles, `.h4` for Level 1 card titles, `text-lg font-medium text-(--foreground)` for Level 2
+group headings, and `text-base font-medium text-(--foreground)` for Level 3 subgroup headings, while
+preserving semantic heading levels. Verify computed family for page and card headings when browser
+inspection is available. Inspect the rendered result when font, token, or stylesheet delivery could
+fail at runtime.
+
+Do not show implementation-policy notes as product copy unless they aid the user's task. Mark
+synthetic sample values where they could be mistaken for live operational data. Never invent numeric
+safety thresholds, severity cutoffs, regulatory claims, imperative operational directions, or the
+name/section/authority of a handbook or policy. A source citation is valid only when the source was
+provided or actually opened and logged. A sample disclaimer does not validate an invented policy.
+Use cited Owner/source policy; when none is supplied, say that policy is unavailable and refer
+people generically to approved operating guidance. Do not infer flight actions from synthetic
+values. If a local demo simulates an operational action, label its UI result as simulated and say
+that no live system changed. Check badges and labels at their rendered width: clipping, overlap,
+overflow, or fragmented wrapping fails visual review.
+
+For substantive screen content, treat this as a hard evidence gate: inventory each rendered
+per-record `nextAction`, every numeric safety threshold/cutoff, and each operational recommendation
+in `CONTENT-AUDIT.md`. Add a `Source evidence` column with an opened `file:line` and exact quoted
+excerpt for sourced claims. “Prompt requirement,” “official guidance,” and “design policy” alone
+are not citations. Worker-created sample values may be used only as explicitly synthetic data; they
+do not support safety thresholds or flight instructions. Only the exact cited excerpt supports the
+wording it contains; another line in the same file does not authorize unrelated claims. The
+implementation and generated audit/report files are not policy sources. Give repeated per-record
+actions separate rows. If no supplied/opened source authorizes a directive, remove it or state
+neutrally that no authorized action is supplied and refer to approved guidance. The audit checker
+validates exact excerpts, row coverage, and uncited directive/threshold patterns.
+For category distributions with displayed percentages, calculate each share as `count / total × 100`,
+state the rounding precision, and record `Displayed rounded shares: sum(...) = N%` in the consistency
+calculation. Verify the sum against the values rendered in the chart/table. Do not say rounded shares
+sum to 100.0% when they do not, and do not silently adjust a category to force the total.
+
+For a browser-reviewed page, exercise at least one primary action and one meaningful control. Check
+the visible state/result after interaction, not just that the trigger exists or has a handler.
+Control values must be human-readable, and date/range labels must match the represented dates; only
+use Q1/Q2 when the applicable fiscal calendar is explicitly known.
+Worker-authored interaction rows stay PENDING/NOT RUN. The coordinator alone records PASS after
+desktop browser interaction and cites a saved screenshot or DOM evidence file for each passed row.
+
+For a delegated handoff, log each prompt/instruction file actually opened. If instruction text was
+injected by the runtime without a file read, report it as injected, not as a file read. Count actual
+read-log entries, not Markdown lines. Reconcile
+every material handoff claim against exact code and log evidence; a map or narrative that claims
+`text-base`, a component, token, or policy compliance when the implementation contradicts it fails
+the gate. Keep implementation-only notes (for example, “square mark radius applied per design
+rules”) out of product UI.
+
+### Radius
+
+`--radius` is the default surface/control radius and resolves to 2px. Use `rounded-(--radius)` or a
+standard utility proven to resolve to this token. Avoid `rounded-full` and larger custom radii on
+ordinary surfaces, badges, tracks, thumbs, and controls. Keep full circles only for genuinely
+circular elements such as avatars, radio controls, and status dots. Chart bars/areas use square
+corners (`radius={0}` or equivalent); chart containers still use the 2px surface token. Before
+handoff, scan custom classes and chart props for radius bypasses, then inspect computed radius on
+representative surfaces and controls when browser access is available. Do not use literal radius
+values in CSS or inline styles when the token fits; use zero only for intentional square geometry.
+For substantive/delegated work, record every authored rounded utility, literal radius, and chart-mark
+radius in `RADIUS-AUDIT.md`; the final audit rejects non-token radii and undocumented circular shapes.
 
 ### Container padding and form spacing
 
@@ -172,10 +351,9 @@ and compose supported SkyTrack controls around or inside it.
 
 Use the [`DataTable` demo](src/demos/data-table.demo.tsx) for search, column visibility, sorting,
 optional row selection, pagination, row actions, and token styling. For a custom semantic table,
-use the [Invoice table example](src/showcase/overview-style.tsx) for markup and token styling; the
-standalone [`table-pattern` demo](src/demos/table-pattern.demo.tsx) shows a denser records table
-composed with `Tabs`, `CheckboxRoot`, `Badge`, `Input`, and `Button`. Check that the chosen demo
-matches the installed package version before composing a table in a consumer app.
+use the [Invoice table example](src/showcase/overview-style.tsx) for markup and token styling.
+Check that the chosen demo matches the installed package version before composing a table in a
+consumer app.
 
 Keep the reference's exact visible column labels and order, row content/density, filter labels,
 toolbar grouping, selection controls, and pagination. Put wide tables in a local `overflow-x-auto`
@@ -281,10 +459,14 @@ inherited cursor shows, not `not-allowed`). The number-field scrub area keeps `c
 
 Style with the semantic utilities that map to the CSS custom properties: `bg-background`,
 `text-foreground`, `text-muted-foreground`, `bg-primary`, `text-primary-foreground`,
-`border-border`, `border-input`, `ring-ring`, `bg-destructive`, `bg-accent`, `text-success`,
-`text-warning`, `text-info`, and `text-favorite`. Never hard-code a colour. Tokens are what make
-the light and dark themes work. Use `success`, `warning`, and `info` for status meaning; use
-`favorite` for favorited or starred state, not for warnings.
+`border-border`, `border-input`, `ring-ring`, `bg-destructive`, `text-destructive`, `bg-accent`,
+`text-success`, `bg-success`, `text-warning`, `bg-warning`, `text-info`, `bg-info`, and
+`text-favorite`. Never use raw palette classes such as `text-amber-600` or `bg-emerald-500` to
+encode semantic status. Use `success`, `warning`, `destructive`, and `info` only for their matching
+meaning; use `favorite` for favorited or starred state, not for warnings. For chart categories,
+prefer the installed chart's categorical palette. If none exists, derive colors from existing CSS
+variables with `color-mix()` or relative OKLCH, check contrast in light and dark themes, and retain
+labels or other non-color cues. Record any token gap; do not add shared tokens without authorization.
 
 ### Use shorthand for boolean data variants
 
@@ -599,9 +781,11 @@ Use only needed parts: `FieldLabel` for the visible label, `FieldDescription` fo
 for custom validity details. Put `name`, validation props, and disabled state on `FieldRoot` as shown
 in the demo. Bare `FieldError` displays the active validation message. Do not hand-build a label/error
 wrapper when this field pattern fits.
-When a secondary label is visually subordinate to the main `FieldLabel`, use
-`className='text-xs sub-heading'` (or CSS `@apply text-xs sub-heading`). SkyTrack already defines
-`.sub-heading` in `src/index.css`; do not recreate its typography locally.
+Apply `.sub-heading` to page/section eyebrow labels, secondary/assistive labels paired with `FieldLabel`,
+sidebar group titles, and option-menu group titles; this class renders those labels uppercase. Add a context-appropriate text-size utility when
+needed; use `text-xs sub-heading` for compact field labels. SkyTrack defines `.sub-heading` in
+`src/index.css`; do not recreate its uppercase, tracking, weight, or muted-color typography in local
+classes. Keep regular page and content heading styles aligned with the heading-role guidance above.
 
 ### Shared control heights — inline with Button
 

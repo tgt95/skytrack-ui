@@ -12,41 +12,36 @@
 
 ## Usage
 
-Use Breadcrumb when people navigate several levels deep and need a quick path back to a parent location, such as “Records > Customers > Customer details”.
+Use Breadcrumb when a nested page hierarchy helps people stay oriented and move to an ancestor, such as “Workspace > Records > Record details”.
 
-- **Fit:** Deep navigational structures requiring step-back traversal.
-- **Avoid:** Flat app structures, linear wizards (use steppers or Progress), or top-level navigation.
-- **Best alternative:** For linear steps, use Progress. For main navigation, use Navigation Menu.
+- **Fit:** Nested page structures where moving to an ancestor is useful.
+- **Avoid:** Flat navigation, sequential task steps, or top-level navigation.
+- **Best alternative:** Use a step indicator for a sequential task and Navigation Menu for primary navigation.
 
 **Live demo variant:** `Basic`
 
 ## Types
 
-Breadcrumbs support standard link trails with diverse separator styling:
-
-- **Separators:** Use a subtle, consistent separator between levels.
-- **Long paths:** Collapse less relevant middle levels when a path is too long, while keeping the current location clear.
-
-**Live demo variant:** `Custom separator`
+Show the ancestor path when it supports orientation; collapse intermediate levels only when available space makes the full path hard to scan.
 
 ## Behavior
 
-Clicking an ancestor link navigates directly to that level. Clicking the ellipsis icon opens an accessible dropdown listing intermediate levels.
+Clicking an ancestor link navigates directly to that level. The ellipsis indicates collapsed intermediate levels and can be composed with Menu to provide an accessible dropdown for intermediate ancestors.
 
 - **Current page:** The final item is static text and cannot be clicked.
 
-| Do                                                                                                   | Don't                                                                                | Why                                                                                                         |
-| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| Collapse deep intermediate parent levels into an ellipsis menu when horizontal space is constrained. | Allow long breadcrumb trails to wrap onto two or three lines above the page heading. | Multi-line breadcrumbs create visual noise and push high-priority charts and activity data down the screen. |
+| Do                                                                                                                                                          | Don't                                                                               | Why                                                                              |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| When space is limited, keep the first and current locations visible and make hidden ancestors available from an overflow menu or static ellipsis indicator. | Wrap or truncate the hierarchy without preserving a clear path to the current page. | A clear path helps people understand their location and choose where to go next. |
 
 **Live demo variant:** `Collapsed path`
 
 ## Layout
 
-Position breadcrumbs directly above the page title.
+Place Breadcrumb near the page title so it reads as context for the current page.
 
-- **Structure:** Keep the path on one line when possible. Show the current page as text rather than as a link to itself.
-- **Mobile viewports:** Collapse intermediate ancestors into an ellipsis menu or replace with a single "Back to [Parent]" link.
+- **Structure:** Keep the path on one line when it fits. Show the current page as text rather than as a link to itself.
+- **Mobile viewports:** Keep the current page and a clear way to reach its parent visible; collapse intermediate ancestors when that improves scanning.
 
 **Live demo variant:** `Basic`
 
@@ -58,8 +53,6 @@ Identify the path as navigation, avoid announcing decorative separators, and mak
 
 ## Content
 
-Crumb labels must match the exact titles of the referenced parent pages.
-
-- **Truncation:** If an entity name is excessively long, truncate the middle with an ellipsis (e.g. "Project 2026-Alpha...").
+Use concise labels that match the names people see on the referenced pages. Shorten a long label only when its destination remains clear.
 
 **Live demo variant:** `Custom separator`

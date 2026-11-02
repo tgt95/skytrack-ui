@@ -22,13 +22,7 @@ Use Dropzone when people need to add files from their device, especially when dr
 
 ## Types
 
-Dropzone supports single-file and multi-file ingestion:
-
-- **Single File:** Replaces the prompt with the selected file or directly triggers upload.
-- **Multiple Files:** Accepts batch file drops and lists selected items in an adjacent or nested attachment list.
-- **States:** Active drag-over, disabled, validation error, and upload success.
-
-**Live demo variant:** `Multiple files`
+Choose single-file or multi-file intake based on the task and make selected files reviewable before upload.
 
 ## Behavior
 
@@ -49,7 +43,7 @@ Give the drop area enough width to display file requirements and the main select
 
 - **Internal spacing:** Leave enough space around the instruction and selection action so the drop area is easy to recognize.
 - **Selected files:** Show chosen files in a list directly below the drop area.
-- **Mobile viewports:** Provide a prominent "Browse Files" button since drag-and-drop is rarely supported on mobile touch screens.
+- **Mobile viewports:** Provide a prominent “Browse files” button since drag-and-drop is rarely supported on mobile touch screens.
 
 **Live demo variant:** `Selected files`
 

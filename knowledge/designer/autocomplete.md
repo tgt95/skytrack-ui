@@ -12,7 +12,7 @@
 
 ## Usage
 
-Use Autocomplete when people need to find one value in a long list by typing a few characters, such as a customer, team member, or location.
+Use Autocomplete when people need to find one value in a long list by typing a few characters, such as a record, team, or project.
 
 - **Fit:** Single-selection lookups across large or dynamic datasets.
 - **Avoid:** A short, fixed list that users can scan without searching (use Select), multiple selections (use Combobox), or unconstrained text entry (use Input).
@@ -22,15 +22,11 @@ Use Autocomplete when people need to find one value in a long list by typing a f
 
 ## Types
 
-Choose a size that fits the surrounding form and leaves enough room for the selected value.
-
-Grouped results and asynchronous search are compositions. The application supplies the grouped items or manages remote requests and their loading/error states.
-
-**Live demo variant:** `Sizes`
+Choose suggestion list, inline completion, or grouped results according to how people enter and scan options.
 
 ## Behavior
 
-Typing filters the supplied items. For asynchronous search, the application controls requests, loading feedback, and stale-result handling; the component does not debounce remote requests.
+Typing filters available options. For asynchronous search, display loading feedback while fetching results and keep current suggestions visible until new matches load.
 
 - **Selection:** Choosing an option populates the input and closes the popup.
 - **Dismissal:** Pressing `Escape` closes the menu without clearing the typed query.
@@ -58,7 +54,7 @@ Give the search field and suggestions clear names and states. Arrow keys move th
 
 ## Content
 
-Placeholder copy should describe expected input format (e.g., "Search by tail number or model...").
+Placeholder copy should describe expected input format (e.g., "Search by record or project...").
 
 - **Item labels:** Make the primary name easy to scan; use quieter secondary text for helpful context.
 

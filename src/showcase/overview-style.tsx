@@ -639,16 +639,18 @@ function PreviewStyle3 () {
   )
 }
 
-export function OverviewStyle () {
+export function OverviewStyle ({ className = '' }: { className?: string }) {
   return (
-    <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+    <div className={`grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 ${className}`}>
       <PreviewStyle0 />
       <PreviewStyle1 />
       <PreviewStyle2 />
 
       {/* Type rhythm */}
       <Card className='lg:col-span-1 lg:row-span-2'>
-        <p className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>Host Grotesk - IBM Plex Sans / Mono</p>
+        <p className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>
+          Host Grotesk - IBM Plex Sans / Mono
+        </p>
         <h2 className='h1'>
           Designing <br /> with rhythm and hierarchy
         </h2>

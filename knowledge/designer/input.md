@@ -14,7 +14,7 @@
 
 Use Input for single-line freeform alphanumeric data entry, such as account identifiers, names, or keyword searches.
 
-Avoid Input for strictly bounded numbers (use Number Field), multi-line text (use textarea), verification codes (use OTP Field), or selecting from predefined lists (use Select or Combobox).
+Avoid Input for strictly bounded numbers (use Number Field), multi-line text (use a multi-line text field), verification codes (use OTP Field), or selecting from predefined lists (use Select or Combobox).
 
 The best alternative for selectable options is Combobox. For formatted numbers with stepper controls, choose Number Field.
 
@@ -22,21 +22,13 @@ The best alternative for selectable options is Combobox. For formatted numbers w
 
 ## Types
 
-Input supports three standardized size roles aligned with control heights:
-
-- **Compact:** Use in a dense table filter or toolbar.
-- **Standard:** Use for common forms and dialogs.
-- **Large:** Use for prominent search or when a larger touch target is needed.
-
-An icon or short unit can appear beside the value when it helps people understand or complete the field.
-
-**Live demo variant:** `Sizes`
+Choose control size and value type to match the expected entry and surrounding form.
 
 ## Behavior
 
-Input responds immediately to keystrokes. In focus state, a 2px ring outline appears around the input.
+Input responds immediately to keystrokes. When focused, show a clear, high-contrast indicator so people can identify the active field.
 
-When invalid, the border shifts to destructive color, accompanied by an alert icon and paired error message. Disabled inputs dim to 50% opacity and reject focus.
+When invalid, the border shifts to destructive color, accompanied by a paired error message. Disabled inputs appear visually muted and reject focus.
 
 **Live demo variant:** `States`
 
@@ -60,8 +52,8 @@ Provide a visible label and connect supporting instructions and errors to the fi
 
 ## Content
 
-Field labels should be concise noun phrases in sentence case (e.g., “Account number”, “Location name”).
+Field labels should be concise noun phrases in sentence case (e.g., “Account number”, “Project name”).
 
-Placeholders should provide a representative formatting example (e.g., "e.g. N12345"), never mandatory instructions. Error messages must explain how to resolve the issue directly.
+Placeholders should provide a representative formatting example (e.g., “e.g., AC-12345” or “name@example.com”), never mandatory instructions. Error messages must explain how to resolve the issue directly.
 
 **Live demo variant:** `Types`

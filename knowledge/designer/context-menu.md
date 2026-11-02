@@ -14,22 +14,15 @@
 
 Use Context Menu to offer relevant secondary actions on a selected item, such as a record, file, or project card.
 
-- **Fit:** Secondary actions tied to the selected item (e.g. “Open details”, “Export record”, “Duplicate project”).
-- **Avoid:** Exposing unique, primary actions that have no other access point in the UI. Never hide mandatory safety-critical controls solely behind right-click menus.
+- **Fit:** Secondary actions tied to the selected item (e.g. "Open details", "Export item", "Duplicate item").
+- **Avoid:** Exposing unique, primary actions that have no other access point in the UI. Never hide required or primary actions solely behind right-click menus.
 - **Best alternative:** For a visible, persistent action menu, use Menu.
 
 **Live demo variant:** `Default`
 
 ## Types
 
-Context Menu supports diverse interactive menu item types:
-
-- **Actions:** Commands such as opening, editing, or duplicating the selected item.
-- **Toggles:** Independent options, such as showing or hiding a detail.
-- **Single-choice options:** Mutually exclusive choices, such as switching between list and grid views.
-- **Submenus:** A small set of closely related secondary actions.
-
-**Live demo variant:** `Checkbox and radio items`
+Choose menu items by their relationship to the selected object: direct action, independent option, single choice, or short submenu.
 
 ## Behavior
 
@@ -58,7 +51,7 @@ Keep important actions available outside the context menu too. Support keyboard 
 
 ## Content
 
-Item labels should be short (1–3 words) and start with action verbs in sentence case (e.g., "Edit location", "Delete segment").
+Item labels should be concise and start with action verbs in sentence case (e.g., “Edit record”, “Duplicate item”, “Delete file”).
 
 - **Destructive actions:** Give irreversible actions a clear danger treatment and place them apart from routine actions.
 - **Shortcuts:** Show a shortcut beside the action it describes.

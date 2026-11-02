@@ -22,16 +22,7 @@ Use Button for a clear, discrete action—such as saving changes, inviting a per
 
 ## Types
 
-Use visual hierarchy to make the main action easy to identify, following Fluent 2 guidance:
-
-- **Primary:** Use a filled style for the main action. Show one primary action per visual group.
-- **Secondary:** Use neutral styling for supporting actions such as “Cancel” or “Save draft”.
-- **Destructive:** Use a clear danger style for irreversible actions such as “Delete record”.
-- **Quiet:** Use a low emphasis style for repeated actions in dense lists and tables.
-
-Choose a button size that fits its context while keeping its label and hit area easy to read and use. Icon-only buttons need a clear accessible name and a target large enough to activate comfortably.
-
-**Live demo variant:** `Sizes`
+Choose action emphasis by priority and use an icon when it improves recognition without replacing the label.
 
 ## Behavior
 
@@ -43,13 +34,13 @@ Buttons provide tactile feedback across hover, active, and focus-visible states.
 
 ## Layout
 
-Separate buttons in a group by 8–12px. Place the primary action where people expect to complete the task, such as at the end of a dialog footer or form action row.
+State one primary action for the layout to anchor the primary task, and separate buttons in a group by 8–12px. Place the primary action where people expect to complete the task, such as at the end of a dialog footer or form action row. Multiple secondary actions with equal priority can share a consistent neutral appearance.
 
 - **Mobile viewports:** Use a comfortable touch target of at least 44px. Let a button fill the available width when that improves clarity or reach.
 
-| Do                                                                                         | Don't                                                               | Why                                                                       |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Give one main action the strongest emphasis and use quieter styles for supporting actions. | Give several equally prominent styles to actions in the same group. | A clear visual hierarchy helps people identify the recommended next step. |
+| Do                                                                                                  | Don't                                                                                                                                                                 | Why                                                                                                                  |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Give one main action primary emphasis in the layout, and use neutral or quieter styles for supporting actions. | Use multiple primary or heavily emphasized actions in the same group. Multiple secondary actions may share equal neutral priority, but competing primary styles confuse hierarchy. | A single primary action clarifies the recommended next step, while secondary peer actions remain accessible without visual competition. |
 
 **Live demo variant:** `With icon`
 

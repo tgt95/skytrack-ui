@@ -12,30 +12,24 @@
 
 ## Usage
 
-Use Dialog for a short, self-contained task that people can complete without losing their place, such as editing a profile, reviewing details, or confirming a non-destructive change.
+Use Dialog for a short, self-contained task that people can complete without losing their place, such as editing a profile, reviewing details, or confirming a non-destructive change. Keep dialogs focused on a single primary goal; do not combine divergent tasks or chain nested workflows within a modal overlay.
 
-- **Fit:** Complex multi-field forms, configuration wizards, and focused object editing that require user completion before returning.
-- **Avoid:** Irreversible actions that need an explicit confirmation (use Alert Dialog) or brief status feedback (use Toast).
-- **Best alternative:** For urgent, high-risk confirmations with no form fields, use Alert Dialog. For slide-over inspection panels, use Drawer.
+- **Fit:** Focused object editing that requires user completion before returning.
+- **Avoid:** Complex multi-step workflows or configuration wizards (use a dedicated page, drawer, or step flow), high-risk irreversible operations (use Alert Dialog), or brief status feedback (use Toast).
+- **Best alternative:** For complex multi-step tasks or configuration wizards, use a dedicated page, drawer, or step flow. For urgent, high-risk confirmations with no form fields, use Alert Dialog. For slide-over inspection panels, use Drawer.
 
 **Live demo variant:** `Default`
 
 ## Types
 
-Dialog provides diverse scrolling and containment options:
-
-- **Standard Dialog:** Centered modal card suitable for 3–6 form fields.
-- **Inside Scroll Dialog (`Inside scroll dialog`):** Keeps header and footer fixed while scrolling the body content internally.
-- **Outside Scroll Dialog (`Outside scroll dialog`):** The entire modal scrolls within the page viewport, ideal for lengthy multi-section forms.
-
-**Live demo variant:** `Inside scroll dialog`
+Choose a dialog pattern by task context, content length, and whether closing could lose meaningful edits.
 
 ## Behavior
 
 Opening a dialog visually separates it from the page and prevents interaction with content behind it.
 
 - **Dismissal:** Users can close the modal by clicking the 'x' close button, clicking the backdrop overlay, or pressing `Escape`.
-- **Unsaved changes:** If the user has typed into form fields, trigger a confirmation before discarding edits.
+- **Unsaved changes:** If the user has typed into form fields, confirm discarding edits inline within the dialog surface or retain draft edits rather than opening a nested modal. Never launch a second modal dialog on top of an active dialog.
 
 **Live demo variant:** `Close confirmation`
 
@@ -43,13 +37,14 @@ Opening a dialog visually separates it from the page and prevents interaction wi
 
 Give the dialog enough internal space to separate its title, content, and actions.
 
-- **Structure:** Use a clear title, brief description when needed, focused content, and a distinct action area.
-- **Actions:** Place the primary action where it is easy to find and pair it with a clear way to cancel.
+- **Focus and structure:** Keep the dialog focused on a single task. Use a clear title, brief description when needed, concise content, and a distinct action area.
+- **Actions:** Place the primary action where it is easy to find and pair it with a clear way to cancel. Keep action choices focused on the primary outcome; while some systems like Fluent suggest a maximum of three footer actions, prioritize clarity and minimal distraction over a rigid universal limit.
 - **Mobile viewports:** Keep the dialog within the screen and make its content and actions easy to reach.
 
-| Do                                                                    | Don't                                                        | Why                                                           |
-| --------------------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------- |
-| Give the primary action more emphasis than the neutral cancel action. | Give the primary and cancel actions identical visual weight. | A clear hierarchy helps people choose the intended next step. |
+| Do                                                                                           | Don't                                                                                | Why                                                                                   |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| Give the primary action more emphasis than the neutral cancel action.                        | Give the primary and cancel actions identical visual weight.                         | A clear hierarchy helps people choose the intended next step.                         |
+| Resolve unsaved change confirmations inline or retain draft state within the current dialog. | Launch a second modal dialog on top of an open dialog to confirm discarding changes. | Nested modals disorient users, clutter the interface, and create fragile focus traps. |
 
 **Live demo variant:** `Outside scroll dialog`
 
@@ -64,6 +59,6 @@ Give the dialog a clear title and purpose. Keep keyboard focus inside while it i
 Titles must clearly declare the task (e.g., "Edit project", "Add team member").
 
 - **Descriptions:** Add one concise sentence below the title when people need context to complete the task.
-- **Action buttons:** Pair explicit verbs (e.g., "Save Work Plan" and "Cancel"). Avoid generic "OK".
+- **Action buttons:** Align button labels directly with the task verb in sentence case (e.g., “Save changes”, “Create project”, “Discard changes”) paired with a clear neutral cancel action. Avoid generic labels like “OK”, “Yes”, or “Continue” that do not explain what will happen.
 
 **Live demo variant:** `Open from a menu`

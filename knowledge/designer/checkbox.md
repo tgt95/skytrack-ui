@@ -14,20 +14,15 @@
 
 Use Checkbox for an independent choice that people confirm when they submit, such as accepting terms or including an optional item.
 
-- **Fit:** Binary decisions that take effect when a form is submitted (e.g. "I confirm location boundary compliance").
-- **Avoid:** settings that take effect immediately (use Switch), or selecting between mutually exclusive choices (use Radio Group).
+- **Fit:** Binary decisions that take effect when a form is submitted (e.g. "I confirm compliance").
+- **Avoid:** Settings that take effect immediately (use Switch), or selecting between mutually exclusive choices (use Radio Group).
 - **Best alternative:** For instant on/off toggles with immediate effect, use Switch.
 
 **Live demo variant:** `Default`
 
 ## Types
 
-Checkbox supports two primary visual configurations: standard standalone checkboxes and indeterminate checkboxes.
-
-- **Binary Checkbox:** Cycles between unchecked and checked (displaying a crisp white checkmark icon).
-- **Indeterminate Checkbox:** Displays a horizontal dash icon, used when a parent item represents a partially selected child list.
-
-**Live demo variant:** `Indeterminate`
+Use an indeterminate state only to represent partial selection within a parent group.
 
 ## Behavior
 
@@ -60,9 +55,9 @@ Use a clear label and make checked, unchecked, mixed, and unavailable states und
 
 ## Content
 
-Labels should be clear, concise, and phrased affirmatively (e.g., "Enable return-to-home fail-safe").
+Labels should be clear, concise, and phrased affirmatively (e.g., “Enable notifications” or “Include archived records”).
 
 - **Formatting:** Write in sentence case. Avoid ending labels with periods unless the label is a full sentence.
-- **Terms & agreements:** Place terms confirmation links directly within the label text (e.g., "I accept the [Access Rules Safety Protocol](#)").
+- **Terms & agreements:** Place terms confirmation links directly within the label text (e.g., "I accept the [Terms of Service](#)").
 
 **Live demo variant:** `Render callback`

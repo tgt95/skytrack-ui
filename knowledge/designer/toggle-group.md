@@ -14,7 +14,7 @@
 
 Use Toggle Group for compact, visually connected button sets that let users choose one or more related options within toolbars or inspector headers (e.g. view mode switcher: Grid vs. List; view filters: Open, Closed, Archived; text alignment controls).
 
-Avoid Toggle Group when there are more than 5 options that would consume excessive horizontal space (use Select), or when options require extensive descriptive explanations (use Radio Group).
+Avoid Toggle Group when the choices no longer fit or scan as a connected set in the available space (use Select), or when people need longer explanations to compare options (use Radio Group).
 
 The best alternative for a large set of options is Select. For an independent, single on/off button, choose Toggle.
 
@@ -22,15 +22,7 @@ The best alternative for a large set of options is Select. For an independent, s
 
 ## Types
 
-Toggle Group supports three key styling variants:
-
-- **Segmented:** A compact choice between related views, such as List and Grid.
-- **Outlined:** A distinct group for related choices alongside other controls.
-- **Default:** Clean unbordered button group with subtle active fills.
-
-Use single selection when only one option may be active; use multi-selection when choices can be combined.
-
-**Live demo variant:** `Segmented inset`
+Choose single or combined selection and a visual treatment that distinguishes the group from nearby actions.
 
 ## Behavior
 
@@ -60,7 +52,7 @@ Give the group a clear name and make each selected state visible beyond color. A
 
 ## Content
 
-Buttons should use universal iconography (e.g. grid, list, map layers) or short 1-word labels ("Day", "Night", "Thermal").
+Buttons should use recognizable iconography (e.g. grid, list, chart) or concise labels (e.g. “Day”, “Night”, “Auto”).
 
 Avoid multi-word labels that cause button wrapping.
 

@@ -38,7 +38,7 @@ export function ChartExample() {
         <CartesianGrid vertical={false} stroke='var(--border)' />
         <XAxis dataKey='month' tickLine={false} axisLine={false} />
         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-        <Bar dataKey='flights' fill='var(--color-flights)' radius={4} />
+        <Bar dataKey='flights' fill='var(--color-flights)' radius={0} />
       </BarChart>
     </ChartContainer>
   )
@@ -83,7 +83,7 @@ Tooltips:
 ## Accessibility
 
 - Always enable `accessibilityLayer` on the root Recharts element to generate semantic SVG tab-stops and keyboard navigation.
-- Colors must be defined via SkyTrack chart tokens (`--chart-1` through `--chart-5`), tested for contrast in light and dark themes.
+- Use SkyTrack's theme-aware categorical series tokens (`--chart-1` through `--chart-10`) and verify the chart colors remain distinguishable against the chart surface in light and dark themes.
 - When color alone distinguishes categories, ensure tooltips and legends present textual labels.
 - Provide a summary text description or companion data table for screen reader users.
 
@@ -100,7 +100,9 @@ Import `ChartContainer`, `ChartTooltip`, `ChartTooltipContent`, `ChartLegend`, `
 | `ChartTooltipContent` | `Component`                                                                   | Formatted tooltip card supporting indicators and formatters |
 | `ChartLegendContent`  | `Component`                                                                   | Formatted legend row reading config labels                  |
 
-Tokens: Uses `--chart-1` through `--chart-5`, `--border`, `--popover`, and `--popover-foreground`.
+Tokens: Uses `--chart-1` through `--chart-10`, `--border`, `--popover`, and `--popover-foreground`. The ten chart tokens form a categorical series palette with two Tailwind shades for each of five hues (blue, orange, teal, purple, pink), separate from functional status colors such as `--success` and `--warning`.
+
+Keep chart bars and areas square (`radius={0}`) per the SkyTrack chart direction. Apply the 2px `--radius` token to the surrounding chart surface only.
 
 **Live demo variant:** `BAR CHART`
 

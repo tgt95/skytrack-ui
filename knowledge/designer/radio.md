@@ -12,11 +12,7 @@
 
 ## Usage
 
-Use Radio Group when users must choose exactly one option from a small, mutually exclusive set of 2 to 5 visible choices (e.g. processing speed setting: Eco, Standard, High-Speed; map projection: Orthographic, Perspective; return-to-home behavior).
-
-Use Checkbox Group when people can choose several options, Select when the list is long, and Switch for an immediate on/off setting.
-
-Use Checkbox Group for several selections and Select for a long list.
+Use Radio Group when people must choose exactly one option from a short, mutually exclusive set that can remain visible together. If the choices no longer scan comfortably in the available space, use a Select instead. For independent selections, use Checkbox Group; for an immediate on/off setting, use Switch.
 
 **Live demo variant:** `Default`
 
@@ -30,7 +26,7 @@ Selection is mutually exclusive within the group. Disabled radio items ignore cl
 
 ## Layout
 
-Stack options with 8–12px between them. Use a horizontal row only when there are two or three short options and enough room.
+Stack options with consistent spacing. Use a horizontal row only when all labels fit comfortably and remain easy to compare at the current viewport.
 
 Give the choices a visible group label. On touch screens, make each option easy to tap with a target at least 44px tall.
 
@@ -48,7 +44,7 @@ Give the choices a clear group label. Arrow keys move and select; Tab enters and
 
 ## Content
 
-Option labels should be clear, parallel noun phrases or brief statements in sentence case (e.g., "Hover in place", "Return to home immediately", "Land at current position").
+Option labels should be clear, parallel noun phrases or brief statements in sentence case (e.g., “Compact”, “Comfortable”, “Spacious”).
 
 Avoid negative statements or confusing double-negative options.
 

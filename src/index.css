@@ -9,9 +9,30 @@
 @import '@fontsource/ibm-plex-mono/500.css';
 @import '@fontsource/ibm-plex-mono/600.css';
 @import '@fontsource/ibm-plex-mono/700.css';
-@import '@fontsource-variable/host-grotesk/wght.css';
 @import 'tailwindcss';
 @import './styles/brand.css';
+
+/* Keep the variable heading font in the packaged stylesheet. Import its WOFF2
+   assets directly because the generated Fontsource variable CSS trips Tailwind's parser. */
+@font-face {
+  font-family: 'Host Grotesk Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 800;
+  src: url('@fontsource-variable/host-grotesk/files/host-grotesk-latin-ext-wght-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Host Grotesk Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 800;
+  src: url('@fontsource-variable/host-grotesk/files/host-grotesk-latin-wght-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 /* Dark mode is class-based: add `.dark` to <html>. */
 @custom-variant dark (&:is(.dark *));
@@ -43,11 +64,17 @@
   --input: var(--color-neutral-200);
   --ring: var(--color-neutral-400);
 
-  --chart-1: var(--color-neutral-300);
-  --chart-2: var(--color-neutral-500);
-  --chart-3: var(--color-neutral-600);
-  --chart-4: var(--color-neutral-700);
-  --chart-5: var(--color-neutral-800);
+  /* Categorical chart series colors; keep these separate from functional status tokens. */
+  --chart-1: var(--color-blue-600);
+  --chart-2: var(--color-orange-600);
+  --chart-3: var(--color-teal-600);
+  --chart-4: var(--color-purple-600);
+  --chart-5: var(--color-pink-600);
+  --chart-6: var(--color-blue-800);
+  --chart-7: var(--color-orange-800);
+  --chart-8: var(--color-teal-800);
+  --chart-9: var(--color-purple-800);
+  --chart-10: var(--color-pink-800);
 
   --radius: 0.125rem;
 
@@ -100,18 +127,24 @@
   --input: color-mix(in oklch, var(--color-white) 15%, transparent);
   --ring: var(--color-neutral-500);
 
-  --chart-1: var(--color-neutral-300);
-  --chart-2: var(--color-neutral-500);
-  --chart-3: var(--color-neutral-600);
-  --chart-4: var(--color-neutral-700);
-  --chart-5: var(--color-neutral-800);
+  /* Light Tailwind shades retain contrast on the dark chart surface. */
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-orange-300);
+  --chart-3: var(--color-teal-300);
+  --chart-4: var(--color-purple-300);
+  --chart-5: var(--color-pink-300);
+  --chart-6: var(--color-blue-400);
+  --chart-7: var(--color-orange-400);
+  --chart-8: var(--color-teal-400);
+  --chart-9: var(--color-purple-400);
+  --chart-10: var(--color-pink-400);
 
   --sidebar: var(--color-neutral-900);
   --sidebar-foreground: var(--color-neutral-50);
   --sidebar-primary: oklch(0.606 0.25 292.717);
-  --sidebar-primary-foreground: oklch(0.969 0.016 ￹293.756);
+  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
   --sidebar-accent: var(--color-neutral-800);
-  --sidebar-accent-foreground: ￹var(--color-neutral-50);
+  --sidebar-accent-foreground: var(--color-neutral-50);
   --sidebar-border: color-mix(in oklch, var(--color-white) 10%, transparent);
   --sidebar-ring: var(--color-neutral-500);
 }
@@ -147,6 +180,11 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-9: var(--chart-9);
+  --color-chart-10: var(--chart-10);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);

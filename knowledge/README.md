@@ -8,9 +8,18 @@ Canonical, versioned guidance for each public SkyTrack UI component family. The 
 **Developer showcase sheets:** Overview · Usage · Anatomy · Variants & states · Accessibility · API & examples
 **Designer showcase sheets:** Usage · Types · Behavior · Layout · Accessibility · Content (show only when applicable)
 
-Each Developer sheet pairs its written guidance and verified JSX snippet with a compiled, interactive example from the named demo variant. Designer sheets pair practical guidance with an interactive example and relevant official references. There are 51 demos total, including one standalone table pattern; `calendar` has no dedicated demo and uses `date-picker` as its closest existing composition. See `_template.md` for the Developer page contract.
+Each Developer sheet pairs its written guidance and verified JSX snippet with a compiled, interactive example from the named demo variant. Designer sheets pair practical guidance with an interactive example and relevant official references. The showcase exposes 51 component entries using 50 source demo files; `calendar` has no dedicated demo and uses `date-picker` as its closest existing composition. See `_template.md` for the Developer page contract.
 
-The showcase opens in the Designer edition for product/UX designers and provides a filled audience tab in the top-right header. The existing Developer edition remains available with its original six tabs. Designer pages are indexed separately in [`designer/README.md`](designer/README.md); T-337 is adding compiled, component-specific JSX pairs for its Do/Don't rows.
+The showcase opens in the Designer edition for product/UX designers and provides a filled audience tab in the top-right header. The existing Developer edition remains available with its original six tabs. Designer pages are indexed separately in [`designer/README.md`](designer/README.md), with component-specific JSX examples in applicable Do/Don't guidance.
+
+## Route to only the needed component guidance
+
+Start with [COMPONENT_ROUTING.md](COMPONENT_ROUTING.md) for a one-pass scan of all listed component
+families. Shortlist likely candidates; do not read all 51 component pages, demos, or source files.
+For a code task, read the shortlisted Developer page and verify only those APIs against the target
+package version. Read a Designer page when component choice or UX behavior still needs a decision;
+read both editions only when both questions are active. This index and the routing table guide
+discovery, while installed exports, types, and source decide API support.
 
 Types are checked against the `types` target in `package.json`. Link to generated declarations only when the target exists and matches this source; otherwise document the exact missing artifact and point to the source type declaration.
 
