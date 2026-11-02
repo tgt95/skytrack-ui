@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{r as t,t as n}from"./shared-CT8haQgp.js";var r;function i(){return(i=e((()=>{n(),r=/jsdom|happydom/.test(t)})))()}export{r as n,i as t};

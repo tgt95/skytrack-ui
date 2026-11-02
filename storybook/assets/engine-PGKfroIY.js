@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{r as t,t as n}from"./shared-CT8haQgp.js";var r,i;function a(){return(a=e((()=>{n(),r=typeof CSS<`u`&&!!CSS.supports?.(`-webkit-backdrop-filter:none`),i=!r&&t.includes(`firefox`),!r&&t.includes(`chrom`)})))()}export{a as n,r,i as t};
