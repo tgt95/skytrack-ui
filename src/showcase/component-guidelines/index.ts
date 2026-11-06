@@ -8,13 +8,13 @@ export * from './markdown-renderer'
 export * from './guideline-sheet'
 export * from './designer-guideline-sheet'
 
-const markdownFiles = import.meta.glob<string>('../../../knowledge/*.md', {
+const markdownFiles = import.meta.glob<string>('../../../skills/skytrack-ui/references/knowledge/*.md', {
   query: '?raw',
   import: 'default',
   eager: true
 })
 
-const designerMarkdownFiles = import.meta.glob<string>('../../../knowledge/designer/*.md', {
+const designerMarkdownFiles = import.meta.glob<string>('../../../skills/skytrack-ui/references/knowledge/designer/*.md', {
   query: '?raw',
   import: 'default',
   eager: true

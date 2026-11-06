@@ -14,7 +14,7 @@ const userManagementPermissions = ['create-user', 'edit-user', 'delete-user', 'a
 function BasicGroup() {
   const id = useId()
   return (
-    <FieldRoot className='w-full gap-2'>
+    <FieldRoot className='w-full max-w-40 mx-auto gap-2'>
       <FieldLabel nativeLabel={false} render={<div />} id={id} className='font-semibold'>
         Apples
       </FieldLabel>
@@ -180,11 +180,11 @@ export const demo: DemoMeta = {
     {
       name: 'Labeling a checkbox group',
       render: () => (
-        <FieldRoot className='w-full gap-2'>
-          <FieldLabel nativeLabel={false} render={<div />} id='protocols-label'>
+        <FieldRoot className='w-full max-w-48 justify-start gap-2'>
+          <FieldLabel nativeLabel={false} render={<div />} id='protocols-label' className='w-full'>
             Allowed network protocols
           </FieldLabel>
-          <CheckboxGroup aria-labelledby='protocols-label' defaultValue={['http']}>
+          <CheckboxGroup className='w-full' aria-labelledby='protocols-label' defaultValue={['http']}>
             <FieldItem>
               <FieldLabel className='flex items-center gap-2 font-normal'>
                 <CheckboxRoot value='http' />

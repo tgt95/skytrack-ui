@@ -18,17 +18,6 @@ function CommandPalette() {
   const [open, setOpen] = React.useState(false)
   const [selected, setSelected] = React.useState('')
 
-  React.useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        event.preventDefault()
-        setOpen((current) => !current)
-      }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
-
   return (
     <div className='flex flex-col items-start gap-3'>
       <Button variant='outline' onClick={() => setOpen(true)}>

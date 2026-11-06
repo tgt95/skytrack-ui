@@ -87,6 +87,15 @@
       "CheckboxIndicator",
       "CheckboxRoot",
       "CheckboxGroup",
+      "CodeBlock",
+      "CodeBlockActions",
+      "CodeBlockContent",
+      "CodeBlockCopyButton",
+      "CodeBlockFooter",
+      "CodeBlockHeader",
+      "CodeBlockLine",
+      "CodeBlockTitle",
+      "useHighlightedCode",
       "Collapsible",
       "CollapsiblePanel",
       "CollapsibleTrigger",
@@ -292,6 +301,9 @@
       "RadioGroup",
       "RadioIndicator",
       "RadioRoot",
+      "ResizableHandle",
+      "ResizablePanel",
+      "ResizablePanelGroup",
       "ScrollArea",
       "ScrollAreaContent",
       "ScrollAreaCorner",
@@ -416,6 +428,10 @@
       "CalendarProps",
       "ChartConfig",
       "ChartContainerProps",
+      "CodeBlockContentProps",
+      "CodeBlockCopyButtonProps",
+      "CodeBlockLineProps",
+      "CodeBlockProps",
       "ComboboxRootProps",
       "ContextMenuItemVariantProps",
       "DataTableColumnDef",
@@ -440,6 +456,7 @@
       "PopoverTriggerProps",
       "PreviewCardChangeEventDetails",
       "PreviewCardTriggerProps",
+      "ResizableHandleProps",
       "SelectRootProps",
       "SidebarMenuButtonProps",
       "SidebarMenuSubButtonProps",
@@ -649,6 +666,26 @@
       ],
       "types": [],
       "prefix": "CheckboxGroup"
+    },
+    "./code-block": {
+      "values": [
+        "CodeBlock",
+        "CodeBlockActions",
+        "CodeBlockContent",
+        "CodeBlockCopyButton",
+        "CodeBlockFooter",
+        "CodeBlockHeader",
+        "CodeBlockLine",
+        "CodeBlockTitle",
+        "useHighlightedCode"
+      ],
+      "types": [
+        "CodeBlockContentProps",
+        "CodeBlockCopyButtonProps",
+        "CodeBlockLineProps",
+        "CodeBlockProps"
+      ],
+      "prefix": "CodeBlock"
     },
     "./collapsible": {
       "values": [
@@ -1047,6 +1084,17 @@
       ],
       "types": [],
       "prefix": "Radio"
+    },
+    "./resizable": {
+      "values": [
+        "ResizableHandle",
+        "ResizablePanel",
+        "ResizablePanelGroup"
+      ],
+      "types": [
+        "ResizableHandleProps"
+      ],
+      "prefix": "Resizable"
     },
     "./scroll-area": {
       "values": [

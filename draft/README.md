@@ -2,14 +2,14 @@
 
 **STATUS: OWNER REVIEW DRAFT** · **SOURCE BASIS: skytrack-ui 0.1.5**
 
-This bundle is a historical experiment for AI agents to plan Information Architecture (IA), route to component guidance, implement with SkyTrack UI, and decide what to do when a reference or brief is incomplete. It does not replace active workspace or package rules. For normal work, do not load this bundle: start from the repository `AGENTS.md`, then follow its task-specific routes and the active component decision index at [`../knowledge/COMPONENT_ROUTING.md`](../knowledge/COMPONENT_ROUTING.md).
+This bundle is a historical experiment for AI agents to plan Information Architecture (IA), route to component guidance, implement with SkyTrack UI, and decide what to do when a reference or brief is incomplete. It does not replace active workspace or package rules. For normal work, do not load this bundle: start from the repository `AGENTS.md`, then follow its task-specific routes and the active component decision index at [`../skills/skytrack-ui/references/knowledge/COMPONENT_ROUTING.md`](../skills/skytrack-ui/references/knowledge/COMPONENT_ROUTING.md).
 
 ## Read order
 
 1. Read the repository `AGENTS.md` and applicable task/feature instructions.
-2. For this experiment only, consult the applicable sections of [`../UI_RULES.md`](../UI_RULES.md), [`../AGENT_GUIDE.md`](../AGENT_GUIDE.md), and [`../../../../agents/design-system-implementation.md`](../../../../agents/design-system-implementation.md); this does not require loading the full package guide.
+2. For this experiment only, consult the applicable sections of [`../skills/skytrack-ui/references/UI_RULES.md`](../skills/skytrack-ui/references/UI_RULES.md), [`../skills/skytrack-ui/references/AGENT_GUIDE.md`](../skills/skytrack-ui/references/AGENT_GUIDE.md), and [`../skills/skytrack-ui/references/implementation.md`](../skills/skytrack-ui/references/implementation.md); this does not require loading the full package guide.
 3. Read [`AGENT_GUIDELINE.md`](AGENT_GUIDELINE.md) for the end-to-end decision procedure.
-4. For this experiment only, use [`COMPONENT_ROUTING.md`](COMPONENT_ROUTING.md) to identify a likely family; the active router is [`../knowledge/COMPONENT_ROUTING.md`](../knowledge/COMPONENT_ROUTING.md).
+4. For this experiment only, use [`COMPONENT_ROUTING.md`](COMPONENT_ROUTING.md) to identify a likely family; the active router is [`../skills/skytrack-ui/references/knowledge/COMPONENT_ROUTING.md`](../skills/skytrack-ui/references/knowledge/COMPONENT_ROUTING.md).
 5. Read only the audience-specific guide needed for the decision. The experimental instruction to read both editions is not the active policy; verify implementation/API claims against the target installed package version and compatible evidence.
 
 ## Bundle

@@ -94,7 +94,7 @@ function AttachmentExample({ state }: { state: 'idle' | 'uploading' | 'processin
             className='size-4 animate-spin text-primary'
           />
         ) : state === 'done' ? (
-          <CheckCircleIcon aria-label='Uploaded' className='size-4 text-success' />
+          <CheckCircleIcon weight='fill' aria-label='Uploaded' className='size-4 text-success' />
         ) : (
           <AttachmentAction aria-label='Remove flight-report.pdf'>
             <XIcon />

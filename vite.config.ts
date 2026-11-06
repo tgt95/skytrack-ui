@@ -10,6 +10,11 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   base: process.env.BASE_PATH || '/',
   plugins: [react(), tailwindcss()],
-  resolve: { alias: { '@': path.resolve(import.meta.dirname, 'src') } },
+  resolve: {
+    alias: {
+      '@': path.resolve(import.meta.dirname, 'src'),
+      'skytrack-ui/styles.css': path.resolve(import.meta.dirname, 'src/index.css')
+    }
+  },
   build: { outDir: process.env.BUILD_OUT_DIR || 'dist' }
 })

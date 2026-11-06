@@ -17,22 +17,17 @@ export const Demo: Story = {
   render: () => <VariantBlock name={"Demo"}>{demo.variants[0].render()}</VariantBlock>,
 };
 
-export const SkyTrackAccountFAQ: Story = {
-  name: "SkyTrack account FAQ",
-  render: () => <VariantBlock name={"SkyTrack account FAQ"}>{demo.variants[1].render()}</VariantBlock>,
-};
-
 export const OpenMultiplePanels: Story = {
   name: "Open multiple panels",
-  render: () => <VariantBlock name={"Open multiple panels"}>{demo.variants[2].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Open multiple panels"}>{demo.variants[1].render()}</VariantBlock>,
 };
 
 export const HiddenUntilFound: Story = {
   name: "Hidden until found",
-  render: () => <VariantBlock name={"Hidden until found"}>{demo.variants[3].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Hidden until found"}>{demo.variants[2].render()}</VariantBlock>,
 };
 
 export const DisabledItem: Story = {
   name: "Disabled item",
-  render: () => <VariantBlock name={"Disabled item"}>{demo.variants[4].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Disabled item"}>{demo.variants[3].render()}</VariantBlock>,
 };

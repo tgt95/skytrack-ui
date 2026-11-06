@@ -6,10 +6,14 @@ Private, reusable React component library for SkyTrack. Built on
 **Status: local/private phase.** The package is `private: true`, it is installed from a
 local tarball, and no npm registry destination has been chosen yet. See
 [Publishing](#publishing--still-an-open-owner-decision). **Building UI with this library?**
-Read the agent/handbook guide: [AGENT_GUIDE.md](AGENT_GUIDE.md).
+Start with this repository's [`AGENTS.md`](AGENTS.md), then route through its local
+[`skills/README.md`](skills/README.md) and open only the relevant guide sections.
+Contributor file-read logging is off by default; for the `DEBUG=true` opt-in and command examples,
+see [File-read logging](skills/skytrack-ui/references/README.md#file-read-logging-opt-in) and the
+[copy-paste Agent prompt](skills/skytrack-ui/references/README.md#prompt-for-an-agent).
 
 For component-specific purpose, selection, anatomy, variants, states, accessibility, and verified
-examples, use the [component knowledge index](knowledge/README.md).
+examples, use the [component knowledge index](skills/skytrack-ui/references/knowledge/README.md).
 
 ## Live site (GitHub Pages)
 
@@ -34,11 +38,10 @@ source; no Actions minutes are used. To move deployment into CI instead, add
 artifact with `actions/deploy-pages`, then set the Pages source to "GitHub Actions". That push needs
 a token with the `workflow` scope.
 
-**Visual QA covers audited slices only.** Browser audits exist for part of the component set
-(screenshots under `_tasks/2026-10-07-design-system-audit/shots/`); components outside those
-slices have had no rendered check. Everything below was verified by type checking, bundling,
-Node imports and the recorded browser audits — see [Verified how](#verified-how) and
-[Not verified](#not-verified).
+**Visual QA is component-specific.** Source checks do not establish rendered behavior for every
+component. Treat appearance and interaction as unverified unless the exact component state was
+rendered and inspected. Package checks are listed under [Verified how](#verified-how); scope limits
+are listed under [Not verified](#not-verified).
 
 ---
 
@@ -47,7 +50,7 @@ Node imports and the recorded browser audits — see [Verified how](#verified-ho
 Build the tarball (writes `dist-lib-tarball/skytrack-ui-<version>.tgz`):
 
 ```bash
-cd designs/components/skytrack-ui
+cd /path/to/skytrack-ui
 npm install          # once
 npm run pack:local   # build:lib + npm pack
 ```
@@ -55,14 +58,14 @@ npm run pack:local   # build:lib + npm pack
 Install it in a consumer app:
 
 ```bash
-npm install /path/to/designs/components/skytrack-ui/dist-lib-tarball/skytrack-ui-0.1.5.tgz
+npm install /path/to/skytrack-ui/dist-lib-tarball/skytrack-ui-0.1.5.tgz
 ```
 
 `react` and `react-dom` are **peer dependencies** (`^19.0.0`) — the consumer installs and
 owns them, so there is exactly one React copy at runtime. The other runtime dependencies
 (`@base-ui/react`, `@tanstack/react-table`, `class-variance-authority`, `clsx`, `cmdk`,
-`react-day-picker`, `recharts`, `tailwind-merge`, `@phosphor-icons/react`, `zod`) are installed
-automatically as regular dependencies.
+`react-day-picker`, `react-resizable-panels`, `recharts`, `tailwind-merge`, `@phosphor-icons/react`, `zod`) are installed
+automatically as regular dependencies. Shiki is included for Code Block's optional syntax-highlighting hook.
 
 ## Usage
 
@@ -90,6 +93,44 @@ component's own helper names unchanged (e.g. `createHandle`):
 ```tsx
 import { Tooltip, TooltipPopup, TooltipPositioner, TooltipProvider, TooltipTrigger } from 'skytrack-ui/tooltip'
 ```
+
+Code Block is available as a composable subpath, with optional syntax highlighting:
+
+```tsx
+import { CodeBlock, CodeBlockContent, CodeBlockLine, useHighlightedCode } from 'skytrack-ui/code-block'
+
+const lines = useHighlightedCode('const ready = true', 'typescript')
+
+export function Snippet() {
+  return (
+    <CodeBlock>
+      <CodeBlockContent lineNumbers>
+        {lines.map((line, index) => <CodeBlockLine key={index}>{line}</CodeBlockLine>)}
+      </CodeBlockContent>
+    </CodeBlock>
+  )
+}
+```
+
+Resizable panels are available through a dedicated subpath:
+
+```tsx
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from 'skytrack-ui/resizable'
+
+export function WorkspaceLayout() {
+  return (
+    <ResizablePanelGroup orientation='horizontal' className='w-full' style={{ height: '24rem' }}>
+      <ResizablePanel defaultSize='35%' minSize='20%' aria-label='Map'>Map</ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel defaultSize='65%' minSize='30%' aria-label='Mission details'>
+        Mission details
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  )
+}
+```
+
+Syntax highlighting follows the package's class-based theme: **VS Code Light+** in light mode and **VS Code Dark+** under `.dark`.
 
 ### Sidebar
 
@@ -137,12 +178,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 ```
 
-There are 51 component subpaths: `accordion`, `alert`, `alert-dialog`, `attachment`,
+There are 53 component subpaths: `accordion`, `alert`, `alert-dialog`, `attachment`,
 `autocomplete`, `avatar`, `badge`, `breadcrumb`, `button`, `calendar`, `chart`, `checkbox`,
-`checkbox-group`, `collapsible`, `combobox`, `command`, `context-menu`, `data-table`, `date-picker`,
+`checkbox-group`, `code-block`, `collapsible`, `combobox`, `command`, `context-menu`, `data-table`, `date-picker`,
 `dialog`, `drawer`, `dropzone`, `field`, `fieldset`, `form`, `inline-edit`, `input`, `menu`,
 `menubar`, `meter`, `navigation-menu`, `number-field`, `otp-field`, `page-header`, `pagination`,
-`popover`, `preview-card`, `progress`, `radio`, `scroll-area`, `select`, `separator`, `sidebar`,
+`popover`, `preview-card`, `progress`, `radio`, `resizable`, `scroll-area`, `select`, `separator`, `sidebar`,
 `slider`, `switch`, `tabs`, `toast`, `toggle`, `toggle-group`, `toolbar`, `tooltip`.
 
 ### Aliased root exports
@@ -280,9 +321,8 @@ a `vite build` of consumer TSX importing components + styles, and Node runtime i
 
 ## Not verified
 
-- **Visual appearance.** Browser audits covered the audited slices (screenshots under
-  `_tasks/2026-10-07-design-system-audit/shots/`); components outside those slices have no
-  rendered confirmation that they look right.
+- **Visual appearance.** No repository-wide browser audit is included here. Verify the exact
+  component state and viewport before making a rendered-appearance claim.
 - **Behaviour in a real browser** (focus trapping, portals, gestures, SSR/prerender, screen
   readers, RTL, responsive layout).
 - **Registry installation.** Only the local tarball was installed; no registry, no

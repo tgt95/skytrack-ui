@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react'
 import {
   DotsThreeIcon,
+  FileIcon,
   FolderIcon,
   GearSixIcon,
   HouseIcon,
@@ -39,6 +40,13 @@ import {
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs'
 import { Toolbar, ToolbarButton, ToolbarGroup, ToolbarSeparator } from '@/components/ui/toolbar'
 import type { DemoMeta } from '@/showcase/demo'
+import {
+  Attachment,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentMedia,
+  AttachmentTitle
+} from '@/components/ui/attachment'
 
 const TABS = [
   { value: 'files', label: 'Files', content: '1 file selected · Flight-plan-Q4.xlsx' },
@@ -64,9 +72,9 @@ const MORE_ACTION_GROUPS = [
   ]
 ]
 
-function PageHeaderToolbar ({ onAction }: { onAction: (action: string) => void }) {
+function PageHeaderToolbar({ onAction }: { onAction: (action: string) => void }) {
   return (
-    <Toolbar aria-label='Flight plan actions' className='max-w-full p-0 border-0'>
+    <Toolbar aria-label='Flight plan actions' className='bg-transparent max-w-full p-0 border-0'>
       <ToolbarGroup>
         <ToolbarButton onClick={() => onAction('Open')}>
           <FolderIcon /> Open
@@ -108,11 +116,15 @@ function PageHeaderToolbar ({ onAction }: { onAction: (action: string) => void }
   )
 }
 
-function PageHeaderSidebar ({ activeItem, onSelect }: { activeItem: string; onSelect: (item: string) => void }) {
+function PageHeaderSidebar({ activeItem, onSelect }: { activeItem: string; onSelect: (item: string) => void }) {
   return (
     <Sidebar collapsible='icon' gapClassName='!h-full !min-h-0' containerClassName='!absolute !h-full'>
       <SidebarHeader>
-        <SidebarMenuButton size='default' tooltip='SkyTrack workspace' className='group-data-[icon-collapsed=true]/sidebar:p-0'>
+        <SidebarMenuButton
+          size='default'
+          tooltip='SkyTrack workspace'
+          className='group-data-[icon-collapsed=true]/sidebar:p-0'
+        >
           <span className='flex min-w-0 flex-1 flex-col items-start gap-0.5 group-data-[icon-collapsed=true]/sidebar:hidden'>
             <span
               aria-hidden='true'
@@ -160,7 +172,7 @@ type PageHeaderExampleProps = {
   activeSidebarItem?: string
 }
 
-function PageHeaderExample ({
+function PageHeaderExample({
   withSidebar = false,
   showBreadcrumb = true,
   title = 'Flight plans',
@@ -200,7 +212,7 @@ function PageHeaderExample ({
   const pageContent = (
     <Tabs value={activeTab} onValueChange={(value) => setActiveTab(String(value))} className='gap-0'>
       <PageHeader breadcrumbs={pageBreadcrumb} title={title} toolbar={<PageHeaderToolbar onAction={setLastAction} />}>
-        <TabsList width='hug' className='border-0'>
+        <TabsList width='hug' size='lg' className='border-0'>
           {TABS.map((tab) => (
             <TabsTab key={tab.value} value={tab.value} className='flex-none'>
               {tab.label}
@@ -209,10 +221,21 @@ function PageHeaderExample ({
         </TabsList>
       </PageHeader>
       {TABS.map((tab) => (
-        <TabsPanel key={tab.value} value={tab.value} className='px-6 py-3'>
-          <p className='m-0'>
-            {tab.content} | Action: {lastAction} selected.
-          </p>
+        <TabsPanel key={tab.value} value={tab.value} className='flex flex-col gap-2 p-6'>
+          <p className='text-sm text-muted-foreground'>9 items | Action: {lastAction} selected.</p>
+          <div className='grid min-w-0 grid-cols-1 lg:grid-cols-2 gap-2'>
+            {[...Array(6).keys()].map((_, index) => (
+              <Attachment key={index} className='w-full' size='default' orientation='horizontal'>
+                <AttachmentMedia>
+                  <FileIcon />
+                </AttachmentMedia>
+                <AttachmentContent>
+                  <AttachmentTitle>flight-report-{index + 1}.pdf</AttachmentTitle>
+                  <AttachmentDescription>2.4 MB</AttachmentDescription>
+                </AttachmentContent>
+              </Attachment>
+            ))}
+          </div>
         </TabsPanel>
       ))}
     </Tabs>

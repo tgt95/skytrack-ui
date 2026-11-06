@@ -25,8 +25,8 @@ const attachmentVariants = cva(
     variants: {
       size: {
         default: 'min-h-16 p-3',
-        sm: 'min-h-14 gap-2 p-2.5',
-        xs: 'min-h-11 gap-2 p-2'
+        sm: 'min-h-14 gap-2 p-2',
+        xs: 'gap-2 p-1'
       },
       orientation: {
         horizontal: 'flex-row items-center',
@@ -84,9 +84,10 @@ function AttachmentMedia ({ variant = 'icon', className, ...props }: AttachmentM
       data-slot='attachment-media'
       data-variant={variant}
       className={cn(
-        'relative z-10 flex shrink-0 items-center justify-center overflow-hidden rounded-(--radius) bg-muted text-muted-foreground [&>svg]:size-5 [&>svg]:shrink-0',
+        'relative z-10 flex shrink-0 items-center justify-center overflow-hidden bg-muted text-muted-foreground [&>svg]:size-5 [&>svg]:shrink-0',
         variant === 'icon' && 'size-12',
         variant === 'image' && 'aspect-square w-16 [&>img]:size-full [&>img]:object-cover',
+        size === 'default' || size === 'sm' && 'rounded-(--radius)',
         size === 'sm' && variant === 'icon' && 'size-11',
         size === 'xs' && variant === 'icon' && 'size-10',
         orientation === 'vertical' && variant === 'image' && 'w-full',
@@ -104,7 +105,7 @@ function AttachmentContent ({ className, ...props }: React.ComponentProps<'div'>
       data-slot='attachment-content'
       className={cn(
         'pointer-events-none relative z-10 flex min-w-0 flex-1 flex-col justify-center gap-1',
-        size === 'xs' ? 'gap-0.5' : 'gap-1',
+        size === 'xs' ? 'gap-0' : 'gap-1',
         className
       )}
       {...props}
@@ -139,7 +140,7 @@ function AttachmentDescription ({ className, ...props }: React.ComponentProps<'p
       data-slot='attachment-description'
       className={cn(
         'truncate text-sm leading-5 text-muted-foreground',
-        size == 'xs' && 'text-sm leading-5',
+        size == 'xs' && 'text-xs',
         state === 'error' && 'text-destructive',
         className
       )}

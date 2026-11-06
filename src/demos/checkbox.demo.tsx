@@ -12,7 +12,7 @@ export const demo: DemoMeta = {
     {
       name: 'Default',
       render: () => (
-        <FieldRoot className='flex-row items-center gap-2'>
+        <FieldRoot className='flex-row justify-center tems-center gap-2'>
           <FieldLabel className='flex items-center gap-2'>
             <CheckboxRoot defaultChecked />
             Enable notifications

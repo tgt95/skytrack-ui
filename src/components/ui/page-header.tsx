@@ -4,6 +4,8 @@ import { cn } from '@/lib/utils'
 export type PageHeaderProps = Omit<React.ComponentProps<'header'>, 'title'> & {
   /** Breadcrumb composition, usually built with the SkyTrack Breadcrumb parts. */
   breadcrumbs?: React.ReactNode
+  /** Optional custom class name for the breadcrumbs wrapper container. */
+  breadcrumbsClassName?: string
   /** Page title rendered as an h1 with the `.h3` visual style. */
   title: React.ReactNode
   /** Page-level actions, usually built with SkyTrack Toolbar parts. */
@@ -13,12 +15,20 @@ export type PageHeaderProps = Omit<React.ComponentProps<'header'>, 'title'> & {
 }
 
 /** Page heading composition. Breadcrumbs and Toolbar are caller-composed; children can hold Tabs. */
-function PageHeader({ breadcrumbs, title, toolbar, className, children, ...props }: PageHeaderProps) {
+function PageHeader({
+  breadcrumbs,
+  breadcrumbsClassName,
+  title,
+  toolbar,
+  className,
+  children,
+  ...props
+}: PageHeaderProps) {
   return (
     <header
       data-slot='page-header'
       className={cn(
-        'flex min-w-0 flex-col gap-4 border-border border-b p-4 has-[>[data-slot=page-header-breadcrumbs]]:pt-0 has-[>[data-slot=page-header-body]>[data-slot=page-header-content]>[data-slot=tabs-list][data-variant=line]]:pb-0',
+        'flex min-w-0 flex-col gap-4 bg-card border-border border-b p-4 has-[>[data-slot=page-header-breadcrumbs]]:pt-0 has-[>[data-slot=page-header-body]>[data-slot=page-header-content]>[data-slot=tabs-list][data-variant=line]]:pb-0',
         className
       )}
       {...props}
@@ -26,7 +36,7 @@ function PageHeader({ breadcrumbs, title, toolbar, className, children, ...props
       {breadcrumbs != null && (
         <div
           data-slot='page-header-breadcrumbs'
-          className='-mx-4 flex min-w-0 items-center border-border border-b p-2'
+          className={cn('-mx-4 flex min-w-0 items-center border-border border-b p-2', breadcrumbsClassName)}
         >
           {breadcrumbs}
         </div>
@@ -48,7 +58,8 @@ function PageHeader({ breadcrumbs, title, toolbar, className, children, ...props
         {children != null && (
           <div
             data-slot='page-header-content'
-            className='min-w-0 max-w-full overflow-x-auto has-[>[data-slot=tabs-list][data-variant=line]]:-mx-3'
+            className='min-w-0 max-w-full overflow-x-auto'
+            // className='min-w-0 max-w-full overflow-x-auto has-[>[data-slot=tabs-list][data-variant=line]]:-mx-3'
           >
             {children}
           </div>

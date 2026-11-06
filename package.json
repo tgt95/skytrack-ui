@@ -86,6 +86,11 @@
       "import": "./dist-lib/checkbox-group.js",
       "default": "./dist-lib/checkbox-group.js"
     },
+    "./code-block": {
+      "types": "./dist-lib/components/ui/code-block.d.ts",
+      "import": "./dist-lib/code-block.js",
+      "default": "./dist-lib/code-block.js"
+    },
     "./collapsible": {
       "types": "./dist-lib/components/ui/collapsible.d.ts",
       "import": "./dist-lib/collapsible.js",
@@ -216,6 +221,11 @@
       "import": "./dist-lib/radio.js",
       "default": "./dist-lib/radio.js"
     },
+    "./resizable": {
+      "types": "./dist-lib/components/ui/resizable.d.ts",
+      "import": "./dist-lib/resizable.js",
+      "default": "./dist-lib/resizable.js"
+    },
     "./scroll-area": {
       "types": "./dist-lib/components/ui/scroll-area.d.ts",
       "import": "./dist-lib/scroll-area.js",
@@ -309,7 +319,9 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "react-day-picker": "^10.0.2",
+    "react-resizable-panels": "^4.18.1",
     "recharts": "^3.10.1",
+    "shiki": "^4.6.0",
     "tailwind-merge": "^3.7.0",
     "zod": "^4.6.5"
   },

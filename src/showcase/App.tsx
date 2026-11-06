@@ -1,10 +1,11 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { MagnifyingGlassIcon, MoonIcon, SunIcon, XIcon, PaletteIcon, CodeIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { VariantBlock, type DemoMeta } from './demo'
 import { Sheet } from './sheet'
 import { OverviewStyle } from './overview-style'
 import { OverviewDashboard } from './overview-dashboard'
+import { PatternLibrary } from './pattern-library'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Toggle } from '@/components/ui/toggle'
@@ -41,6 +42,7 @@ import {
 } from './component-guidelines'
 import { DesignerGuidelineSheet } from './component-guidelines/designer-guideline-sheet'
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs'
+import { CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command'
 import skytrackLogo from '../../public/skytrack-logo-full.svg?raw'
 
 /**
@@ -90,7 +92,8 @@ const VIEWS = [
   ['components', 'Components'],
   ['sheet', 'Sheet'],
   ['style-overview', 'Overview'],
-  ['dashboard', 'Dashboard']
+  ['dashboard', 'Dashboard'],
+  ['pattern', 'Patterns']
 ] as const
 
 type View = (typeof VIEWS)[number][0]
@@ -106,8 +109,8 @@ export function App() {
   const [query, setQuery] = useState('')
   const [view, setView] = useState<View>(readViewFromUrl)
   const [audience, setAudience] = useState<Audience>('designer')
-  const [shouldFocusSearch, setShouldFocusSearch] = useState(false)
-  const filterInputRef = useRef<HTMLInputElement>(null)
+  const [commandOpen, setCommandOpen] = useState(false)
+  const [commandQuery, setCommandQuery] = useState('')
 
   const navigateToView = (nextView: View) => {
     if (nextView === view) return
@@ -127,21 +130,12 @@ export function App() {
     const handleSearchShortcut = (event: KeyboardEvent) => {
       if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'k') return
       event.preventDefault()
-      setShouldFocusSearch(true)
-      if (view !== 'components') navigateToView('components')
-      else filterInputRef.current?.focus()
+      setCommandQuery('')
+      setCommandOpen(true)
     }
-
     window.addEventListener('keydown', handleSearchShortcut)
     return () => window.removeEventListener('keydown', handleSearchShortcut)
-  }, [view])
-
-  useEffect(() => {
-    if (!shouldFocusSearch || view !== 'components') return
-    filterInputRef.current?.focus()
-    filterInputRef.current?.select()
-    setShouldFocusSearch(false)
-  }, [shouldFocusSearch, view])
+  }, [])
 
   useEffect(() => {
     document.body.dataset.showcaseView = view
@@ -231,6 +225,8 @@ export function App() {
           )
         })}
       </div>
+    ) : view === 'pattern' ? (
+      <PatternLibrary query={query} audience={selectedAudience} onClearSearch={() => setQuery('')} />
     ) : (
       <div className='mx-auto max-w-7xl px-8 py-10'>
         {view === 'sheet' ? <Sheet /> : view === 'style-overview' ? <OverviewStyle /> : <OverviewDashboard />}
@@ -298,8 +294,7 @@ export function App() {
               </Toggle>
             ))}
           </ToggleGroup>
-          <Input
-            ref={filterInputRef}
+            <Input
             startAdornment={<MagnifyingGlassIcon />}
             endAdornment={
               <>
@@ -313,7 +308,7 @@ export function App() {
             }
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder='Search components'
+            placeholder={view === 'pattern' ? 'Search patterns' : 'Search components'}
             className='w-full min-w-0 max-w-28 sm:max-w-60'
           />
           <Separator orientation='vertical' className='h-[calc(100%-var(--spacing)*8)]' />
@@ -383,6 +378,23 @@ export function App() {
           {renderViewContent('developer')}
         </TabsPanel>
       </Tabs>
+      <CommandDialog open={commandOpen} onOpenChange={setCommandOpen}>
+        <CommandInput value={commandQuery} onValueChange={setCommandQuery} placeholder='Search components...' />
+        <CommandList>
+          <CommandEmpty>No components found.</CommandEmpty>
+          <CommandGroup heading='Components'>
+            {demos.filter((demo) => `${demo.title} ${demo.id} ${demo.description}`.toLowerCase().includes(commandQuery.toLowerCase())).map((demo) => (
+              <CommandItem key={demo.id} value={`${demo.title} ${demo.id}`} onSelect={() => {
+                setQuery('')
+                setCommandOpen(false)
+                if (view !== 'components') navigateToView('components')
+                window.location.hash = demo.id
+                requestAnimationFrame(() => document.getElementById(demo.id)?.scrollIntoView({ block: 'start' }))
+              }}>{demo.title}</CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </SidebarProvider>
   )
 }

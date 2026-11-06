@@ -1,0 +1,95 @@
+# Component knowledge index
+
+Canonical, versioned guidance for each public SkyTrack UI component family. The package source, declarations, and current demo define supported API; this corpus explains usage and design intent. Never infer an unsupported part or prop from another library version.
+
+**Package version at inventory:** `0.1.5`
+**Public component families:** 53
+**Audience editions:** Designer · Developer
+**Developer showcase sheets:** Overview · Usage · Anatomy · Variants & states · Accessibility · API & examples
+**Designer showcase sheets:** Usage · Types · Behavior · Layout · Accessibility · Content (show only when applicable)
+
+Each Developer sheet pairs its written guidance and verified JSX snippet with a compiled, interactive example from the named demo variant. Designer sheets pair practical guidance with an interactive example and relevant official references. The showcase exposes 53 component entries using 52 source demo files; `calendar` has no dedicated demo and uses `date-picker` as its closest existing composition. See `_template.md` for the Developer page contract.
+
+The showcase opens in the Designer edition for product/UX designers and provides a filled audience tab in the top-right header. The existing Developer edition remains available with its original six tabs. Designer pages are indexed separately in [`designer/README.md`](designer/README.md), with component-specific JSX examples in applicable Do/Don't guidance.
+
+## Route to only the needed component guidance
+
+Start with [COMPONENT_ROUTING.md](COMPONENT_ROUTING.md) for a one-pass scan of all listed component
+families. Shortlist likely candidates; do not read all 52 component pages, demos, or source files.
+For a code task, read the shortlisted Developer page and verify only those APIs against the target
+package version. Read a Designer page when component choice or UX behavior still needs a decision;
+read both editions only when both questions are active. This index and the routing table guide
+discovery, while installed exports, types, and source decide API support.
+
+## Cross-component reference research
+
+- [Vendor design-system benchmark](research/DESIGN_SYSTEM_BENCHMARK.md) informs SkyTrack product rules using Fluent 2, Carbon, and SAP Fiori guidance. Open it only when reviewing those decisions.
+- [Figma comparison](research/FIGMA-SKYTRACK-COMPARISON.md) is a partial inventory marked `IN_PROGRESS`; do not treat it as approved product policy or package API evidence.
+
+## Scoped domain knowledge
+
+- [Creative knowledge](creative/README.md) routes marketing, graphic-design, and art-direction expertise. Read it only when the task needs that domain; the consuming workspace supplies the delivery workflow.
+
+Types are checked against the `types` target in `package.json`. Link to generated declarations only when the target exists and matches this source; otherwise document the exact missing artifact and point to the source type declaration.
+
+`REVIEWED` means independent documentation reviews are complete, their findings are resolved, and the static export/page/demo-variant/link inventory passes. It does not imply interactive showcase or browser validation.
+
+| Component export              | Knowledge page                             | Implementation and API types                                      | Demo                                                                                              | Status   |
+| ----------------------------- | ------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | -------- |
+| `skytrack-ui/accordion`       | [`accordion.md`](accordion.md)             | [`accordion.tsx`](../../../../src/components/ui/accordion.tsx)             | [`accordion.demo.tsx`](../../../../src/demos/accordion.demo.tsx)                                           | REVIEWED |
+| `skytrack-ui/alert`           | [`alert.md`](alert.md)                     | [`alert.tsx`](../../../../src/components/ui/alert.tsx)                     | [`alert.demo.tsx`](../../../../src/demos/alert.demo.tsx)                                                   | REVIEWED |
+| `skytrack-ui/alert-dialog`    | [`alert-dialog.md`](alert-dialog.md)       | [`alert-dialog.tsx`](../../../../src/components/ui/alert-dialog.tsx)       | [`alert-dialog.demo.tsx`](../../../../src/demos/alert-dialog.demo.tsx)                                     | REVIEWED |
+| `skytrack-ui/attachment`      | [`attachment.md`](attachment.md)           | [`attachment.tsx`](../../../../src/components/ui/attachment.tsx)           | [`attachment.demo.tsx`](../../../../src/demos/attachment.demo.tsx)                                         | REVIEWED |
+| `skytrack-ui/autocomplete`    | [`autocomplete.md`](autocomplete.md)       | [`autocomplete.tsx`](../../../../src/components/ui/autocomplete.tsx)       | [`autocomplete.demo.tsx`](../../../../src/demos/autocomplete.demo.tsx)                                     | REVIEWED |
+| `skytrack-ui/avatar`          | [`avatar.md`](avatar.md)                   | [`avatar.tsx`](../../../../src/components/ui/avatar.tsx)                   | [`avatar.demo.tsx`](../../../../src/demos/avatar.demo.tsx)                                                 | REVIEWED |
+| `skytrack-ui/badge`           | [`badge.md`](badge.md)                     | [`badge.tsx`](../../../../src/components/ui/badge.tsx)                     | [`badge.demo.tsx`](../../../../src/demos/badge.demo.tsx)                                                   | REVIEWED |
+| `skytrack-ui/breadcrumb`      | [`breadcrumb.md`](breadcrumb.md)           | [`breadcrumb.tsx`](../../../../src/components/ui/breadcrumb.tsx)           | [`breadcrumb.demo.tsx`](../../../../src/demos/breadcrumb.demo.tsx)                                         | REVIEWED |
+| `skytrack-ui/button`          | [`button.md`](button.md)                   | [`button.tsx`](../../../../src/components/ui/button.tsx)                   | [`button.demo.tsx`](../../../../src/demos/button.demo.tsx)                                                 | REVIEWED |
+| `skytrack-ui/calendar`        | [`calendar.md`](calendar.md)               | [`calendar.tsx`](../../../../src/components/ui/calendar.tsx)               | [`date-picker.demo.tsx`](../../../../src/demos/date-picker.demo.tsx) (closest; no dedicated Calendar demo) | REVIEWED |
+| `skytrack-ui/chart`           | [`chart.md`](chart.md)                     | [`chart.tsx`](../../../../src/components/ui/chart.tsx)                     | [`chart.demo.tsx`](../../../../src/demos/chart.demo.tsx)                                                   | REVIEWED |
+| `skytrack-ui/checkbox`        | [`checkbox.md`](checkbox.md)               | [`checkbox.tsx`](../../../../src/components/ui/checkbox.tsx)               | [`checkbox.demo.tsx`](../../../../src/demos/checkbox.demo.tsx)                                             | REVIEWED |
+| `skytrack-ui/checkbox-group`  | [`checkbox-group.md`](checkbox-group.md)   | [`checkbox-group.tsx`](../../../../src/components/ui/checkbox-group.tsx)   | [`checkbox-group.demo.tsx`](../../../../src/demos/checkbox-group.demo.tsx)                                 | REVIEWED |
+| `skytrack-ui/code-block`      | [`code-block.md`](code-block.md)           | [`code-block.tsx`](../../../../src/components/ui/code-block.tsx)           | [`code-block.demo.tsx`](../../../../src/demos/code-block.demo.tsx)                                         | ADDED    |
+| `skytrack-ui/collapsible`     | [`collapsible.md`](collapsible.md)         | [`collapsible.tsx`](../../../../src/components/ui/collapsible.tsx)         | [`collapsible.demo.tsx`](../../../../src/demos/collapsible.demo.tsx)                                       | REVIEWED |
+| `skytrack-ui/combobox`        | [`combobox.md`](combobox.md)               | [`combobox.tsx`](../../../../src/components/ui/combobox.tsx)               | [`combobox.demo.tsx`](../../../../src/demos/combobox.demo.tsx)                                             | REVIEWED |
+| `skytrack-ui/command`         | [`command.md`](command.md)                 | [`command.tsx`](../../../../src/components/ui/command.tsx)                 | [`command.demo.tsx`](../../../../src/demos/command.demo.tsx)                                               | REVIEWED |
+| `skytrack-ui/context-menu`    | [`context-menu.md`](context-menu.md)       | [`context-menu.tsx`](../../../../src/components/ui/context-menu.tsx)       | [`context-menu.demo.tsx`](../../../../src/demos/context-menu.demo.tsx)                                     | REVIEWED |
+| `skytrack-ui/data-table`      | [`data-table.md`](data-table.md)           | [`data-table.tsx`](../../../../src/components/ui/data-table.tsx)           | [`data-table.demo.tsx`](../../../../src/demos/data-table.demo.tsx)                                         | REVIEWED |
+| `skytrack-ui/date-picker`     | [`date-picker.md`](date-picker.md)         | [`date-picker.tsx`](../../../../src/components/ui/date-picker.tsx)         | [`date-picker.demo.tsx`](../../../../src/demos/date-picker.demo.tsx)                                       | REVIEWED |
+| `skytrack-ui/dialog`          | [`dialog.md`](dialog.md)                   | [`dialog.tsx`](../../../../src/components/ui/dialog.tsx)                   | [`dialog.demo.tsx`](../../../../src/demos/dialog.demo.tsx)                                                 | REVIEWED |
+| `skytrack-ui/drawer`          | [`drawer.md`](drawer.md)                   | [`drawer.tsx`](../../../../src/components/ui/drawer.tsx)                   | [`drawer.demo.tsx`](../../../../src/demos/drawer.demo.tsx)                                                 | REVIEWED |
+| `skytrack-ui/dropzone`        | [`dropzone.md`](dropzone.md)               | [`dropzone.tsx`](../../../../src/components/ui/dropzone.tsx)               | [`dropzone.demo.tsx`](../../../../src/demos/dropzone.demo.tsx)                                             | REVIEWED |
+| `skytrack-ui/field`           | [`field.md`](field.md)                     | [`field.tsx`](../../../../src/components/ui/field.tsx)                     | [`field.demo.tsx`](../../../../src/demos/field.demo.tsx)                                                   | REVIEWED |
+| `skytrack-ui/fieldset`        | [`fieldset.md`](fieldset.md)               | [`fieldset.tsx`](../../../../src/components/ui/fieldset.tsx)               | [`fieldset.demo.tsx`](../../../../src/demos/fieldset.demo.tsx)                                             | REVIEWED |
+| `skytrack-ui/form`            | [`form.md`](form.md)                       | [`form.tsx`](../../../../src/components/ui/form.tsx)                       | [`form.demo.tsx`](../../../../src/demos/form.demo.tsx)                                                     | REVIEWED |
+| `skytrack-ui/inline-edit`     | [`inline-edit.md`](inline-edit.md)         | [`inline-edit.tsx`](../../../../src/components/ui/inline-edit.tsx)         | [`inline-edit.demo.tsx`](../../../../src/demos/inline-edit.demo.tsx)                                       | REVIEWED |
+| `skytrack-ui/input`           | [`input.md`](input.md)                     | [`input.tsx`](../../../../src/components/ui/input.tsx)                     | [`input.demo.tsx`](../../../../src/demos/input.demo.tsx)                                                   | REVIEWED |
+| `skytrack-ui/menu`            | [`menu.md`](menu.md)                       | [`menu.tsx`](../../../../src/components/ui/menu.tsx)                       | [`menu.demo.tsx`](../../../../src/demos/menu.demo.tsx)                                                     | REVIEWED |
+| `skytrack-ui/menubar`         | [`menubar.md`](menubar.md)                 | [`menubar.tsx`](../../../../src/components/ui/menubar.tsx)                 | [`menubar.demo.tsx`](../../../../src/demos/menubar.demo.tsx)                                               | REVIEWED |
+| `skytrack-ui/meter`           | [`meter.md`](meter.md)                     | [`meter.tsx`](../../../../src/components/ui/meter.tsx)                     | [`meter.demo.tsx`](../../../../src/demos/meter.demo.tsx)                                                   | REVIEWED |
+| `skytrack-ui/navigation-menu` | [`navigation-menu.md`](navigation-menu.md) | [`navigation-menu.tsx`](../../../../src/components/ui/navigation-menu.tsx) | [`navigation-menu.demo.tsx`](../../../../src/demos/navigation-menu.demo.tsx)                               | REVIEWED |
+| `skytrack-ui/number-field`    | [`number-field.md`](number-field.md)       | [`number-field.tsx`](../../../../src/components/ui/number-field.tsx)       | [`number-field.demo.tsx`](../../../../src/demos/number-field.demo.tsx)                                     | REVIEWED |
+| `skytrack-ui/otp-field`       | [`otp-field.md`](otp-field.md)             | [`otp-field.tsx`](../../../../src/components/ui/otp-field.tsx)             | [`otp-field.demo.tsx`](../../../../src/demos/otp-field.demo.tsx)                                           | REVIEWED |
+| `skytrack-ui/page-header`     | [`page-header.md`](page-header.md)         | [`page-header.tsx`](../../../../src/components/ui/page-header.tsx)         | [`page-header.demo.tsx`](../../../../src/demos/page-header.demo.tsx)                                       | REVIEWED |
+| `skytrack-ui/pagination`      | [`pagination.md`](pagination.md)           | [`pagination.tsx`](../../../../src/components/ui/pagination.tsx)           | [`pagination.demo.tsx`](../../../../src/demos/pagination.demo.tsx)                                         | REVIEWED |
+| `skytrack-ui/popover`         | [`popover.md`](popover.md)                 | [`popover.tsx`](../../../../src/components/ui/popover.tsx)                 | [`popover.demo.tsx`](../../../../src/demos/popover.demo.tsx)                                               | REVIEWED |
+| `skytrack-ui/preview-card`    | [`preview-card.md`](preview-card.md)       | [`preview-card.tsx`](../../../../src/components/ui/preview-card.tsx)       | [`preview-card.demo.tsx`](../../../../src/demos/preview-card.demo.tsx)                                     | REVIEWED |
+| `skytrack-ui/progress`        | [`progress.md`](progress.md)               | [`progress.tsx`](../../../../src/components/ui/progress.tsx)               | [`progress.demo.tsx`](../../../../src/demos/progress.demo.tsx)                                             | REVIEWED |
+| `skytrack-ui/radio`           | [`radio.md`](radio.md)                     | [`radio.tsx`](../../../../src/components/ui/radio.tsx)                     | [`radio.demo.tsx`](../../../../src/demos/radio.demo.tsx)                                                   | REVIEWED |
+| `skytrack-ui/resizable`       | [`resizable.md`](resizable.md)             | [`resizable.tsx`](../../../../src/components/ui/resizable.tsx)              | [`resizable.demo.tsx`](../../../../src/demos/resizable.demo.tsx)                                           | NEW |
+| `skytrack-ui/scroll-area`     | [`scroll-area.md`](scroll-area.md)         | [`scroll-area.tsx`](../../../../src/components/ui/scroll-area.tsx)         | [`scroll-area.demo.tsx`](../../../../src/demos/scroll-area.demo.tsx)                                       | REVIEWED |
+| `skytrack-ui/select`          | [`select.md`](select.md)                   | [`select.tsx`](../../../../src/components/ui/select.tsx)                   | [`select.demo.tsx`](../../../../src/demos/select.demo.tsx)                                                 | REVIEWED |
+| `skytrack-ui/separator`       | [`separator.md`](separator.md)             | [`separator.tsx`](../../../../src/components/ui/separator.tsx)             | [`separator.demo.tsx`](../../../../src/demos/separator.demo.tsx)                                           | REVIEWED |
+| `skytrack-ui/sidebar`         | [`sidebar.md`](sidebar.md)                 | [`sidebar.tsx`](../../../../src/components/ui/sidebar.tsx)                 | [`sidebar.demo.tsx`](../../../../src/demos/sidebar.demo.tsx)                                               | REVIEWED |
+| `skytrack-ui/slider`          | [`slider.md`](slider.md)                   | [`slider.tsx`](../../../../src/components/ui/slider.tsx)                   | [`slider.demo.tsx`](../../../../src/demos/slider.demo.tsx)                                                 | REVIEWED |
+| `skytrack-ui/switch`          | [`switch.md`](switch.md)                   | [`switch.tsx`](../../../../src/components/ui/switch.tsx)                   | [`switch.demo.tsx`](../../../../src/demos/switch.demo.tsx)                                                 | REVIEWED |
+| `skytrack-ui/tabs`            | [`tabs.md`](tabs.md)                       | [`tabs.tsx`](../../../../src/components/ui/tabs.tsx)                       | [`tabs.demo.tsx`](../../../../src/demos/tabs.demo.tsx)                                                     | REVIEWED |
+| `skytrack-ui/toast`           | [`toast.md`](toast.md)                     | [`toast.tsx`](../../../../src/components/ui/toast.tsx)                     | [`toast.demo.tsx`](../../../../src/demos/toast.demo.tsx)                                                   | REVIEWED |
+| `skytrack-ui/toggle`          | [`toggle.md`](toggle.md)                   | [`toggle.tsx`](../../../../src/components/ui/toggle.tsx)                   | [`toggle.demo.tsx`](../../../../src/demos/toggle.demo.tsx)                                                 | REVIEWED |
+| `skytrack-ui/toggle-group`    | [`toggle-group.md`](toggle-group.md)       | [`toggle-group.tsx`](../../../../src/components/ui/toggle-group.tsx)       | [`toggle-group.demo.tsx`](../../../../src/demos/toggle-group.demo.tsx)                                     | REVIEWED |
+| `skytrack-ui/toolbar`         | [`toolbar.md`](toolbar.md)                 | [`toolbar.tsx`](../../../../src/components/ui/toolbar.tsx)                 | [`toolbar.demo.tsx`](../../../../src/demos/toolbar.demo.tsx)                                               | REVIEWED |
+| `skytrack-ui/tooltip`         | [`tooltip.md`](tooltip.md)                 | [`tooltip.tsx`](../../../../src/components/ui/tooltip.tsx)                 | [`tooltip.demo.tsx`](../../../../src/demos/tooltip.demo.tsx)                                               | REVIEWED |
+
+## Showcase reading order
+
+On the Components view, each audience sees the current component title, description, and original demo. The Developer edition keeps its six line-variant tabs. The Designer edition uses its own applicable topics—Usage, Types, Behavior, Layout, Accessibility, and Content—and omits a topic only when it does not apply. T-337 is extending the Do/Don't comparisons so every row renders a component-specific compiled JSX example on both sides, with a rationale beside the pair. Each topic also pairs guidance with the named interactive demo. Both editions stack guidance before the demo on narrow screens.

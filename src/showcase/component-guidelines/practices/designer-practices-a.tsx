@@ -4,21 +4,12 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 import { Alert, AlertTitle, AlertDescription, AlertAction } from '@/components/ui/alert'
 import {
-  AlertDialog,
-  AlertDialogPortal,
-  AlertDialogPopup,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogClose
-} from '@/components/ui/alert-dialog'
-import {
   Attachment,
   AttachmentContent,
   AttachmentTitle,
   AttachmentDescription,
-  AttachmentActions
+  AttachmentActions,
+  AttachmentMedia
 } from '@/components/ui/attachment'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -107,6 +98,7 @@ import { Dropzone } from '@/components/ui/dropzone'
 import { FieldRoot, FieldLabel, FieldControl, FieldDescription, FieldError } from '@/components/ui/field'
 import { FieldsetRoot, FieldsetLegend } from '@/components/ui/fieldset'
 import { Form } from '@/components/ui/form'
+import { FileIcon } from '@phosphor-icons/react/dist/icons/File'
 
 interface AutocompleteResult {
   id: string
@@ -339,7 +331,11 @@ function DateAvailabilityExample({ restrictDates }: { restrictDates: boolean }) 
           ? 'Dates before November 10 are disabled before selection.'
           : 'Choose any date, then continue to check its availability.'}
       </FieldDescription>
-      <Button size='default' variant='outline' onClick={() => setShowError(Boolean(selectedDate && selectedDate < minimumDate))}>
+      <Button
+        size='default'
+        variant='outline'
+        onClick={() => setShowError(Boolean(selectedDate && selectedDate < minimumDate))}
+      >
         Continue
       </Button>
       {showError && <FieldError match={true}>Choose a report date on or after November 10.</FieldError>}
@@ -398,11 +394,7 @@ function DialogUnsavedChangesExample({ nestedConfirmation }: { nestedConfirmatio
                             <DialogClose size='default' variant='outline'>
                               Keep editing
                             </DialogClose>
-                            <DialogClose
-                              size='default'
-                              variant='destructive'
-                              onClick={() => setParentOpen(false)}
-                            >
+                            <DialogClose size='default' variant='destructive' onClick={() => setParentOpen(false)}>
                               Discard
                             </DialogClose>
                           </DialogFooter>
@@ -418,8 +410,12 @@ function DialogUnsavedChangesExample({ nestedConfirmation }: { nestedConfirmatio
                     <p className='text-muted-foreground'>Review the consequence without opening another dialog.</p>
                   </div>
                   <DialogFooter className='flex-row justify-end gap-2'>
-                    <DialogClose size='default' variant='outline'>Keep editing</DialogClose>
-                    <DialogClose size='default' variant='destructive'>Discard</DialogClose>
+                    <DialogClose size='default' variant='outline'>
+                      Keep editing
+                    </DialogClose>
+                    <DialogClose size='default' variant='destructive'>
+                      Discard
+                    </DialogClose>
                   </DialogFooter>
                 </>
               )}
@@ -445,42 +441,22 @@ function DialogUnsavedChangesExample({ nestedConfirmation }: { nestedConfirmatio
 }
 
 function AlertDialogPracticeExample({ equalActions }: { equalActions: boolean }) {
-  const [container, setContainer] = React.useState<HTMLDivElement | null>(null)
-  const [open, setOpen] = React.useState(true)
-
   return (
-    <div
-      ref={setContainer}
-      className='relative isolate flex w-full max-w-sm flex-col items-center gap-2 [transform:translateZ(0)]'
-    >
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogPortal container={container} className='relative z-auto w-full'>
-          <AlertDialogPopup
-            initialFocus={false}
-            className='relative top-auto left-auto z-auto translate-x-0 translate-y-0 w-full max-w-sm p-4 shadow-sm sm:max-w-sm'
-          >
-            <AlertDialogHeader>
-              <AlertDialogTitle className='font-semibold text-foreground'>Delete this project?</AlertDialogTitle>
-              <AlertDialogDescription className='text-base text-muted-foreground'>
-                This action cannot be undone. All project data will be permanently removed.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter className='mt-4 flex-row justify-end gap-2'>
-              <AlertDialogClose size='default' variant={equalActions ? 'destructive' : 'outline'}>
-                Cancel
-              </AlertDialogClose>
-              <AlertDialogClose size='default' variant='destructive'>
-                Delete project
-              </AlertDialogClose>
-            </AlertDialogFooter>
-          </AlertDialogPopup>
-        </AlertDialogPortal>
-      </AlertDialog>
-      {!open && (
-        <Button size='default' variant='outline' onClick={() => setOpen(true)}>
-          Reset preview
+    <div className='w-full max-w-sm rounded-(--radius) border border-border bg-background p-4 shadow-sm'>
+      <div className='space-y-1.5'>
+        <h4 className='font-semibold text-foreground'>Delete this project?</h4>
+        <p className='text-base text-muted-foreground'>
+          This action cannot be undone. All project data will be permanently removed.
+        </p>
+      </div>
+      <div className='mt-4 flex justify-end gap-2'>
+        <Button size='default' variant={equalActions ? 'destructive' : 'outline'}>
+          Cancel
         </Button>
-      )}
+        <Button size='default' variant='destructive'>
+          Delete project
+        </Button>
+      </div>
     </div>
   )
 }
@@ -541,7 +517,12 @@ function DrawerResponsiveExample({ centeredDialog }: { centeredDialog: boolean }
           </Drawer>
         ))}
       {!open && (
-        <Button size='default' variant='outline' className='absolute inset-x-3 top-12 z-[60]' onClick={() => setOpen(true)}>
+        <Button
+          size='default'
+          variant='outline'
+          className='absolute inset-x-3 top-12 z-[60]'
+          onClick={() => setOpen(true)}
+        >
           Show preview
         </Button>
       )}
@@ -712,6 +693,9 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
         recommended: (
           <div className='w-full max-w-md space-y-1.5'>
             <Attachment size='default' state='error'>
+              <AttachmentMedia>
+                <FileIcon />
+              </AttachmentMedia>
               <AttachmentContent>
                 <AttachmentTitle>activity_log.csv</AttachmentTitle>
                 <AttachmentDescription>Upload failed: checksum mismatch</AttachmentDescription>
@@ -727,6 +711,9 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
         discouraged: (
           <div className='w-full max-w-md space-y-1.5'>
             <Attachment size='default' state='error'>
+              <AttachmentMedia>
+                <FileIcon />
+              </AttachmentMedia>
               <AttachmentContent>
                 <AttachmentTitle>activity_log.csv</AttachmentTitle>
                 <AttachmentDescription>Error</AttachmentDescription>
@@ -1083,12 +1070,12 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
         recommended: (
           <FieldRoot invalid className='w-full max-w-md'>
             <FieldLabel>Maximum capacity</FieldLabel>
-              <FieldControl
-                type='number'
-                defaultValue={550}
-                aria-invalid='true'
-                className='ring-2 ring-ring ring-offset-2 ring-offset-background'
-              />
+            <FieldControl
+              type='number'
+              defaultValue={550}
+              aria-invalid='true'
+              className='ring-2 ring-ring ring-offset-2 ring-offset-background'
+            />
             <FieldError>Capacity cannot exceed 400 items.</FieldError>
           </FieldRoot>
         ),

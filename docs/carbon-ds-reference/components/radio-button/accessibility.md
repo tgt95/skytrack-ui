@@ -1,0 +1,71 @@
+---
+title: Radio button
+description:
+  Radio buttons are used when two or more options are mutually exclusive,
+  meaning the user must select only one option.
+tabs: ['Usage', 'Style', 'Code', 'Accessibility']
+---
+
+
+> No accessibility annotations are needed for radio buttons, but keep these
+> considerations in mind if you are modifying Carbon or creating a custom
+> component.
+
+
+### Quick Navigation
+
+- [What Carbon provides](#what-carbon-provides)
+- [Development considerations](#development-considerations)
+
+
+## What Carbon provides
+
+Carbon bakes keyboard operation into its components, improving the experience of
+blind users and others who operate via the keyboard. Carbon incorporates many
+other accessibility considerations, some of which are described below.
+
+### Keyboard interaction
+
+A group of radio buttons takes a single tab stop. Carbon does not require any
+item to be selected by default, and the first item will always take focus in
+case of no selection. The user changes the selected radio button using the arrow
+keys (up/down or left/right). Pressing `Tab` again will move focus out of the
+radio button group to the next component.
+
+
+![example of tabbing into a radio button group and arrowing between selections](images/radio-button-accessibility-1.png)
+
+
+*Caption: A radio button group is a single tab stop and radio buttons are selected using
+  arrow keys.*
+
+
+### Labeling and states
+
+Carbon surfaces the labeling of radio buttons and groups to screen readers and
+other assistive technologies. Carbon also provides state and context
+information, such as the number of items in the radio button group.
+
+
+!["color group, Purple radio button checked, 2 of 3"](images/radio-button-accessibility-2.png)
+
+
+*Caption: JAWS screen reader output, based on the information provided by Carbon.*
+
+
+## Development considerations
+
+Keep this in mind if you’re modifying Carbon or creating a custom component.
+
+- Carbon uses `fieldset` and `legend` to group and label sets of radio buttons.
+- Carbon uses `label` and `for` to programmatically connect radio buttons with
+  their labels.
+- Required radio button groups must be identified programmatically, either via
+  the label or with `aria-required`.
+- See the
+  [ARIA authoring practices](https://www.w3.org/WAI/ARIA/apg/patterns/radiobutton/)
+  for more considerations.
+
+
+> ♿ **Accessibility Status:** Component audited for WCAG 2.1 AA accessibility standards.
+
