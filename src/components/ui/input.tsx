@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Input as BaseInput } from '@base-ui/react/input'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
-import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/components/ui/control-sizes'
+import { focusRing } from '@/lib/focus-ring'
+import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/lib/control-sizes'
 
 type InputAdornmentProps = React.ComponentProps<'span'> & {
   position: 'start' | 'end'

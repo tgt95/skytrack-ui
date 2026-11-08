@@ -1,14 +1,4 @@
 import type { ComponentType } from 'react'
-import {
-  ChartAreaTypePreview,
-  ChartBarTypePreview,
-  ChartHorizontalBarTypePreview,
-  ChartLineTypePreview,
-  ChartPieTypePreview,
-  ChartScatterTypePreview,
-  ChartStackedAreaTypePreview,
-  ChartStackedBarTypePreview
-} from './designer-chart-type-examples'
 
 export interface DesignerTypeExample {
   id?: string
@@ -141,26 +131,12 @@ export const designerTypePatternsByDemoId: Record<string, DesignerTypePattern[]>
       description:
         'Choose a chart by the relationship people need to read: rank or compare categories, follow change over time, show parts of a whole, or explore how two measures relate.',
       examples: [
-        { id: 'chart-bar', variantName: 'BAR CHART', label: 'Category comparison · Bar', preview: ChartBarTypePreview },
-        {
-          id: 'chart-horizontal-bar',
-          label: 'Category ranking · Horizontal bar',
-          preview: ChartHorizontalBarTypePreview
-        },
-        {
-          id: 'chart-stacked-bar',
-          label: 'Composition by category · Stacked bar',
-          preview: ChartStackedBarTypePreview
-        },
-        { id: 'chart-line', label: 'Trend over time · Line', preview: ChartLineTypePreview },
-        { id: 'chart-area', label: 'Magnitude over time · Area', preview: ChartAreaTypePreview },
-        {
-          id: 'chart-stacked-area',
-          label: 'Composition over time · Stacked area',
-          preview: ChartStackedAreaTypePreview
-        },
-        { id: 'chart-pie', label: 'Part of a whole · Pie', preview: ChartPieTypePreview },
-        { id: 'chart-scatter', label: 'Relationship between measures · Scatter', preview: ChartScatterTypePreview }
+        { id: 'chart-bar', variantName: 'BAR CHART', label: 'Compare categories · Bar' },
+        { id: 'chart-line', variantName: 'LINE CHART', label: 'Follow time · Line' },
+        { id: 'chart-stacked-bar', variantName: 'STACKED BAR', label: 'Compare composition · Stacked bar' },
+        { id: 'chart-area', variantName: 'AREA CHART', label: 'Show magnitude · Area' },
+        { id: 'chart-pie', variantName: 'PIE CHART', label: 'Show parts of a whole · Pie' },
+        { id: 'chart-scatter', variantName: 'SCATTER CHART', label: 'Explore numeric relationship · Scatter' }
       ]
     }
   ],
@@ -217,18 +193,32 @@ export const designerTypePatternsByDemoId: Record<string, DesignerTypePattern[]>
     )
   ],
   'data-table': [
-    pattern(
-      'Dense record review',
-      'Use a table when people need to compare multiple attributes across records and act on rows or selections.',
-      ['CUSTOMER RECORDS', 'Sortable, selectable records']
-    )
+    {
+      ...pattern(
+        'Dense record review',
+        'Use a table when people need to compare multiple attributes across records and act on rows or selections.',
+        ['DEFAULT TABLE', 'Sortable customer rows'],
+        ['SELECTABLE ROWS', 'Select records together'],
+        ['OPEN ROW DETAILS ON DEMAND', 'Expand details and select rows'],
+        ['SINGLE ROW SELECTION', 'Select one record'],
+        ['BATCH ACTIONS', 'Act on selected records'],
+        ['CUSTOM SEARCH + COLUMNS', 'Replace default controls with JSX'],
+        ['COLLAPSED SEARCH', 'Reveal search when needed'],
+        ['ADVANCED FILTERS', 'Combine search with role, location, and status facets'],
+        ['DENSE RECORDS', '24 records with inner scrolling'],
+        ['ROW DENSITY + ZEBRA', 'Adjust row density and striping'],
+        ['LOADING + EMPTY STATES', 'Loading and no-results states']
+      ),
+      layout: 'single-column'
+    }
   ],
   'date-picker': [
     pattern(
       'Date selection surface',
       'Use an input-triggered calendar when a date belongs in a form; use an inline calendar when date navigation is the main task.',
       ['DEFAULT', 'Date picker in a form'],
-      ['CALENDAR', 'Calendar displayed inline']
+      ['CALENDAR', 'Calendar displayed inline'],
+      ['DATE RANGE', 'Select a start and end date']
     )
   ],
   dialog: [
@@ -379,6 +369,31 @@ export const designerTypePatternsByDemoId: Record<string, DesignerTypePattern[]>
       ['Complete and indeterminate', 'Complete and unknown progress']
     )
   ],
+  'progress-indicator': [
+    pattern(
+      'Step sequence',
+      'Use a horizontal step sequence when labels fit; switch to a vertical list when descriptions or validation states need room.',
+      ['HORIZONTAL', 'Compact horizontal workflow'],
+      ['VERTICAL WITH ERROR', 'Vertical workflow with validation state']
+    )
+  ],
+  pagination: [
+    pattern(
+      'Page navigation context',
+      'Use standalone page navigation for content pages, and pair pagination with a table when people need to control the visible record set.',
+      ['PAGE NAVIGATION', 'Navigate a content sequence'],
+      ['TABLE PAGINATION', 'Change table page and page size']
+    )
+  ],
+  search: [
+    pattern(
+      'Search field treatment',
+      'Choose a standard field for compact toolbars, a fluid field when search is a primary page task, and a disabled state when search is unavailable.',
+      ['DEFAULT WITH CLEAR', 'Standard search with clear action'],
+      ['FLUID', 'Prominent fluid search'],
+      ['DISABLED', 'Unavailable search state']
+    )
+  ],
   'scroll-area': [
     pattern(
       'Scroll affordance',
@@ -485,7 +500,6 @@ export const designerTypePatternsByDemoId: Record<string, DesignerTypePattern[]>
 export const designerTypeOmissions: Record<string, string> = {
   'inline-edit': 'Trigger-rendering examples change composition mechanics, not a distinct design-facing type.',
   meter: 'The existing examples change the measured value while retaining the same visual role.',
-  pagination: 'The demo changes page state; it does not show distinct pagination presentations.',
   popover: 'The examples vary trigger, position, and state behavior; the page has one contextual popover role.',
   'preview-card': 'Trigger and position differences do not create distinct types.',
   radio: 'The examples vary labeling, state, and implementation; the design role remains a single-choice group.',

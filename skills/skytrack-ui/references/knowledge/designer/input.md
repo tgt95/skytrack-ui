@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/input.d.ts`](../../../../../dist-lib/components/ui/input.d.ts)
 - Showcase demo id: `input`
 - Closest demo: [`src/demos/input.demo.tsx`](../../../../../src/demos/input.demo.tsx)
-- Official guidance: [Carbon Design System Text Input Usage](https://carbondesignsystem.com/components/text-input/usage/)
 
 ## Usage
 

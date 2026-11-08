@@ -1,7 +1,7 @@
 # Designer component guidance
 
 **Audience:** Product and UX designers creating digital products.
-**Coverage:** 53 component guides.
+**Coverage:** 55 component guides.
 
 Use these guides to choose a component, place it in a clear information hierarchy, and design its states and content. The showcase opens on **Designer**; select **Developer** for implementation details.
 
@@ -67,9 +67,11 @@ When conducting page and layout reviews, verify that screens reflow cleanly down
 | Popover         | [popover.md](popover.md)                 |
 | Preview Card    | [preview-card.md](preview-card.md)       |
 | Progress        | [progress.md](progress.md)               |
+| Progress Indicator | [progress-indicator.md](progress-indicator.md) |
 | Radio Group     | [radio.md](radio.md)                     |
 | Resizable       | [resizable.md](resizable.md)             |
 | Scroll Area     | [scroll-area.md](scroll-area.md)         |
+| Search          | [search.md](search.md)                   |
 | Select          | [select.md](select.md)                   |
 | Separator       | [separator.md](separator.md)             |
 | Sidebar         | [sidebar.md](sidebar.md)                 |

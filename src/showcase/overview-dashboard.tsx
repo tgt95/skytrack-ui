@@ -56,7 +56,7 @@ import {
 } from '@/components/ui/combobox'
 import { Badge } from '@/components/ui/badge'
 
-function Card ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
     <div className={`flex flex-col gap-4 border border-border bg-card p-6 text-card-foreground ${className}`}>
       {children}
@@ -64,15 +64,15 @@ function Card ({ children, className = '' }: { children: React.ReactNode; classN
   )
 }
 
-function CardTitle ({ children }: { children: React.ReactNode }) {
+function CardTitle({ children }: { children: React.ReactNode }) {
   return <h5 className='h5 heading py-0.5'>{children}</h5>
 }
 
-function CardSub ({ children }: { children: React.ReactNode }) {
+function CardSub({ children }: { children: React.ReactNode }) {
   return <p className='text-sm text-muted-foreground'>{children}</p>
 }
 
-function MiniSelect ({
+function MiniSelect({
   label,
   items,
   defaultValue
@@ -108,7 +108,7 @@ function MiniSelect ({
   )
 }
 
-function Donut ({
+function Donut({
   pct,
   size = 180,
   track = 'var(--chart-1)',
@@ -148,7 +148,7 @@ function Donut ({
   )
 }
 
-function AreaSpark ({ points, color = 'var(--chart-1)', id }: { points: number[]; color?: string; id: string }) {
+function AreaSpark({ points, color = 'var(--chart-1)', id }: { points: number[]; color?: string; id: string }) {
   const W = 300
   const H = 100
   const step = W / (points.length - 1)
@@ -167,7 +167,7 @@ function AreaSpark ({ points, color = 'var(--chart-1)', id }: { points: number[]
   )
 }
 
-function Ring ({ pct, label, value }: { pct: number; label: string; value: string }) {
+function Ring({ pct, label, value }: { pct: number; label: string; value: string }) {
   return (
     <div className='flex items-center gap-3'>
       <svg viewBox='0 0 36 36' className='size-4 shrink-0 text-primary' aria-hidden='true'>
@@ -200,7 +200,7 @@ const HISTORY = [
   { month: 'May', v: 92 }
 ]
 
-function ContributionCard () {
+function ContributionCard() {
   return (
     <Card>
       <div className='flex flex-col gap-0.5'>
@@ -246,9 +246,9 @@ const CURRENCIES = [
   { value: 'vnd', label: 'VND — Vietnamese Dong' }
 ]
 
-function PayoutCard () {
+function PayoutCard() {
   const [amount, setAmount] = useState<number | number[]>(2500)
-  const n = Array.isArray(amount) ? amount[0] ?? 2500 : amount
+  const n = Array.isArray(amount) ? (amount[0] ?? 2500) : amount
 
   return (
     <Card>
@@ -322,7 +322,7 @@ function PayoutCard () {
   )
 }
 
-function SavingsCard () {
+function SavingsCard() {
   return (
     <Card className='h-full'>
       <div className='flex flex-col gap-0.5'>
@@ -367,14 +367,35 @@ function SavingsCard () {
 }
 
 const TXNS = [
-  { icon: CoffeeIcon, name: 'Blue Bottle Coffee', cat: 'Food & Drink', when: 'Today, 10:24 AM', amt: '-$6.50', hot: false },
-  { icon: ShoppingCartIcon, name: 'Whole Foods Market', cat: 'Groceries', when: 'Yesterday', amt: '-$142.30', hot: false },
+  {
+    icon: CoffeeIcon,
+    name: 'Blue Bottle Coffee',
+    cat: 'Food & Drink',
+    when: 'Today, 10:24 AM',
+    amt: '-$6.50',
+    hot: false
+  },
+  {
+    icon: ShoppingCartIcon,
+    name: 'Whole Foods Market',
+    cat: 'Groceries',
+    when: 'Yesterday',
+    amt: '-$142.30',
+    hot: false
+  },
   { icon: WalletIcon, name: 'Stripe Payout', cat: 'Income', when: 'Oct 12', amt: '+$4,200.00', hot: true },
   { icon: CarIcon, name: 'Uber Technologies', cat: 'Transport', when: 'Oct 11', amt: '-$24.10', hot: false },
-  { icon: TelevisionIcon, name: 'Netflix Subscription', cat: 'Entertainment', when: 'Oct 10', amt: '-$19.99', hot: false }
+  {
+    icon: TelevisionIcon,
+    name: 'Netflix Subscription',
+    cat: 'Entertainment',
+    when: 'Oct 10',
+    amt: '-$19.99',
+    hot: false
+  }
 ]
 
-export function OverviewDashboard () {
+export function OverviewDashboard() {
   return (
     <div className='grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3'>
       <ContributionCard />
@@ -573,7 +594,11 @@ export function OverviewDashboard () {
             ['var(--chart-1)', 41],
             ['var(--chart-2)', 25]
           ].map(([c, v], i) => (
-            <div key={i} className='flex-1 rounded-t-[var(--radius)]' style={{ height: `${v}%`, backgroundColor: c as string }} />
+            <div
+              key={i}
+              className='flex-1 rounded-t-[var(--radius)]'
+              style={{ height: `${v}%`, backgroundColor: c as string }}
+            />
           ))}
         </div>
         <div className='grid grid-cols-4 gap-2 text-center'>
@@ -616,7 +641,10 @@ export function OverviewDashboard () {
             <div key={`${d}-${v}`} className='text-center'>
               <div className='text-xs text-muted-foreground'>{d}</div>
               <div className='relative mt-1 h-20 overflow-hidden rounded-(--radius) bg-muted'>
-                <div className='absolute inset-x-0 bottom-0 rounded-(--radius) bg-chart-3' style={{ height: `${v}%` }} />
+                <div
+                  className='absolute inset-x-0 bottom-0 rounded-(--radius) bg-chart-3'
+                  style={{ height: `${v}%` }}
+                />
               </div>
             </div>
           ))}

@@ -16,11 +16,11 @@ const MIN = 0
 const MAX = 100
 const MARKS = [0, 25, 50, 75, 100]
 
-function valueToPercent (value: number) {
+function valueToPercent(value: number) {
   return ((value - MIN) / (MAX - MIN)) * 100
 }
 
-function ControlledSlider () {
+function ControlledSlider() {
   const [value, setValue] = useState<number | number[]>(30)
   return (
     <FieldRoot>
@@ -40,7 +40,7 @@ function ControlledSlider () {
   )
 }
 
-function RangeSlider ({ collision }: { collision: 'push' | 'swap' | 'none' }) {
+function RangeSlider({ collision }: { collision: 'push' | 'swap' | 'none' }) {
   return (
     <FieldRoot>
       <Slider defaultValue={[25, 45]} thumbCollisionBehavior={collision}>
@@ -60,7 +60,7 @@ function RangeSlider ({ collision }: { collision: 'push' | 'swap' | 'none' }) {
   )
 }
 
-function MarksSlider () {
+function MarksSlider() {
   return (
     <FieldRoot>
       <Slider defaultValue={40} min={MIN} max={MAX}>

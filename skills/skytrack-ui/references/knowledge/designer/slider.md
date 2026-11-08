@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/slider.d.ts`](../../../../../dist-lib/components/ui/slider.d.ts)
 - Showcase demo id: `slider`
 - Closest demo: [`src/demos/slider.demo.tsx`](../../../../../src/demos/slider.demo.tsx)
-- Official guidance: [Carbon Design System Slider Usage](https://carbondesignsystem.com/components/slider/usage/)
 
 ## Usage
 

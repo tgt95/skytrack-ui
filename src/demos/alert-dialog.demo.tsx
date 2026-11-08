@@ -253,9 +253,7 @@ export const demo: DemoMeta = {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogClose>Cancel</AlertDialogClose>
-                <AlertDialogClose variant='destructive'>
-                  Discard
-                </AlertDialogClose>
+                <AlertDialogClose variant='destructive'>Discard</AlertDialogClose>
               </AlertDialogFooter>
             </AlertDialogPopup>
           </AlertDialogPortal>

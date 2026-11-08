@@ -34,6 +34,7 @@ export type PatternDefinition = {
   sourcePath: string
   summary: string
   whenToUse: string
+  userBenefit: string
   designGuidance: string[]
   implementationGuidance: string[]
   components: string[]
@@ -53,10 +54,13 @@ export const PATTERNS: PatternDefinition[] = [
     summary:
       'Consistent placement, labels, confirmation, and feedback for add, cancel, clear, close, copy, delete, edit, errors, next, refresh, remove, and reset.',
     whenToUse: 'Use these shared action patterns whenever people act on a control, a resource, or a workflow.',
+    userBenefit: 'People can predict what each action changes, while the most important next step is easy to find.',
     designGuidance: [
+      'When Add is the main task, make it the single primary action; otherwise use less emphasis and keep other actions secondary.',
       'Use an action label and placement consistently so the same word leads to the same result.',
-      'Keep cancel, close, clear, reset, remove, and delete distinct; deletion permanently destroys data.',
-      'Match confirmation and post-action feedback to the impact of the action.'
+      'Use a secondary button or link for Cancel; place Clear’s close icon at the field’s right edge; dismiss surfaces with an upper-right close icon rather than a Close button; confirm Copy with a brief tooltip and keep Remove low emphasis.',
+      'Keep cancel, close, clear, reset, remove, and delete distinct; Delete destroys an object and is usually permanent, while Remove detaches it.',
+      'Match confirmation and post-action feedback to the impact, reversibility, and failure cost of the action.'
     ],
     implementationGuidance: [
       'Use Button for primary and secondary actions, Menu for grouped overflow, and AlertDialog for high-impact deletion.',
@@ -74,10 +78,12 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'A focused conversation that asks for input or gives urgent information during a workflow.',
     whenToUse:
       'Use a modal when the user must respond before continuing, or a non-modal panel when the page should remain available.',
+    userBenefit: 'People keep their page context unless a response is necessary before they can continue.',
     designGuidance: [
+      'Block the underlying page only when the user must respond before continuing; otherwise preserve access to it.',
       'Use dialogs sparingly and keep each task short and focused.',
       'Open them from a user action; do not nest dialogs or make a dialog a substitute for a full page.',
-      'Keep focus, keyboard dismissal, validation, and completion behavior clear.'
+      'Keep focus, keyboard dismissal, validation, and completion behavior clear; place Cancel on the far left and the sole primary action on the far right.'
     ],
     implementationGuidance: [
       'Use Dialog for a task that needs context and AlertDialog when a response is required to continue.',
@@ -95,8 +101,10 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'An unavailable control state used when permissions, dependencies, or prerequisites prevent interaction.',
     whenToUse:
       'Use disabled while a specific condition blocks an otherwise available action; use read-only when values remain reviewable.',
+    userBenefit: 'A visible reason and a way to resolve it turn an unavailable control into a clear next step.',
     designGuidance: [
       'Explain the prerequisite or permission when the disabled state would otherwise be confusing.',
+      'Keep the blocked action visible while the user can resolve its prerequisite.',
       'Do not use disabled styling as a substitute for read-only content.',
       'Hide an item only when the user should not see it at all.'
     ],
@@ -116,8 +124,10 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'User-triggered content that reveals information related to the control or item that opened it.',
     whenToUse:
       'Use a disclosure for secondary details or options that are useful in context but need not occupy the page by default.',
+    userBenefit: 'The page stays scannable while related details remain available where they are needed.',
     designGuidance: [
       'Keep the revealed content reasonably sized and do not hide critical information.',
+      'Choose inline expansion for related details and a menu or popover for compact options.',
       'Avoid nested disclosures and avoid opening many competing sections at once.',
       'Make the trigger, expanded state, and dismissal behavior easy to understand.'
     ],
@@ -137,6 +147,7 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'A content area with no data, including first use, user-created emptiness, or unavailable content.',
     whenToUse:
       'Use the empty state that names the actual reason: no data yet, no results, an error, or a required user action.',
+    userBenefit: 'People learn why content is missing and what they can do next instead of meeting a dead end.',
     designGuidance: [
       'Explain why the space is empty and offer a useful next step when one exists.',
       'Keep the message sized to its space and use starter content only when it helps people begin.',
@@ -158,8 +169,10 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'A way for people to include or exclude items from a displayed data set using defined attributes.',
     whenToUse:
       'Use filters when a collection needs narrowing by known attributes; choose single, multiple, or combined filters to fit the task.',
+    userBenefit: 'People can narrow a known collection and see whether their choices changed the results.',
     designGuidance: [
       'Show active filter state and whether changes apply immediately or after an explicit action.',
+      'Apply simple, single-category choices immediately; use Apply and Cancel when users need to review several pending choices.',
       'Support clearing or resetting filters without forcing users to reverse each choice.',
       'Keep the result count and empty result recovery close to the filtered content.'
     ],
@@ -179,6 +192,7 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'Alternative fluid presentations for familiar controls, containers, and forms alongside default styles.',
     whenToUse:
       'Use a fluid treatment when the page context calls for a more expressive surface, and use default styling for dense productive work.',
+    userBenefit: 'Controls fit their parent layout without forcing every task into the same width.',
     designGuidance: [
       'Apply fluid styles intentionally to related controls instead of mixing them without hierarchy.',
       'Check alignment, sizing, placement, and accessibility when a fluid control spans its container.',
@@ -200,9 +214,10 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'Related input controls that let people provide data or configure options.',
     whenToUse:
       'Use a form for one or more related values; choose a page, side panel, or dialog according to task complexity and context.',
+    userBenefit: 'Clear labels, grouped fields, and actionable errors reduce uncertainty and repeated work.',
     designGuidance: [
       'Label controls, distinguish optional from required information, and explain unusual values with helper text.',
-      'Group related fields and use validation that identifies the problem and how to fix it.',
+      'Collect only what the task needs; group related fields and validate beside the problem with a clear repair.',
       'Keep action order, button emphasis, spacing, and responsive columns consistent.'
     ],
     implementationGuidance: [
@@ -221,8 +236,11 @@ export const PATTERNS: PatternDefinition[] = [
     summary:
       'Persistent navigation and orientation across a product, paired with local navigation for the current area.',
     whenToUse: 'Use a global header when people need a consistent way to orient and move between product areas.',
+    userBenefit:
+      'A stable global frame helps people move between product areas without confusing page actions with navigation.',
     designGuidance: [
       'Keep a clear sense of place and show breadcrumb levels when they help explain hierarchy.',
+      'Keep cross-product navigation and system utilities separate from controls for the current page.',
       'Separate global navigation from page-level controls and match the visual hierarchy to source order.',
       'Provide keyboard access, landmarks, and a skip path to the main content.'
     ],
@@ -242,6 +260,8 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'Feedback that shows work is in progress, how much is complete, or when more content is available.',
     whenToUse:
       'Use a loading indicator for delayed work; choose skeletons for content-shaped placeholders and progress only when measurable.',
+    userBenefit:
+      'Honest, well-placed progress feedback reduces uncertainty without promising work the system cannot measure.',
     designGuidance: [
       'Place the indicator in the area that is loading, or use a full-screen treatment only when the entire page is blocked.',
       'Use progressive loading when useful content can appear before the full result.',
@@ -263,8 +283,11 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'A page where a user gains access through an available sign-in method.',
     whenToUse:
       'Use a login flow at an access boundary; choose and order authentication methods according to product policy.',
+    userBenefit:
+      'A clear access flow supports the methods people can use while protecting account and credential information.',
     designGuidance: [
       'Describe available methods and keep validation and server-side error recovery distinct.',
+      'Use the same recovery wording for unknown accounts and incorrect credentials when revealing account membership would be unsafe.',
       'Account for progressive authentication such as single sign-on and multi-factor verification.',
       'Use a layout that works at narrow widths and preserves clear focus order.'
     ],
@@ -284,8 +307,10 @@ export const PATTERNS: PatternDefinition[] = [
     sourcePath: `${CORE_SOURCE}/notification-pattern/index.md`,
     summary: 'Feedback that ranges from an inline response to a system-wide message.',
     whenToUse: 'Choose a notification type by urgency, persistence, scope, and whether a response is required.',
+    userBenefit: 'The right timing and reach communicate urgency without interrupting more work than necessary.',
     designGuidance: [
       'Keep task-generated feedback near the work and reserve broad messaging for system-level updates.',
+      'Choose meaning (information, success, warning, error) separately from delivery (inline, toast, banner, panel, or modal).',
       'Match inline, toast, actionable, callout, banner, panel, or modal treatment to the message.',
       'Do not rely on a timed toast for critical information or a required decision.'
     ],
@@ -305,8 +330,10 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'Text or controls that exceed the available space, handled with truncation or a show-more affordance.',
     whenToUse:
       'Use truncation for constrained repeated labels and Show more when the omitted text is useful in context.',
+    userBenefit: 'Compact layouts stay readable while meaningful values remain available in full.',
     designGuidance: [
       'Keep the complete value available when truncation hides meaningful information.',
+      'Prefer wrapping unless repeated content or a compact layout makes truncation necessary.',
       'Choose where to truncate based on the content; identifiers may need a middle ellipsis.',
       'Make expansion explicit and keep the expanded content easy to collapse.'
     ],
@@ -326,6 +353,7 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'Values people may review but cannot modify in the current context.',
     whenToUse:
       'Use read-only when people should still inspect or copy a value; use disabled only when a prerequisite prevents interaction.',
+    userBenefit: 'People can inspect important values without mistaking them for editable or unavailable content.',
     designGuidance: [
       'Keep read-only values legible and distinguish them from editable controls without suggesting they are unavailable.',
       'Make the state clear through structure, label, and behavior rather than color alone.',
@@ -347,10 +375,12 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'A way to find relevant content with a word or phrase, including basic, active, and focused search.',
     whenToUse:
       'Use search for open-ended discovery and add a scope filter when the searchable collection needs context.',
+    userBenefit: 'People can find an open-ended match, understand the result, and recover when nothing matches.',
     designGuidance: [
-      'Avoid dead ends, display useful result counts, and show loading when results take time.',
+      'Always show the result count, including zero and counts for each scope; show loading when results take time.',
       'Support type-ahead or recent suggestions when they help the task, without requiring them for a small local list.',
-      'Keep the query and clear action available and localize the field.'
+      'Keep the query and clear action available and localize the field.',
+      'A scope filter selects one category at a time and defaults to All or Any.'
     ],
     implementationGuidance: [
       'Use Input for a direct search field and Command for searchable keyboard-driven choices.',
@@ -367,9 +397,11 @@ export const PATTERNS: PatternDefinition[] = [
     sourcePath: `${CORE_SOURCE}/status-indicator-pattern/index.md`,
     summary: 'Visual indicators that help people assess status or severity and respond appropriately.',
     whenToUse: 'Use an indicator when a status needs to be found quickly in a list, record, or workflow.',
+    userBenefit: 'Consistent labels and symbols make important states faster to scan and easier to understand.',
     designGuidance: [
       'Pair color with a text label or a well-understood icon; color alone is insufficient.',
       'Standardize status vocabulary and severity across the product.',
+      'When combining states, surface the most important active condition rather than hiding its severity.',
       'Use consolidated indicators carefully to avoid adding unnecessary cognitive load.'
     ],
     implementationGuidance: [
@@ -387,10 +419,11 @@ export const PATTERNS: PatternDefinition[] = [
     sourcePath: `${CORE_SOURCE}/text-toolbar-pattern/index.md`,
     summary: 'A compact set of actions for editing text, searching, attaching files, or embedding links.',
     whenToUse: 'Use a text toolbar when actions apply to the current text or selection and should remain close to it.',
+    userBenefit: 'Actions stay close to the text they change, which reduces context switching during editing.',
     designGuidance: [
       'Keep actions relevant, grouped, and responsive; move lower-priority actions into an overflow menu.',
       'Provide accessible labels or tooltips for icon-only actions and support keyboard navigation.',
-      'The local Carbon source notes that its keyword-search guidance is still open for production contributions.'
+      'Include text search only when people need to find wording in the current document.'
     ],
     implementationGuidance: [
       'Use Toolbar with ToggleGroup and Toggle for related formatting states.',
@@ -408,8 +441,12 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'Community guidance for designing conversational interfaces that let users work with natural language.',
     whenToUse:
       'Use a chatbot when conversation offers a useful route through a task; keep direct controls available for predictable actions.',
+    userBenefit:
+      'Conversation helps with open-ended questions while direct navigation remains available for predictable tasks.',
     designGuidance: [
-      'Set expectations for what the assistant can do and make it easy to correct or restart the conversation.',
+      'Identify the assistant as a bot, explain its limits, and make it easy to correct or restart the conversation.',
+      'Use conversation only when natural language helps; keep predictable actions available through direct controls.',
+      'Restate intent before consequential actions; route complex, lengthy, sensitive, or emotional needs to a person or a more suitable flow.',
       'Keep answers tied to the current task and avoid implying certainty the system does not have.',
       'Provide a visible way to reach conventional navigation or help.'
     ],
@@ -419,8 +456,7 @@ export const PATTERNS: PatternDefinition[] = [
       'Keep the conversation readable and expose newly added messages.'
     ],
     components: ['Input', 'Button', 'Command'],
-    sourceNote:
-      'Community pattern: the local snapshot identifies community maintainers and does not imply core Carbon support.'
+    sourceNote: 'Community guidance is maintained separately from the core pattern topics.'
   },
   {
     id: 'community-in-app-learning',
@@ -429,21 +465,23 @@ export const PATTERNS: PatternDefinition[] = [
     sourceStatus: 'Community catalog only',
     sourcePath: `${COMMUNITY_SOURCE}/index.md:38`,
     summary:
-      'A catalog summary describing patterns that help users understand key features, including welcome, getting-started, in-context, global, and update guidance.',
+      'The catalog lists five learning topics but provides no local rules for how they open, persist, or track progress.',
     whenToUse:
       'Use in-app learning to explain a feature when and where users need it, or to help them get started with a new capability.',
+    userBenefit: 'Short, timely guidance helps people take a next step without leaving the task.',
     designGuidance: [
-      'Make guidance relevant to the current screen and easy to dismiss or revisit.',
-      'Use a short next step instead of overwhelming a first-time user with a tutorial.',
-      'Check progress and avoid repeatedly showing completed guidance.'
+      'Local interpretation: keep guidance relevant to the current task and make it easy to dismiss or revisit when useful.',
+      'Local interpretation: offer a short next step instead of overwhelming a first-time user with a tutorial.',
+      'Local interpretation: if the product tracks completion, avoid repeatedly showing guidance the user has finished.'
     ],
     implementationGuidance: [
       'Use Collapsible or Alert to illustrate contextual help with an optional next action.',
-      'This source snapshot includes only the catalog summary; the demo is a SkyTrack-local illustration.',
-      'Do not present the example as authoritative Carbon detailed guidance.'
+      'The local example illustrates welcome, contextual, and update guidance; it does not persist learning progress.',
+      'Treat the example as a local illustration, not a complete implementation guide.'
     ],
     components: ['Collapsible', 'Alert', 'Button'],
-    sourceNote: 'The linked detailed IBM pages are restricted. Only the local catalog description is available here.'
+    sourceNote:
+      'The community catalog lists learning topics but does not define interaction or progress policy. Guidance here is local interpretation; the examples do not record or persist learner progress.'
   },
   {
     id: 'community-create-flows',
@@ -454,9 +492,11 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'A flow for generating a new resource, distinct from adding an existing resource.',
     whenToUse:
       'Use a create flow when a new resource must be configured; choose inline, modal, side panel, tearsheet, or full page by complexity.',
+    userBenefit: 'The creation surface matches the task size, so simple work stays quick and complex work has room.',
     designGuidance: [
-      'Keep a one-step creation inline when it is simple and does not need extra context.',
-      'Choose a larger surface for multistep or context-heavy creation and make leaving the flow predictable.',
+      'Use inline creation for a simple new item; choose a larger surface when setup needs more fields, steps, or page context.',
+      'In multi-step flows, disable Back on the first step and keep Next or Create unavailable until required fields are ready.',
+      'For a full-page flow, confirm navigation away when the resource is still incomplete; keep Cancel as the explicit exit.',
       'Show completion and loading feedback after the user commits.'
     ],
     implementationGuidance: [
@@ -476,8 +516,10 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'A flow for changing a resource that already exists in the system.',
     whenToUse:
       'Use edit behavior aligned with create behavior unless the editable fields or need for surrounding context materially differ.',
+    userBenefit: 'The edit surface and review effort match the amount of context and consequence of a change.',
     designGuidance: [
       'Choose modal, side panel, or full page according to impact and the amount of context needed.',
+      'For high-impact edits, warn that the change cannot be undone, explain its system consequences, and provide a review before separate confirmation.',
       'Preserve non-editable values and show a summary of changes when it helps review.',
       'Give a clear save/cancel path and success feedback.'
     ],
@@ -497,10 +539,14 @@ export const PATTERNS: PatternDefinition[] = [
     sourcePath: `${COMMUNITY_SOURCE}/export-pattern/index.md`,
     summary: 'Saving a resource externally, with an option to change its format; downloading preserves the format.',
     whenToUse:
-      'Use export when a user needs a resource in another format or external destination; use download for an unchanged file transfer.',
+      'Use Export when a user needs an external copy in a different format; use Download when moving a remote resource to the user’s device without changing its format.',
+    userBenefit:
+      'A useful default keeps routine exports quick, while meaningful format choices and completion remain clear.',
     designGuidance: [
       'Provide a sensible default name and let users edit it when naming matters.',
+      'Name the destination and resulting format before starting work so people know where the exported copy will go.',
       'Offer format or destination choices only when the task needs them.',
+      'In a dialog, focus the first required field when input is needed; when defaults are ready, make Export the initial focus.',
       'Show progress, success, and error feedback without suggesting a file was saved before it was.'
     ],
     implementationGuidance: [
@@ -520,9 +566,12 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'Guidance for explaining what an API key is for, its security implications, and where it will be used.',
     whenToUse:
       'Use this flow when users need a credential for an integration and must understand its access and retrieval constraints.',
+    userBenefit:
+      'Clear scope and retrieval expectations help prevent excess access and reduce the chance of losing a credential.',
     designGuidance: [
       'Name the key and explain its scope before creation.',
-      'Warn when a key is shown once or cannot be retrieved later, and explain safe storage.',
+      'Before creation, say where to retrieve the key and link there; if retrieval is unavailable, warn the user and offer a secure download.',
+      'Explain how to recover access or rotate the key if the original value is lost.',
       'Offer restricted access options before broad access when the use case allows.'
     ],
     implementationGuidance: [
@@ -542,9 +591,11 @@ export const PATTERNS: PatternDefinition[] = [
     summary: 'Transferring data or objects from an external source into a system.',
     whenToUse:
       'Use import when users bring in a file or supported remote source; select modal, side panel, or full-page flow by complexity.',
+    userBenefit: 'People can check a source and correct file problems before data is transferred.',
     designGuidance: [
       'Explain accepted formats, file count, and limits before file selection.',
       'Keep selected files visible and report validation errors at the field.',
+      'Define duplicate handling for the product before import; the available example leaves conflict policy open.',
       'Make focus and keyboard behavior clear before and after selection.'
     ],
     implementationGuidance: [
@@ -553,7 +604,7 @@ export const PATTERNS: PatternDefinition[] = [
       'Show invalid selections with FieldError and successful sample state with a clear status.'
     ],
     components: ['Field', 'Dropzone', 'Attachment'],
-    sourceNote: 'Community pattern; the local reference points to Carbon File Uploader guidance.'
+    sourceNote: 'Community pattern; the example illustrates a supported file-selection flow.'
   },
   {
     id: 'community-order-summary',
@@ -561,20 +612,25 @@ export const PATTERNS: PatternDefinition[] = [
     group: 'Community',
     sourceStatus: 'Community catalog only',
     sourcePath: `${COMMUNITY_SOURCE}/index.md:44`,
-    summary: 'An order summary pattern listed in the community catalog; the local index provides no detailed guidance.',
-    whenToUse: 'Use an order summary when people need to review the items and total associated with a pending order.',
+    summary:
+      'The catalog describes a summary of a platform, its status, or a specific service; it does not define detailed interaction behavior.',
+    whenToUse:
+      'Local interpretation: summarize a platform or service when people need a quick view of its scope, current status, and capacity before deciding whether to inspect more detail.',
+    userBenefit:
+      'Local interpretation: a clear summary helps people understand what is available and whether they need more detail before taking another action.',
     designGuidance: [
-      'Keep item descriptions, quantities, and monetary totals easy to scan.',
-      'Show the total and any important fees before a user commits.',
-      'Treat this as general interaction guidance, not detail from the unavailable Carbon page.'
+      'Local interpretation: group related service capabilities, operating status, and capacity so the summary is easy to scan.',
+      'Show freshness or update time when status can change and the decision depends on current information.',
+      'Keep the summary distinct from follow-up actions; the local example does not open a service workspace or change service state.'
     ],
     implementationGuidance: [
       'Use semantic term/value structure for labels and amounts, with Badge only for a meaningful status.',
-      'The local snapshot contains the catalog description only; this demo is illustrative.',
-      'Do not imply a payment or order submission occurred.'
+      'The service-status summary is a local interpretation because detailed interaction guidance is not available here.',
+      'Do not imply navigation, a service change, or an external request occurred.'
     ],
     components: ['Badge', 'Button'],
-    sourceNote: 'The linked detailed IBM page is restricted. The local index is the only Carbon source available.'
+    sourceNote:
+      'The available source is a brief catalog listing, not detailed interaction guidance. The local service summary does not open a workspace or change platform state.'
   },
   {
     id: 'community-remove',
@@ -584,11 +640,12 @@ export const PATTERNS: PatternDefinition[] = [
     sourcePath: `${COMMUNITY_SOURCE}/remove-pattern/index.md`,
     summary: 'Moving information from one location to another; deletion is the destructive form of removal.',
     whenToUse:
-      'Use removal for a reversible move or deletion for permanent destruction, and scale confirmation to its impact.',
+      'Use removal to move or unlink an item and deletion to destroy it. Either change may be difficult or impossible to undo, so match confirmation to its impact.',
+    userBenefit: 'People understand whether an item is unlinked or destroyed and know what recovery is possible.',
     designGuidance: [
       'Name whether the action removes or deletes and state what happens afterward.',
-      'Use stronger confirmation for high-impact destructive actions; do not interrupt low-impact moves unnecessarily.',
-      'Provide a recovery path when the action can be undone.'
+      'Confirm medium-impact removal when its effects cannot be reversed, and state clearly what will change.',
+      'Use stronger confirmation for high-impact destructive actions; keep low-impact actions lightweight when recovery is available.'
     ],
     implementationGuidance: [
       'Use AlertDialog when a destructive decision must be acknowledged.',

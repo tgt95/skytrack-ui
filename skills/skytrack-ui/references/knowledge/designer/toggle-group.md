@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/toggle-group.d.ts`](../../../../../dist-lib/components/ui/toggle-group.d.ts)
 - Showcase demo id: `toggle-group`
 - Closest demo: [`src/demos/toggle-group.demo.tsx`](../../../../../src/demos/toggle-group.demo.tsx)
-- Official guidance: [Carbon Design System Content Switcher Usage](https://carbondesignsystem.com/components/content-switcher/usage/)
 
 ## Usage
 

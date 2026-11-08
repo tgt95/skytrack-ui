@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Toolbar as BaseToolbar } from '@base-ui/react/toolbar'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 
 export const toolbarButtonVariants = cva(
   cn(

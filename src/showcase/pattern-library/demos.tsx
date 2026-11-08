@@ -1,10 +1,17 @@
-import { useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import {
+  ArrowClockwiseIcon,
   ArrowDownIcon,
+  ArrowRightIcon,
   ArrowUpIcon,
+  BellIcon,
   CaretDownIcon,
   CheckCircleIcon,
+  CopyIcon,
+  FileTextIcon,
   MagnifyingGlassIcon,
+  PencilSimpleIcon,
   WarningCircleIcon,
   XIcon
 } from '@phosphor-icons/react'
@@ -71,7 +78,31 @@ import { FieldsetLegend, FieldsetRoot } from '@/components/ui/fieldset'
 import { InlineEdit, InlineEditInput, InlineEditTrigger } from '@/components/ui/inline-edit'
 import { Input } from '@/components/ui/input'
 import { Menu, MenuItem, MenuPopup, MenuPortal, MenuPositioner, MenuTrigger } from '@/components/ui/menu'
+import {
+  Popover,
+  PopoverDescription,
+  PopoverPortal,
+  PopoverPositioner,
+  PopoverPopup,
+  PopoverTitle,
+  PopoverTrigger
+} from '@/components/ui/popover'
 import { Progress, ProgressIndicator, ProgressLabel, ProgressTrack, ProgressValue } from '@/components/ui/progress'
+import { RadioGroup, RadioRoot } from '@/components/ui/radio'
+import {
+  Select,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectLabel,
+  SelectList,
+  SelectPopup,
+  SelectPortal,
+  SelectPositioner,
+  SelectTrigger,
+  SelectValue,
+  SelectIcon
+} from '@/components/ui/select'
 import {
   ToastClose,
   ToastContent,
@@ -85,8 +116,17 @@ import {
 } from '@/components/ui/toast'
 import { Toggle } from '@/components/ui/toggle'
 import { ToggleGroup } from '@/components/ui/toggle-group'
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipPortal,
+  TooltipPositioner,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import { Toolbar, ToolbarButton, ToolbarSeparator } from '@/components/ui/toolbar'
 import type { PatternId } from './catalog'
+import { PATTERN_PAGE_CONTENT, type PatternPageDraft, type SectionNode } from './page-content'
 
 const SAMPLE_ITEMS = [
   { name: 'North coast survey', type: 'Planning' },
@@ -95,90 +135,305 @@ const SAMPLE_ITEMS = [
   { name: 'Solar array scan', type: 'Complete' }
 ]
 
+const FILTER_ITEMS = [
+  { name: 'North coast survey', status: 'Ready', category: 'Planning' },
+  { name: 'Runway inspection', status: 'In review', category: 'Review' },
+  { name: 'River mapping', status: 'Ready', category: 'Planning' },
+  { name: 'Solar array scan', status: 'Complete', category: 'Complete' }
+]
+
+const PatternDemoContext = createContext<{ patternId: PatternId; page: PatternPageDraft } | null>(null)
+
+function findSectionHeading(sections: SectionNode[], sectionId: string): string | undefined {
+  for (const section of sections) {
+    if (section.id === sectionId) return section.heading
+    const childHeading = findSectionHeading(section.children ?? [], sectionId)
+    if (childHeading) return childHeading
+  }
+  return undefined
+}
+
 function DemoFrame({ children }: { children: ReactNode }) {
   return <div className='min-w-0 space-y-4'>{children}</div>
 }
 
 function UseCaseSection({ title, scenario, children }: { title: string; scenario: string; children: ReactNode }) {
-  return (
-    <section data-pattern-example className='min-w-0 space-y-3 border-t border-border pt-4 first:border-0 first:pt-0'>
-      <header className='space-y-1'>
-        <h4 className='text-base font-medium text-(--foreground)'>{title}</h4>
-        <p className='text-muted-foreground'>{scenario}</p>
+  const context = useContext(PatternDemoContext)
+  const demo = context?.page.demos.find((item) => item.title === title)
+  const [portal, setPortal] = useState<{ demoId: string; target: HTMLElement } | null>(null)
+
+  useEffect(() => {
+    if (!demo) return
+    const target = document.querySelector<HTMLElement>(`[data-pattern-demo-slot="${demo.id}"]`)
+    setPortal(target ? { demoId: demo.id, target } : null)
+  }, [context?.patternId, demo?.id])
+
+  if (!context || !demo) {
+    throw new Error(`Missing source-mapped demo copy for ${context?.patternId ?? 'unknown pattern'}: ${title}`)
+  }
+
+  const sourceSectionHeading = findSectionHeading(context.page.sections, demo.sectionId)
+
+  const content = (
+    <section
+      id={`pattern-example-${demo.id}`}
+      data-pattern-example
+      data-pattern-example-id={demo.id}
+      className='grid min-w-0 scroll-mt-24 gap-4 border-t border-border py-4 first:border-0 first:pt-0'
+    >
+      <header className='min-w-0 space-y-1'>
+        {sourceSectionHeading !== title && <h4 className='text-lg font-medium text-(--foreground)'>{title}</h4>}
+        <p className='text-base text-muted-foreground'>{demo.scenario || scenario}</p>
       </header>
-      {children}
+      <dl data-pattern-teaching-copy className='grid min-w-0 gap-4 md:grid-cols-3'>
+        <div className='min-w-0 space-y-1'>
+          <dt className='text-lg font-medium text-(--foreground)'>What it means</dt>
+          <dd className='text-muted-foreground'>{demo.teaching.meaning}</dd>
+        </div>
+        <div className='min-w-0 space-y-1'>
+          <dt className='text-lg font-medium text-(--foreground)'>How to choose</dt>
+          <dd className='text-muted-foreground'>{demo.teaching.decision}</dd>
+        </div>
+        <div className='min-w-0 space-y-1'>
+          <dt className='text-lg font-medium text-(--foreground)'>Before you ship</dt>
+          <dd className='text-muted-foreground'>{demo.teaching.consider}</dd>
+        </div>
+      </dl>
+      <div data-pattern-demo-card className='min-w-0 overflow-hidden rounded-(--radius) border border-border bg-card'>
+        <div className='flex items-center justify-between gap-3 border-b border-border px-4 py-2'>
+          <span className='text-xs font-semibold sub-heading uppercase tracking-wider text-muted-foreground'>
+            {demo.interactive ? 'Interactive example' : 'Visual example'}
+          </span>
+          <span className='text-xs font-semibold sub-heading uppercase tracking-wider text-muted-foreground'>
+            {demo.interactive ? 'Try it' : 'Reference'}
+          </span>
+        </div>
+        <div className='@container flex min-h-80 min-w-0 flex-wrap items-center justify-center gap-4 p-4 sm:p-6'>
+          <div className='min-w-0 w-full space-y-4'>
+            {demo.interactive && (
+              <p data-pattern-demo-instruction className='border-b border-border pb-3 text-sm text-muted-foreground'>
+                Use a control below, then look for the sample result in this example. Changes stay in this preview.
+              </p>
+            )}
+            {!demo.interactive && (
+              <p data-pattern-demo-instruction className='border-b border-border pb-3 text-sm text-muted-foreground'>
+                Visual reference only. The sample shows this pattern’s state or layout without a live interaction.
+              </p>
+            )}
+            {children}
+          </div>
+        </div>
+      </div>
     </section>
   )
+
+  return portal?.demoId === demo.id ? createPortal(content, portal.target, demo.id) : null
 }
 
 function CommonActionsDemo() {
   const [items, setItems] = useState(['North coast survey'])
-  const [message, setMessage] = useState('Choose an action to see its result in this sample.')
-  const [query, setQuery] = useState('Breakfast tacos')
-  const [selectedToppings, setSelectedToppings] = useState(['salsa', 'guacamole'])
-  const [copied, setCopied] = useState(false)
+  const availablePlans = [
+    { label: 'River mapping', value: 'River mapping' },
+    { label: 'Solar array scan', value: 'Solar array scan' }
+  ]
+  const [selectedPlanToAdd, setSelectedPlanToAdd] = useState(availablePlans[0].value)
+  const [addImportance, setAddImportance] = useState<'primary' | 'secondary'>('primary')
+  const [query, setQuery] = useState('Coast')
+  const [selectedStatuses, setSelectedStatuses] = useState(['ready', 'review'])
+  const [defaultedStatus, setDefaultedStatus] = useState('Ready')
+  const [savedRouteName, setSavedRouteName] = useState('North coast survey')
+  const [cancelDraftName, setCancelDraftName] = useState('North coast survey')
+  const [cancelOpen, setCancelOpen] = useState(false)
+  const [cancelFeedback, setCancelFeedback] = useState('The saved route name is unchanged.')
+  const [copyState, setCopyState] = useState<'ready' | 'copied' | 'unavailable'>('ready')
   const [closed, setClosed] = useState(false)
   const [step, setStep] = useState(1)
   const [editing, setEditing] = useState(false)
   const [draftName, setDraftName] = useState('North coast survey')
   const [removed, setRemoved] = useState(false)
+  const [draftDeleted, setDraftDeleted] = useState(false)
+  const [savedViewDeleted, setSavedViewDeleted] = useState(false)
+  const [planDeleted, setPlanDeleted] = useState(false)
+  const [planConfirmation, setPlanConfirmation] = useState('')
+  const [editFeedback, setEditFeedback] = useState('')
+  const [refreshFailed, setRefreshFailed] = useState(true)
+  const [refreshed, setRefreshed] = useState(false)
+  const [resetFeedback, setResetFeedback] = useState('')
+
+  const copyMissionId = async () => {
+    try {
+      if (!navigator.clipboard) throw new Error('Clipboard access is unavailable.')
+      await navigator.clipboard.writeText('mission-2048')
+      setCopyState('copied')
+    } catch {
+      setCopyState('unavailable')
+    }
+  }
 
   const reset = () => {
-    setQuery('Breakfast tacos')
-    setSelectedToppings(['salsa', 'guacamole'])
-    setStep(1)
-    setDraftName('North coast survey')
-    setItems(['North coast survey'])
-    setRemoved(false)
-    setMessage('Sample restored to its starting state.')
+    setQuery('Coast')
+    setSelectedStatuses(['ready', 'review'])
+    setResetFeedback('Filters restored to their sample defaults.')
   }
 
   return (
     <DemoFrame>
-      <UseCaseSection title='Add' scenario='A dispatcher creates a flight plan from the mission list.'>
-        <Button onClick={() => setItems((current) => [...current, 'New flight plan ' + (current.length + 1)])}>
-          Add flight plan
-        </Button>
-        <ul className='list-disc ps-5 text-muted-foreground'>
-          {items.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </UseCaseSection>
-
       <UseCaseSection
-        title='Cancel'
-        scenario='A pilot abandons an unsaved change and returns to the last saved route name.'
+        title='Add'
+        scenario='A coordinator adds an existing mission to a shared review collection; the mission itself is unchanged.'
       >
-        <div className='flex flex-wrap items-end gap-2'>
-          <FieldRoot className='min-w-56 flex-1'>
-            <FieldLabel>Unsaved route name</FieldLabel>
-            <Input value={draftName} onChange={(event) => setDraftName(event.target.value)} />
-          </FieldRoot>
-          <Button
-            variant='outline'
-            onClick={() => {
-              setDraftName('North coast survey')
-              setMessage('Unsaved edit canceled.')
-            }}
-          >
-            Cancel edit
-          </Button>
+        <div className='grid w-full gap-4 sm:grid-cols-2'>
+          <section className='flex min-w-0 flex-wrap items-end gap-2' aria-labelledby='available-missions-title'>
+            <div className='w-full space-y-2'>
+              <p className='text-sm font-medium'>How important is Add on this page?</p>
+              <div className='flex flex-wrap gap-2' role='group' aria-label='Add action importance'>
+                <Button
+                  size='sm'
+                  variant={addImportance === 'primary' ? 'secondary' : 'outline'}
+                  aria-pressed={addImportance === 'primary'}
+                  onClick={() => setAddImportance('primary')}
+                >
+                  Main task
+                </Button>
+                <Button
+                  size='sm'
+                  variant={addImportance === 'secondary' ? 'secondary' : 'outline'}
+                  aria-pressed={addImportance === 'secondary'}
+                  onClick={() => setAddImportance('secondary')}
+                >
+                  Secondary task
+                </Button>
+              </div>
+              <p className='text-sm text-muted-foreground'>
+                {addImportance === 'primary'
+                  ? 'When adding is the main page task, give it the single primary button; keep other actions secondary.'
+                  : 'When adding is secondary here, lower its emphasis so the page’s main action stays clearest.'}
+              </p>
+            </div>
+            <FieldRoot className='min-w-48 flex-1'>
+              <h5 id='available-missions-title' className='text-sm font-medium'>
+                Add an existing mission
+              </h5>
+              <Select<string>
+                items={availablePlans}
+                value={selectedPlanToAdd}
+                onValueChange={(value) => value && setSelectedPlanToAdd(value)}
+              >
+                <SelectLabel>Choose a mission</SelectLabel>
+                <SelectTrigger className='w-full'>
+                  <SelectValue />
+                  <SelectIcon />
+                </SelectTrigger>
+                <SelectPortal>
+                  <SelectPositioner side='bottom' align='start' sideOffset={4}>
+                    <SelectPopup>
+                      <SelectList>
+                        {availablePlans.map((plan) => (
+                          <SelectItem key={plan.value} value={plan.value}>
+                            <SelectItemIndicator />
+                            <SelectItemText>{plan.label}</SelectItemText>
+                          </SelectItem>
+                        ))}
+                      </SelectList>
+                    </SelectPopup>
+                  </SelectPositioner>
+                </SelectPortal>
+              </Select>
+            </FieldRoot>
+            <Button
+              variant={addImportance === 'primary' ? 'default' : 'outline'}
+              disabled={items.includes(selectedPlanToAdd)}
+              onClick={() => setItems((current) => [...current, selectedPlanToAdd])}
+            >
+              {items.includes(selectedPlanToAdd) ? 'Already added' : 'Add mission'}
+            </Button>
+          </section>
+          <section className='space-y-2' aria-labelledby='review-collection-title'>
+            <h5 id='review-collection-title' className='font-medium'>
+              Team review collection
+            </h5>
+            <ul className='list-disc ps-5 text-muted-foreground'>
+              {items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p className='text-sm text-muted-foreground'>
+              Adding links an existing mission here; it does not create a new one.
+            </p>
+          </section>
         </div>
       </UseCaseSection>
 
       <UseCaseSection
+        title='Cancel'
+        scenario='A pilot closes a route-edit dialog and discards the unsaved name, leaving the saved route unchanged.'
+      >
+        <p>Saved route: {savedRouteName}</p>
+        <Button
+          variant='outline'
+          onClick={() => {
+            setCancelDraftName(savedRouteName)
+            setCancelOpen(true)
+          }}
+        >
+          Edit route name
+        </Button>
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {cancelFeedback}
+        </p>
+        <Dialog open={cancelOpen} onOpenChange={setCancelOpen}>
+          <DialogPortal>
+            <DialogBackdrop />
+            <DialogPopup>
+              <DialogHeader>
+                <DialogTitle>Edit route name</DialogTitle>
+                <DialogDescription>Cancel closes this dialog and discards the unsaved name.</DialogDescription>
+              </DialogHeader>
+              <FieldRoot>
+                <FieldLabel>Route name</FieldLabel>
+                <Input value={cancelDraftName} onChange={(event) => setCancelDraftName(event.target.value)} />
+              </FieldRoot>
+              <DialogFooter>
+                <DialogClose
+                  variant='outline'
+                  onClick={() => {
+                    setCancelDraftName(savedRouteName)
+                    setCancelFeedback(`Edit canceled. Saved route: ${savedRouteName}.`)
+                  }}
+                >
+                  Cancel edit
+                </DialogClose>
+                <Button
+                  onClick={() => {
+                    setSavedRouteName(cancelDraftName)
+                    setCancelOpen(false)
+                    setCancelFeedback(`Route name saved in this sample: ${cancelDraftName}.`)
+                  }}
+                >
+                  Save route name
+                </Button>
+              </DialogFooter>
+            </DialogPopup>
+          </DialogPortal>
+        </Dialog>
+      </UseCaseSection>
+
+      <UseCaseSection
         title='Clear'
-        scenario='Clear removes current selections or a search value and restores the control to its default state.'
+        scenario='Clear removes active multi-select choices or search text; for a single-choice control, it restores the defined default.'
       >
         <div className='grid gap-4 md:grid-cols-2'>
           <FieldRoot>
-            <FieldLabel nativeLabel={false} render={<span>Selected taco toppings</span>} />
-            <CheckboxGroup aria-label='Taco toppings' value={selectedToppings} onValueChange={setSelectedToppings}>
+            <FieldLabel nativeLabel={false} render={<span>Mission status filters</span>} />
+            <CheckboxGroup
+              aria-label='Mission status filters'
+              value={selectedStatuses}
+              onValueChange={setSelectedStatuses}
+            >
               {[
-                ['salsa', 'Salsa'],
-                ['guacamole', 'Guacamole'],
-                ['queso', 'Queso']
+                ['ready', 'Ready'],
+                ['review', 'In review'],
+                ['complete', 'Complete']
               ].map(([value, label]) => (
                 <FieldItem key={value}>
                   <FieldLabel className='flex items-center gap-2 font-normal'>
@@ -187,12 +442,12 @@ function CommonActionsDemo() {
                 </FieldItem>
               ))}
             </CheckboxGroup>
-            <Button size='sm' variant='outline' onClick={() => setSelectedToppings([])}>
+            <Button size='sm' variant='outline' onClick={() => setSelectedStatuses([])}>
               Clear selections
             </Button>
           </FieldRoot>
           <FieldRoot>
-            <FieldLabel>Search orders</FieldLabel>
+            <FieldLabel>Search missions</FieldLabel>
             <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
@@ -205,10 +460,32 @@ function CommonActionsDemo() {
               }
             />
             <p className='text-muted-foreground'>
-              {query ? 'Showing matches for “' + query + '”.' : 'Showing all orders.'}
+              {query ? 'Showing matches for “' + query + '”.' : 'Showing all missions.'}
             </p>
           </FieldRoot>
         </div>
+        <FieldRoot className='mt-4'>
+          <FieldLabel nativeLabel={false} render={<span>Single status filter · default is Ready</span>} />
+          <RadioGroup
+            value={defaultedStatus}
+            onValueChange={(value) => setDefaultedStatus(String(value))}
+            aria-label='Single status filter with Ready as the default'
+            className='flex flex-wrap gap-x-5 gap-y-2'
+          >
+            {['Ready', 'In review', 'Complete'].map((option) => (
+              <label key={option} className='flex cursor-pointer items-center gap-2'>
+                <RadioRoot value={option} />
+                <span>{option}</span>
+              </label>
+            ))}
+          </RadioGroup>
+          <Button size='sm' variant='outline' onClick={() => setDefaultedStatus('Ready')}>
+            Clear to default
+          </Button>
+          <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+            Status filter: {defaultedStatus}.
+          </p>
+        </FieldRoot>
       </UseCaseSection>
 
       <UseCaseSection title='Close' scenario='A user dismisses a non-blocking update after reading it.'>
@@ -217,31 +494,51 @@ function CommonActionsDemo() {
             Show update again
           </Button>
         ) : (
-          <Alert variant='info'>
+          <Alert variant='info' className='relative pe-12'>
             <AlertTitle>Route review reminder</AlertTitle>
-            <AlertDescription className='flex items-center justify-between gap-3'>
-              Review the route before scheduling.
-              <Button
-                size='icon-xs'
-                variant='ghost'
-                aria-label='Close route review reminder'
-                onClick={() => setClosed(true)}
-              >
-                <XIcon />
-              </Button>
-            </AlertDescription>
+            <AlertDescription>Review the route before scheduling.</AlertDescription>
+            <Button
+              size='icon-xs'
+              variant='ghost'
+              className='absolute right-2 top-2'
+              aria-label='Close route review reminder'
+              onClick={() => setClosed(true)}
+            >
+              <XIcon />
+            </Button>
           </Alert>
         )}
       </UseCaseSection>
 
-      <UseCaseSection title='Copy' scenario='A coordinator copies a stable flight-plan ID from its detail view.'>
+      <UseCaseSection title='Copy' scenario='Copy a stable flight-plan ID and confirm when it is on the clipboard.'>
         <div className='flex flex-wrap items-center gap-3'>
-          <code className='rounded-(--radius) bg-muted px-2 py-1'>mission-2048</code>
-          <Button variant='outline' onClick={() => setCopied(true)}>
-            {copied ? 'Copy confirmed' : 'Copy ID'}
-          </Button>
+          <code tabIndex={0} aria-label='Flight plan ID to copy' className='rounded-(--radius) bg-muted px-2 py-1'>
+            mission-2048
+          </code>
+          <TooltipProvider>
+            <Tooltip open={copyState === 'copied'}>
+              <TooltipTrigger
+                aria-label='Copy flight plan ID'
+                onClick={copyMissionId}
+                render={
+                  <Button size='icon' variant='ghost'>
+                    <CopyIcon aria-hidden='true' />
+                  </Button>
+                }
+              />
+              <TooltipPortal>
+                <TooltipPositioner sideOffset={8}>
+                  <TooltipPopup>{copyState === 'copied' ? 'Copied' : 'Copy ID'}</TooltipPopup>
+                </TooltipPositioner>
+              </TooltipPortal>
+            </Tooltip>
+          </TooltipProvider>
           <span role='status' className='text-muted-foreground'>
-            {copied ? 'Copy action shown in the local preview.' : 'Ready to copy.'}
+            {copyState === 'copied'
+              ? 'Flight plan ID copied to the clipboard.'
+              : copyState === 'unavailable'
+                ? 'Clipboard access is unavailable. Select the ID and copy it manually.'
+                : 'Copy mission-2048, then paste it into another field to verify.'}
           </span>
         </div>
       </UseCaseSection>
@@ -250,83 +547,104 @@ function CommonActionsDemo() {
         title='Delete'
         scenario='Choose confirmation strength based on how much data the action destroys.'
       >
-        <div className='grid gap-4 md:grid-cols-3'>
-          <div className='space-y-2'>
-            <h5 className='text-sm font-medium text-(--foreground)'>Low impact · remove a draft row</h5>
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() => setMessage('Draft row removed without a confirmation step.')}
-            >
-              Remove draft row
-            </Button>
+        <div className='grid min-w-0 grid-cols-1 gap-4 @xs:grid-cols-2 @lg:grid-cols-3'>
+          <div className='min-w-0 space-y-2'>
+            <h5 className='text-base font-medium text-(--foreground)'>Low impact · delete a draft row</h5>
+            {draftDeleted ? (
+              <p role='status'>Draft row deleted without a confirmation step. Reload to reset this sample.</p>
+            ) : (
+              <div className='flex items-center gap-2'>
+                <span>Unsent draft row</span>
+                <Button size='sm' variant='outline' onClick={() => setDraftDeleted(true)}>
+                  Delete draft row
+                </Button>
+              </div>
+            )}
           </div>
-          <div className='space-y-2'>
-            <h5 className='text-sm font-medium text-(--foreground)'>Moderate impact · delete a saved view</h5>
-            <AlertDialog>
-              <AlertDialogTrigger
-                render={
-                  <Button size='sm' variant='outline'>
-                    Delete saved view
-                  </Button>
-                }
-              />
-              <AlertDialogPortal>
-                <AlertDialogBackdrop />
-                <AlertDialogPopup>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete “Coastal survey” view?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      The saved view will be removed. Its underlying missions remain.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogClose>Cancel</AlertDialogClose>
-                    <AlertDialogClose
-                      variant='destructive'
-                      onClick={() => setMessage('Saved view deleted; missions were kept.')}
-                    >
-                      Delete view
-                    </AlertDialogClose>
-                  </AlertDialogFooter>
-                </AlertDialogPopup>
-              </AlertDialogPortal>
-            </AlertDialog>
+          <div className='min-w-0 space-y-2'>
+            <h5 className='text-base font-medium text-(--foreground)'>Moderate impact · delete a saved view</h5>
+            {savedViewDeleted ? (
+              <p role='status'>Saved view deleted; its missions remain. Reload to reset this sample.</p>
+            ) : (
+              <AlertDialog>
+                <AlertDialogTrigger
+                  render={
+                    <Button size='sm' variant='outline'>
+                      Delete saved view
+                    </Button>
+                  }
+                />
+                <AlertDialogPortal>
+                  <AlertDialogBackdrop />
+                  <AlertDialogPopup>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete “Coastal survey” view?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        The saved view will be removed. Its underlying missions remain.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogClose>Cancel</AlertDialogClose>
+                      <AlertDialogClose variant='destructive' onClick={() => setSavedViewDeleted(true)}>
+                        Delete view
+                      </AlertDialogClose>
+                    </AlertDialogFooter>
+                  </AlertDialogPopup>
+                </AlertDialogPortal>
+              </AlertDialog>
+            )}
           </div>
-          <div className='space-y-2'>
-            <h5 className='text-sm font-medium text-(--foreground)'>High impact · permanently delete a plan</h5>
-            <AlertDialog>
-              <AlertDialogTrigger
-                render={
-                  <Button size='sm' variant='destructive'>
-                    Delete flight plan
-                  </Button>
-                }
-              />
-              <AlertDialogPortal>
-                <AlertDialogBackdrop />
-                <AlertDialogPopup>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete flight plan permanently?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This removes the mission, route and attached notes from this local sample.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogClose>Cancel</AlertDialogClose>
-                    <AlertDialogClose
-                      variant='destructive'
-                      onClick={() => {
-                        setItems([])
-                        setMessage('Flight plan permanently deleted in the sample.')
-                      }}
-                    >
-                      Delete permanently
-                    </AlertDialogClose>
-                  </AlertDialogFooter>
-                </AlertDialogPopup>
-              </AlertDialogPortal>
-            </AlertDialog>
+          <div className='min-w-0 space-y-2'>
+            <h5 className='text-base font-medium text-(--foreground)'>High impact · permanently delete a plan</h5>
+            {planDeleted ? (
+              <p role='status'>Flight plan permanently deleted in this sample. Reload to reset it.</p>
+            ) : (
+              <AlertDialog>
+                <AlertDialogTrigger
+                  render={
+                    <Button size='sm' variant='destructive'>
+                      Delete flight plan
+                    </Button>
+                  }
+                />
+                <AlertDialogPortal>
+                  <AlertDialogBackdrop />
+                  <AlertDialogPopup>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete flight plan permanently?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This deletes North coast survey, including its route and notes. This cannot be undone in this
+                        sample.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <FieldRoot>
+                      <FieldLabel>Type North coast survey to confirm</FieldLabel>
+                      <FieldControl
+                        render={
+                          <Input
+                            value={planConfirmation}
+                            onChange={(event) => setPlanConfirmation(event.target.value)}
+                            aria-label='Type North coast survey to confirm'
+                          />
+                        }
+                      />
+                    </FieldRoot>
+                    <AlertDialogFooter>
+                      <AlertDialogClose>Cancel</AlertDialogClose>
+                      <AlertDialogClose
+                        variant='destructive'
+                        disabled={planConfirmation !== 'North coast survey'}
+                        onClick={() => {
+                          setPlanDeleted(true)
+                        }}
+                      >
+                        Delete permanently
+                      </AlertDialogClose>
+                    </AlertDialogFooter>
+                  </AlertDialogPopup>
+                </AlertDialogPortal>
+              </AlertDialog>
+            )}
           </div>
         </div>
       </UseCaseSection>
@@ -342,7 +660,7 @@ function CommonActionsDemo() {
               size='sm'
               onClick={() => {
                 setEditing(false)
-                setMessage('Flight plan name saved locally.')
+                setEditFeedback(`Saved name: ${draftName}`)
               }}
             >
               Save
@@ -353,6 +671,7 @@ function CommonActionsDemo() {
               onClick={() => {
                 setEditing(false)
                 setDraftName('North coast survey')
+                setEditFeedback('Edit canceled; the saved name was restored.')
               }}
             >
               Cancel
@@ -362,22 +681,35 @@ function CommonActionsDemo() {
           <div className='flex items-center gap-3'>
             <span>{draftName}</span>
             <Button size='sm' variant='outline' onClick={() => setEditing(true)}>
+              <PencilSimpleIcon aria-hidden='true' />
               Edit name
             </Button>
           </div>
         )}
+        {editFeedback && (
+          <p role='status' className='text-sm text-muted-foreground'>
+            {editFeedback}
+          </p>
+        )}
       </UseCaseSection>
 
       <UseCaseSection title='Errors' scenario='When refreshing fails, explain what happened and offer a retry.'>
-        <Alert variant='destructive'>
-          <AlertTitle>Could not refresh flight plans</AlertTitle>
-          <AlertDescription className='flex flex-wrap items-center justify-between gap-3'>
-            Check the connection, then try again.
-            <Button size='sm' variant='outline' onClick={() => setMessage('Refresh retried in the local sample.')}>
-              Retry
-            </Button>
-          </AlertDescription>
-        </Alert>
+        {refreshFailed ? (
+          <Alert variant='destructive'>
+            <AlertTitle>Could not refresh flight plans</AlertTitle>
+            <AlertDescription className='flex flex-wrap items-center justify-between gap-3'>
+              Check the connection, then try again.
+              <Button size='sm' variant='outline' onClick={() => setRefreshFailed(false)}>
+                Retry
+              </Button>
+            </AlertDescription>
+          </Alert>
+        ) : (
+          <Alert variant='success' role='status'>
+            <AlertTitle>Flight plans refreshed</AlertTitle>
+            <AlertDescription>The retry succeeded in this local example.</AlertDescription>
+          </Alert>
+        )}
       </UseCaseSection>
 
       <UseCaseSection title='Next' scenario='A user advances through a short mission setup flow.'>
@@ -385,17 +717,19 @@ function CommonActionsDemo() {
           <span>Step {step} of 3 · Flight area</span>
           <Button variant='outline' disabled={step >= 3} onClick={() => setStep((value) => Math.min(3, value + 1))}>
             Next step
+            <ArrowRightIcon aria-hidden='true' />
           </Button>
         </div>
       </UseCaseSection>
 
       <UseCaseSection title='Refresh' scenario='A user requests the latest mission list without changing filters.'>
         <div className='flex flex-wrap items-center gap-3'>
-          <Button variant='outline' onClick={() => setMessage('Mission list refreshed just now.')}>
+          <Button variant='outline' onClick={() => setRefreshed(true)}>
+            <ArrowClockwiseIcon aria-hidden='true' />
             Refresh missions
           </Button>
           <span role='status' className='text-muted-foreground'>
-            {message}
+            {refreshed ? 'Sample mission list refreshed just now; filters were kept.' : 'Last refreshed 5 minutes ago.'}
           </span>
         </div>
       </UseCaseSection>
@@ -427,25 +761,33 @@ function CommonActionsDemo() {
         scenario='Reset restores filter defaults after the user has made several selections.'
       >
         <div className='flex flex-wrap items-center gap-3'>
-          <Badge count={selectedToppings.length + ' toppings'} status='outline' />
-          <span className='text-muted-foreground'>Search: {query || 'All orders'}</span>
+          <Badge count={selectedStatuses.length + ' statuses'} status='outline' />
+          <span className='text-muted-foreground'>Search: {query || 'All missions'}</span>
           <Button size='sm' variant='ghost' onClick={reset}>
             Reset filters
           </Button>
         </div>
+        {resetFeedback && (
+          <p role='status' className='text-sm text-muted-foreground'>
+            {resetFeedback}
+          </p>
+        )}
       </UseCaseSection>
 
       <p role='status' aria-live='polite' className='text-muted-foreground'>
-        Local example state only. {message}
+        These controls change only the preview; they do not update real mission data.
       </p>
     </DemoFrame>
   )
 }
 
 function DialogsDemo() {
+  const [routeDialogOpen, setRouteDialogOpen] = useState(false)
   const [routeName, setRouteName] = useState('')
   const [validation, setValidation] = useState(false)
   const [result, setResult] = useState('No route change has been confirmed.')
+  const [nonModalResult, setNonModalResult] = useState('The mission list stays available while details are open.')
+  const [decisionResult, setDecisionResult] = useState('Choose a dialog action to see its local outcome.')
   const [taskProgress, setTaskProgress] = useState(0)
 
   return (
@@ -457,7 +799,7 @@ function DialogsDemo() {
         <p className='rounded-(--radius) border border-border p-3'>
           Current mission: North coast survey · scheduled 14:30
         </p>
-        <Dialog>
+        <Dialog open={routeDialogOpen} onOpenChange={setRouteDialogOpen}>
           <DialogTrigger render={<Button>Review route change</Button>} />
           <DialogPortal>
             <DialogBackdrop />
@@ -480,7 +822,10 @@ function DialogsDemo() {
                 <Button
                   onClick={() => {
                     setValidation(true)
-                    if (routeName.trim()) setResult('Route change confirmed locally: ' + routeName.trim())
+                    if (routeName.trim()) {
+                      setResult('Route change confirmed locally: ' + routeName.trim())
+                      setRouteDialogOpen(false)
+                    }
                   }}
                 >
                   Confirm route
@@ -516,20 +861,23 @@ function DialogsDemo() {
           </Dialog>
           <Button
             variant='ghost'
-            onClick={() => setResult('Mission list action remained available beside the non-modal dialog.')}
+            onClick={() => setNonModalResult('Another mission was selected while route details stayed open.')}
           >
             Select another mission
           </Button>
         </div>
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {nonModalResult}
+        </p>
       </UseCaseSection>
 
       <UseCaseSection
         title='Button groups · one, two, or three decisions'
-        scenario='Use only the number of dialog actions needed to make the choice clear.'
+        scenario='Keep only the actions needed for this decision, then give the main outcome the clearest emphasis.'
       >
         <div className='grid gap-4 md:grid-cols-3'>
           <div className='space-y-2'>
-            <h5 className='text-sm font-medium text-(--foreground)'>Information only</h5>
+            <h5 className='text-base font-medium text-(--foreground)'>Information only</h5>
             <Dialog>
               <DialogTrigger
                 render={
@@ -549,14 +897,14 @@ function DialogsDemo() {
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
-                    <DialogClose>Done</DialogClose>
+                    <DialogClose onClick={() => setDecisionResult('Notice acknowledged.')}>Acknowledge</DialogClose>
                   </DialogFooter>
                 </DialogPopup>
               </DialogPortal>
             </Dialog>
           </div>
           <div className='space-y-2'>
-            <h5 className='text-sm font-medium text-(--foreground)'>Cancel or continue</h5>
+            <h5 className='text-base font-medium text-(--foreground)'>Cancel or continue</h5>
             <Dialog>
               <DialogTrigger
                 render={
@@ -573,15 +921,19 @@ function DialogsDemo() {
                     <DialogDescription>There are unsaved changes to the North coast survey.</DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
-                    <DialogClose variant='outline'>Discard</DialogClose>
-                    <DialogClose>Save changes</DialogClose>
+                    <DialogClose variant='outline' onClick={() => setDecisionResult('Unsaved route edits discarded.')}>
+                      Discard
+                    </DialogClose>
+                    <DialogClose onClick={() => setDecisionResult('Route edits saved in this local example.')}>
+                      Save changes
+                    </DialogClose>
                   </DialogFooter>
                 </DialogPopup>
               </DialogPortal>
             </Dialog>
           </div>
           <div className='space-y-2'>
-            <h5 className='text-sm font-medium text-(--foreground)'>Required response</h5>
+            <h5 className='text-base font-medium text-(--foreground)'>Required response</h5>
             <AlertDialog>
               <AlertDialogTrigger
                 render={
@@ -594,40 +946,74 @@ function DialogsDemo() {
                 <AlertDialogBackdrop />
                 <AlertDialogPopup>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Leave mission setup?</AlertDialogTitle>
-                    <AlertDialogDescription>Your entered route details will be discarded.</AlertDialogDescription>
+                    <AlertDialogTitle>Keep, save, or leave mission setup?</AlertDialogTitle>
+                    <AlertDialogDescription>Choose what to do with the unsaved route details.</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogClose>Keep editing</AlertDialogClose>
-                    <AlertDialogClose variant='destructive'>Leave setup</AlertDialogClose>
+                    <AlertDialogClose onClick={() => setDecisionResult('Mission setup remains open.')}>
+                      Keep editing
+                    </AlertDialogClose>
+                    <AlertDialogClose onClick={() => setDecisionResult('Route draft saved in this local example.')}>
+                      Save draft
+                    </AlertDialogClose>
+                    <AlertDialogClose
+                      variant='destructive'
+                      onClick={() => setDecisionResult('Mission setup left; sample details discarded.')}
+                    >
+                      Leave setup
+                    </AlertDialogClose>
                   </AlertDialogFooter>
                 </AlertDialogPopup>
               </AlertDialogPortal>
             </AlertDialog>
           </div>
         </div>
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {decisionResult}
+        </p>
       </UseCaseSection>
 
       <UseCaseSection
         title='Show progress after confirming a longer task'
         scenario='If a confirmed route check takes time, communicate progress and completion after the dialog closes.'
       >
-        <Progress value={taskProgress}>
-          <ProgressLabel>Validating route permissions</ProgressLabel>
-          <ProgressValue />
-          <ProgressTrack>
-            <ProgressIndicator />
-          </ProgressTrack>
-        </Progress>
-        {taskProgress === 100 ? (
+        {taskProgress === 0 ? (
+          <Dialog>
+            <DialogTrigger render={<Button>Review route check</Button>} />
+            <DialogPortal>
+              <DialogBackdrop />
+              <DialogPopup>
+                <DialogHeader>
+                  <DialogTitle>Validate route permissions?</DialogTitle>
+                  <DialogDescription>
+                    The check may take a while. Confirm to close this dialog and follow progress on the page.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose variant='outline'>Cancel</DialogClose>
+                  <DialogClose onClick={() => setTaskProgress(50)}>Start validation</DialogClose>
+                </DialogFooter>
+              </DialogPopup>
+            </DialogPortal>
+          </Dialog>
+        ) : taskProgress === 100 ? (
           <Alert variant='success'>
             <AlertTitle>Route ready</AlertTitle>
             <AlertDescription>Validation finished in this local example.</AlertDescription>
           </Alert>
         ) : (
-          <Button size='sm' onClick={() => setTaskProgress((value) => Math.min(value + 50, 100))}>
-            {taskProgress === 0 ? 'Start validation' : 'Complete validation'}
-          </Button>
+          <div className='space-y-3'>
+            <Progress value={taskProgress}>
+              <ProgressLabel>Validating route permissions</ProgressLabel>
+              <ProgressValue />
+              <ProgressTrack>
+                <ProgressIndicator />
+              </ProgressTrack>
+            </Progress>
+            <Button size='sm' onClick={() => setTaskProgress(100)}>
+              Complete validation
+            </Button>
+          </div>
         )}
       </UseCaseSection>
 
@@ -655,17 +1041,17 @@ function DisabledStatesDemo() {
 
       <UseCaseSection
         title='Disabled with a warning · unsaved prerequisite'
-        scenario='Explain why exporting is unavailable and how to make it available.'
+        scenario='Unsaved route edits block the primary scheduling action; explain what needs to happen before the user can continue.'
       >
-        <Alert variant='warning'>
-          <AlertTitle>Save the route before exporting</AlertTitle>
-          <AlertDescription className='flex flex-wrap items-center justify-between gap-3'>
-            The current route has unsaved changes.
-            <Button size='sm' variant='outline' disabled>
-              Export GeoJSON
-            </Button>
-          </AlertDescription>
-        </Alert>
+        <div className='w-full max-w-xl space-y-3'>
+          <Alert variant='warning'>
+            <AlertTitle>Save the route before continuing</AlertTitle>
+            <AlertDescription>The current route has unsaved changes. Save them before scheduling.</AlertDescription>
+          </Alert>
+          <Button disabled className='w-full sm:w-auto'>
+            Continue to scheduling
+          </Button>
+        </div>
       </UseCaseSection>
 
       <UseCaseSection
@@ -708,9 +1094,15 @@ function DisabledStatesDemo() {
 }
 
 function DisclosuresDemo() {
-  const [notice, setNotice] = useState('Choose an option to see the related result.')
-  const [filter, setFilter] = useState('All plans')
+  const [profileNotice, setProfileNotice] = useState('Choose a profile action to preview its result.')
+  const [creationNotice, setCreationNotice] = useState('Choose a create action to preview its result.')
+  const [pendingCategories, setPendingCategories] = useState<string[]>(['Planning'])
+  const [appliedCategories, setAppliedCategories] = useState<string[]>(['Planning'])
   const [routeNotesOpen, setRouteNotesOpen] = useState(false)
+  const filteredMissions =
+    appliedCategories.length === 0
+      ? FILTER_ITEMS
+      : FILTER_ITEMS.filter((mission) => appliedCategories.includes(mission.category))
 
   return (
     <DemoFrame>
@@ -723,58 +1115,82 @@ function DisclosuresDemo() {
           <MenuPortal>
             <MenuPositioner side='bottom' align='start' sideOffset={4}>
               <MenuPopup>
-                <MenuItem onClick={() => setNotice('Profile settings opened in the local example.')}>
+                <MenuItem onClick={() => setProfileNotice('Profile settings opened in the local example.')}>
                   Profile settings
                 </MenuItem>
-                <MenuItem onClick={() => setNotice('Account security opened in the local example.')}>
+                <MenuItem onClick={() => setProfileNotice('Account security opened in the local example.')}>
                   Account security
                 </MenuItem>
-                <MenuItem onClick={() => setNotice('Signed out of this local sample.')}>Sign out</MenuItem>
+                <MenuItem onClick={() => setProfileNotice('Signed out of this local sample.')}>Sign out</MenuItem>
               </MenuPopup>
             </MenuPositioner>
           </MenuPortal>
         </Menu>
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {profileNotice}
+        </p>
       </UseCaseSection>
 
       <UseCaseSection
         title='Settings and filter menu · change a view'
-        scenario='Place compact preferences next to the collection they affect and reflect the selected value.'
+        scenario='Stage related display filters in a compact popover, apply them together, and inspect the updated mission list.'
       >
-        <div className='flex flex-wrap items-center gap-3'>
-          <Menu>
-            <MenuTrigger render={<Button variant='outline'>Mission filter · {filter}</Button>} />
-            <MenuPortal>
-              <MenuPositioner side='bottom' align='start' sideOffset={4}>
-                <MenuPopup>
-                  <MenuItem
-                    onClick={() => {
-                      setFilter('All plans')
-                      setNotice('Showing all plans.')
-                    }}
+        <div className='space-y-3'>
+          <Popover>
+            <PopoverTrigger
+              render={<Button variant='outline'>Mission filters · {appliedCategories.length} applied</Button>}
+            />
+            <PopoverPortal>
+              <PopoverPositioner side='bottom' align='start' sideOffset={4}>
+                <PopoverPopup className='w-72 gap-3'>
+                  <div className='space-y-1'>
+                    <PopoverTitle>Filter missions</PopoverTitle>
+                    <PopoverDescription>Choose categories, then apply them together.</PopoverDescription>
+                  </div>
+                  <CheckboxGroup
+                    aria-label='Mission categories'
+                    value={pendingCategories}
+                    onValueChange={(value) => setPendingCategories(value as string[])}
                   >
-                    All plans
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      setFilter('In review')
-                      setNotice('Filtered to plans in review.')
-                    }}
-                  >
-                    In review
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      setFilter('Scheduled')
-                      setNotice('Filtered to scheduled plans.')
-                    }}
-                  >
-                    Scheduled
-                  </MenuItem>
-                </MenuPopup>
-              </MenuPositioner>
-            </MenuPortal>
-          </Menu>
-          <Badge count={filter} status='outline' />
+                    {['Planning', 'Review', 'Complete'].map((category) => (
+                      <label key={category} className='flex cursor-pointer items-center gap-2'>
+                        <CheckboxRoot value={category} aria-label={category} />
+                        {category}
+                      </label>
+                    ))}
+                  </CheckboxGroup>
+                  <div className='flex justify-between gap-2 border-t border-border pt-3'>
+                    <Button
+                      size='sm'
+                      variant='ghost'
+                      onClick={() => {
+                        setPendingCategories([])
+                        setAppliedCategories([])
+                      }}
+                    >
+                      Reset
+                    </Button>
+                    <Button size='sm' onClick={() => setAppliedCategories(pendingCategories)}>
+                      Apply filters
+                    </Button>
+                  </div>
+                </PopoverPopup>
+              </PopoverPositioner>
+            </PopoverPortal>
+          </Popover>
+          <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+            {appliedCategories.length
+              ? `${filteredMissions.length} missions match: ${appliedCategories.join(', ')}.`
+              : `Showing all ${FILTER_ITEMS.length} sample missions.`}
+          </p>
+          <ul aria-label='Filtered sample missions' className='divide-y divide-border border-y border-border'>
+            {filteredMissions.map((mission) => (
+              <li key={mission.name} className='flex flex-wrap items-center justify-between gap-2 py-2'>
+                <span>{mission.name}</span>
+                <Badge count={mission.category} status='outline' />
+              </li>
+            ))}
+          </ul>
         </div>
       </UseCaseSection>
 
@@ -783,7 +1199,7 @@ function DisclosuresDemo() {
         scenario='Keep the most common creation action visible and place related alternatives in its adjacent menu.'
       >
         <div className='inline-flex items-stretch'>
-          <Button className='rounded-e-none' onClick={() => setNotice('Created a blank local flight plan.')}>
+          <Button className='rounded-e-none' onClick={() => setCreationNotice('Created a blank local flight plan.')}>
             Create flight plan
           </Button>
           <Menu>
@@ -797,15 +1213,20 @@ function DisclosuresDemo() {
             <MenuPortal>
               <MenuPositioner side='bottom' align='end' sideOffset={4}>
                 <MenuPopup>
-                  <MenuItem onClick={() => setNotice('Created a flight plan from the local template.')}>
+                  <MenuItem onClick={() => setCreationNotice('Created a flight plan from the local template.')}>
                     From template
                   </MenuItem>
-                  <MenuItem onClick={() => setNotice('Started importing a sample route.')}>Import route</MenuItem>
+                  <MenuItem onClick={() => setCreationNotice('Started importing a sample route.')}>
+                    Import route
+                  </MenuItem>
                 </MenuPopup>
               </MenuPositioner>
             </MenuPortal>
           </Menu>
         </div>
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {creationNotice}
+        </p>
       </UseCaseSection>
 
       <UseCaseSection
@@ -824,20 +1245,21 @@ function DisclosuresDemo() {
           </CollapsiblePanel>
         </Collapsible>
       </UseCaseSection>
-
-      <p role='status' aria-live='polite' className='text-muted-foreground'>
-        {notice} Disclosures are user initiated and remain local to this example.
-      </p>
     </DemoFrame>
   )
 }
 
 function EmptyStatesDemo() {
-  const [created, setCreated] = useState(false)
+  const [firstPlanCreated, setFirstPlanCreated] = useState(false)
+  const [guidePlanCreated, setGuidePlanCreated] = useState(false)
   const [query, setQuery] = useState('unmatched route')
   const [loadFailed, setLoadFailed] = useState(true)
   const [completedSteps, setCompletedSteps] = useState(1)
   const [showAll, setShowAll] = useState(false)
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false)
+  const [starterContentCleared, setStarterContentCleared] = useState(false)
+  const availablePlans = ['North coast survey', 'River mapping', 'Runway inspection']
+  const matchingPlans = availablePlans.filter((plan) => plan.toLowerCase().includes(query.trim().toLowerCase()))
 
   return (
     <DemoFrame>
@@ -845,20 +1267,24 @@ function EmptyStatesDemo() {
         title='No data · create the first plan'
         scenario='A new workspace has no saved flight plans, so give the dispatcher one clear starting action.'
       >
-        {created ? (
-          <Alert variant='success'>
-            <AlertTitle>First plan created</AlertTitle>
-            <AlertDescription>North coast survey is now in the sample list.</AlertDescription>
-          </Alert>
-        ) : (
-          <div
-            role='status'
-            className='grid justify-items-center gap-3 border border-dashed border-border px-6 py-8 text-center'
-          >
-            <h5 className='text-sm font-medium text-(--foreground)'>No flight plans yet</h5>
-            <p className='text-muted-foreground'>Create your first plan to start organizing missions.</p>
-            <Button onClick={() => setCreated(true)}>Create flight plan</Button>
+        {firstPlanCreated ? (
+          <div className='space-y-3'>
+            <Alert variant='success'>
+              <AlertTitle>First plan created</AlertTitle>
+              <AlertDescription>North coast survey is now in the sample list.</AlertDescription>
+            </Alert>
+            <ul className='divide-y divide-border border-y border-border' aria-label='Sample flight plans'>
+              <li className='py-2'>North coast survey · Draft</li>
+            </ul>
           </div>
+        ) : (
+          <section aria-labelledby='no-flight-plans-title' className='space-y-3 border border-dashed border-border p-6'>
+            <h5 id='no-flight-plans-title' className='text-base font-medium text-(--foreground)'>
+              Start your first flight plan
+            </h5>
+            <p className='text-muted-foreground'>Add a plan to begin organizing missions in this workspace.</p>
+            <Button onClick={() => setFirstPlanCreated(true)}>Create flight plan</Button>
+          </section>
         )}
       </UseCaseSection>
       <UseCaseSection
@@ -869,16 +1295,29 @@ function EmptyStatesDemo() {
           <FieldLabel>Search flight plans</FieldLabel>
           <Input value={query} onChange={(event) => setQuery(event.target.value)} />
         </FieldRoot>
-        {query ? (
+        {query && matchingPlans.length === 0 ? (
           <Alert role='status'>
-            <AlertTitle>No matching plans</AlertTitle>
-            <AlertDescription>Try another term or clear this search.</AlertDescription>
+            <AlertTitle>No plans match “{query}”</AlertTitle>
+            <AlertDescription>Revise your search or clear it to see all flight plans.</AlertDescription>
             <Button variant='outline' onClick={() => setQuery('')}>
               Clear search
             </Button>
           </Alert>
         ) : (
-          <p role='status'>Showing all flight plans.</p>
+          <div role='status' className='space-y-2'>
+            <p>
+              {query
+                ? `${matchingPlans.length} matching flight plan${matchingPlans.length === 1 ? '' : 's'}.`
+                : 'Showing all flight plans.'}
+            </p>
+            <ul className='divide-y divide-border border-y border-border' aria-label='Matching flight plans'>
+              {(query ? matchingPlans : availablePlans).map((plan) => (
+                <li key={plan} className='py-2'>
+                  {plan}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </UseCaseSection>
       <UseCaseSection
@@ -909,64 +1348,97 @@ function EmptyStatesDemo() {
           <AlertDescription>
             Start with a mission name, define the route, then assign an available aircraft.
           </AlertDescription>
-          <Button variant='outline' onClick={() => setCreated(true)}>
+          <Button variant='outline' onClick={() => setGuidePlanCreated(true)}>
             Create a plan
           </Button>
+          {guidePlanCreated && (
+            <ul role='status' aria-live='polite' className='border-t border-border pt-2 text-sm text-muted-foreground'>
+              <li>North coast survey · Draft · created from this guide</li>
+            </ul>
+          )}
         </Alert>
       </UseCaseSection>
       <UseCaseSection
         title='Onboarding · guide a first task'
         scenario='Show short setup steps with visible progress so a new dispatcher can continue in manageable stages.'
       >
-        <Progress value={completedSteps * 33}>
-          <ProgressLabel>Workspace setup</ProgressLabel>
-          <ProgressValue />
-          <ProgressTrack>
-            <ProgressIndicator />
-          </ProgressTrack>
-        </Progress>
-        <ol className='list-decimal space-y-1 ps-5'>
-          <li>Connect an aircraft</li>
-          <li>Review the safety checklist</li>
-          <li>Create a flight plan</li>
-        </ol>
-        <Button size='sm' onClick={() => setCompletedSteps((value) => (value >= 3 ? 1 : value + 1))}>
-          {completedSteps >= 3 ? 'Restart setup' : 'Complete next step'}
-        </Button>
+        {onboardingDismissed ? (
+          <div role='status' className='space-y-2'>
+            <p>Setup guide dismissed. The workspace is ready when you want to begin.</p>
+            <Button size='sm' variant='outline' onClick={() => setOnboardingDismissed(false)}>
+              Show setup guide
+            </Button>
+          </div>
+        ) : (
+          <div className='space-y-3'>
+            <Progress value={(completedSteps / 3) * 100}>
+              <ProgressLabel>Workspace setup</ProgressLabel>
+              <ProgressValue />
+              <ProgressTrack>
+                <ProgressIndicator />
+              </ProgressTrack>
+            </Progress>
+            <p role='status'>{completedSteps} of 3 setup steps complete.</p>
+            <ol className='list-decimal space-y-1 ps-5'>
+              <li>Connect an aircraft</li>
+              <li>Review the safety checklist</li>
+              <li>Create a flight plan</li>
+            </ol>
+            <div className='flex flex-wrap gap-2'>
+              <Button size='sm' onClick={() => setCompletedSteps((value) => (value >= 3 ? 1 : value + 1))}>
+                {completedSteps >= 3 ? 'Restart setup' : 'Complete next step'}
+              </Button>
+              <Button size='sm' variant='outline' onClick={() => setOnboardingDismissed(true)}>
+                Dismiss guide
+              </Button>
+            </div>
+          </div>
+        )}
       </UseCaseSection>
       <UseCaseSection
         title='Starter content · orient the user with an example'
         scenario='A sample collection can teach the structure of the workflow before real records are available.'
       >
-        <ul className='divide-y divide-border border-y border-border'>
-          {SAMPLE_ITEMS.slice(0, showAll ? SAMPLE_ITEMS.length : 2).map((item) => (
-            <li key={item.name} className='flex items-center justify-between gap-3 py-2'>
-              <span>{item.name}</span>
-              <Badge count={item.type} status='outline' />
-            </li>
-          ))}
-        </ul>
-        <Button size='sm' variant='outline' onClick={() => setShowAll((value) => !value)}>
-          {showAll ? 'Show fewer examples' : 'Show more examples'}
-        </Button>
+        {starterContentCleared ? (
+          <div role='status' className='space-y-2'>
+            <p>Sample content cleared. No flight plans are in this example collection.</p>
+            <Button size='sm' variant='outline' onClick={() => setStarterContentCleared(false)}>
+              Restore sample content
+            </Button>
+          </div>
+        ) : (
+          <div className='space-y-2'>
+            <ul className='divide-y divide-border border-y border-border' aria-label='Starter flight plans'>
+              {SAMPLE_ITEMS.slice(0, showAll ? SAMPLE_ITEMS.length : 2).map((item) => (
+                <li key={item.name} className='flex items-center justify-between gap-3 py-2'>
+                  <span>{item.name}</span>
+                  <Badge count={item.type} status='outline' />
+                </li>
+              ))}
+            </ul>
+            <div className='flex flex-wrap gap-2'>
+              <Button size='sm' variant='outline' onClick={() => setShowAll((value) => !value)}>
+                {showAll ? 'Show fewer examples' : 'Show more examples'}
+              </Button>
+              <Button size='sm' variant='outline' onClick={() => setStarterContentCleared(true)}>
+                Clear sample content
+              </Button>
+            </div>
+          </div>
+        )}
       </UseCaseSection>
     </DemoFrame>
   )
 }
 
 function FilteringDemo() {
-  const [query, setQuery] = useState('')
-  const [type, setType] = useState('All')
+  const [status, setStatus] = useState('All')
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [mode, setMode] = useState<'instant' | 'batch'>('instant')
   const [appliedTypes, setAppliedTypes] = useState<string[]>([])
   const activeTypes = mode === 'instant' ? selectedTypes : appliedTypes
-  const filtered = SAMPLE_ITEMS.filter(
-    (item) =>
-      item.name.toLowerCase().includes(query.toLowerCase()) &&
-      (type === 'All' || item.type === type) &&
-      (!activeTypes.length || activeTypes.includes(item.type))
-  )
+  const statusResults = FILTER_ITEMS.filter((item) => status === 'All' || item.status === status)
+  const categoryResults = FILTER_ITEMS.filter((item) => !activeTypes.length || activeTypes.includes(item.category))
 
   return (
     <DemoFrame>
@@ -974,27 +1446,30 @@ function FilteringDemo() {
         title='Choose one status · instant results'
         scenario='A dispatcher selects one status and sees the mission list update immediately.'
       >
-        <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-          <div className='flex flex-wrap gap-2' aria-label='Filter by status'>
-            {['All', 'Planning', 'Review', 'Complete'].map((option) => (
-              <Button
-                key={option}
-                size='sm'
-                variant={type === option ? 'secondary' : 'outline'}
-                aria-pressed={type === option}
-                onClick={() => setType(option)}
-              >
-                {option}
-              </Button>
-            ))}
-          </div>
-          <Input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder='Filter flight plans'
-            aria-label='Filter flight plans'
-          />
-        </div>
+        <RadioGroup
+          value={status}
+          onValueChange={(value) => setStatus(String(value))}
+          aria-label='Filter missions by status'
+          className='flex flex-wrap gap-x-5 gap-y-2'
+        >
+          {['All', 'Ready', 'In review', 'Complete'].map((option) => (
+            <label key={option} className='flex cursor-pointer items-center gap-2'>
+              <RadioRoot value={option} />
+              <span>{option}</span>
+            </label>
+          ))}
+        </RadioGroup>
+        <p role='status' aria-live='polite' className='text-muted-foreground'>
+          {statusResults.length} {statusResults.length === 1 ? 'mission' : 'missions'} shown for {status.toLowerCase()}.
+        </p>
+        <ul className='divide-y divide-border border-y border-border'>
+          {statusResults.map((item) => (
+            <li key={item.name} className='flex justify-between gap-3 py-2'>
+              <span>{item.name}</span>
+              <Badge count={item.status} status='outline' className='rounded-(--radius)' />
+            </li>
+          ))}
+        </ul>
       </UseCaseSection>
       <UseCaseSection
         title='Combine categories · apply or update instantly'
@@ -1018,79 +1493,68 @@ function FilteringDemo() {
             Batch
           </Button>
         </div>
-        <div className='flex flex-wrap gap-2' aria-label='Filter by plan type'>
-          {['Planning', 'Review', 'Complete'].map((option) => {
-            const checked = selectedTypes.includes(option)
-            return (
-              <Button
-                key={option}
-                size='sm'
-                variant={checked ? 'secondary' : 'outline'}
-                aria-pressed={checked}
-                onClick={() =>
-                  setSelectedTypes((current) =>
-                    checked ? current.filter((item) => item !== option) : [...current, option]
-                  )
-                }
-              >
-                {option}
-              </Button>
-            )
-          })}
+        <FieldRoot>
+          <FieldLabel nativeLabel={false} render={<span>Filter by plan category</span>} />
+          <CheckboxGroup
+            value={selectedTypes}
+            onValueChange={(value) => setSelectedTypes(value as string[])}
+            aria-label='Filter by plan category'
+            className='flex flex-wrap gap-x-5 gap-y-2'
+          >
+            {['Planning', 'Review', 'Complete'].map((option) => (
+              <label key={option} className='flex cursor-pointer items-center gap-2'>
+                <CheckboxRoot value={option} aria-label={option} />
+                <span>{option}</span>
+              </label>
+            ))}
+          </CheckboxGroup>
+        </FieldRoot>
+        <div className='flex flex-wrap gap-2'>
           {mode === 'batch' && (
             <Button size='sm' onClick={() => setAppliedTypes(selectedTypes)}>
               Apply filters
             </Button>
           )}
+          <Button size='sm' variant='outline' onClick={() => setSelectedTypes([])}>
+            Clear selections
+          </Button>
           <Button
             size='sm'
             variant='ghost'
             onClick={() => {
               setSelectedTypes([])
               setAppliedTypes([])
-              setType('All')
-              setQuery('')
+              setMode('instant')
             }}
           >
-            Reset all
+            Reset all filters
           </Button>
         </div>
+        <p role='status' aria-live='polite' className='text-muted-foreground'>
+          {categoryResults.length} {categoryResults.length === 1 ? 'mission' : 'missions'} shown
+          {mode === 'batch' ? ` · ${selectedTypes.length} pending selection(s)` : ' · instant update'}.
+        </p>
+        {categoryResults.length ? (
+          <ul className='divide-y divide-border border-y border-border'>
+            {categoryResults.map((item) => (
+              <li key={item.name} className='flex justify-between gap-3 py-2'>
+                <span>{item.name}</span>
+                <Badge count={item.category} status='outline' className='rounded-(--radius)' />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Alert role='status'>
+            <AlertTitle>No matching plans</AlertTitle>
+            <AlertDescription>Clear the selected categories to restore the complete sample list.</AlertDescription>
+          </Alert>
+        )}
       </UseCaseSection>
-      <p aria-live='polite' className='text-muted-foreground'>
-        {filtered.length} results
-      </p>
-      {filtered.length ? (
-        <ul className='divide-y divide-border border-y border-border'>
-          {filtered.map((item) => (
-            <li key={item.name} className='flex justify-between gap-3 py-2'>
-              <span>{item.name}</span>
-              <Badge count={item.type} status='outline' className='rounded-(--radius)' />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <Alert role='status'>
-          <AlertTitle>No matching plans</AlertTitle>
-          <AlertDescription>Change or clear the selected filters.</AlertDescription>
-        </Alert>
-      )}
-      {(query || type !== 'All') && (
-        <Button
-          variant='ghost'
-          onClick={() => {
-            setQuery('')
-            setType('All')
-          }}
-        >
-          Clear filters
-        </Button>
-      )}
     </DemoFrame>
   )
 }
 
 function FluidStylesDemo() {
-  const [notice, setNotice] = useState('Choose a button to compare its container behavior.')
   return (
     <DemoFrame>
       <UseCaseSection
@@ -1100,8 +1564,8 @@ function FluidStylesDemo() {
         <div className='grid gap-4 sm:grid-cols-2'>
           <div className='space-y-2 border border-border p-3'>
             <p className='font-medium'>Productive form</p>
-            <Input placeholder='Workspace name' aria-label='Workspace name' />
-            <Button variant='outline' onClick={() => setNotice('Default action stays sized to its label.')}>
+            <Input placeholder='Workspace name' aria-label='Workspace name' readOnly />
+            <Button variant='outline' disabled>
               Continue
             </Button>
           </div>
@@ -1110,24 +1574,28 @@ function FluidStylesDemo() {
               <p className='font-medium'>Expressive call to action</p>
               <p className='text-muted-foreground'>Use in a spacious, high-emphasis moment.</p>
             </div>
-            <Button className='w-full' onClick={() => setNotice('Fluid action fills its container edge.')}>
+            <Button className='w-full' disabled>
               Explore missions
             </Button>
           </div>
         </div>
+        <p className='text-sm text-muted-foreground'>
+          Compare the content-sized action with the button that fills its container.
+        </p>
       </UseCaseSection>
       <UseCaseSection
         title='Align related actions in a compact panel'
         scenario='Keep Save draft and Preview the same width when they share a small action area.'
       >
         <div className='grid max-w-sm grid-cols-2 gap-3'>
-          <Button variant='outline' onClick={() => setNotice('Draft action selected.')}>
+          <Button variant='outline' disabled>
             Save draft
           </Button>
-          <Button variant='outline' onClick={() => setNotice('Preview action selected.')}>
+          <Button variant='outline' disabled>
             Preview
           </Button>
         </div>
+        <p className='text-sm text-muted-foreground'>The related actions share the same width in this compact panel.</p>
       </UseCaseSection>
       <UseCaseSection
         title='Let a fluid form follow its available width'
@@ -1135,7 +1603,7 @@ function FluidStylesDemo() {
       >
         <FieldRoot className='w-full max-w-none'>
           <FieldLabel>Workspace name</FieldLabel>
-          <Input className='w-full' placeholder='e.g. Coastal operations' />
+          <Input className='w-full' placeholder='e.g. Coastal operations' readOnly />
           <FieldDescription>
             The component has no special fluid prop; apply the supported width utility in context.
           </FieldDescription>
@@ -1146,9 +1614,22 @@ function FluidStylesDemo() {
         scenario='A quick workspace invite uses a compact, edge-to-edge group; use this for one-step tasks, not dense multi-section forms.'
       >
         <div className='w-full max-w-md overflow-hidden border border-border'>
-          <Input className='rounded-none border-0 border-b' aria-label='Teammate email' placeholder='Teammate email' />
-          <Input className='rounded-none border-0 border-b' aria-label='Mission role' placeholder='Mission role' />
-          <Button className='w-full rounded-none'>Send invitation</Button>
+          <label className='block space-y-1 border-b border-border p-2 text-sm'>
+            <span>Teammate email</span>
+            <Input
+              className='rounded-none border-0 px-0'
+              aria-label='Teammate email'
+              value='dispatcher@example.com'
+              readOnly
+            />
+          </label>
+          <label className='block space-y-1 border-b border-border p-2 text-sm'>
+            <span>Mission role</span>
+            <Input className='rounded-none border-0 px-0' aria-label='Mission role' value='Pilot' readOnly />
+          </label>
+          <Button className='w-full rounded-none' disabled>
+            Send invitation
+          </Button>
         </div>
       </UseCaseSection>
       <UseCaseSection
@@ -1166,10 +1647,6 @@ function FluidStylesDemo() {
           </div>
         </div>
       </UseCaseSection>
-      <p aria-live='polite' className='text-muted-foreground'>
-        {notice} The Input API in this library does not expose Carbon fluid-input styling; input examples retain the
-        supported Field/Input composition.
-      </p>
     </DemoFrame>
   )
 }
@@ -1179,80 +1656,132 @@ function FormsDemo() {
   const [email, setEmail] = useState('')
   const [notes, setNotes] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [nameTouched, setNameTouched] = useState(false)
+  const [emailTouched, setEmailTouched] = useState(false)
+  const [validationEmail, setValidationEmail] = useState('')
+  const [validationTouched, setValidationTouched] = useState(false)
+  const [validationSubmitted, setValidationSubmitted] = useState(false)
+  const [serverRejected, setServerRejected] = useState(false)
   const [longFormStep, setLongFormStep] = useState(1)
+  const [longFormValues, setLongFormValues] = useState({
+    purpose: '',
+    requestedDate: '',
+    aircraft: '',
+    checklistOwner: ''
+  })
   const [checks, setChecks] = useState(['weather', 'airspace'])
-  const invalidName = submitted && !name.trim()
-  const invalidEmail = submitted && !email.includes('@')
+  const invalidName = (submitted || nameTouched) && !name.trim()
+  const invalidEmail = (submitted || emailTouched) && !email.includes('@')
+  const invalidValidationEmail = (validationSubmitted || validationTouched) && !validationEmail.includes('@')
 
   return (
-    <form
-      className='grid min-w-0 gap-4 md:max-w-2xl'
-      onSubmit={(event) => {
-        event.preventDefault()
-        setSubmitted(true)
-      }}
-    >
+    <DemoFrame>
       <UseCaseSection
         title='Collect mission contact details'
         scenario='Ask for required contact information first, distinguish optional notes, and explain field expectations.'
       >
-        <FieldsetRoot>
-          <FieldsetLegend>Mission contact</FieldsetLegend>
-          <div className='grid gap-4 md:grid-cols-2'>
-            <FieldRoot invalid={invalidName}>
-              <FieldLabel>Contact name (required)</FieldLabel>
+        <form
+          className='grid min-w-0 gap-4 md:max-w-2xl'
+          onSubmit={(event) => {
+            event.preventDefault()
+            setSubmitted(true)
+          }}
+        >
+          <FieldsetRoot>
+            <FieldsetLegend>Mission contact</FieldsetLegend>
+            <div className='grid gap-4'>
+              <FieldRoot invalid={invalidName}>
+                <FieldLabel>Contact name</FieldLabel>
+                <Input
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  onBlur={() => setNameTouched(true)}
+                  aria-invalid={invalidName}
+                  placeholder='Name'
+                />
+                <FieldError match={invalidName}>Enter a contact name.</FieldError>
+              </FieldRoot>
+              <FieldRoot invalid={invalidEmail}>
+                <FieldLabel>Email address</FieldLabel>
+                <Input
+                  type='email'
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  onBlur={() => setEmailTouched(true)}
+                  aria-invalid={invalidEmail}
+                  placeholder='name@example.com'
+                />
+                <FieldDescription>Use an address that can receive mission updates.</FieldDescription>
+                <FieldError match={invalidEmail}>Enter a valid email address.</FieldError>
+              </FieldRoot>
+            </div>
+            <FieldRoot>
+              <FieldLabel>Access notes (optional)</FieldLabel>
               <Input
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                aria-invalid={invalidName}
-                placeholder='Name'
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
+                placeholder='Add relevant access details'
               />
-              <FieldError match={invalidName}>Enter a contact name.</FieldError>
+              <FieldDescription>Only include information needed for this mission.</FieldDescription>
             </FieldRoot>
-            <FieldRoot invalid={invalidEmail}>
-              <FieldLabel>Email address (required)</FieldLabel>
-              <Input
-                type='email'
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                aria-invalid={invalidEmail}
-                placeholder='name@example.com'
-              />
-              <FieldDescription>Use an address that can receive mission updates.</FieldDescription>
-              <FieldError match={invalidEmail}>Enter a valid email address.</FieldError>
-            </FieldRoot>
+          </FieldsetRoot>
+          <div className='flex flex-wrap items-center gap-3'>
+            <Button type='submit'>Save contact details</Button>
+            {submitted && !invalidName && !invalidEmail && (
+              <p role='status'>Contact details are valid. Nothing was submitted.</p>
+            )}
           </div>
-          <FieldRoot>
-            <FieldLabel>Access notes (optional)</FieldLabel>
-            <Input
-              value={notes}
-              onChange={(event) => setNotes(event.target.value)}
-              placeholder='Add relevant access details'
-            />
-            <FieldDescription>Only include information needed for this mission.</FieldDescription>
-          </FieldRoot>
-        </FieldsetRoot>
+        </form>
       </UseCaseSection>
       <UseCaseSection
         title='Validate and recover from missing information'
-        scenario='Try saving without a name or with an invalid email; keep errors beside their fields and make clearing the form reversible.'
+        scenario='Enter an invalid email and leave the field to see its inline error; correct it or clear it, then compare a simulated server rejection.'
       >
-        <div className='flex flex-wrap items-center gap-3'>
-          <Button type='submit'>Save sample</Button>
-          <Button
-            type='reset'
-            variant='outline'
-            onClick={() => {
-              setName('')
-              setEmail('')
-              setNotes('')
-              setSubmitted(false)
-            }}
-          >
-            Clear form
-          </Button>
-          {submitted && !invalidName && !invalidEmail && (
-            <p role='status'>The sample form is valid. Nothing was submitted.</p>
+        <div className='grid min-w-0 gap-4 md:max-w-xl'>
+          <FieldRoot invalid={invalidValidationEmail}>
+            <FieldLabel>Notification email</FieldLabel>
+            <Input
+              type='email'
+              value={validationEmail}
+              onChange={(event) => {
+                setValidationEmail(event.target.value)
+                setServerRejected(false)
+              }}
+              onBlur={() => setValidationTouched(true)}
+              aria-invalid={invalidValidationEmail}
+              placeholder='pilot@example.com'
+            />
+            <FieldDescription>Used only to illustrate client-side email validation.</FieldDescription>
+            <FieldError match={invalidValidationEmail}>Enter an email address that includes @.</FieldError>
+          </FieldRoot>
+          <div className='flex flex-wrap items-center gap-3'>
+            <Button type='button' onClick={() => setValidationSubmitted(true)}>
+              Validate email
+            </Button>
+            <Button
+              type='button'
+              variant='outline'
+              onClick={() => {
+                setValidationEmail('')
+                setValidationSubmitted(false)
+                setValidationTouched(false)
+                setServerRejected(false)
+              }}
+            >
+              Clear email
+            </Button>
+            <Button type='button' variant='outline' onClick={() => setServerRejected(true)}>
+              Simulate server rejection
+            </Button>
+          </div>
+          {validationSubmitted && !invalidValidationEmail && (
+            <p role='status'>Email format is valid. No request was sent.</p>
+          )}
+          {serverRejected && (
+            <Alert variant='destructive'>
+              <AlertTitle>Service could not save this sample</AlertTitle>
+              <AlertDescription>Check mission access or try again later. No request was sent.</AlertDescription>
+            </Alert>
           )}
         </div>
       </UseCaseSection>
@@ -1272,11 +1801,19 @@ function FormsDemo() {
             <FieldsetLegend>Mission details</FieldsetLegend>
             <FieldRoot>
               <FieldLabel>Purpose</FieldLabel>
-              <Input placeholder='Coastal mapping' />
+              <Input
+                value={longFormValues.purpose}
+                onChange={(event) => setLongFormValues((values) => ({ ...values, purpose: event.target.value }))}
+                placeholder='Coastal mapping'
+              />
             </FieldRoot>
             <FieldRoot>
               <FieldLabel>Requested date</FieldLabel>
-              <Input type='date' />
+              <Input
+                type='date'
+                value={longFormValues.requestedDate}
+                onChange={(event) => setLongFormValues((values) => ({ ...values, requestedDate: event.target.value }))}
+              />
             </FieldRoot>
           </FieldsetRoot>
         ) : (
@@ -1284,17 +1821,25 @@ function FormsDemo() {
             <FieldsetLegend>Safety review</FieldsetLegend>
             <FieldRoot>
               <FieldLabel>Aircraft</FieldLabel>
-              <Input placeholder='Choose an aircraft' />
+              <Input
+                value={longFormValues.aircraft}
+                onChange={(event) => setLongFormValues((values) => ({ ...values, aircraft: event.target.value }))}
+                placeholder='Choose an aircraft'
+              />
             </FieldRoot>
             <FieldRoot>
               <FieldLabel>Launch checklist</FieldLabel>
-              <Input placeholder='Confirm checklist owner' />
+              <Input
+                value={longFormValues.checklistOwner}
+                onChange={(event) => setLongFormValues((values) => ({ ...values, checklistOwner: event.target.value }))}
+                placeholder='Confirm checklist owner'
+              />
             </FieldRoot>
           </FieldsetRoot>
         )}
-        <div className='flex flex-wrap gap-2'>
+        <div className='flex flex-wrap justify-end gap-2'>
           <Button type='button' variant='outline' disabled={longFormStep === 1} onClick={() => setLongFormStep(1)}>
-            Back
+            Previous stage
           </Button>
           <Button type='button' onClick={() => setLongFormStep(longFormStep === 1 ? 2 : 1)}>
             {longFormStep === 1 ? 'Continue to safety' : 'Review request'}
@@ -1330,14 +1875,15 @@ function FormsDemo() {
           </FieldDescription>
         </FieldRoot>
       </UseCaseSection>
-    </form>
+    </DemoFrame>
   )
 }
 
 function GlobalHeaderDemo() {
   const [configuration, setConfiguration] = useState<'header' | 'panel'>('header')
   const [organization, setOrganization] = useState<'workspace' | 'mission'>('workspace')
-  const [message, setMessage] = useState('Current location: Missions / North coast survey')
+  const [headerMessage, setHeaderMessage] = useState('Current location: Missions / North coast survey')
+  const [schemeMessage, setSchemeMessage] = useState('Choose a destination to preview this navigation scheme.')
   return (
     <DemoFrame>
       <UseCaseSection
@@ -1366,10 +1912,10 @@ function GlobalHeaderDemo() {
           <header className='flex flex-wrap items-center justify-between gap-3 border-b border-border bg-card px-4 py-3'>
             <strong>SkyTrack Mission workspace</strong>
             <nav aria-label='Global navigation' className='flex flex-wrap gap-1'>
-              <Button size='sm' variant='ghost' onClick={() => setMessage('Opened global Home.')}>
+              <Button size='sm' variant='ghost' onClick={() => setHeaderMessage('Opened global Home.')}>
                 Home
               </Button>
-              <Button size='sm' variant='ghost' onClick={() => setMessage('Opened global Missions.')}>
+              <Button size='sm' variant='ghost' onClick={() => setHeaderMessage('Opened global Missions.')}>
                 Missions
               </Button>
               <Menu>
@@ -1383,9 +1929,11 @@ function GlobalHeaderDemo() {
                 <MenuPortal>
                   <MenuPositioner side='bottom' align='end' sideOffset={4}>
                     <MenuPopup>
-                      <MenuItem onClick={() => setMessage('Notifications panel opened.')}>Notifications · 2</MenuItem>
-                      <MenuItem onClick={() => setMessage('System settings opened.')}>System settings</MenuItem>
-                      <MenuItem onClick={() => setMessage('Product switcher opened.')}>Switch product</MenuItem>
+                      <MenuItem onClick={() => setHeaderMessage('Notifications panel opened.')}>
+                        Notifications · 2
+                      </MenuItem>
+                      <MenuItem onClick={() => setHeaderMessage('System settings opened.')}>System settings</MenuItem>
+                      <MenuItem onClick={() => setHeaderMessage('Product switcher opened.')}>Switch product</MenuItem>
                     </MenuPopup>
                   </MenuPositioner>
                 </MenuPortal>
@@ -1403,7 +1951,7 @@ function GlobalHeaderDemo() {
                   size='sm'
                   variant='secondary'
                   className='w-full justify-start'
-                  onClick={() => setMessage('Viewing mission overview.')}
+                  onClick={() => setHeaderMessage('Viewing mission overview.')}
                 >
                   Overview
                 </Button>
@@ -1411,7 +1959,7 @@ function GlobalHeaderDemo() {
                   size='sm'
                   variant='ghost'
                   className='w-full justify-start'
-                  onClick={() => setMessage('Viewing flight plans.')}
+                  onClick={() => setHeaderMessage('Viewing flight plans.')}
                 >
                   Flight plans
                 </Button>
@@ -1419,7 +1967,7 @@ function GlobalHeaderDemo() {
                   size='sm'
                   variant='ghost'
                   className='w-full justify-start'
-                  onClick={() => setMessage('Viewing aircraft.')}
+                  onClick={() => setHeaderMessage('Viewing aircraft.')}
                 >
                   Aircraft
                 </Button>
@@ -1429,11 +1977,35 @@ function GlobalHeaderDemo() {
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem>
-                    <BreadcrumbLink render={<a href='#workspace' />}>Workspace</BreadcrumbLink>
+                    <BreadcrumbLink
+                      render={
+                        <a
+                          href='#workspace'
+                          onClick={(event) => {
+                            event.preventDefault()
+                            setHeaderMessage('Opened the local workspace overview preview.')
+                          }}
+                        />
+                      }
+                    >
+                      Workspace
+                    </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
-                    <BreadcrumbLink render={<a href='#missions' />}>Missions</BreadcrumbLink>
+                    <BreadcrumbLink
+                      render={
+                        <a
+                          href='#missions'
+                          onClick={(event) => {
+                            event.preventDefault()
+                            setHeaderMessage('Opened the local mission-list preview.')
+                          }}
+                        />
+                      }
+                    >
+                      Missions
+                    </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
@@ -1442,15 +2014,19 @@ function GlobalHeaderDemo() {
                 </BreadcrumbList>
               </Breadcrumb>
               <Toolbar className='w-full justify-between'>
-                <ToolbarButton onClick={() => setMessage('Opened the local mission overview.')}>Overview</ToolbarButton>
+                <ToolbarButton onClick={() => setHeaderMessage('Opened the local mission overview.')}>
+                  Overview
+                </ToolbarButton>
                 <ToolbarSeparator />
-                <ToolbarButton onClick={() => setMessage('Opened the local mission settings.')}>Settings</ToolbarButton>
+                <ToolbarButton onClick={() => setHeaderMessage('Opened the local mission settings.')}>
+                  Settings
+                </ToolbarButton>
               </Toolbar>
             </div>
           </div>
         </div>
         <p aria-live='polite' className='text-muted-foreground'>
-          {message} · Global utilities stay consistent; local navigation changes with the product context.
+          {headerMessage} · Global utilities stay consistent; local navigation changes with the product context.
         </p>
       </UseCaseSection>
       <UseCaseSection
@@ -1484,12 +2060,15 @@ function GlobalHeaderDemo() {
               key={item}
               size='sm'
               variant={item === (organization === 'workspace' ? 'Projects' : 'Overview') ? 'secondary' : 'ghost'}
-              onClick={() => setMessage(`Opened ${item} in the ${organization}-first scheme.`)}
+              onClick={() => setSchemeMessage(`Opened ${item} in the ${organization}-first scheme.`)}
             >
               {item}
             </Button>
           ))}
         </nav>
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {schemeMessage}
+        </p>
       </UseCaseSection>
     </DemoFrame>
   )
@@ -1609,6 +2188,8 @@ function LoginDemo() {
   const [step, setStep] = useState<'email' | 'password' | 'verification'>('email')
   const [layout, setLayout] = useState<'centered' | 'split'>('centered')
   const [loginError, setLoginError] = useState(false)
+  const [workEmail, setWorkEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [message, setMessage] = useState('This form does not authenticate or send credentials.')
   return (
     <DemoFrame>
@@ -1629,20 +2210,39 @@ function LoginDemo() {
             </Button>
           ))}
         </div>
+        <div
+          role='region'
+          aria-label='Sign-in layout preview'
+          className={`grid w-full gap-3 rounded-(--radius) border border-border p-4 ${layout === 'centered' ? 'mx-auto max-w-sm justify-items-center text-center' : 'sm:grid-cols-2 sm:items-start'}`}
+        >
+          {layout === 'split' && (
+            <div className='space-y-2'>
+              <p className='text-muted-foreground'>SkyTrack workspace</p>
+              <p>Plan and review missions with your team.</p>
+            </div>
+          )}
+          <div className='w-full space-y-2'>
+            <p className='font-medium'>Log in</p>
+            <Input aria-label='Preview work email' placeholder='Work email' readOnly />
+            <Button disabled className='w-full'>
+              Continue
+            </Button>
+          </div>
+        </div>
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {layout === 'centered'
+            ? 'Centered form preview: focused entry without extra introduction.'
+            : 'Split welcome preview: a short product introduction sits beside the sign-in form.'}
+        </p>
       </UseCaseSection>
       <UseCaseSection
         title='Authenticate progressively and recover from an error'
         scenario='Request work email first, then show the password or organization SSO path, an optional verification step, and clear recovery actions.'
       >
-        <div
-          className={`mx-auto grid w-full gap-4 rounded-(--radius) border border-border p-5 ${layout === 'centered' ? 'max-w-md' : 'max-w-3xl md:grid-cols-2 md:items-start'}`}
-        >
+        <div className='mx-auto grid w-full max-w-md gap-4 rounded-(--radius) border border-border p-5'>
           <div>
             <p className='text-muted-foreground'>SkyTrack workspace</p>
             <h4 className='font-medium'>Log in</h4>
-            {layout === 'split' && (
-              <p className='mt-2 text-muted-foreground'>Review shared mission records with your team.</p>
-            )}
             <p className='text-muted-foreground'>
               {step === 'email'
                 ? 'Enter your work email to continue.'
@@ -1657,31 +2257,65 @@ function LoginDemo() {
               event.preventDefault()
               if (step === 'email') {
                 setStep('password')
-                setMessage('Progressive authentication: the password step follows the user ID.')
+                setLoginError(false)
+                setMessage('The preview moved to the password step without checking whether this account exists.')
               } else if (step === 'password') {
                 setStep('verification')
-                setMessage('A second factor is requested after the password step.')
-              } else setMessage('Sample flow complete. No sign-in was attempted.')
+                setPassword('')
+                setMessage('Illustrative verification step shown. No credentials were checked and no sign-in occurred.')
+              } else {
+                setStep('email')
+                setPassword('')
+                setMessage('The sample flow ended. No sign-in was attempted.')
+              }
             }}
           >
-            <FieldRoot>
-              <FieldLabel>Email address</FieldLabel>
-              <Input
-                type='email'
-                autoComplete='username'
-                placeholder='name@example.com'
-                onChange={() => setLoginError(false)}
-                aria-invalid={loginError}
-              />
-              {loginError && (
-                <FieldError>The sign-in details were not recognized. Check them and try again.</FieldError>
-              )}
-            </FieldRoot>
+            {loginError && (
+              <Alert variant='destructive'>
+                <AlertDescription>Incorrect ID or password. Try again.</AlertDescription>
+              </Alert>
+            )}
+            {step === 'email' ? (
+              <FieldRoot>
+                <FieldLabel>Work email</FieldLabel>
+                <FieldControl
+                  render={
+                    <Input
+                      type='email'
+                      autoComplete='username'
+                      placeholder='name@example.com'
+                      aria-label='Work email'
+                      value={workEmail}
+                      onChange={(event) => {
+                        setWorkEmail(event.target.value)
+                        setLoginError(false)
+                      }}
+                    />
+                  }
+                />
+              </FieldRoot>
+            ) : (
+              <div className='space-y-1 rounded-(--radius) border border-border p-3'>
+                <p className='text-xs text-muted-foreground'>Work email</p>
+                <p className='break-all'>{workEmail || 'pilot@example.com'}</p>
+              </div>
+            )}
             {step === 'password' && (
               <>
                 <FieldRoot>
                   <FieldLabel>Password</FieldLabel>
-                  <Input type='password' autoComplete='current-password' placeholder='Enter a password' />
+                  <FieldControl
+                    render={
+                      <Input
+                        type='password'
+                        autoComplete='current-password'
+                        placeholder='Enter a password'
+                        aria-label='Password'
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                      />
+                    }
+                  />
                 </FieldRoot>
                 <Button
                   type='button'
@@ -1693,43 +2327,72 @@ function LoginDemo() {
               </>
             )}
             {step === 'verification' && (
-              <FieldRoot>
-                <FieldLabel>Verification code</FieldLabel>
-                <Input inputMode='numeric' autoComplete='one-time-code' placeholder='123 456' />
-              </FieldRoot>
+              <div className='space-y-3'>
+                <Badge count='Illustrative · MFA guidance not standardized' status='outline' />
+                <FieldRoot>
+                  <FieldLabel>Verification code</FieldLabel>
+                  <FieldControl
+                    render={
+                      <Input
+                        inputMode='numeric'
+                        autoComplete='one-time-code'
+                        placeholder='123 456'
+                        aria-label='Verification code'
+                      />
+                    }
+                  />
+                </FieldRoot>
+              </div>
             )}
-            <Button type='submit'>{step === 'email' ? 'Continue' : step === 'password' ? 'Log in' : 'Verify'}</Button>
+            <Button type='submit'>
+              {step === 'email' ? 'Continue' : step === 'password' ? 'Continue to verification' : 'Finish preview'}
+            </Button>
           </form>
           {step !== 'email' && (
             <Button
               size='sm'
               variant='outline'
               onClick={() => {
-                setStep(step === 'verification' ? 'password' : 'email')
-                setMessage(step === 'verification' ? 'Returned to password entry.' : 'Returned to email entry.')
+                setStep('email')
+                setPassword('')
+                setLoginError(false)
+                setMessage('Returned to the work email step.')
               }}
             >
-              {step === 'verification' ? 'Back to password' : 'Back to email'}
+              Change email
             </Button>
           )}
-          <div className='border-t border-border pt-3'>
-            <p className='mb-2 text-muted-foreground'>Alternative method</p>
-            <Button size='sm' variant='ghost' onClick={() => setLoginError(true)}>
-              Preview sign-in error
-            </Button>
+          {step === 'password' && (
             <Button
-              variant='outline'
-              className='w-full'
-              onClick={() => setMessage('Organization SSO selected. No authentication occurred.')}
+              size='sm'
+              variant='ghost'
+              onClick={() => {
+                setPassword('')
+                setStep('email')
+                setLoginError(true)
+                setMessage('The sample returned to work email entry after a credential error; password was cleared.')
+              }}
             >
-              Continue with organization SSO
+              Preview credential error
             </Button>
-          </div>
+          )}
+          {step === 'email' && (
+            <div className='border-t border-border pt-3'>
+              <p className='mb-2 text-muted-foreground'>Alternative method</p>
+              <Button
+                variant='outline'
+                className='w-full'
+                onClick={() => setMessage('Organization SSO selected. No authentication occurred.')}
+              >
+                Continue with organization SSO
+              </Button>
+            </div>
+          )}
         </div>
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {message}
+        </p>
       </UseCaseSection>
-      <p role='status' aria-live='polite' className='text-muted-foreground'>
-        {message}
-      </p>
     </DemoFrame>
   )
 }
@@ -1776,28 +2439,46 @@ function NotificationsDemo() {
         </div>
       </UseCaseSection>
       <UseCaseSection
+        title='Keep field guidance visible on page load'
+        scenario='When a pilot opens mission setup, show a short informational note above the collection field it explains; keep it visible without a dismiss or action button.'
+      >
+        <div className='mx-auto w-full max-w-xl space-y-2'>
+          <Alert variant='info' role='note' aria-label='Page-load callout'>
+            <AlertDescription>Choose a collection to keep this mission with the right review team.</AlertDescription>
+          </Alert>
+          <FieldRoot>
+            <FieldLabel>Review collection</FieldLabel>
+            <FieldControl render={<Input value='Coastal operations' readOnly aria-label='Review collection' />} />
+            <FieldDescription>The callout stays beside the field it explains.</FieldDescription>
+          </FieldRoot>
+        </div>
+      </UseCaseSection>
+      <UseCaseSection
         title='Confirm a completed action briefly'
         scenario='After saving a flight plan, show a short-lived message that does not interrupt the next task.'
       >
         <div className='flex flex-wrap gap-2'>
-          {statuses.map(({ type, label, message }) => (
-            <Button
-              key={type}
-              size='sm'
-              variant='outline'
-              onClick={() => toastManager.add({ type, title: label, description: message })}
-            >
-              Show {label.toLowerCase()} toast
-            </Button>
-          ))}
+          {statuses
+            .filter(({ type }) => type === 'success' || type === 'info')
+            .map(({ type, label, message }) => (
+              <Button
+                key={type}
+                size='sm'
+                variant='outline'
+                onClick={() => toastManager.add({ type, title: label, description: message })}
+              >
+                Show {label.toLowerCase()} toast
+              </Button>
+            ))}
         </div>
       </UseCaseSection>
       <UseCaseSection
         title='Review accumulated notifications in a panel'
         scenario='A pilot opens the notification center to distinguish task reminders from system-generated updates.'
       >
+        <p className='text-xs text-muted-foreground'>Experimental preview · panel contents are sample notifications.</p>
         <Button variant='outline' aria-expanded={panelOpen} onClick={() => setPanelOpen((open) => !open)}>
-          {panelOpen ? 'Close notifications · 3' : 'Notifications · 3'}
+          {panelOpen ? 'Close notifications · 3 unread' : 'Notifications · 3 unread'}
         </Button>
         {panelOpen && (
           <div
@@ -1806,15 +2487,27 @@ function NotificationsDemo() {
             className='max-w-xl divide-y divide-border border border-border'
           >
             <div className='space-y-1 p-3'>
-              <p className='font-medium'>Task · Draft review pending</p>
+              <div className='flex flex-wrap items-center gap-2'>
+                <p className='font-medium'>Task · Draft review pending</p>
+                <Badge count='Unread' status='processing' />
+                <Badge count='Information' status='outline' />
+              </div>
               <p className='text-muted-foreground'>A sample task is waiting for review.</p>
             </div>
             <div className='space-y-1 p-3'>
-              <p className='font-medium'>System · Map data refreshed</p>
+              <div className='flex flex-wrap items-center gap-2'>
+                <p className='font-medium'>System · Map data refreshed</p>
+                <Badge count='Unread' status='processing' />
+                <Badge count='Success' status='success' />
+              </div>
               <p className='text-muted-foreground'>The latest coverage is available for route planning.</p>
             </div>
             <div className='space-y-1 p-3'>
-              <p className='font-medium'>Priority · Notification access updated</p>
+              <div className='flex flex-wrap items-center gap-2'>
+                <p className='font-medium'>Priority · Notification access updated</p>
+                <Badge count='Unread' status='processing' />
+                <Badge count='Warning' status='warning' />
+              </div>
               <p className='text-muted-foreground'>A workspace access setting changed in this sample.</p>
             </div>
           </div>
@@ -1830,7 +2523,7 @@ function NotificationsDemo() {
           <AlertAction>
             <Button
               size='sm'
-              variant='outline'
+              variant='ghost'
               onClick={() => setActionMessage('Description editor preview opened; no record was changed.')}
             >
               Edit description
@@ -1838,16 +2531,21 @@ function NotificationsDemo() {
           </AlertAction>
         </Alert>
         {updateVisible ? (
-          <Alert variant='info' className='items-center'>
-            <AlertDescription>
-              <strong>Service update:</strong> A sample feature update is available.
-            </AlertDescription>
-            <AlertAction>
-              <Button size='sm' variant='ghost' onClick={() => setUpdateVisible(false)}>
-                Dismiss
-              </Button>
-            </AlertAction>
-          </Alert>
+          <div className='space-y-2'>
+            <p className='text-xs text-muted-foreground'>
+              Experimental preview · banner guidance is still being explored.
+            </p>
+            <Alert variant='info' className='items-center'>
+              <AlertDescription>
+                <strong>Service update:</strong> A sample feature update is available.
+              </AlertDescription>
+              <AlertAction>
+                <Button size='sm' variant='ghost' onClick={() => setUpdateVisible(false)}>
+                  Dismiss
+                </Button>
+              </AlertAction>
+            </Alert>
+          </div>
         ) : (
           <Button size='sm' variant='outline' onClick={() => setUpdateVisible(true)}>
             Show service update
@@ -1920,17 +2618,15 @@ function OverflowDemo() {
           <div className='min-w-0'>
             <dt className='text-muted-foreground'>Mid-line</dt>
             <dd className='truncate' title='flight-plan-4829017356-revision-a'>
-              flight-plan-48…-revision-a
+              flight-plan-4829017356-revision-a
             </dd>
           </div>
           <div className='min-w-0'>
             <dt className='text-muted-foreground'>Front-line</dt>
-            <dd
-              className='truncate text-right'
-              dir='rtl'
-              title='https://skytrack.example.com/missions/north-coast-survey'
-            >
-              https://skytrack.example.com/missions/north-coast-survey
+            <dd className='truncate text-right' dir='rtl'>
+              <bdi dir='ltr' title='https://skytrack.example.com/missions/north-coast-survey'>
+                https://skytrack.example.com/missions/north-coast-survey
+              </bdi>
             </dd>
           </div>
         </dl>
@@ -2017,8 +2713,8 @@ function ReadOnlyDemo() {
           </FieldRoot>
           <FieldRoot>
             <FieldLabel>Launch window · read-only</FieldLabel>
-            <Input type='date' value='2026-11-05' readOnly />
-            <FieldDescription>Bound-entry value is reviewable but cannot be changed.</FieldDescription>
+            <Input type='text' value='Nov 5, 2026' readOnly />
+            <FieldDescription>The saved date stays readable; this view does not offer a date picker.</FieldDescription>
           </FieldRoot>
           <label className='flex items-center gap-2'>
             <CheckboxRoot checked readOnly aria-label='Weather review completed' />
@@ -2031,9 +2727,8 @@ function ReadOnlyDemo() {
         scenario='A restricted reviewer can see that an optional mission note has no value without mistaking a disabled control for read-only content.'
       >
         <FieldRoot className='max-w-md'>
-          <FieldLabel>Mission note · read-only</FieldLabel>
-          <Input value='' placeholder='No note provided' readOnly />
-          <FieldDescription>The field remains readable and keyboard-focusable.</FieldDescription>
+          <p className='text-sm font-medium'>Mission note · read-only</p>
+          <p className='text-foreground'>No note provided</p>
         </FieldRoot>
       </UseCaseSection>
     </DemoFrame>
@@ -2045,11 +2740,19 @@ function SearchDemo() {
   const [mode, setMode] = useState<'basic' | 'active' | 'focused'>('active')
   const [scope, setScope] = useState('All')
   const [submittedQuery, setSubmittedQuery] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
+  const [recoveryQuery, setRecoveryQuery] = useState('')
+  const [previewQuery, setPreviewQuery] = useState('')
+  const [previewActiveIndex, setPreviewActiveIndex] = useState(0)
+  const [previewOpen, setPreviewOpen] = useState(false)
   const [searchLoading, setSearchLoading] = useState(false)
   const scopedItems = SAMPLE_ITEMS.filter((item) => scope === 'All' || item.type === scope)
   const results = scopedItems.filter((item) =>
     item.name.toLowerCase().includes((mode === 'basic' ? submittedQuery : query).toLowerCase())
   )
+  const recoveryResults = SAMPLE_ITEMS.filter((item) => item.name.toLowerCase().includes(recoveryQuery.toLowerCase()))
+  const previewResults = SAMPLE_ITEMS.filter((item) => item.name.toLowerCase().includes(previewQuery.toLowerCase()))
+  const previewOptions = previewResults.slice(0, 3)
   return (
     <DemoFrame>
       <UseCaseSection
@@ -2073,19 +2776,37 @@ function SearchDemo() {
           ))}
         </div>
         {mode === 'focused' && (
-          <div className='flex flex-wrap gap-2' aria-label='Search scope'>
-            {['All', 'Planning', 'Review', 'Complete'].map((value) => (
-              <Button
-                key={value}
-                size='sm'
-                variant={scope === value ? 'secondary' : 'outline'}
-                aria-pressed={scope === value}
-                onClick={() => setScope(value)}
-              >
-                {value}
-              </Button>
-            ))}
-          </div>
+          <FieldRoot className='max-w-xs'>
+            <FieldLabel>Search scope</FieldLabel>
+            <Select<string> value={scope} onValueChange={(value) => value && setScope(value)}>
+              <SelectTrigger>
+                <SelectValue />
+                <SelectIcon />
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectPositioner side='bottom' align='start' sideOffset={4}>
+                  <SelectPopup>
+                    <SelectList>
+                      {['All', 'Planning', 'Review', 'Complete'].map((value) => {
+                        const count =
+                          value === 'All'
+                            ? SAMPLE_ITEMS.length
+                            : SAMPLE_ITEMS.filter((item) => item.type === value).length
+                        return (
+                          <SelectItem key={value} value={value}>
+                            <SelectItemIndicator />
+                            <SelectItemText>
+                              {value} · {count}
+                            </SelectItemText>
+                          </SelectItem>
+                        )
+                      })}
+                    </SelectList>
+                  </SelectPopup>
+                </SelectPositioner>
+              </SelectPortal>
+            </Select>
+          </FieldRoot>
         )}
         <form
           className='flex flex-wrap gap-2'
@@ -2096,7 +2817,12 @@ function SearchDemo() {
         >
           <Input
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value)
+              if (mode !== 'basic') setSubmittedQuery(event.target.value)
+            }}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
             placeholder={
               mode === 'focused' ? `Search ${scope === 'All' ? 'missions' : scope.toLowerCase()}` : 'Search missions'
             }
@@ -2120,21 +2846,7 @@ function SearchDemo() {
           />
           {mode === 'basic' && <Button type='submit'>Search</Button>}
         </form>
-        {mode === 'focused' && query && scope !== 'All' && (
-          <Button size='sm' variant='ghost' onClick={() => setScope('All')}>
-            Search all missions for “{query}”
-          </Button>
-        )}
-      </UseCaseSection>
-      <UseCaseSection
-        title='Review result count and recover from no matches'
-        scenario='Show how many missions match, offer recent queries before the first search, and let the user broaden or clear a search.'
-      >
-        <p aria-live='polite' className='text-muted-foreground'>
-          {results.length} results{mode === 'basic' && !submittedQuery ? ' · submit to search' : ''}
-          {mode === 'focused' ? ` · ${scope} scope` : ''}
-        </p>
-        {mode === 'basic' && !submittedQuery ? (
+        {searchFocused && !query && (
           <div className='flex flex-wrap items-center gap-2'>
             <span className='text-muted-foreground'>Recent searches:</span>
             {['North coast', 'Runway inspection'].map((recent) => (
@@ -2142,48 +2854,143 @@ function SearchDemo() {
                 key={recent}
                 size='sm'
                 variant='ghost'
+                onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
                   setQuery(recent)
                   setSubmittedQuery(recent)
+                  setSearchFocused(false)
                 }}
               >
                 {recent}
               </Button>
             ))}
           </div>
-        ) : results.length ? (
+        )}
+        {mode === 'focused' && query && scope !== 'All' && (
+          <Button size='sm' variant='ghost' onClick={() => setScope('All')}>
+            Search all missions for “{query}”
+          </Button>
+        )}
+        <div className='space-y-2'>
+          <p role='status' aria-live='polite' className='text-muted-foreground'>
+            {mode === 'basic' && !submittedQuery
+              ? 'Submit a query to see the results page preview.'
+              : `${results.length} ${results.length === 1 ? 'mission' : 'missions'} match`}
+            {mode === 'focused' ? ` · ${scope} scope` : ''}
+          </p>
+          {mode === 'basic' && !submittedQuery ? null : results.length ? (
+            <ul className='list-disc ps-5'>
+              {results.map((item) => (
+                <li key={item.name}>{item.name}</li>
+              ))}
+            </ul>
+          ) : (
+            <Alert role='status'>
+              <AlertTitle>No missions found</AlertTitle>
+              <AlertDescription>Try another term, widen the scope, or clear the search.</AlertDescription>
+            </Alert>
+          )}
+          {mode === 'basic' && submittedQuery && (
+            <p className='text-xs text-muted-foreground'>Basic search opens a separate results view in this sample.</p>
+          )}
+        </div>
+      </UseCaseSection>
+      <UseCaseSection
+        title='Review result count and recover from no matches'
+        scenario='Show a live match count, then clear an unmatched term to recover the complete sample list.'
+      >
+        <FieldRoot className='max-w-md'>
+          <FieldLabel>Search the sample catalog</FieldLabel>
+          <Input
+            value={recoveryQuery}
+            onChange={(event) => setRecoveryQuery(event.target.value)}
+            placeholder='Try an unmatched term'
+          />
+        </FieldRoot>
+        <p aria-live='polite' className='text-muted-foreground'>
+          {recoveryResults.length} {recoveryResults.length === 1 ? 'mission' : 'missions'} found in this example.
+        </p>
+        {recoveryResults.length ? (
           <ul className='list-disc ps-5'>
-            {results.map((item) => (
+            {recoveryResults.map((item) => (
               <li key={item.name}>{item.name}</li>
             ))}
           </ul>
         ) : (
           <Alert role='status'>
             <AlertTitle>No missions found</AlertTitle>
-            <AlertDescription>Try another term, widen the scope, or clear the search.</AlertDescription>
+            <AlertDescription>Clear the term to restore the complete sample list.</AlertDescription>
           </Alert>
+        )}
+        {recoveryQuery && (
+          <Button size='sm' variant='outline' onClick={() => setRecoveryQuery('')}>
+            Clear search
+          </Button>
         )}
       </UseCaseSection>
       <UseCaseSection
         title='Preview matches before opening the full result set'
-        scenario='For a small mission catalog, show type-ahead matches in place; a broader focused search can expand to all missions.'
+        scenario='For a short mission list, filter matches as the user types and show suggestions in place.'
       >
-        <p className='text-muted-foreground'>
-          Type in the search field above to update these matching mission previews.
-        </p>
-        <ul aria-live='polite' className='divide-y divide-border border-y border-border'>
-          {results.slice(0, 3).map((item) => (
-            <li key={item.name} className='flex items-center justify-between gap-3 py-2'>
-              <span>{item.name}</span>
-              <Badge variant='outline'>{item.type}</Badge>
-            </li>
-          ))}
-          {!results.length && <li className='py-2 text-muted-foreground'>No matching preview yet.</li>}
-        </ul>
-        {mode === 'focused' && (
-          <Button size='sm' variant='outline' onClick={() => setScope('All')}>
-            See all missions
-          </Button>
+        <FieldRoot className='max-w-md'>
+          <FieldLabel>Find a mission preview</FieldLabel>
+          <Input
+            value={previewQuery}
+            onChange={(event) => {
+              setPreviewQuery(event.target.value)
+              setPreviewActiveIndex(0)
+              setPreviewOpen(Boolean(event.target.value))
+            }}
+            onFocus={() => setPreviewOpen(Boolean(previewQuery))}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowDown' && previewOptions.length) {
+                event.preventDefault()
+                setPreviewActiveIndex((index) => (index + 1) % previewOptions.length)
+              } else if (event.key === 'ArrowUp' && previewOptions.length) {
+                event.preventDefault()
+                setPreviewActiveIndex((index) => (index - 1 + previewOptions.length) % previewOptions.length)
+              } else if (event.key === 'Enter' && previewOpen && previewOptions[previewActiveIndex]) {
+                event.preventDefault()
+                setPreviewQuery(previewOptions[previewActiveIndex].name)
+                setPreviewOpen(false)
+              } else if (event.key === 'Escape') {
+                setPreviewOpen(false)
+              }
+            }}
+            role='combobox'
+            aria-expanded={previewOpen}
+            aria-controls={previewOpen ? 'mission-search-suggestions' : undefined}
+            aria-activedescendant={previewOpen ? `mission-search-option-${previewActiveIndex}` : undefined}
+            placeholder='Type a mission name'
+          />
+        </FieldRoot>
+        {previewOpen && (
+          <ul
+            id='mission-search-suggestions'
+            role='listbox'
+            aria-label='Mission suggestions'
+            aria-live='polite'
+            className='divide-y divide-border border-y border-border'
+          >
+            {previewOptions.map((item, index) => (
+              <li
+                key={item.name}
+                id={`mission-search-option-${index}`}
+                role='option'
+                aria-selected={previewActiveIndex === index}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => {
+                  setPreviewQuery(item.name)
+                  setPreviewOpen(false)
+                }}
+                className={`flex cursor-pointer items-center justify-between gap-3 py-2 ${previewActiveIndex === index ? 'bg-muted' : ''}`}
+              >
+                <span>{item.name}</span>
+                <Badge variant='outline'>{item.type}</Badge>
+              </li>
+            ))}
+            {!previewResults.length && <li className='py-2 text-muted-foreground'>No matching preview yet.</li>}
+          </ul>
         )}
       </UseCaseSection>
       <UseCaseSection
@@ -2191,7 +2998,6 @@ function SearchDemo() {
         scenario='For a resource-intensive query, communicate that the request is still running; keep the search icon and text-entry order usable in right-to-left interfaces.'
       >
         <FieldRoot className='max-w-md'>
-          <FieldLabel>Mission catalog · right-to-left example</FieldLabel>
           <Input
             dir='rtl'
             aria-label='Search missions in right-to-left layout'
@@ -2239,15 +3045,15 @@ function StatusIndicatorsDemo() {
       >
         <ul className='grid gap-2'>
           <li className='flex items-center gap-2'>
-            <span aria-hidden='true' className='size-3 rounded-full bg-success' />
+            <span aria-hidden='true' className='size-4 rounded-full border-2 border-success' />
             <span>Ready</span>
           </li>
           <li className='flex items-center gap-2'>
-            <span aria-hidden='true' className='size-3 rotate-45 bg-warning' />
+            <span aria-hidden='true' className='size-4 rotate-45 border-2 border-warning' />
             <span>Needs review</span>
           </li>
           <li className='flex items-center gap-2'>
-            <span aria-hidden='true' className='size-3 bg-destructive' />
+            <span aria-hidden='true' className='size-4 border-2 border-destructive' />
             <span>Blocked</span>
           </li>
         </ul>
@@ -2256,19 +3062,39 @@ function StatusIndicatorsDemo() {
         title='Summarize unread work in navigation'
         scenario='Show a queue count, an unread item, and the meaningful zero state.'
       >
-        <div className='flex flex-wrap items-center gap-6'>
-          <span className='inline-flex items-center gap-2'>
-            <span>Notifications</span>
-            <Badge count={4} status='error' />
-          </span>
-          <span className='inline-flex items-center gap-2'>
-            <span>New report</span>
-            <Badge dot status='processing' aria-label='New report available' />
-          </span>
-          <span className='inline-flex items-center gap-2'>
-            <span>Review queue</span>
-            <Badge count={0} showZero status='secondary' />
-          </span>
+        <div className='grid grid-cols-3 gap-4 text-center'>
+          <div className='grid justify-items-center gap-1'>
+            <span
+              role='img'
+              aria-label='Notifications icon with four unread items'
+              className='relative inline-flex size-12 items-center justify-center rounded-(--radius) border border-border'
+            >
+              <BellIcon aria-hidden='true' className='size-5' />
+              <Badge count={4} status='error' className='absolute -end-1 -top-1' />
+            </span>
+            <span className='text-sm text-muted-foreground'>4 unread</span>
+          </div>
+          <div className='grid justify-items-center gap-1'>
+            <span
+              role='img'
+              aria-label='Reports icon with a new-item dot'
+              className='relative inline-flex size-10 items-center justify-center rounded-(--radius) border border-border'
+            >
+              <FileTextIcon aria-hidden='true' className='size-4' />
+              <Badge dot status='processing' className='absolute -end-1 -top-1' />
+            </span>
+            <span className='text-sm text-muted-foreground'>New report</span>
+          </div>
+          <div className='grid justify-items-center gap-1'>
+            <span
+              role='img'
+              aria-label='Review queue icon with no unread badge'
+              className='inline-flex size-10 items-center justify-center rounded-(--radius) border border-border'
+            >
+              <CheckCircleIcon aria-hidden='true' className='size-4' />
+            </span>
+            <span className='text-sm text-muted-foreground'>0 unread · badge hidden</span>
+          </div>
         </div>
       </UseCaseSection>
       <UseCaseSection
@@ -2296,16 +3122,45 @@ function StatusIndicatorsDemo() {
   )
 }
 
+function highlightMatches(text: string, query: string): ReactNode {
+  if (!query) return text
+  const haystack = text.toLowerCase()
+  const needle = query.toLowerCase()
+  const result: ReactNode[] = []
+  let start = 0
+  let match = haystack.indexOf(needle, start)
+  let key = 0
+  while (match !== -1) {
+    if (match > start) result.push(text.slice(start, match))
+    result.push(
+      <mark key={`match-${key++}`} className='bg-primary/20 text-foreground'>
+        {text.slice(match, match + query.length)}
+      </mark>
+    )
+    start = match + query.length
+    match = haystack.indexOf(needle, start)
+  }
+  if (start < text.length) result.push(text.slice(start))
+  return result
+}
+
 function TextToolbarDemo() {
-  const [query, setQuery] = useState('')
-  const [attachment, setAttachment] = useState(false)
-  const [link, setLink] = useState('')
-  const [message, setMessage] = useState('Unsaved local draft preview.')
-  const [formats, setFormats] = useState<string[]>(['bold'])
-  const [draft, setDraft] = useState(
+  const [editorText, setEditorText] = useState(
     'North coast mission brief\nSample notes: route summary, assigned asset, and linked reference.'
   )
-  const matches = query ? draft.toLowerCase().split(query.toLowerCase()).length - 1 : 0
+  const [findQuery, setFindQuery] = useState('')
+  const [findDraft, setFindDraft] = useState(
+    'River mapping review\nConfirm the planned survey boundary before the team briefing.'
+  )
+  const [attachment, setAttachment] = useState(false)
+  const [link, setLink] = useState('')
+  const [linkOpen, setLinkOpen] = useState(false)
+  const [embeddedLink, setEmbeddedLink] = useState('')
+  const [message, setMessage] = useState('Unsaved local draft preview.')
+  const [formats, setFormats] = useState<string[]>(['bold'])
+  const [textStyle, setTextStyle] = useState<'body' | 'heading' | 'quote'>('body')
+  const matches = findQuery ? findDraft.toLowerCase().split(findQuery.toLowerCase()).length - 1 : 0
+  const matchLabel = `${matches} ${matches === 1 ? 'match' : 'matches'}`
   return (
     <DemoFrame>
       <UseCaseSection
@@ -2335,11 +3190,30 @@ function TextToolbarDemo() {
             <MenuPortal>
               <MenuPositioner side='bottom' align='start' sideOffset={4}>
                 <MenuPopup>
-                  <MenuItem onClick={() => setMessage('Heading style selected for the draft preview.')}>
+                  <MenuItem
+                    onClick={() => {
+                      setTextStyle('heading')
+                      setMessage('Heading style applied to the local draft preview.')
+                    }}
+                  >
                     Heading
                   </MenuItem>
-                  <MenuItem onClick={() => setMessage('Body style selected for the draft preview.')}>Body</MenuItem>
-                  <MenuItem onClick={() => setMessage('Quote style selected for the draft preview.')}>Quote</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setTextStyle('body')
+                      setMessage('Body style applied to the local draft preview.')
+                    }}
+                  >
+                    Body
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setTextStyle('quote')
+                      setMessage('Quote style applied to the local draft preview.')
+                    }}
+                  >
+                    Quote
+                  </MenuItem>
                 </MenuPopup>
               </MenuPositioner>
             </MenuPortal>
@@ -2349,95 +3223,137 @@ function TextToolbarDemo() {
             <MenuPortal>
               <MenuPositioner side='bottom' align='start' sideOffset={4}>
                 <MenuPopup>
+                  <MenuItem onClick={() => setLinkOpen(true)}>Embed link</MenuItem>
                   <MenuItem onClick={() => setAttachment(true)}>Attach file</MenuItem>
-                  <MenuItem onClick={() => document.getElementById('text-toolbar-search')?.focus()}>
-                    Search text
-                  </MenuItem>
-                  <MenuItem onClick={() => setMessage('Changes saved as a draft.')}>Save draft</MenuItem>
+                  <MenuItem onClick={() => setMessage('Draft saved in this local example.')}>Save draft</MenuItem>
                 </MenuPopup>
               </MenuPositioner>
             </MenuPortal>
           </Menu>
         </Toolbar>
-        <div className='flex flex-wrap gap-2'>
-          <Input
-            value={link}
-            onChange={(event) => setLink(event.target.value)}
-            aria-label='Embed link'
-            placeholder='Paste a link to embed'
-          />
-          <Button
-            size='sm'
-            variant='outline'
-            onClick={() => setMessage(link ? `Embedded link: ${link}` : 'Enter a link first.')}
-          >
-            Embed link
-          </Button>
-          <Button size='sm' variant='outline' onClick={() => setAttachment((value) => !value)}>
-            {attachment ? 'Remove attachment' : 'Attach file'}
-          </Button>
-          <Button size='sm' onClick={() => setMessage('Draft saved.')}>
-            Save draft
-          </Button>
-        </div>
-        {attachment && (
-          <Attachment state='done' className='w-full'>
-            <AttachmentMedia>PDF</AttachmentMedia>
-            <AttachmentContent>
-              <AttachmentTitle>mission-brief.pdf</AttachmentTitle>
-              <AttachmentDescription>
-                Attached sample ·{' '}
-                <Button
-                  size='icon-xs'
-                  variant='ghost'
-                  aria-label='Remove attachment'
-                  onClick={() => setAttachment(false)}
-                >
-                  ×
-                </Button>
-              </AttachmentDescription>
-            </AttachmentContent>
-          </Attachment>
+        {linkOpen && (
+          <div className='flex flex-wrap gap-2'>
+            <Input
+              value={link}
+              onChange={(event) => setLink(event.target.value)}
+              aria-label='Embed link'
+              placeholder='Paste a link to embed'
+            />
+            <Button
+              size='sm'
+              variant='outline'
+              onClick={() => {
+                if (!link.trim()) {
+                  setMessage('Enter a link before embedding it.')
+                  return
+                }
+                setEmbeddedLink(link.trim())
+                setLinkOpen(false)
+                setMessage('Link added to the local draft preview.')
+              }}
+            >
+              Add link
+            </Button>
+          </div>
         )}
+        <div className='space-y-2'>
+          <p className='text-sm text-muted-foreground'>Formatted draft preview · local sample</p>
+          <div
+            role='region'
+            aria-label='Formatted draft preview'
+            className={`min-h-16 whitespace-pre-wrap rounded-(--radius) border border-border bg-muted/30 p-3 ${textStyle === 'heading' ? 'text-xl font-medium' : textStyle === 'quote' ? 'border-s-2 ps-3 italic' : ''}`}
+            style={{
+              fontWeight: formats.includes('bold') ? 600 : 400,
+              fontStyle: formats.includes('italic') ? 'italic' : 'normal',
+              textDecoration: formats.includes('underline') ? 'underline' : 'none'
+            }}
+          >
+            {editorText}
+          </div>
+          {embeddedLink && <p className='text-sm'>Reference: {embeddedLink}</p>}
+          <FieldRoot>
+            <FieldLabel>Edit draft text</FieldLabel>
+            <FieldControl
+              render={<textarea />}
+              className='min-h-20 resize-y py-3'
+              value={editorText}
+              onChange={(event) => setEditorText(event.target.value)}
+            />
+          </FieldRoot>
+          {attachment && (
+            <Attachment state='done' className='w-full'>
+              <AttachmentMedia>PDF</AttachmentMedia>
+              <AttachmentContent>
+                <AttachmentTitle>mission-brief.pdf</AttachmentTitle>
+                <AttachmentDescription>
+                  Attached sample ·{' '}
+                  <Button
+                    size='icon-xs'
+                    variant='ghost'
+                    aria-label='Remove attachment'
+                    onClick={() => setAttachment(false)}
+                  >
+                    ×
+                  </Button>
+                </AttachmentDescription>
+              </AttachmentContent>
+            </Attachment>
+          )}
+        </div>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
           Local sample only. {message}
         </p>
       </UseCaseSection>
       <UseCaseSection
         title='Find and edit wording in context'
-        scenario='Search within the brief, see the match count, and update the editable text while reviewing its formatted preview.'
+        scenario='Search within the brief, see the match count, and update the wording in this example.'
       >
+        <Alert variant='warning'>
+          <AlertTitle>Experimental example</AlertTitle>
+          <AlertDescription>
+            The maintained guidance marks in-editor keyword search as not ready for production. This preview only
+            demonstrates a local match count.
+          </AlertDescription>
+        </Alert>
         <Input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          value={findQuery}
+          onChange={(event) => setFindQuery(event.target.value)}
           startAdornment={<MagnifyingGlassIcon aria-hidden='true' />}
-          endAdornment={query ? <Badge count={`${matches} matches`} size='sm' /> : null}
+          endAdornment={
+            findQuery ? (
+              <div className='flex items-center gap-1'>
+                <Badge count={matchLabel} size='sm' />
+                <Button size='icon-xs' variant='ghost' aria-label='Clear find text' onClick={() => setFindQuery('')}>
+                  <XIcon />
+                </Button>
+              </div>
+            ) : null
+          }
           placeholder='Find text in draft'
           aria-label='Find text in draft'
-          id='text-toolbar-search'
+          id='text-toolbar-search-secondary'
         />
         <div className='space-y-2'>
-          <p className='text-sm text-muted-foreground'>Draft editor · formatting applies to the preview</p>
+          <p className='text-sm text-muted-foreground'>Draft editor · edits stay in this preview</p>
           <FieldRoot>
             <FieldLabel>Draft text</FieldLabel>
             <FieldControl
               render={<textarea />}
               className='min-h-24 resize-y py-3'
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
+              value={findDraft}
+              onChange={(event) => setFindDraft(event.target.value)}
             />
           </FieldRoot>
+          <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+            {findQuery ? `${matchLabel} in this draft.` : 'Enter a word to see how many times it appears.'}
+          </p>
         </div>
         <div
-          aria-label='Formatted draft preview'
+          role='region'
+          aria-label='Edited draft preview'
           className='min-h-16 whitespace-pre-wrap rounded-(--radius) border border-border bg-muted/30 p-3'
-          style={{
-            fontWeight: formats.includes('bold') ? 600 : 400,
-            fontStyle: formats.includes('italic') ? 'italic' : 'normal',
-            textDecoration: formats.includes('underline') ? 'underline' : 'none'
-          }}
         >
-          {draft}
+          {highlightMatches(findDraft, findQuery)}
         </div>
       </UseCaseSection>
     </DemoFrame>
@@ -2447,7 +3363,9 @@ function TextToolbarDemo() {
 function ChatbotsDemo() {
   const [message, setMessage] = useState('')
   const [sent, setSent] = useState<Array<{ role: 'user' | 'assistant'; text: string }>>([])
+  const [navigationPreviewOpen, setNavigationPreviewOpen] = useState(false)
   const [connectionError, setConnectionError] = useState(false)
+  const [retryResult, setRetryResult] = useState('No message has been retried.')
   const [humanHandoff, setHumanHandoff] = useState(false)
   const sendMessage = (value: string) => {
     const question = value.trim()
@@ -2457,20 +3375,20 @@ function ChatbotsDemo() {
       ? 'This local sample has no authorized weather policy, so it cannot provide flight guidance.'
       : normalized.includes('route') || normalized.includes('mission')
         ? 'Open Missions to review the route, assigned aircraft, and schedule.'
-        : 'I can help with mission routes or weather checks. Try one of those topics, or open Missions directly.'
+        : 'I can help you find mission records. I cannot provide flight or weather guidance; open Missions or contact your flight operations team.'
     setSent((items) => [...items, { role: 'user', text: question }, { role: 'assistant', text: answer }])
     setMessage('')
   }
   return (
     <DemoFrame>
       <UseCaseSection
-        title='Ask for mission planning help'
-        scenario='A pilot asks for route or weather guidance, sees suggested prompts, and receives a scripted local answer.'
+        title='Ask for help with mission planning'
+        scenario='A pilot asks how to find route details; the scripted helper explains its limits and points to the mission record.'
       >
         <div role='log' aria-live='polite' className='space-y-2'>
           <p>
-            <strong>Mission helper:</strong> I can help find route or weather guidance. Choose a prompt or type a
-            question.
+            <strong>Mission helper:</strong> I can help you find mission information. I cannot provide flight or weather
+            guidance. Choose a prompt or type a question.
           </p>
           {sent.map((item, index) => (
             <p key={`${item.role}-${index}`}>
@@ -2509,9 +3427,22 @@ function ChatbotsDemo() {
         title='Continue through standard navigation'
         scenario='When a question is outside the helper’s scope, direct the user back to the Missions workspace.'
       >
-        <Button variant='outline' onClick={() => sendMessage('Open missions')}>
-          Open Missions
+        <Button variant='outline' onClick={() => setNavigationPreviewOpen(true)}>
+          Preview Missions workspace
         </Button>
+        {navigationPreviewOpen && (
+          <section
+            role='region'
+            aria-label='Missions workspace preview'
+            className='max-w-xl space-y-2 rounded-(--radius) border border-border p-4'
+          >
+            <h4 className='font-medium'>Missions</h4>
+            <p>North coast survey · Ready for review</p>
+            <p className='text-sm text-muted-foreground'>
+              Local destination preview only; product navigation did not occur.
+            </p>
+          </section>
+        )}
         <p className='text-muted-foreground'>
           Scripted local responses only; unknown questions get a scope clarification. No chatbot service is connected.
         </p>
@@ -2523,25 +3454,37 @@ function ChatbotsDemo() {
         {connectionError ? (
           <Alert variant='destructive'>
             <AlertTitle>Message not sent</AlertTitle>
-            <AlertDescription>Check the connection, then retry your question.</AlertDescription>
+            <AlertDescription>
+              “How can I review my route?” was not sent. Check the connection, then retry the message.
+            </AlertDescription>
             <AlertAction>
               <Button
                 size='sm'
                 variant='outline'
                 onClick={() => {
                   setConnectionError(false)
-                  setSent((items) => [...items, { role: 'assistant', text: 'Connection restored. How can I help?' }])
+                  setRetryResult('Message sent after reconnect: “How can I review my route?”')
                 }}
               >
-                Retry
+                Retry message
               </Button>
             </AlertAction>
           </Alert>
         ) : (
-          <Button size='sm' variant='outline' onClick={() => setConnectionError(true)}>
+          <Button
+            size='sm'
+            variant='outline'
+            onClick={() => {
+              setRetryResult('No message has been retried.')
+              setConnectionError(true)
+            }}
+          >
             Simulate connection error
           </Button>
         )}
+        <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+          {retryResult}
+        </p>
       </UseCaseSection>
       <UseCaseSection
         title='Hand off a complex request to a person'
@@ -2566,7 +3509,7 @@ function ChatbotsDemo() {
 }
 
 function InAppLearningDemo() {
-  const [welcomeVisible, setWelcomeVisible] = useState(true)
+  const [welcomeState, setWelcomeState] = useState<'welcome' | 'dismissed' | 'started' | 'completed'>('welcome')
   const [completedSteps, setCompletedSteps] = useState<string[]>([])
   const [tipsCompleted, setTipsCompleted] = useState(false)
   const [updatesVisible, setUpdatesVisible] = useState(true)
@@ -2578,22 +3521,38 @@ function InAppLearningDemo() {
         title='Welcome a first-time user'
         scenario='Orient a new workspace member with a short welcome and one clear way to begin or dismiss the introduction.'
       >
-        {welcomeVisible ? (
+        {welcomeState === 'welcome' ? (
           <Alert>
             <AlertTitle>Welcome to Mission planning</AlertTitle>
             <AlertDescription>Learn where to find missions, saved views, and workspace help.</AlertDescription>
             <AlertAction>
-              <Button size='sm' onClick={() => setWelcomeVisible(false)}>
+              <Button size='sm' onClick={() => setWelcomeState('started')}>
                 Get started
+              </Button>
+              <Button size='sm' variant='outline' onClick={() => setWelcomeState('dismissed')}>
+                Dismiss intro
+              </Button>
+            </AlertAction>
+          </Alert>
+        ) : welcomeState === 'started' ? (
+          <Alert variant='info'>
+            <AlertTitle>Getting started · step 1 of 3</AlertTitle>
+            <AlertDescription>Open the Missions workspace to find and review a flight plan.</AlertDescription>
+            <AlertAction>
+              <Button size='sm' onClick={() => setWelcomeState('completed')}>
+                Continue setup
+              </Button>
+              <Button size='sm' variant='outline' onClick={() => setWelcomeState('welcome')}>
+                Back to welcome
               </Button>
             </AlertAction>
           </Alert>
         ) : (
           <Alert variant='success'>
-            <AlertTitle>Introduction dismissed</AlertTitle>
+            <AlertTitle>{welcomeState === 'dismissed' ? 'Introduction dismissed' : 'Setup guide complete'}</AlertTitle>
             <AlertDescription>You can revisit the guide from Workspace help.</AlertDescription>
             <AlertAction>
-              <Button size='sm' variant='outline' onClick={() => setWelcomeVisible(true)}>
+              <Button size='sm' variant='outline' onClick={() => setWelcomeState('welcome')}>
                 Show welcome
               </Button>
             </AlertAction>
@@ -2703,8 +3662,7 @@ function InAppLearningDemo() {
       </UseCaseSection>
 
       <p className='text-muted-foreground'>
-        Catalog-only source: section types follow the accessible Carbon community catalog summary; the wording and UI
-        are local illustrations, not product onboarding policy.
+        This interaction is a local illustration; its wording and interface are not product onboarding policy.
       </p>
     </DemoFrame>
   )
@@ -2719,15 +3677,25 @@ function CreateFlowsDemo() {
   const [createProgress, setCreateProgress] = useState(0)
   const [name, setName] = useState('North coast survey')
   const [created, setCreated] = useState('')
+  const [sidePanelResult, setSidePanelResult] = useState('')
+  const [fullPageResult, setFullPageResult] = useState('')
+  const [selectedCollectionMission, setSelectedCollectionMission] = useState('North coast survey')
   const create = () => {
+    if (!name.trim()) return
     setCreated(name.trim())
     setOpen(false)
   }
+  const quickFields = (
+    <FieldRoot>
+      <FieldLabel>Mission name</FieldLabel>
+      <Input value={name} onChange={(event) => setName(event.target.value)} required />
+    </FieldRoot>
+  )
   const fields = (
     <>
       <FieldRoot>
         <FieldLabel>Mission name</FieldLabel>
-        <Input value={name} onChange={(event) => setName(event.target.value)} />
+        <Input value={name} onChange={(event) => setName(event.target.value)} required />
       </FieldRoot>
       <FieldRoot>
         <FieldLabel>Purpose</FieldLabel>
@@ -2741,7 +3709,7 @@ function CreateFlowsDemo() {
         title={mode === 'inline' ? 'Create a quick mission inline' : 'Create a mission in a focused dialog'}
         scenario={
           mode === 'inline'
-            ? 'Add a short mission while keeping the collection visible.'
+            ? 'Create a new one-field mission while keeping the collection visible; use this compact route when no extra context is needed.'
             : 'Use a modal for a short task that needs focused attention but not a full page.'
         }
       >
@@ -2769,9 +3737,11 @@ function CreateFlowsDemo() {
               <h4 className='font-medium'>Quick create</h4>
               <p className='text-muted-foreground'>One short step; keep the user in context.</p>
             </div>
-            {fields}
+            {quickFields}
             <div className='flex gap-2'>
-              <Button onClick={create}>Create mission</Button>
+              <Button onClick={create} disabled={!name.trim()}>
+                Create mission
+              </Button>
               <Button variant='outline' onClick={() => setName('')}>
                 Clear
               </Button>
@@ -2791,7 +3761,9 @@ function CreateFlowsDemo() {
                   {fields}
                   <DialogFooter>
                     <DialogClose variant='outline'>Cancel</DialogClose>
-                    <Button onClick={create}>Create mission</Button>
+                    <Button onClick={create} disabled={!name.trim()}>
+                      Create mission
+                    </Button>
                   </DialogFooter>
                 </DialogPopup>
               </DialogPortal>
@@ -2813,34 +3785,65 @@ function CreateFlowsDemo() {
         title='Create a complex mission in a side panel'
         scenario='Keep the collection visible beside a longer creation task; this uses the library Drawer as the side-panel surface.'
       >
-        <Drawer open={panelOpen} onOpenChange={setPanelOpen} swipeDirection='right'>
-          <DrawerTrigger>Open mission side panel</DrawerTrigger>
-          <DrawerPortal>
-            <DrawerBackdrop />
-            <DrawerViewport side='right'>
-              <DrawerPopup side='right'>
-                <DrawerContent>
-                  <DrawerTitle>New mission</DrawerTitle>
-                  <DrawerDescription>
-                    Enter a mission name and purpose. This example does not create a record.
-                  </DrawerDescription>
-                  {fields}
-                  <div className='flex flex-wrap gap-2'>
-                    <DrawerClose onClick={() => setPanelOpen(false)}>Cancel</DrawerClose>
-                    <Button
-                      onClick={() => {
-                        setCreated(name.trim())
-                        setPanelOpen(false)
-                      }}
-                    >
-                      Create mission
-                    </Button>
-                  </div>
-                </DrawerContent>
-              </DrawerPopup>
-            </DrawerViewport>
-          </DrawerPortal>
-        </Drawer>
+        <div className='grid min-w-0 gap-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,0.8fr)]'>
+          <section aria-label='Mission collection' className='min-w-0 space-y-3 border border-border p-4'>
+            <div>
+              <h5 className='text-base font-medium text-(--foreground)'>Mission collection</h5>
+              <p className='text-sm text-muted-foreground'>
+                Select or review a mission while the create panel is open.
+              </p>
+            </div>
+            <div className='grid gap-2'>
+              {['North coast survey', 'River mapping'].map((mission) => (
+                <Button
+                  key={mission}
+                  size='sm'
+                  variant={selectedCollectionMission === mission ? 'secondary' : 'ghost'}
+                  className='justify-start'
+                  aria-pressed={selectedCollectionMission === mission}
+                  onClick={() => setSelectedCollectionMission(mission)}
+                >
+                  {mission}
+                </Button>
+              ))}
+            </div>
+            {!panelOpen && (
+              <Button variant='outline' onClick={() => setPanelOpen(true)}>
+                Create a mission
+              </Button>
+            )}
+          </section>
+          {panelOpen && (
+            <aside aria-label='New mission side panel' className='min-w-0 space-y-3 border border-border p-4'>
+              <div>
+                <h5 className='text-base font-medium text-(--foreground)'>New mission</h5>
+                <p className='text-sm text-muted-foreground'>
+                  Create beside {selectedCollectionMission}; the collection stays usable.
+                </p>
+              </div>
+              {fields}
+              <div className='flex flex-wrap gap-2'>
+                <Button variant='outline' onClick={() => setPanelOpen(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  disabled={!name.trim()}
+                  onClick={() => {
+                    setSidePanelResult(`${name.trim()} prepared in the local preview; no mission was saved.`)
+                    setPanelOpen(false)
+                  }}
+                >
+                  Create mission
+                </Button>
+              </div>
+            </aside>
+          )}
+        </div>
+        {sidePanelResult && (
+          <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+            {sidePanelResult}
+          </p>
+        )}
       </UseCaseSection>
       <UseCaseSection
         title='Give a multi-step creation task a full-page canvas'
@@ -2849,15 +3852,16 @@ function CreateFlowsDemo() {
         {fullPageOpen ? (
           <section className='space-y-3 border border-border p-4'>
             <p className='sub-heading'>NEW MISSION · FULL-PAGE LAYOUT PREVIEW</p>
-            <h5 className='text-sm font-medium text-(--foreground)'>Configure flight area</h5>
+            <h5 className='text-base font-medium text-(--foreground)'>Configure flight area</h5>
             {fields}
             <div className='flex flex-wrap gap-2'>
               <Button variant='outline' onClick={() => setDiscardOpen(true)}>
                 Leave with unsaved changes
               </Button>
               <Button
+                disabled={!name.trim()}
                 onClick={() => {
-                  setCreated(name.trim())
+                  setFullPageResult(`${name.trim() || 'Untitled mission'} marked created in this local example.`)
                   setFullPageOpen(false)
                 }}
               >
@@ -2893,6 +3897,11 @@ function CreateFlowsDemo() {
             Preview full-page creation
           </Button>
         )}
+        {fullPageResult && (
+          <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
+            {fullPageResult}
+          </p>
+        )}
       </UseCaseSection>
       <UseCaseSection
         title='Use a narrow tearsheet for a compact create task'
@@ -2900,24 +3909,26 @@ function CreateFlowsDemo() {
       >
         <div className='mx-auto flex min-h-72 w-full max-w-sm flex-col border border-border bg-background shadow-sm'>
           <div className='space-y-1 border-b border-border p-4'>
-            <h5 className='text-sm font-medium text-(--foreground)'>New mission · narrow tearsheet</h5>
+            <h5 className='text-base font-medium text-(--foreground)'>New mission · narrow tearsheet</h5>
             <p className='text-muted-foreground'>Compact task layout illustration</p>
           </div>
           <div className='flex-1 space-y-3 p-4'>
             <FieldRoot>
               <FieldLabel>Mission name</FieldLabel>
-              <Input defaultValue='Coastal survey' />
+              <Input defaultValue='Coastal survey' readOnly />
             </FieldRoot>
             <FieldRoot>
               <FieldLabel>Collection</FieldLabel>
-              <Input defaultValue='North region' />
+              <Input defaultValue='North region' readOnly />
             </FieldRoot>
           </div>
           <div className='flex flex-wrap justify-end gap-2 border-t border-border p-4'>
-            <Button size='sm' variant='outline'>
+            <Button size='sm' variant='outline' disabled>
               Cancel
             </Button>
-            <Button size='sm'>Create</Button>
+            <Button size='sm' disabled>
+              Create
+            </Button>
           </div>
         </div>
         <p className='text-muted-foreground'>
@@ -2931,35 +3942,37 @@ function CreateFlowsDemo() {
         <div className='mx-auto grid min-h-72 w-full max-w-4xl grid-cols-1 border border-border bg-background shadow-sm md:grid-cols-[minmax(0,1fr)_minmax(14rem,0.7fr)]'>
           <div className='flex min-w-0 flex-col'>
             <div className='space-y-1 border-b border-border p-4'>
-              <h5 className='text-sm font-medium text-(--foreground)'>Configure mission · wide tearsheet</h5>
+              <h5 className='text-base font-medium text-(--foreground)'>Configure mission · wide tearsheet</h5>
               <p className='text-muted-foreground'>Expanded create layout illustration</p>
             </div>
             <div className='grid flex-1 gap-3 p-4 sm:grid-cols-2'>
               <FieldRoot>
                 <FieldLabel>Mission name</FieldLabel>
-                <Input defaultValue='Coastal survey' />
+                <Input defaultValue='Coastal survey' readOnly />
               </FieldRoot>
               <FieldRoot>
                 <FieldLabel>Collection</FieldLabel>
-                <Input defaultValue='North region' />
+                <Input defaultValue='North region' readOnly />
               </FieldRoot>
               <FieldRoot className='sm:col-span-2'>
                 <FieldLabel>Description</FieldLabel>
-                <Input defaultValue='Map the coastal sample area' />
+                <Input defaultValue='Map the coastal sample area' readOnly />
               </FieldRoot>
             </div>
           </div>
           <aside className='space-y-2 border-t border-border bg-muted/30 p-4 md:border-t-0 md:border-l'>
-            <h5 className='text-sm font-medium text-(--foreground)'>Review</h5>
+            <h5 className='text-base font-medium text-(--foreground)'>Review</h5>
             <p className='text-muted-foreground'>
               Name and collection are shown together before the local sample is created.
             </p>
           </aside>
           <div className='flex flex-wrap justify-end gap-2 border-t border-border p-4 md:col-span-2'>
-            <Button size='sm' variant='outline'>
+            <Button size='sm' variant='outline' disabled>
               Cancel
             </Button>
-            <Button size='sm'>Create</Button>
+            <Button size='sm' disabled>
+              Create
+            </Button>
           </div>
         </div>
         <p className='text-muted-foreground'>
@@ -2984,7 +3997,7 @@ function CreateFlowsDemo() {
           </Alert>
         ) : (
           <Button size='sm' onClick={() => setCreateProgress((value) => Math.min(100, value + 50))}>
-            Advance create flow
+            {createProgress === 0 ? 'Submit sample mission' : 'Continue preparation'}
           </Button>
         )}
         <Button size='sm' variant='ghost' onClick={() => setCreateProgress(0)}>
@@ -3002,8 +4015,14 @@ function EditDemo() {
   const [open, setOpen] = useState(false)
   const [highImpactConfirmOpen, setHighImpactConfirmOpen] = useState(false)
   const [editPanelOpen, setEditPanelOpen] = useState(false)
+  const [panelImpact, setPanelImpact] = useState<'low' | 'high'>('low')
+  const [panelReviewing, setPanelReviewing] = useState(false)
   const [editPageOpen, setEditPageOpen] = useState(false)
-  const [saved, setSaved] = useState('')
+  const [fullPageConfirmOpen, setFullPageConfirmOpen] = useState(false)
+  const [inlineStatus, setInlineStatus] = useState('')
+  const [modalStatus, setModalStatus] = useState('')
+  const [panelStatus, setPanelStatus] = useState('')
+  const [pageStatus, setPageStatus] = useState('')
   return (
     <DemoFrame>
       <UseCaseSection
@@ -3045,7 +4064,7 @@ function EditDemo() {
               value={name}
               onValueChange={(value) => {
                 setName(value)
-                setSaved('Mission name updated locally.')
+                setInlineStatus('Mission name updated in this sample.')
               }}
               label='Mission name'
             >
@@ -3108,8 +4127,8 @@ function EditDemo() {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Confirm this higher-impact edit</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Review the change summary before saving. The sample illustrates a confirmation step; no live
-                      mission is modified.
+                      This changes the mission name dispatchers use to identify it in review lists. This sample has no
+                      undo; no live mission is modified.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <p>
@@ -3121,7 +4140,7 @@ function EditDemo() {
                       variant='destructive'
                       onClick={() => {
                         setName(draft)
-                        setSaved('Changes saved locally after confirmation.')
+                        setModalStatus('Mission name saved in this sample after confirmation.')
                         setHighImpactConfirmOpen(false)
                       }}
                     >
@@ -3133,10 +4152,15 @@ function EditDemo() {
             </AlertDialog>
           </section>
         )}
-        {saved && (
+        {inlineStatus && mode === 'inline' && (
+          <p role='status' aria-live='polite' className='text-muted-foreground'>
+            {inlineStatus}
+          </p>
+        )}
+        {modalStatus && mode === 'high-impact' && (
           <Alert variant='success'>
-            <AlertTitle>Saved</AlertTitle>
-            <AlertDescription>{saved}</AlertDescription>
+            <AlertTitle>Change confirmed</AlertTitle>
+            <AlertDescription>{modalStatus}</AlertDescription>
           </Alert>
         )}
         <p className='text-muted-foreground'>
@@ -3145,10 +4169,35 @@ function EditDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Keep a broader edit in a side panel'
-        scenario='When an update needs related context, edit it in a side surface while retaining the mission list behind it.'
+        scenario='Keep the mission list in context; save low-impact edits directly or review a warning stage for high-impact changes.'
       >
+        <div className='flex flex-wrap gap-2' role='group' aria-label='Side-panel edit impact'>
+          <Button
+            size='sm'
+            variant={panelImpact === 'low' ? 'secondary' : 'outline'}
+            aria-pressed={panelImpact === 'low'}
+            onClick={() => setPanelImpact('low')}
+          >
+            Low impact
+          </Button>
+          <Button
+            size='sm'
+            variant={panelImpact === 'high' ? 'secondary' : 'outline'}
+            aria-pressed={panelImpact === 'high'}
+            onClick={() => setPanelImpact('high')}
+          >
+            High impact
+          </Button>
+        </div>
         <Drawer open={editPanelOpen} onOpenChange={setEditPanelOpen} swipeDirection='right'>
-          <DrawerTrigger>Open mission edit panel</DrawerTrigger>
+          <DrawerTrigger
+            onClick={() => {
+              setDraft(name)
+              setPanelReviewing(false)
+            }}
+          >
+            Open mission edit panel
+          </DrawerTrigger>
           <DrawerPortal>
             <DrawerBackdrop />
             <DrawerViewport side='right'>
@@ -3156,44 +4205,80 @@ function EditDemo() {
                 <DrawerContent>
                   <DrawerTitle>Edit mission details</DrawerTitle>
                   <DrawerDescription>
-                    Review editable and locked values before saving the sample. This side-panel flow keeps the list
-                    context available.
+                    The mission list stays visible behind this drawer for reference.{' '}
+                    {panelImpact === 'low'
+                      ? 'Save this low-impact edit directly.'
+                      : 'Review the consequences before saving.'}
                   </DrawerDescription>
-                  <FieldRoot>
-                    <FieldLabel>Mission name</FieldLabel>
-                    <Input value={draft} onChange={(event) => setDraft(event.target.value)} />
-                  </FieldRoot>
-                  <Alert variant='warning'>
-                    <AlertTitle>Review the change</AlertTitle>
-                    <AlertDescription>
-                      Only the mission name changes in this example; the assigned flight area is read-only.
-                    </AlertDescription>
-                  </Alert>
-                  <FieldRoot>
-                    <FieldLabel>Flight area · read-only</FieldLabel>
-                    <Input value='North coast' readOnly />
-                  </FieldRoot>
-                  <div className='flex flex-wrap gap-2'>
-                    <DrawerClose>Cancel</DrawerClose>
-                    <Button
-                      onClick={() => {
-                        setName(draft)
-                        setSaved('Changes saved locally.')
-                        setEditPanelOpen(false)
-                      }}
-                    >
-                      Save changes
-                    </Button>
-                  </div>
+                  {panelReviewing ? (
+                    <>
+                      <Alert variant='warning'>
+                        <AlertTitle>Review before saving</AlertTitle>
+                        <AlertDescription>
+                          This changes how dispatchers identify the plan in review lists. This sample has no Undo.
+                        </AlertDescription>
+                      </Alert>
+                      <p>
+                        Mission name: {name} → {draft}
+                      </p>
+                      <div className='flex flex-wrap gap-2'>
+                        <Button variant='outline' onClick={() => setPanelReviewing(false)}>
+                          Back to edit
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setName(draft)
+                            setPanelStatus('Higher-impact mission name saved in this side-panel example after review.')
+                            setPanelReviewing(false)
+                            setEditPanelOpen(false)
+                          }}
+                        >
+                          Confirm and save
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <FieldRoot>
+                        <FieldLabel>Mission name</FieldLabel>
+                        <Input value={draft} onChange={(event) => setDraft(event.target.value)} />
+                      </FieldRoot>
+                      <FieldRoot>
+                        <FieldLabel>Flight area · read-only</FieldLabel>
+                        <Input value='North coast' readOnly />
+                      </FieldRoot>
+                      <div className='flex flex-wrap gap-2'>
+                        <DrawerClose>Cancel</DrawerClose>
+                        {panelImpact === 'low' ? (
+                          <Button
+                            onClick={() => {
+                              setName(draft)
+                              setPanelStatus('Mission name saved directly in this low-impact side-panel example.')
+                              setEditPanelOpen(false)
+                            }}
+                          >
+                            Save changes
+                          </Button>
+                        ) : (
+                          <Button onClick={() => setPanelReviewing(true)}>Review change</Button>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </DrawerContent>
               </DrawerPopup>
             </DrawerViewport>
           </DrawerPortal>
         </Drawer>
+        {panelStatus && (
+          <p role='status' aria-live='polite' className='text-muted-foreground'>
+            {panelStatus}
+          </p>
+        )}
       </UseCaseSection>
       <UseCaseSection
         title='Use a full-page canvas for a complex revision'
-        scenario='When a route revision needs broad context and review, provide a dedicated layout; this is an in-place preview, not a separate route.'
+        scenario='Review a consequential full-page mission edit, then confirm its summary before saving; this is an in-place layout preview.'
       >
         {editPageOpen ? (
           <section className='max-w-2xl space-y-3 border border-border p-4'>
@@ -3202,12 +4287,6 @@ function EditDemo() {
               <FieldLabel>Mission name</FieldLabel>
               <Input value={draft} onChange={(event) => setDraft(event.target.value)} />
             </FieldRoot>
-            <Alert variant='warning'>
-              <AlertTitle>Review before saving</AlertTitle>
-              <AlertDescription>
-                This preview changes only a local sample value. Confirm the summary below before continuing.
-              </AlertDescription>
-            </Alert>
             <p className='text-muted-foreground'>
               Change summary: {name} → {draft}
             </p>
@@ -3215,15 +4294,7 @@ function EditDemo() {
               <Button variant='outline' onClick={() => setEditPageOpen(false)}>
                 Cancel preview
               </Button>
-              <Button
-                onClick={() => {
-                  setName(draft)
-                  setSaved('Changes saved locally.')
-                  setEditPageOpen(false)
-                }}
-              >
-                Save revision
-              </Button>
+              <Button onClick={() => setFullPageConfirmOpen(true)}>Save revision</Button>
             </div>
           </section>
         ) : (
@@ -3231,6 +4302,41 @@ function EditDemo() {
             Preview full-page edit
           </Button>
         )}
+        {pageStatus && (
+          <p role='status' aria-live='polite' className='text-muted-foreground'>
+            {pageStatus}
+          </p>
+        )}
+        <AlertDialog open={fullPageConfirmOpen} onOpenChange={setFullPageConfirmOpen}>
+          <AlertDialogPortal>
+            <AlertDialogBackdrop />
+            <AlertDialogPopup>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Confirm full-page revision</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This changes how dispatchers identify the plan in review lists. This sample has no Undo; no live
+                  mission is modified.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <p>
+                Mission name: {name} → {draft}
+              </p>
+              <AlertDialogFooter>
+                <AlertDialogClose>Keep editing</AlertDialogClose>
+                <Button
+                  onClick={() => {
+                    setName(draft)
+                    setPageStatus('Mission name saved in this full-page example after confirmation.')
+                    setFullPageConfirmOpen(false)
+                    setEditPageOpen(false)
+                  }}
+                >
+                  Confirm and save
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogPopup>
+          </AlertDialogPortal>
+        </AlertDialog>
       </UseCaseSection>
     </DemoFrame>
   )
@@ -3240,8 +4346,14 @@ function ExportDemo() {
   const toastManager = useToastManager()
   const [format, setFormat] = useState('CSV')
   const [location, setLocation] = useState('Downloads')
-  const [progress, setProgress] = useState(0)
-  const [status, setStatus] = useState('Choose a format; no file will be generated.')
+  const [preparing, setPreparing] = useState(false)
+  const [progressError, setProgressError] = useState(false)
+  const [downloadStatus, setDownloadStatus] = useState('Choose the standard report action; no file will be generated.')
+  const [configurationStatus, setConfigurationStatus] = useState(
+    'Choose format and destination; no file will be generated.'
+  )
+  const [progressStatus, setProgressStatus] = useState('Export preparation has not started.')
+  const [completionStatus, setCompletionStatus] = useState('No success notification has been shown.')
   const [fileName, setFileName] = useState('mission-report')
   const [exportError, setExportError] = useState('')
   const [destinationError, setDestinationError] = useState(false)
@@ -3253,13 +4365,15 @@ function ExportDemo() {
       >
         <Button
           onClick={() =>
-            setStatus('mission-summary.csv is ready for the browser download flow. This demo does not create a file.')
+            setDownloadStatus(
+              'mission-summary.csv is shown as the default filename. This preview does not create or download a file.'
+            )
           }
         >
-          Download mission summary · CSV
+          Preview standard download
         </Button>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {status}
+          {downloadStatus}
         </p>
       </UseCaseSection>
       <UseCaseSection
@@ -3290,7 +4404,7 @@ function ExportDemo() {
                 onClick={() => {
                   setFormat(option)
                   setDestinationError(false)
-                  setStatus(`${option} selected for the local example.`)
+                  setConfigurationStatus(`${option} selected for the local example.`)
                 }}
               >
                 {option}
@@ -3310,6 +4424,7 @@ function ExportDemo() {
                 onClick={() => {
                   setLocation(option)
                   setDestinationError(false)
+                  setConfigurationStatus(`${option} selected as the local export destination.`)
                 }}
               >
                 {option}
@@ -3325,17 +4440,18 @@ function ExportDemo() {
                 ? setExportError('Enter a file name before exporting.')
                 : (setExportError(''),
                   setDestinationError(false),
-                  setProgress(0),
-                  setStatus(`${fileName}.${format.toLowerCase()} prepared for ${location}. No download occurred.`))
+                  setConfigurationStatus(
+                    `${fileName}.${format.toLowerCase()} prepared for ${location}. No download occurred.`
+                  ))
             }
           >
-            Export {format}
+            Prepare {format} preview
           </Button>
           <Button
             variant='outline'
             onClick={() => {
               setDestinationError(true)
-              setStatus('Export failed in the local sample.')
+              setConfigurationStatus('Export failed in the local sample.')
             }}
           >
             Show export error
@@ -3351,7 +4467,9 @@ function ExportDemo() {
                 variant='outline'
                 onClick={() => {
                   setDestinationError(false)
-                  setStatus('Export is ready to retry in the local sample.')
+                  setConfigurationStatus(
+                    `Retry completed in the sample: ${fileName}.${format.toLowerCase()} is prepared. No file was created.`
+                  )
                 }}
               >
                 Retry
@@ -3360,39 +4478,71 @@ function ExportDemo() {
           </Alert>
         )}
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {status}
+          {configurationStatus}
         </p>
       </UseCaseSection>
       <UseCaseSection
         title='Track preparation and recover from an export failure'
         scenario='Show progress only while preparation runs, then communicate completion or a recoverable destination error.'
       >
-        <div className='grid max-w-xl gap-2'>
-          <Progress value={progress}>
-            <ProgressLabel>Preparing export</ProgressLabel>
-            <ProgressValue />
-            <ProgressTrack>
-              <ProgressIndicator />
-            </ProgressTrack>
-          </Progress>
+        <div aria-busy={preparing} className='grid max-w-xl gap-2'>
+          {preparing && (
+            <Progress value={null}>
+              <ProgressLabel>Preparing export</ProgressLabel>
+              <ProgressTrack>
+                <ProgressIndicator />
+              </ProgressTrack>
+            </Progress>
+          )}
           <Button
             size='sm'
             variant='outline'
             onClick={() => {
-              const next = progress >= 100 ? 25 : Math.min(progress + 25, 100)
-              setProgress(next)
-              setStatus(
-                next === 100
-                  ? 'Export preparation complete. No file was created.'
-                  : `Preparing ${format} export · ${next}%.`
-              )
+              if (preparing) {
+                setPreparing(false)
+                setProgressStatus('Export preparation complete. No file was created.')
+              } else {
+                setProgressError(false)
+                setPreparing(true)
+                setProgressStatus(`Preparing ${format} export in this preview.`)
+              }
             }}
           >
-            Advance preparation
+            {preparing ? 'Finish preparation' : 'Start preparation'}
+          </Button>
+          <Button
+            size='sm'
+            variant='ghost'
+            disabled={preparing}
+            onClick={() => {
+              setProgressError(true)
+              setProgressStatus('A destination error is being previewed.')
+            }}
+          >
+            Preview destination error
           </Button>
         </div>
+        {progressError && (
+          <Alert variant='destructive'>
+            <AlertTitle>Export preparation failed</AlertTitle>
+            <AlertDescription>The sample destination is unavailable. Retry to preview recovery.</AlertDescription>
+            <AlertAction>
+              <Button
+                size='sm'
+                variant='outline'
+                onClick={() => {
+                  setProgressError(false)
+                  setPreparing(true)
+                  setProgressStatus('Retrying export preparation in this preview.')
+                }}
+              >
+                Retry preparation
+              </Button>
+            </AlertAction>
+          </Alert>
+        )}
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {status}
+          {progressStatus}
         </p>
       </UseCaseSection>
       <UseCaseSection
@@ -3409,7 +4559,7 @@ function ExportDemo() {
           size='sm'
           variant='outline'
           onClick={() => {
-            setStatus('Success notification preview shown; no file was downloaded.')
+            setCompletionStatus('Success notification preview shown; no file was downloaded.')
             toastManager.add({
               type: 'success',
               title: 'Export ready',
@@ -3420,7 +4570,7 @@ function ExportDemo() {
           Preview success notification
         </Button>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {status}
+          {completionStatus}
         </p>
       </UseCaseSection>
     </DemoFrame>
@@ -3441,10 +4591,14 @@ function ExportDemoWithProvider() {
 }
 
 function ApiKeyDemo() {
-  const [notice, setNotice] = useState('Name the key and choose its access before generating the sample.')
+  const [creationNotice, setCreationNotice] = useState(
+    'Name the key and choose its access before generating the sample.'
+  )
+  const [managementNotice, setManagementNotice] = useState('Existing key settings have not changed.')
   const [name, setName] = useState('Mission planning integration')
   const [restricted, setRestricted] = useState(false)
   const [generated, setGenerated] = useState(false)
+  const [oneTimeResultDismissed, setOneTimeResultDismissed] = useState(false)
   const [visible, setVisible] = useState(false)
   const [copied, setCopied] = useState(false)
   const [retrieval, setRetrieval] = useState<'product' | 'platform' | 'once'>('once')
@@ -3510,7 +4664,10 @@ function ApiKeyDemo() {
                 size='sm'
                 variant={retrieval === value ? 'secondary' : 'outline'}
                 aria-pressed={retrieval === value}
-                onClick={() => setRetrieval(value)}
+                onClick={() => {
+                  setRetrieval(value)
+                  setOneTimeResultDismissed(false)
+                }}
               >
                 {label}
               </Button>
@@ -3521,13 +4678,13 @@ function ApiKeyDemo() {
               ? 'The sample management page can display this key again later.'
               : retrieval === 'platform'
                 ? 'Provide a link to the separate platform where the key can be retrieved.'
-                : 'The sample key is available only in the generated result; copy it before leaving.'}
+                : 'The sample value is shown only in the result view. Its preview copy action does not use the clipboard.'}
           </FieldDescription>
           {retrieval === 'product' && (
             <Button
               size='sm'
               variant='outline'
-              onClick={() => setNotice('Key management page preview selected; no external page opened.')}
+              onClick={() => setCreationNotice('Key management page preview selected; no external page opened.')}
             >
               Preview key management
             </Button>
@@ -3536,7 +4693,9 @@ function ApiKeyDemo() {
             <Button
               size='sm'
               variant='outline'
-              onClick={() => setNotice('Separate-platform instructions preview selected; no external service opened.')}
+              onClick={() =>
+                setCreationNotice('Separate-platform instructions preview selected; no external service opened.')
+              }
             >
               Preview retrieval instructions
             </Button>
@@ -3550,10 +4709,10 @@ function ApiKeyDemo() {
           </div>
         )}
         <Alert variant='warning'>
-          <AlertTitle>{retrieval === 'once' ? 'Copy your key now' : 'Key retrieval details'}</AlertTitle>
+          <AlertTitle>{retrieval === 'once' ? 'One-time key preview' : 'Key retrieval details'}</AlertTitle>
           <AlertDescription>
             {retrieval === 'once'
-              ? 'This sample shows a one-time retrieval warning. A real product should explain safe storage and whether recovery is unavailable.'
+              ? 'This sample shows a one-time retrieval warning. It does not create a real credential; a product should explain safe storage and recovery.'
               : retrieval === 'product'
                 ? 'This sample says the key can be retrieved later in the product.'
                 : 'This sample says the key can be retrieved in a separate platform and should link to its instructions.'}
@@ -3563,14 +4722,15 @@ function ApiKeyDemo() {
           disabled={!name.trim()}
           onClick={() => {
             setGenerated(true)
+            setOneTimeResultDismissed(false)
             setVisible(false)
             setCopied(false)
-            setNotice('Sample key generated. Copy it now; this value is illustrative and not a credential.')
+            setCreationNotice('Sample key value generated for this preview. No credential was created.')
           }}
         >
           {generated ? 'Generate another sample key' : 'Generate key'}
         </Button>
-        {generated && (
+        {generated && !oneTimeResultDismissed && (
           <section className='space-y-3 rounded-(--radius) border border-border p-4'>
             <div>
               <h4 className='font-medium'>{name || 'API key'}</h4>
@@ -3589,10 +4749,10 @@ function ApiKeyDemo() {
                 size='sm'
                 onClick={() => {
                   setCopied(true)
-                  setNotice('Sample key copied state shown. Clipboard was not accessed.')
+                  setCreationNotice('Sample copy feedback shown. Clipboard was not accessed.')
                 }}
               >
-                {copied ? 'Copied' : 'Copy key'}
+                {copied ? 'Copy preview shown' : 'Preview copy feedback'}
               </Button>
             </div>
             <Menu>
@@ -3606,23 +4766,40 @@ function ApiKeyDemo() {
               <MenuPortal>
                 <MenuPositioner side='bottom' align='start' sideOffset={4}>
                   <MenuPopup>
-                    <MenuItem onClick={() => setNotice('Key rotation preview selected; no credential was changed.')}>
-                      Rotate key
+                    <MenuItem
+                      onClick={() => setCreationNotice('Key rotation preview selected; no credential was changed.')}
+                    >
+                      Preview key rotation
                     </MenuItem>
-                    <MenuItem onClick={() => setNotice('Revoke preview selected; no credential was revoked.')}>
-                      Revoke key
+                    <MenuItem onClick={() => setCreationNotice('Revoke preview selected; no credential was revoked.')}>
+                      Preview key revocation
                     </MenuItem>
                   </MenuPopup>
                 </MenuPositioner>
               </MenuPortal>
             </Menu>
             <p className='text-muted-foreground'>
-              Generated view: reveal/hide and copy are local illustrations only; no real key or clipboard access.
+              Generated view: reveal, hide, and copy feedback are local illustrations only; no credential or clipboard
+              access.
             </p>
+            {retrieval === 'once' && (
+              <Button size='sm' variant='ghost' onClick={() => setOneTimeResultDismissed(true)}>
+                Leave key result
+              </Button>
+            )}
           </section>
         )}
+        {generated && oneTimeResultDismissed && (
+          <Alert variant='warning'>
+            <AlertTitle>One-time result closed</AlertTitle>
+            <AlertDescription>
+              This example hides the value after you leave. If it were a real one-time key, recovery would require a new
+              key and any affected integration would need updating.
+            </AlertDescription>
+          </Alert>
+        )}
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {notice}
+          {creationNotice}
         </p>
       </UseCaseSection>
       <UseCaseSection
@@ -3648,11 +4825,13 @@ function ApiKeyDemo() {
               <MenuPositioner side='bottom' align='end' sideOffset={4}>
                 <MenuPopup>
                   <MenuItem onClick={() => setEditingExisting(true)}>Edit permissions</MenuItem>
-                  <MenuItem onClick={() => setNotice('Rotation preview selected; no credential was changed.')}>
-                    Rotate key
+                  <MenuItem
+                    onClick={() => setManagementNotice('Rotation preview selected; no credential was changed.')}
+                  >
+                    Preview rotation
                   </MenuItem>
-                  <MenuItem onClick={() => setNotice('Revoke preview selected; no credential was revoked.')}>
-                    Revoke
+                  <MenuItem onClick={() => setManagementNotice('Revoke preview selected; no credential was revoked.')}>
+                    Preview revocation
                   </MenuItem>
                 </MenuPopup>
               </MenuPositioner>
@@ -3661,7 +4840,7 @@ function ApiKeyDemo() {
         </div>
         {editingExisting && (
           <div className='grid max-w-xl gap-3 border border-border p-4'>
-            <h5 className='text-sm font-medium text-(--foreground)'>Edit key settings</h5>
+            <h5 className='text-base font-medium text-(--foreground)'>Edit key settings</h5>
             <FieldRoot>
               <FieldLabel>Key name</FieldLabel>
               <Input value={existingName} onChange={(event) => setExistingName(event.target.value)} />
@@ -3684,7 +4863,7 @@ function ApiKeyDemo() {
               <Button
                 size='sm'
                 onClick={() => {
-                  setNotice('Key settings saved in the local example; key contents are unchanged.')
+                  setManagementNotice('Key settings saved in the local example; key contents are unchanged.')
                   setEditingExisting(false)
                 }}
               >
@@ -3694,7 +4873,7 @@ function ApiKeyDemo() {
           </div>
         )}
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {notice}
+          {managementNotice}
         </p>
       </UseCaseSection>
       <p className='text-muted-foreground'>Local illustrations only; no credential is created, stored, or rotated.</p>
@@ -3708,6 +4887,10 @@ function ImportDemo() {
   const [source, setSource] = useState<'file' | 'url'>('file')
   const [url, setUrl] = useState('')
   const [status, setStatus] = useState('')
+  const [singleFileResult, setSingleFileResult] = useState('')
+  const [metadataResult, setMetadataResult] = useState('')
+  const [collectionName, setCollectionName] = useState('Coastal survey imports')
+  const [importNote, setImportNote] = useState('')
   const [singleFileOpen, setSingleFileOpen] = useState(false)
   const [singleFileSelected, setSingleFileSelected] = useState(false)
   const [singleFileSource, setSingleFileSource] = useState<'file' | 'url'>('file')
@@ -3908,10 +5091,10 @@ function ImportDemo() {
                 <Button
                   disabled={!singleFileSelected}
                   onClick={() => {
-                    setStatus(
+                    setSingleFileResult(
                       singleFileSource === 'file'
-                        ? 'One mission file selected for import. No file was uploaded.'
-                        : 'URL accepted for this sample. No data was fetched.'
+                        ? 'Import step completed in this local example. No file was uploaded.'
+                        : 'Import step completed in this local example. No data was fetched.'
                     )
                     setSingleFileOpen(false)
                   }}
@@ -3922,6 +5105,11 @@ function ImportDemo() {
             </DialogPopup>
           </DialogPortal>
         </Dialog>
+        {singleFileResult && (
+          <p role='status' aria-live='polite' className='text-muted-foreground'>
+            {singleFileResult}
+          </p>
+        )}
       </UseCaseSection>
       <UseCaseSection
         title='Add metadata in a side panel after file selection'
@@ -3939,109 +5127,92 @@ function ImportDemo() {
                   <p className='text-muted-foreground'>Selected source: north-coast-missions.geojson · local sample</p>
                   <FieldRoot>
                     <FieldLabel>Collection name</FieldLabel>
-                    <Input defaultValue='Coastal survey imports' />
+                    <Input value={collectionName} onChange={(event) => setCollectionName(event.target.value)} />
                   </FieldRoot>
                   <FieldRoot>
                     <FieldLabel>Import note</FieldLabel>
-                    <Input placeholder='Optional note for reviewers' />
+                    <Input
+                      value={importNote}
+                      onChange={(event) => setImportNote(event.target.value)}
+                      placeholder='Optional note for reviewers'
+                    />
                   </FieldRoot>
                   <div className='flex flex-wrap gap-2'>
                     <DrawerClose>Cancel</DrawerClose>
-                    <Button onClick={() => setMetadataPanelOpen(false)}>Continue import</Button>
+                    <Button
+                      onClick={() => {
+                        setMetadataPanelOpen(false)
+                        setMetadataResult(
+                          `Import details ready for review in “${collectionName || 'Untitled collection'}”. ${importNote.trim() ? 'Reviewer note included.' : 'No reviewer note added.'} No data was imported.`
+                        )
+                      }}
+                    >
+                      Review import
+                    </Button>
                   </div>
                 </DrawerContent>
               </DrawerPopup>
             </DrawerViewport>
           </DrawerPortal>
         </Drawer>
+        {metadataResult && (
+          <p role='status' aria-live='polite' className='text-muted-foreground'>
+            {metadataResult}
+          </p>
+        )}
       </UseCaseSection>
     </DemoFrame>
   )
 }
 
 function OrderSummaryDemo() {
-  const [seats, setSeats] = useState(2)
-  const [reviewReady, setReviewReady] = useState(false)
-  const subtotal = 120 + seats * 25
-  const serviceFee = 15
-  const total = subtotal + serviceFee
+  const [showCapabilities, setShowCapabilities] = useState(false)
+  const [detailsPreviewed, setDetailsPreviewed] = useState(false)
 
   return (
     <DemoFrame>
       <UseCaseSection
-        title='Review what is included before confirmation'
-        scenario='Summarize selected items, quantities, charges, and current review state so the user can check the order before continuing.'
+        title='Review a platform service summary'
+        scenario='Summarize service scope and operating state so a team can decide whether it needs to inspect more detail.'
       >
         <div className='space-y-3'>
           <dl className='grid grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-3'>
-            <dt>Mission planning package × 1</dt>
-            <dd className='text-right'>$120.00</dd>
-            <dt>Additional workspace seats · $25.00 each</dt>
-            <dd className='flex items-center gap-2 text-right'>
-              <Button
-                size='icon-xs'
-                variant='outline'
-                aria-label='Remove one seat'
-                disabled={seats <= 1}
-                onClick={() => setSeats((value) => Math.max(1, value - 1))}
-              >
-                −
-              </Button>
-              <span>{seats} × $25.00</span>
-              <Button
-                size='icon-xs'
-                variant='outline'
-                aria-label='Add one seat'
-                onClick={() => setSeats((value) => value + 1)}
-              >
-                +
-              </Button>
-              <span className='sr-only'>Line total ${(seats * 25).toFixed(2)}</span>
+            <dt>Workspace</dt>
+            <dd className='text-right'>North Coast Operations</dd>
+            <dt>Mission planning</dt>
+            <dd className='text-right'>
+              <Badge count='Available' status='success' />
             </dd>
-            <dt>Subtotal</dt>
-            <dd className='text-right'>${subtotal.toFixed(2)}</dd>
-            <dt>Service fee</dt>
-            <dd className='text-right'>${serviceFee.toFixed(2)}</dd>
+            <dt>Telemetry</dt>
+            <dd className='text-right'>
+              <Badge count='Connected' status='success' />
+            </dd>
+            <dt>Storage</dt>
+            <dd className='text-right'>82% used</dd>
           </dl>
-          <div className='flex items-center justify-between gap-3 border-t border-border pt-3 font-medium'>
-            <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+          {showCapabilities && (
+            <ul className='list-disc space-y-1 border-t border-border pt-3 ps-5 text-muted-foreground'>
+              <li>Plan and schedule survey missions</li>
+              <li>Review live aircraft telemetry</li>
+              <li>Share mission records with the operations team</li>
+            </ul>
+          )}
+          <div className='flex flex-wrap gap-2'>
+            <Button variant='outline' onClick={() => setShowCapabilities((value) => !value)}>
+              {showCapabilities ? 'Hide capabilities' : 'Show capabilities'}
+            </Button>
+            <Button onClick={() => setDetailsPreviewed(true)}>Preview service details</Button>
           </div>
-          <div className='flex flex-wrap items-center justify-between gap-3'>
-            <span>Order status</span>
-            <Badge count='Review' status='warning' />
-          </div>
-          <Button onClick={() => setReviewReady(true)}>Continue to review</Button>
-          {reviewReady && (
+          {detailsPreviewed && (
             <Alert variant='info'>
-              <AlertTitle>Ready for review</AlertTitle>
-              <AlertDescription>
-                The displayed total is the current sample selection. No order was submitted.
-              </AlertDescription>
+              <AlertTitle>Service details previewed in this sample</AlertTitle>
+              <AlertDescription>No external service page was opened or changed.</AlertDescription>
             </Alert>
           )}
         </div>
         <p className='text-muted-foreground'>
-          Sample prices and fees are illustrative; no checkout or order was submitted.
-        </p>
-      </UseCaseSection>
-      <UseCaseSection
-        title='Summarize a service and its current status'
-        scenario='When the summary describes a platform or service, make its main function and current state scannable before the user opens more detail.'
-      >
-        <div className='space-y-2 border-y border-border py-3'>
-          <div className='flex flex-wrap items-center justify-between gap-3'>
-            <span className='font-medium'>Mission archive service</span>
-            <Badge count='Sample status' status='outline' />
-          </div>
-          <p className='text-muted-foreground'>Stores named sample plans, saved filters, and export history.</p>
-          <Button size='sm' variant='outline'>
-            View service details
-          </Button>
-        </div>
-        <p className='text-muted-foreground'>
-          Catalog-only source: service-summary details are a local illustration based on the accessible Carbon catalog
-          description.
+          Local interpretation: this sample summarizes service scope and status. Previewing details only reveals this
+          local confirmation; it does not open or change a service.
         </p>
       </UseCaseSection>
     </DemoFrame>
@@ -4058,7 +5229,11 @@ function RemoveDemo() {
   const [mediumRemoved, setMediumRemoved] = useState(false)
   const [lowRemoved, setLowRemoved] = useState(false)
   const [confirmationName, setConfirmationName] = useState('')
-  const [outcome, setOutcome] = useState('Choose an example to see its local result.')
+  const [highDeleteResult, setHighDeleteResult] = useState('No deletion has been confirmed.')
+  const [mediumDeleteResult, setMediumDeleteResult] = useState('No saved filter has been deleted.')
+  const [lowDraftResult, setLowDraftResult] = useState('The draft remains in the sample list.')
+  const [mediumRemoveResult, setMediumRemoveResult] = useState('The item remains in the team collection.')
+  const [lowRemoveResult, setLowRemoveResult] = useState('The saved item remains in this sample view.')
   const resourceName = 'North coast survey'
 
   return (
@@ -4070,16 +5245,9 @@ function RemoveDemo() {
         <div className='flex flex-wrap items-center justify-between gap-3 border-y border-border py-3'>
           <span>{resourceName} · shared route</span>
           {highDeleted ? (
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() => {
-                setHighDeleted(false)
-                setOutcome('Sample resource restored.')
-              }}
-            >
-              Restore sample
-            </Button>
+            <span className='text-muted-foreground'>
+              Deleted in this sample · reload the page to restart the example.
+            </span>
           ) : (
             <AlertDialog open={highImpactOpen} onOpenChange={setHighImpactOpen}>
               <AlertDialogTrigger
@@ -4109,7 +5277,7 @@ function RemoveDemo() {
                       variant='destructive'
                       disabled={confirmationName.trim() !== resourceName}
                       onClick={() => {
-                        setOutcome(`${resourceName} deleted in this local example.`)
+                        setHighDeleteResult(`${resourceName} deleted in this local example.`)
                         setHighDeleted(true)
                         setHighImpactOpen(false)
                         setConfirmationName('')
@@ -4124,7 +5292,7 @@ function RemoveDemo() {
           )}
         </div>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {outcome}
+          {highDeleteResult}
         </p>
       </UseCaseSection>
 
@@ -4135,16 +5303,9 @@ function RemoveDemo() {
         <div className='flex flex-wrap items-center justify-between gap-3'>
           <span>Saved filter · “Coastal survey”</span>
           {mediumDeleted ? (
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() => {
-                setMediumDeleted(false)
-                setOutcome('Saved filter restored in the local example.')
-              }}
-            >
-              Restore saved filter
-            </Button>
+            <span className='text-muted-foreground'>
+              Deleted in this sample · reload the page to restart the example.
+            </span>
           ) : (
             <AlertDialog open={mediumDeleteOpen} onOpenChange={setMediumDeleteOpen}>
               <AlertDialogTrigger render={<Button variant='outline'>Delete saved filter</Button>} />
@@ -4162,7 +5323,9 @@ function RemoveDemo() {
                     <Button
                       variant='destructive'
                       onClick={() => {
-                        setOutcome('Saved filter deleted in this local example; mission records remain unchanged.')
+                        setMediumDeleteResult(
+                          'Saved filter deleted in this local example; mission records remain unchanged.'
+                        )
                         setMediumDeleted(true)
                         setMediumDeleteOpen(false)
                       }}
@@ -4176,23 +5339,23 @@ function RemoveDemo() {
           )}
         </div>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {outcome}
+          {mediumDeleteResult}
         </p>
       </UseCaseSection>
 
       <UseCaseSection
-        title='Low-impact deletion · keep the list moving'
-        scenario='For a reversible or low-impact item, remove it directly and offer Undo instead of interrupting with a confirmation.'
+        title='Low-impact deletion · undo a draft deletion'
+        scenario='When deleting a low-risk draft is easy to reverse or recreate, skip the confirmation and keep an immediate Undo action beside the result.'
       >
         <div className='flex flex-wrap items-center justify-between gap-3'>
           {lowDeleted ? (
             <>
-              <span>Draft removed from the sample list.</span>
+              <span>Draft deleted from the sample list.</span>
               <Button
                 variant='outline'
                 onClick={() => {
                   setLowDeleted(false)
-                  setOutcome('Draft restored to the local sample list.')
+                  setLowDraftResult('Draft restored to the sample list.')
                 }}
               >
                 Undo
@@ -4205,16 +5368,16 @@ function RemoveDemo() {
                 variant='outline'
                 onClick={() => {
                   setLowDeleted(true)
-                  setOutcome('Draft removed from the sample list; Undo is available.')
+                  setLowDraftResult('Draft deleted from the sample list; Undo is available.')
                 }}
               >
-                Remove draft
+                Delete draft
               </Button>
             </>
           )}
         </div>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {outcome}
+          {lowDraftResult}
         </p>
       </UseCaseSection>
 
@@ -4225,16 +5388,9 @@ function RemoveDemo() {
         <div className='flex flex-wrap items-center justify-between gap-3'>
           <span>{resourceName} · team collection</span>
           {mediumRemoved ? (
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() => {
-                setMediumRemoved(false)
-                setOutcome('Restored to the local team collection.')
-              }}
-            >
-              Restore to team
-            </Button>
+            <span className='text-muted-foreground'>
+              Removed from the team collection · reload to restart this sample.
+            </span>
           ) : (
             <AlertDialog open={mediumRemoveOpen} onOpenChange={setMediumRemoveOpen}>
               <AlertDialogTrigger render={<Button variant='outline'>Remove from team</Button>} />
@@ -4244,7 +5400,8 @@ function RemoveDemo() {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Remove from the team collection?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      The item will leave this collection. The owner&apos;s original resource remains available.
+                      The item will leave this collection, but the owner&apos;s original resource remains available.
+                      This removal cannot be undone from the sample view.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -4252,7 +5409,7 @@ function RemoveDemo() {
                     <Button
                       variant='destructive'
                       onClick={() => {
-                        setOutcome('Removed from the sample collection; the owner’s resource remains.')
+                        setMediumRemoveResult('Removed from the sample collection; the owner’s resource remains.')
                         setMediumRemoved(true)
                         setMediumRemoveOpen(false)
                       }}
@@ -4266,7 +5423,7 @@ function RemoveDemo() {
           )}
         </div>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
-          {outcome}
+          {mediumRemoveResult}
         </p>
       </UseCaseSection>
 
@@ -4282,7 +5439,7 @@ function RemoveDemo() {
                 variant='ghost'
                 onClick={() => {
                   setLowRemoved(false)
-                  setOutcome('Saved item restored to this sample view.')
+                  setLowRemoveResult('Saved item restored to this sample view.')
                 }}
               >
                 Undo
@@ -4293,14 +5450,14 @@ function RemoveDemo() {
               variant='outline'
               onClick={() => {
                 setLowRemoved(true)
-                setOutcome('Removed from this sample view; the source item is unchanged.')
+                setLowRemoveResult('Removed from this sample view; the source item is unchanged.')
               }}
             >
               Remove saved item
             </Button>
           )}
           <span role='status' aria-live='polite' className='text-muted-foreground'>
-            {outcome}
+            {lowRemoveResult}
           </span>
         </div>
       </UseCaseSection>
@@ -4309,7 +5466,7 @@ function RemoveDemo() {
   )
 }
 
-export function PatternDemo({ patternId }: { patternId: PatternId }) {
+function renderPatternDemo(patternId: PatternId) {
   switch (patternId) {
     case 'common-actions':
       return <CommonActionsDemo />
@@ -4364,4 +5521,12 @@ export function PatternDemo({ patternId }: { patternId: PatternId }) {
     case 'community-remove':
       return <RemoveDemo />
   }
+}
+
+export function PatternDemo({ patternId }: { patternId: PatternId }) {
+  return (
+    <PatternDemoContext.Provider value={{ patternId, page: PATTERN_PAGE_CONTENT[patternId] }}>
+      {renderPatternDemo(patternId)}
+    </PatternDemoContext.Provider>
+  )
 }

@@ -64,7 +64,7 @@ export const demo: DemoMeta = {
             <AccordionItem key={item.q}>
               <AccordionTrigger>{item.q}</AccordionTrigger>
               <AccordionContent>
-                <div className="pb-4">{item.a}</div>
+                <div className='pb-4'>{item.a}</div>
               </AccordionContent>
             </AccordionItem>
           ))}
@@ -96,7 +96,7 @@ export const demo: DemoMeta = {
             <AccordionItem key={item.q}>
               <AccordionTrigger>{item.q}</AccordionTrigger>
               <AccordionContent>
-                <div className="pb-4">{item.a}</div>
+                <div className='pb-4'>{item.a}</div>
               </AccordionContent>
             </AccordionItem>
           ))}
@@ -111,7 +111,7 @@ export const demo: DemoMeta = {
             <AccordionItem key={item.q} disabled={index === 1}>
               <AccordionTrigger>{item.q}</AccordionTrigger>
               <AccordionContent>
-                <div className="pb-4">{item.a}</div>
+                <div className='pb-4'>{item.a}</div>
               </AccordionContent>
             </AccordionItem>
           ))}

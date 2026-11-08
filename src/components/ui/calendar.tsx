@@ -27,8 +27,8 @@ import {
 } from '@/components/ui/menu'
 
 const calendarClassNames: Partial<ClassNames> = {
-  [UI.Months]: 'flex flex-col gap-4 sm:flex-row',
-  [UI.Month]: 'relative space-y-4',
+  [UI.Months]: 'flex w-max flex-col gap-4 sm:flex-row',
+  [UI.Month]: 'relative shrink-0 space-y-4',
   [UI.MonthCaption]: 'flex h-9 items-center justify-center gap-1',
   [UI.CaptionLabel]: 'text-sm font-medium',
   [UI.Nav]: 'flex items-center justify-between',
@@ -36,7 +36,7 @@ const calendarClassNames: Partial<ClassNames> = {
   [UI.NextMonthButton]: 'absolute end-0 top-0 size-9 p-0',
   [UI.MonthGrid]: 'w-full border-collapse',
   [UI.Weekdays]: 'flex',
-  [UI.Weekday]: 'w-9 rounded-md text-center text-xs font-normal text-muted-foreground',
+  [UI.Weekday]: 'w-9 rounded-(--radius) text-center text-xs font-normal text-muted-foreground',
   [UI.Weeks]: 'mt-2 flex flex-col gap-1',
   [UI.Week]: 'flex w-full',
   [UI.Day]: 'relative size-9 p-0 text-center text-sm focus-within:z-10',

@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/popover.d.ts`](../../../../../dist-lib/components/ui/popover.d.ts)
 - Showcase demo id: `popover`
 - Closest demo: [`src/demos/popover.demo.tsx`](../../../../../src/demos/popover.demo.tsx)
-- Official guidance: [Carbon Design System Popover Usage](https://carbondesignsystem.com/components/popover/usage/)
 
 ## Usage
 

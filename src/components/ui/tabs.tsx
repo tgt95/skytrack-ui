@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Tabs as BaseTabs } from '@base-ui/react/tabs'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 
 type TabsRootProps = React.ComponentProps<typeof BaseTabs.Root>
 
@@ -91,11 +91,7 @@ function TabsList({
           >
             {children}
             {showIndicator && (
-              <TabsIndicator
-                variant={indicatorVariant}
-                data-side={indicatorSide}
-                className={indicatorClassName}
-              />
+              <TabsIndicator variant={indicatorVariant} data-side={indicatorSide} className={indicatorClassName} />
             )}
           </BaseTabs.List>
         </TabsIndicatorSideContext.Provider>

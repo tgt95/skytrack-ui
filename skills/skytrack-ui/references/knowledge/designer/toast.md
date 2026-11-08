@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/toast.d.ts`](../../../../../dist-lib/components/ui/toast.d.ts)
 - Showcase demo id: `toast`
 - Closest demo: [`src/demos/toast.demo.tsx`](../../../../../src/demos/toast.demo.tsx)
-- Official guidance: [Carbon Design System Toast Notification Usage](https://carbondesignsystem.com/components/notification/usage/)
 
 ## Usage
 

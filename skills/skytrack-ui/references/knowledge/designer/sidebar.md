@@ -8,7 +8,6 @@
 - Public type declaration: Target `./dist-lib/components/ui/sidebar.d.ts` declared in [`package.json`](../../../../../package.json) is absent; exported types verified in [`src/components/ui/sidebar.tsx`](../../../../../src/components/ui/sidebar.tsx).
 - Showcase demo id: `sidebar`
 - Closest demo: [`src/demos/sidebar.demo.tsx`](../../../../../src/demos/sidebar.demo.tsx)
-- Official guidance: [Carbon Design System UI Shell Left Panel](https://carbondesignsystem.com/components/UI-shell-left-panel/usage/)
 
 ## Usage
 

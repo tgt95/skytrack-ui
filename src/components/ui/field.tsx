@@ -9,8 +9,8 @@ import type {
   FieldRootState
 } from '@base-ui/react/field'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
-import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/components/ui/control-sizes'
+import { focusRing } from '@/lib/focus-ring'
+import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/lib/control-sizes'
 
 function mergeFieldClassName<State>(
   baseClassNames: string[],

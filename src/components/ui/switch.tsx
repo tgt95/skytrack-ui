@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Switch as BaseSwitch } from '@base-ui/react/switch'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 
 export const switchVariants = cva(
   cn(

@@ -89,7 +89,9 @@ function CodeBlockActions({ className, ...props }: React.ComponentProps<'div'>) 
       data-slot='code-block-actions'
       data-floating={floatingActions ? 'true' : undefined}
       className={cn(
-        floatingActions ? 'absolute right-2 top-2 z-10 flex items-center gap-1' : 'ml-auto flex shrink-0 items-center gap-1',
+        floatingActions
+          ? 'absolute right-2 top-2 z-10 flex items-center gap-1'
+          : 'ml-auto flex shrink-0 items-center gap-1',
         className
       )}
       {...props}
@@ -119,9 +121,12 @@ function CodeBlockCopyButton({
   const resetTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const statusLabel = copyState === 'copied' ? copiedLabel : copyState === 'error' ? copyFailedLabel : copyLabel
 
-  React.useEffect(() => () => {
-    if (resetTimer.current) clearTimeout(resetTimer.current)
-  }, [])
+  React.useEffect(
+    () => () => {
+      if (resetTimer.current) clearTimeout(resetTimer.current)
+    },
+    []
+  )
 
   const handleClick: NonNullable<ButtonProps['onClick']> = async (event) => {
     onClick?.(event)
@@ -275,7 +280,10 @@ export function useHighlightedCode(code: string, language: string): React.ReactN
     let active = true
     setLines(plainLines)
 
-    if (!language || language === 'text' || language === 'txt') return () => { active = false }
+    if (!language || language === 'text' || language === 'txt')
+      return () => {
+        active = false
+      }
 
     void import('shiki')
       .then(({ codeToTokensWithThemes }) =>

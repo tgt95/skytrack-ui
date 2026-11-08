@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Popover as BasePopover } from '@base-ui/react/popover'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
+import { PopupArrowGlyph } from '@/lib/popup-arrow'
 
 /** Native Base UI props for `PopoverTrigger`; styling comes from the call site. */
 export type PopoverTriggerProps = React.ComponentProps<typeof BasePopover.Trigger>
@@ -71,27 +72,6 @@ function PopoverPopup({ className, ...props }: React.ComponentProps<typeof BaseP
   )
 }
 
-function PopoverArrowGlyph(props: React.ComponentProps<'svg'>) {
-  return (
-    <svg width='20' height='10' viewBox='0 0 20 10' fill='none' aria-hidden='true' focusable='false' {...props}>
-      {/* body: container color, covers the popup border segment behind it (arrow paints above
-          the popup's own border since it is a positioned child with z-10) */}
-      <path d='M1 9 L10 1 L19 9 Z' fill='currentColor' stroke='none' className='text-popover' />
-      {/* outer slanted edges only: border color, no base line; round joins keep the apex from
-          spiking into an asymmetric miter tip at 1x */}
-      <path
-        d='M1 9 L10 1 L19 9'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth={1}
-        strokeLinejoin='round'
-        strokeLinecap='round'
-        className='text-border'
-      />
-    </svg>
-  )
-}
-
 function PopoverArrow({ className, children, ...props }: React.ComponentProps<typeof BasePopover.Arrow>) {
   return (
     <BasePopover.Arrow
@@ -106,7 +86,7 @@ function PopoverArrow({ className, children, ...props }: React.ComponentProps<ty
       )}
       {...props}
     >
-      {children ?? <PopoverArrowGlyph />}
+      {children ?? <PopupArrowGlyph />}
     </BasePopover.Arrow>
   )
 }

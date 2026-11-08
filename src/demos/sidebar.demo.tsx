@@ -49,7 +49,7 @@ const WORKSPACE_ITEMS = [
   { label: 'Team', icon: UsersThreeIcon }
 ] as const
 
-function WorkspaceSidebar ({ variant = 'sidebar' }: { variant?: 'sidebar' | 'inset' }) {
+function WorkspaceSidebar({ variant = 'sidebar' }: { variant?: 'sidebar' | 'inset' }) {
   return (
     <Sidebar
       variant={variant}
@@ -134,7 +134,12 @@ function WorkspaceSidebar ({ variant = 'sidebar' }: { variant?: 'sidebar' | 'ins
                   <AvatarFallback>TT</AvatarFallback>
                 </Avatar>
                 <span className='truncate'>Tuan Trinh</span>
-                <Badge variant='outline' count='Pro' className='ml-auto group-data-[icon-collapsed=true]/sidebar:hidden' size='sm' />
+                <Badge
+                  variant='outline'
+                  count='Pro'
+                  className='ml-auto group-data-[icon-collapsed=true]/sidebar:hidden'
+                  size='sm'
+                />
                 <CaretUpDownIcon className='group-data-[icon-collapsed=true]/sidebar:hidden' aria-hidden='true' />
               </MenuTrigger>
               <MenuPortal>
@@ -160,7 +165,7 @@ function WorkspaceSidebar ({ variant = 'sidebar' }: { variant?: 'sidebar' | 'ins
   )
 }
 
-function SidebarExample () {
+function SidebarExample() {
   return (
     <SidebarProvider className='relative h-112 min-h-0 w-full overflow-hidden border border-border'>
       <WorkspaceSidebar />
@@ -182,7 +187,7 @@ function SidebarExample () {
   )
 }
 
-function ControlledExample () {
+function ControlledExample() {
   return (
     <SidebarProvider defaultOpen={false} className='relative h-56 min-h-0 w-full overflow-hidden'>
       <Sidebar collapsible='icon' side='right' gapClassName='!h-full !min-h-0' containerClassName='!absolute !h-full'>
@@ -215,7 +220,7 @@ function ControlledExample () {
   )
 }
 
-function InsetExample () {
+function InsetExample() {
   return (
     <SidebarProvider className='relative h-112 min-h-0 w-full overflow-hidden'>
       <WorkspaceSidebar variant='inset' />

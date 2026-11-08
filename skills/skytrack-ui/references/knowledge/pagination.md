@@ -15,7 +15,7 @@ The Pagination component provides accessible page navigation controls for large 
 
 It builds on SkyTrack `buttonVariants` to deliver consistent focus rings, active indicator styling, and disabled states.
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `PAGE NAVIGATION`
 
 ```tsx
 import {
@@ -62,7 +62,7 @@ export function PaginationExample() {
 
 Use Pagination when users need discrete navigation through a bounded result set and a stable way to revisit a page. Pair it with the current range and total when those values are available. For a continuous or frequently appended feed, choose a loading and position model that preserves context; Pagination itself does not load or virtualize records. Avoid pagination when all items fit comfortably in the current view.
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `PAGE NAVIGATION`
 
 ## Anatomy
 
@@ -76,9 +76,11 @@ Render in strict nested list order:
 6. `PaginationEllipsis`: Truncation indicator with `DotsThreeIcon` (`data-slot='pagination-ellipsis'`).
 7. `PaginationNext`: Anchor button navigating to next page with `CaretRightIcon` (`data-slot='pagination-next'`).
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `PAGE NAVIGATION`
 
 ## Variants & states
+
+The showcase demonstrates both page-number navigation and a table footer with rows-per-page selection, direct page selection, item range, and previous/next controls. The table footer composes `DataTable`'s `renderPagination` slot with the public `Pagination` and `Select` components.
 
 Supported props and states:
 
@@ -88,7 +90,7 @@ Supported props and states:
 - Sizes: Supports `size='default'`, `'sm'`, `'lg'`, or `'icon'`.
 - Custom Text: `PaginationPrevious` and `PaginationNext` support custom labels via `text` prop (e.g. `text='Newer'`).
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `TABLE PAGINATION`
 
 ## Accessibility
 
@@ -98,7 +100,7 @@ Supported props and states:
 - Previous and next buttons provide fallback `aria-label='Go to previous page'` and `'Go to next page'` when text is hidden on small screens.
 - `PaginationEllipsis` includes visually hidden "More pages" text for screen readers.
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `TABLE PAGINATION`
 
 ## API & examples
 
@@ -114,7 +116,7 @@ Import named parts from `skytrack-ui/pagination` (or `@/components/ui/pagination
 
 Tokens: Uses `--border`, `--foreground`, `--muted-foreground`, and `--radius`.
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `PAGE NAVIGATION`
 
 ## Evidence and limits
 

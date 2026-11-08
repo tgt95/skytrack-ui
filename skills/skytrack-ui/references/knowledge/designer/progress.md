@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/progress.d.ts`](../../../../../dist-lib/components/ui/progress.d.ts)
 - Showcase demo id: `progress`
 - Closest demo: [`src/demos/progress.demo.tsx`](../../../../../src/demos/progress.demo.tsx)
-- Official guidance: [Carbon Design System Progress Bar Usage](https://carbondesignsystem.com/components/progress-bar/usage/)
 
 ## Usage
 

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Avatar as BaseAvatar } from '@base-ui/react/avatar'
 import { cn } from '@/lib/utils'
-import type { ControlSize } from '@/components/ui/control-sizes'
+import type { ControlSize } from '@/lib/control-sizes'
 
 const AVATAR_SIZE_CLASSES: Record<ControlSize, string> = {
   xs: 'size-6',

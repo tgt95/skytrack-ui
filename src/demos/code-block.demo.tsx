@@ -93,7 +93,7 @@ export const demo: DemoMeta = {
           <CodeBlockContent>
             <CodeBlockLine variant='removed'>status = &quot;draft&quot;</CodeBlockLine>
             <CodeBlockLine variant='added'>status = &quot;planned&quot;</CodeBlockLine>
-            <CodeBlockLine variant='highlighted'>  notify dispatch team</CodeBlockLine>
+            <CodeBlockLine variant='highlighted'> notify dispatch team</CodeBlockLine>
           </CodeBlockContent>
         </CodeBlock>
       )

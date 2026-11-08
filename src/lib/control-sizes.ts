@@ -1,4 +1,4 @@
-/** Shared heights and typography for controls aligned with standard Button sizes. */
+/** Shared heights and typography for controls aligned with the standard control sizes. */
 export type ControlSize = 'xs' | 'sm' | 'default' | 'lg'
 
 export const CONTROL_SIZE_CLASSES: Record<ControlSize, string> = {

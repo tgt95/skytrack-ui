@@ -14,11 +14,14 @@ const markdownFiles = import.meta.glob<string>('../../../skills/skytrack-ui/refe
   eager: true
 })
 
-const designerMarkdownFiles = import.meta.glob<string>('../../../skills/skytrack-ui/references/knowledge/designer/*.md', {
-  query: '?raw',
-  import: 'default',
-  eager: true
-})
+const designerMarkdownFiles = import.meta.glob<string>(
+  '../../../skills/skytrack-ui/references/knowledge/designer/*.md',
+  {
+    query: '?raw',
+    import: 'default',
+    eager: true
+  }
+)
 
 export const guidelinesBySlug: Record<string, ParsedGuideline> = {}
 

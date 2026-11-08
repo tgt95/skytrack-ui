@@ -72,6 +72,12 @@ check(
   `no @/ specifier in ${emitted.length} emitted JS/declaration files`,
   `@/ alias left in: ${aliased.map((f) => path.relative(root, f)).join(', ')}`
 )
+const testDeclarations = emitted.filter((file) => /\.(test|spec)\.d\.ts$/.test(file))
+check(
+  testDeclarations.length === 0,
+  'no test/spec declarations in dist-lib',
+  `test/spec declarations emitted: ${testDeclarations.map((f) => path.relative(root, f)).join(', ')}`
+)
 
 console.log('\n[verify] 3. package metadata')
 const target = (value) => (typeof value === 'string' ? value : (value?.import ?? value?.default))

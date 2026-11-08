@@ -123,8 +123,8 @@ export function ChartBarTypePreview() {
         <CartesianGrid vertical={false} stroke='var(--border)' />
         <XAxis dataKey='category' tickLine={false} axisLine={false} tickMargin={8} />
         <YAxis width={32} tickLine={false} axisLine={false} />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-        <Bar dataKey='requests' fill='var(--color-requests)' />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent className='rounded-(--radius)' />} />
+        <Bar dataKey='requests' fill='var(--color-requests)' radius={0} />
       </BarChart>
     </ChartContainer>
   )
@@ -137,8 +137,8 @@ export function ChartHorizontalBarTypePreview() {
         <CartesianGrid horizontal={false} stroke='var(--border)' />
         <XAxis type='number' tickLine={false} axisLine={false} />
         <YAxis type='category' dataKey='category' width={78} tickLine={false} axisLine={false} tickMargin={8} />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-        <Bar dataKey='requests' fill='var(--color-requests)' />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent className='rounded-(--radius)' />} />
+        <Bar dataKey='requests' fill='var(--color-requests)' radius={0} />
       </BarChart>
     </ChartContainer>
   )
@@ -151,10 +151,10 @@ export function ChartStackedBarTypePreview() {
         <CartesianGrid vertical={false} stroke='var(--border)' />
         <XAxis dataKey='category' tickLine={false} axisLine={false} tickMargin={8} />
         <YAxis width={32} tickLine={false} axisLine={false} />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent className='rounded-(--radius)' />} />
         <ChartLegend verticalAlign='bottom' content={<ChartLegendContent />} />
-        <Bar dataKey='new' stackId='category-total' fill='var(--color-new)' />
-        <Bar dataKey='completed' stackId='category-total' fill='var(--color-completed)' />
+        <Bar dataKey='new' stackId='category-total' fill='var(--color-new)' radius={0} />
+        <Bar dataKey='completed' stackId='category-total' fill='var(--color-completed)' radius={0} />
       </BarChart>
     </ChartContainer>
   )
@@ -167,7 +167,7 @@ export function ChartLineTypePreview() {
         <CartesianGrid vertical={false} stroke='var(--border)' />
         <XAxis dataKey='period' tickLine={false} axisLine={false} tickMargin={8} />
         <YAxis width={32} tickLine={false} axisLine={false} />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent className='rounded-(--radius)' />} />
         <ChartLegend verticalAlign='bottom' content={<ChartLegendContent />} />
         <Line dataKey='opened' stroke='var(--color-opened)' strokeWidth={2} dot={false} />
         <Line dataKey='resolved' stroke='var(--color-resolved)' strokeWidth={2} dot={false} />
@@ -181,7 +181,7 @@ export function ChartPieTypePreview() {
     <div className='w-full max-w-sm space-y-2'>
       <ChartContainer config={distributionConfig} className='h-48 w-full'>
         <PieChart accessibilityLayer>
-          <ChartTooltip content={<ChartTooltipContent />} />
+          <ChartTooltip content={<ChartTooltipContent className='rounded-(--radius)' />} />
           <Pie data={distributionData} dataKey='requests' nameKey='category' innerRadius={0} outerRadius='78%'>
             {distributionData.map((item, index) => (
               <Cell key={item.category} fill={categoryColors[index]} />
@@ -208,7 +208,7 @@ export function ChartAreaTypePreview() {
         <CartesianGrid vertical={false} stroke='var(--border)' />
         <XAxis dataKey='period' tickLine={false} axisLine={false} tickMargin={8} />
         <YAxis width={32} tickLine={false} axisLine={false} />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent className='rounded-(--radius)' />} />
         <Area
           dataKey='requests'
           type='monotone'
@@ -228,7 +228,7 @@ export function ChartStackedAreaTypePreview() {
         <CartesianGrid vertical={false} stroke='var(--border)' />
         <XAxis dataKey='period' tickLine={false} axisLine={false} tickMargin={8} />
         <YAxis width={32} tickLine={false} axisLine={false} />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent className='rounded-(--radius)' />} />
         <ChartLegend verticalAlign='bottom' content={<ChartLegendContent />} />
         <Area
           dataKey='direct'
@@ -266,7 +266,10 @@ export function ChartScatterTypePreview() {
           tickMargin={8}
         />
         <YAxis type='number' dataKey='y' name='Rating' domain={[0, 100]} width={32} tickLine={false} axisLine={false} />
-        <ChartTooltip cursor={{ strokeDasharray: '3 3' }} content={<ChartTooltipContent />} />
+        <ChartTooltip
+          cursor={{ strokeDasharray: '3 3' }}
+          content={<ChartTooltipContent className='rounded-(--radius)' />}
+        />
         <Scatter name='Responses' data={relationshipData} fill='var(--color-responses)' />
       </ScatterChart>
     </ChartContainer>

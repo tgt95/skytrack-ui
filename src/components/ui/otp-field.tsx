@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { OTPField as BaseOTPField } from '@base-ui/react/otp-field'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 
 function OTPField({ className, ...props }: React.ComponentProps<typeof BaseOTPField.Root>) {
   return <BaseOTPField.Root data-slot='otp-field' className={cn('flex items-center gap-2', className)} {...props} />

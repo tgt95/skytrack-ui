@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { PlusIcon, XIcon } from '@phosphor-icons/react'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 import { Tabs, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs'
 import type { DemoMeta } from '@/showcase/demo'
 

@@ -8,7 +8,6 @@
 - Public type declaration: Target `./dist-lib/components/ui/chart.d.ts` declared in [`package.json`](../../../../../package.json) is absent from this checkout; exported types verified in [`src/components/ui/chart.tsx`](../../../../../src/components/ui/chart.tsx).
 - Showcase demo id: `chart`
 - Closest demo: [`src/demos/chart.demo.tsx`](../../../../../src/demos/chart.demo.tsx)
-- Official guidance: [Carbon Design System Chart Types](https://carbondesignsystem.com/data-visualization/chart-types/)
 
 ## Usage
 
@@ -33,6 +32,8 @@ Match the chart to the relationship people need to understand:
 - **Scatter:** Explore how two numeric measures vary together; describe association without implying causation.
 
 The examples show category comparison and ranking, category composition, trends and magnitude over time, a small part-to-whole set, and the relationship between two measures.
+
+The interactive examples are `BAR CHART`, `LINE CHART`, `STACKED BAR`, `AREA CHART`, `PIE CHART`, and `SCATTER CHART`. Each displays its sample values as text; the outcome example contains 25 sample records and does not display rounded percentages.
 
 ## Behavior
 

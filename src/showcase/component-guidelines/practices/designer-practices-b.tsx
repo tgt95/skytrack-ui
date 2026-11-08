@@ -378,9 +378,7 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
                       <MenuItem className='rounded-sm px-2 py-1 hover:bg-accent'>Export report</MenuItem>
                     </MenuGroup>
                     <MenuSeparator className='my-1 h-px bg-border' />
-                    <MenuItem variant='destructive'>
-                      Delete project
-                    </MenuItem>
+                    <MenuItem variant='destructive'>Delete project</MenuItem>
                   </MenuPopup>
                 </MenuPositioner>
               </MenuPortal>
@@ -404,9 +402,7 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
                     <MenuItem className='rounded-sm px-2 py-1 hover:bg-accent'>Export report</MenuItem>
                     <MenuItem className='rounded-sm px-2 py-1 hover:bg-accent'>Open project</MenuItem>
                     <MenuSeparator className='my-1 h-px bg-border' />
-                    <MenuItem variant='destructive'>
-                      Delete project
-                    </MenuItem>
+                    <MenuItem variant='destructive'>Delete project</MenuItem>
                   </MenuPopup>
                 </MenuPositioner>
               </MenuPortal>
@@ -1116,9 +1112,7 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
             <ToolbarButton className='px-2 py-0.5 hover:bg-muted'>Select</ToolbarButton>
             <ToolbarButton className='px-2 py-0.5 hover:bg-muted'>Draw</ToolbarButton>
             <ToolbarSeparator className='h-3.5 w-px bg-border mx-0.5' />
-            <ToolbarButton className='px-2 py-0.5 hover:bg-destructive/10 text-destructive'>
-              Delete
-            </ToolbarButton>
+            <ToolbarButton className='px-2 py-0.5 hover:bg-destructive/10 text-destructive'>Delete</ToolbarButton>
           </Toolbar>
         ),
         discouraged: (

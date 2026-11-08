@@ -8,7 +8,6 @@
 - Public type declaration: Target `./dist-lib/components/ui/calendar.d.ts` declared in [`package.json`](../../../../../package.json) is absent from this checkout; exported types verified in [`src/components/ui/calendar.tsx`](../../../../../src/components/ui/calendar.tsx).
 - Showcase demo id: `date-picker`
 - Closest demo: [`src/demos/date-picker.demo.tsx`](../../../../../src/demos/date-picker.demo.tsx); no dedicated demo exists for Calendar; closest composition is the `CALENDAR` variant in `date-picker.demo.tsx`.
-- Official guidance: [Carbon Design System Date Picker Usage](https://carbondesignsystem.com/components/date-picker/usage/)
 
 ## Usage
 

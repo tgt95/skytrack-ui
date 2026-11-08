@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ScrollArea as BaseScrollArea } from '@base-ui/react/scroll-area'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 
 function ScrollArea({ className, ...props }: React.ComponentProps<typeof BaseScrollArea.Root>) {
   return (

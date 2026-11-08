@@ -211,7 +211,7 @@
   --yellow-900: #553006;
   --yellow-950: #422006;
 
-    /* --white-a0: #NaNNaNNaN;
+  /* --white-a0: #NaNNaNNaN;
   --white-a1: #NaNNaNNaN;
   --white-a10: #NaNNaNNaN;
   --white-a100: var(--brand-color-key-white, #ffffff);
@@ -378,7 +378,6 @@
   --primitive-unit-spacing-80: 80;
   --primitive-unit-spacing-96: 96; */
 }
-
 
 /* Agent's work */
 :root {

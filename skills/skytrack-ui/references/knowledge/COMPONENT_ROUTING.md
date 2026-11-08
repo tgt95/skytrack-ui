@@ -1,6 +1,6 @@
 # Component decision index
 
-**STATUS: ACTIVE** · **53 DECLARED COMPONENT FAMILIES IN THE CURRENT SOURCE INDEX**
+**STATUS: ACTIVE** · **55 DECLARED COMPONENT FAMILIES IN THE CURRENT SOURCE INDEX**
 
 Use this as a quick, one-pass scan of the component catalog before deciding to build a custom control or pattern. Match the task to the “Use when” column and shortlist plausible families. This index is for routing only: it does not prove that an API exists in the target installation or that a candidate fits every requirement.
 
@@ -25,6 +25,7 @@ Do not open every linked knowledge page, implementation file, type declaration, 
 | Reveal one optional panel | Collapsible | One secondary section can be shown or hidden in context. For a repeated set of disclosure sections, compare Accordion. | [Designer](designer/collapsible.md) | [Developer](collapsible.md) |
 | Search and choose from a constrained list | Combobox | People need to filter a list and select one or more listed values. Compare Autocomplete when freeform text/suggestions are central and Select when search is unnecessary. | [Designer](designer/combobox.md) | [Developer](combobox.md) |
 | Search or launch commands quickly | Command | People need a searchable action/command palette, often with keyboard invocation. Do not substitute it for persistent navigation. | [Designer](designer/command.md) | [Developer](command.md) |
+| Find or filter content with a query | Search | People need to locate records or filter a page/component result set by text. Use Combobox when the query must select from constrained suggestions. | [Designer](designer/search.md) | [Developer](search.md) |
 | Actions at a pointed or pressed object | Context Menu | An action list is directly anchored to a right-click or long-press target. Provide another discoverable path for essential actions. | [Designer](designer/context-menu.md) | [Developer](context-menu.md) |
 | Compare and operate on dense records | Data Table | Records have meaningful columns and people need row-by-row comparison, search, sorting, paging, visibility, or selection. For individual browsing, compare list/card layouts. | [Designer](designer/data-table.md) | [Developer](data-table.md) |
 | Enter a date in a compact field | Date Picker | A field opens a calendar for selecting a date. Compare Calendar for a standalone month-grid experience or broader date-range interaction. | [Designer](designer/date-picker.md) | [Developer](date-picker.md) |
@@ -47,6 +48,7 @@ Do not open every linked knowledge page, implementation file, type declaration, 
 | Rich transient content anchored to a trigger | Popover | People need a small interactive helper such as filter or quick settings content. Use Dialog/Drawer for longer or more consequential tasks. | [Designer](designer/popover.md) | [Developer](popover.md) |
 | Preview a linked object on hover or focus | Preview Card | People benefit from a brief rich preview before navigating. Do not hide essential information behind hover. | [Designer](designer/preview-card.md) | [Developer](preview-card.md) |
 | Show completion of ongoing work | Progress | People need completion feedback for an operation currently underway. Historical rates or category shares are charts; for a current measured value within a range, compare Meter. | [Designer](designer/progress.md) | [Developer](progress.md) |
+| Orient people in a linear multistep task | Progress Indicator | People need to know completed, current, and upcoming steps in a fixed process. Use Progress for an operation that is currently running. | [Designer](designer/progress-indicator.md) | [Developer](progress-indicator.md) |
 | Choose one of a short visible set | Radio Group | A few mutually exclusive choices fit in the current form and are easier to compare when all are visible. Compare Select for longer lists or constrained space. | [Designer](designer/radio.md) | [Developer](radio.md) |
 | Resize adjacent work areas | Resizable | People need to adjust space between related panels, such as a map and inspector. Use Tabs for mutually exclusive views or Drawer for temporary details. | [Designer](designer/resizable.md) | [Developer](resizable.md) |
 | Scroll a bounded content region | Scroll Area | A content region needs bounded scrolling with the package's themed scrollbar. Prefer normal page or native scrolling when no bounded region is required. | [Designer](designer/scroll-area.md) | [Developer](scroll-area.md) |
@@ -72,7 +74,7 @@ Do not open every linked knowledge page, implementation file, type declaration, 
 | Select / Radio Group / Combobox | Select | A fixed list is too long to show at once but does not need search; use Radio Group for a short visible set, Combobox for searchable constrained choices. |
 | Autocomplete / Combobox | Autocomplete | Typing suggestions are primary and freeform text may be meaningful; use Combobox when a listed option must be selected. Verify each page's constraints. |
 | Checkbox / Switch / Toggle | Checkbox | Selection is committed with a form; use Switch for an immediate setting, Toggle for a button-like pressed state. |
-| Meter / Progress / Chart | Meter | Use Meter for current values against a range, Progress for ongoing work completion, and Chart for historical or comparative data. |
+| Meter / Progress / Progress Indicator / Chart | Meter | Use Meter for current values against a range, Progress for ongoing operation completion, Progress Indicator for a multistep workflow, and Chart for historical or comparative data. |
 | Alert / Toast | Alert | The information should remain in context; use Toast for brief, non-blocking feedback. |
 | Menu / Context Menu / Command | Menu | An explicit trigger opens a nearby action list; use Context Menu for pointer/long-press context, Command for searchable keyboard-oriented commands. |
 | Tabs / Navigation Menu / Sidebar | Tabs | People switch independent panels of one context; use navigation components for distinct product destinations. |

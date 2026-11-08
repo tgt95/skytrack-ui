@@ -162,6 +162,7 @@
       "contextMenuItemVariants",
       "DataTable",
       "DatePicker",
+      "DateRangePicker",
       "Dialog",
       "DialogBackdrop",
       "DialogClose",
@@ -298,6 +299,7 @@
       "ProgressLabel",
       "ProgressTrack",
       "ProgressValue",
+      "ProgressStepIndicator",
       "RadioGroup",
       "RadioIndicator",
       "RadioRoot",
@@ -310,6 +312,7 @@
       "ScrollAreaScrollbar",
       "ScrollAreaThumb",
       "ScrollAreaViewport",
+      "Search",
       "Select",
       "SelectArrow",
       "SelectBackdrop",
@@ -435,8 +438,13 @@
       "ComboboxRootProps",
       "ContextMenuItemVariantProps",
       "DataTableColumnDef",
+      "DataTableExpandedRowProps",
       "DataTableProps",
+      "DataTableRenderProps",
+      "DataTableSelectionMode",
+      "DataTableSize",
       "DatePickerProps",
+      "DateRangePickerProps",
       "DialogButtonProps",
       "DialogChangeEventDetails",
       "DrawerButtonProps",
@@ -456,7 +464,12 @@
       "PopoverTriggerProps",
       "PreviewCardChangeEventDetails",
       "PreviewCardTriggerProps",
+      "ProgressIndicatorOrientation",
+      "ProgressIndicatorStep",
+      "ProgressStepIndicatorProps",
+      "ProgressStepStatus",
       "ResizableHandleProps",
+      "SearchProps",
       "SelectRootProps",
       "SidebarMenuButtonProps",
       "SidebarMenuSubButtonProps",
@@ -785,16 +798,22 @@
       ],
       "types": [
         "DataTableColumnDef",
-        "DataTableProps"
+        "DataTableExpandedRowProps",
+        "DataTableProps",
+        "DataTableRenderProps",
+        "DataTableSelectionMode",
+        "DataTableSize"
       ],
       "prefix": "DataTable"
     },
     "./date-picker": {
       "values": [
-        "DatePicker"
+        "DatePicker",
+        "DateRangePicker"
       ],
       "types": [
-        "DatePickerProps"
+        "DatePickerProps",
+        "DateRangePickerProps"
       ],
       "prefix": "DatePicker"
     },
@@ -1076,6 +1095,18 @@
       "types": [],
       "prefix": "Progress"
     },
+    "./progress-indicator": {
+      "values": [
+        "ProgressStepIndicator"
+      ],
+      "types": [
+        "ProgressIndicatorOrientation",
+        "ProgressIndicatorStep",
+        "ProgressStepIndicatorProps",
+        "ProgressStepStatus"
+      ],
+      "prefix": "ProgressIndicator"
+    },
     "./radio": {
       "values": [
         "RadioGroup",
@@ -1107,6 +1138,15 @@
       ],
       "types": [],
       "prefix": "ScrollArea"
+    },
+    "./search": {
+      "values": [
+        "Search"
+      ],
+      "types": [
+        "SearchProps"
+      ],
+      "prefix": "Search"
     },
     "./select": {
       "values": [

@@ -3,8 +3,8 @@ import { Autocomplete as BaseAutocomplete } from '@base-ui/react/autocomplete'
 import { CaretDownIcon, MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
-import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/components/ui/control-sizes'
+import { focusRing } from '@/lib/focus-ring'
+import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/lib/control-sizes'
 
 /**
  * Props of the `Autocomplete` root, generic over the item value type.

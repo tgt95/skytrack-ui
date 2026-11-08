@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/form.d.ts`](../../../../../dist-lib/components/ui/form.d.ts)
 - Showcase demo id: `form`
 - Closest demo: [`src/demos/form.demo.tsx`](../../../../../src/demos/form.demo.tsx)
-- Official guidance: [Carbon Design System Form Usage](https://carbondesignsystem.com/components/form/usage/)
 
 ## Usage
 
@@ -57,7 +56,7 @@ Make required information and errors clear. When every field in a form is requir
 Form titles should clearly describe the task in sentence case (e.g., "Create record", "Invite team member").
 
 - **Submit button:** Use a specific action label (e.g., "Save record", "Invite team member") instead of "Submit".
-- **Required fields:** Mark mandatory fields individually using SkyTrack’s required-field indicator convention (e.g., an asterisk or “(required)”). Exception: if every field in a form is required, state that once before the form (e.g., “All fields are required”) instead of repeating markers across every field. Keep the convention consistent for similar forms. Do not adopt Carbon’s optional-marker strategy as a new SkyTrack rule.
+- **Required fields:** Mark mandatory fields individually using SkyTrack’s required-field indicator convention (e.g., an asterisk or “(required)”). Exception: if every field in a form is required, state that once before the form (e.g., “All fields are required”) instead of repeating markers across every field. Keep the convention consistent for similar forms.
 - **Validation messages:** Provide clear, actionable error text explaining how to resolve invalid values.
 
 **Live demo variant:** `Submit with a Server Function`

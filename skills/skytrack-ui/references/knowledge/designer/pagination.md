@@ -8,7 +8,6 @@
 - Public type declaration: Target `./dist-lib/components/ui/pagination.d.ts` declared in [`package.json`](../../../../../package.json) is absent; exported types verified in [`src/components/ui/pagination.tsx`](../../../../../src/components/ui/pagination.tsx).
 - Showcase demo id: `pagination`
 - Closest demo: [`src/demos/pagination.demo.tsx`](../../../../../src/demos/pagination.demo.tsx)
-- Official guidance: [Carbon Design System Pagination Usage](https://carbondesignsystem.com/components/pagination/usage/)
 
 ## Usage
 
@@ -18,7 +17,13 @@ Avoid Pagination for short data sets that can be displayed inline, or for real-t
 
 For a continuous or streaming feed, use a feed pattern with a clear way to load more content.
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `PAGE NAVIGATION`
+
+## Types
+
+Use standalone page navigation when a content sequence owns the page state. For record tables, pair the paginator with a range summary and page-size control so users can understand and adjust the visible slice.
+
+**Live demo variant:** `PAGE NAVIGATION`
 
 ## Behavior
 
@@ -26,7 +31,7 @@ Clicking a page number button immediately navigates to that page and loads the c
 
 When on page 1, "Previous" is disabled; when on the final page, "Next" is disabled. The current page is marked visually and programmatically.
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `TABLE PAGINATION`
 
 ## Layout
 
@@ -40,13 +45,13 @@ On mobile screens, collapse intermediate page numbers to display only "Previous"
 | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | Make the current page visually distinct and understandable to assistive technology. | Remove or hide the "Previous" or "Next" buttons on the first or last page. | Keeping the controls in a consistent position helps people find them as they move through the collection. |
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `PAGE NAVIGATION`
 
 ## Accessibility
 
 Make the current page and the pagination controls clear to assistive technology. Name Previous and Next actions; make page choices keyboard accessible.
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `PAGE NAVIGATION`
 
 ## Content
 
@@ -54,4 +59,4 @@ Number buttons should display concise arabic numerals. Ellipsis items indicate o
 
 Count summaries should be clearly formatted (e.g., "Showing 1–20 of 145 projects").
 
-**Live demo variant:** `INTERACTIVE`
+**Live demo variant:** `PAGE NAVIGATION`

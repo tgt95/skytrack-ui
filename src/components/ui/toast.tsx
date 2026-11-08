@@ -3,10 +3,11 @@ import { Toast as BaseToast } from '@base-ui/react/toast'
 import { XIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
+import { PopupArrowGlyph } from '@/lib/popup-arrow'
 
 /** Props of the `Toast` root for a single toast object. */
-export type ToastRootProps<Data extends object = any> = BaseToast.Root.Props & {
+export type ToastRootProps<Data extends object = object> = BaseToast.Root.Props & {
   toast: BaseToast.Root.ToastObject<Data>
 }
 
@@ -158,23 +159,6 @@ function ToastPositioner({ className, ...props }: React.ComponentProps<typeof Ba
   )
 }
 
-function ToastArrowGlyph(props: React.ComponentProps<'svg'>) {
-  return (
-    <svg width='20' height='10' viewBox='0 0 20 10' fill='none' aria-hidden='true' focusable='false' {...props}>
-      <path d='M1 9 L10 1 L19 9 Z' fill='currentColor' stroke='none' className='text-popover' />
-      <path
-        d='M1 9 L10 1 L19 9'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth={1}
-        strokeLinejoin='round'
-        strokeLinecap='round'
-        className='text-border'
-      />
-    </svg>
-  )
-}
-
 function ToastArrow({ className, children, ...props }: React.ComponentProps<typeof BaseToast.Arrow>) {
   return (
     <BaseToast.Arrow
@@ -182,7 +166,7 @@ function ToastArrow({ className, children, ...props }: React.ComponentProps<type
       className={cn('pointer-events-none absolute z-10 flex h-2.5 w-5 items-center justify-center', className)}
       {...props}
     >
-      {children ?? <ToastArrowGlyph />}
+      {children ?? <PopupArrowGlyph />}
     </BaseToast.Arrow>
   )
 }

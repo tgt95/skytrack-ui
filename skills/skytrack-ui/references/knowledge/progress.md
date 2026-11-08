@@ -11,7 +11,7 @@
 
 ## Overview
 
-The Progress component conveys the completion status of an ongoing asynchronous operation, file upload, or multi-stage background process. In SkyTrack, it tracks drone firmware uploads, 3D orthomosaic rendering jobs, batch flight log exports, and waypoint mission uploads.
+The Progress component conveys completion status for an ongoing asynchronous operation or upload. It is not a step navigator: use `skytrack-ui/progress-indicator` to orient people through completed, current, and upcoming steps in a linear workflow.
 
 Built on `@base-ui/react/progress`, it supports determinate progress bars with animated width fills, numeric value displays, and indeterminate loading modes.
 

@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/tooltip.d.ts`](../../../../../dist-lib/components/ui/tooltip.d.ts)
 - Showcase demo id: `tooltip`
 - Closest demo: [`src/demos/tooltip.demo.tsx`](../../../../../src/demos/tooltip.demo.tsx)
-- Official guidance: [Carbon Design System Tooltip Usage](https://carbondesignsystem.com/components/tooltip/usage/)
 
 ## Usage
 

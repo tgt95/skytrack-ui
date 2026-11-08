@@ -80,6 +80,11 @@ function SidebarProvider({
   const [openState, setOpenState] = React.useState(defaultOpen)
   const [openMobile, setOpenMobile] = React.useState(false)
   const open = openProp ?? openState
+  const openRef = React.useRef(open)
+
+  React.useLayoutEffect(() => {
+    openRef.current = open
+  }, [open])
 
   const setOpen = React.useCallback(
     (nextOpen: boolean) => {
@@ -91,8 +96,8 @@ function SidebarProvider({
 
   const toggleSidebar = React.useCallback(() => {
     if (isMobile) setOpenMobile((current) => !current)
-    else setOpen(!open)
-  }, [isMobile, open, setOpen])
+    else setOpen(!openRef.current)
+  }, [isMobile, setOpen])
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

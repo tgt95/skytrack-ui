@@ -105,7 +105,9 @@ export function Snippet() {
   return (
     <CodeBlock>
       <CodeBlockContent lineNumbers>
-        {lines.map((line, index) => <CodeBlockLine key={index}>{line}</CodeBlockLine>)}
+        {lines.map((line, index) => (
+          <CodeBlockLine key={index}>{line}</CodeBlockLine>
+        ))}
       </CodeBlockContent>
     </CodeBlock>
   )
@@ -120,7 +122,9 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from 'skytrack-u
 export function WorkspaceLayout() {
   return (
     <ResizablePanelGroup orientation='horizontal' className='w-full' style={{ height: '24rem' }}>
-      <ResizablePanel defaultSize='35%' minSize='20%' aria-label='Map'>Map</ResizablePanel>
+      <ResizablePanel defaultSize='35%' minSize='20%' aria-label='Map'>
+        Map
+      </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize='65%' minSize='30%' aria-label='Mission details'>
         Mission details
@@ -278,6 +282,18 @@ npm run test:consumer  # install the tarball in an isolated offline project and 
 (`tsconfig.lib.json`) → rewrite `@/` aliases in the declarations → verify
 (`scripts/verify-lib.mjs`). If verification fails, the build fails.
 
+### Local quality checks
+
+```bash
+npm run typecheck       # TypeScript checks for the showcase and source
+npm run lint            # audited component-boundary and accessibility invariants
+npm test                # focused component behavior tests
+npm run format:check    # package source, scripts, configs, and maintained package docs
+```
+
+Before shipping package changes, also run `npm run build:lib` and `npm run test:consumer`.
+The format commands use explicit package-owned paths and leave unrelated docs untouched.
+
 Adding or renaming a component means running `npm run generate:exports` (it is part of
 `build:lib`) and adding the matching `./<component>` entry to `exports` in `package.json`.
 The generator refuses to run if two components export the same name and no explicit alias is
@@ -318,6 +334,8 @@ file, package metadata, CSS asset resolution, utility coverage, Node import of e
 and `npm run test:consumer` (real tarball installed with `npm install --offline` into an
 isolated temporary project, `tsc --strict` under `moduleResolution: bundler` **and** `node16`,
 a `vite build` of consumer TSX importing components + styles, and Node runtime import checks).
+Consumer evidence defaults to a unique temporary folder; set `SKYTRACK_UI_CONSUMER_EVIDENCE_DIR`
+to retain it in a chosen location.
 
 ## Not verified
 

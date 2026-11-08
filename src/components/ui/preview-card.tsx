@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { PreviewCard as BasePreviewCard } from '@base-ui/react/preview-card'
 import { cn } from '@/lib/utils'
+import { PopupArrowGlyph } from '@/lib/popup-arrow'
 
 /** Native Base UI props for `PreviewCardTrigger`; styling comes from the call site. */
 export type PreviewCardTriggerProps = React.ComponentProps<typeof BasePreviewCard.Trigger>
@@ -70,27 +71,6 @@ function PreviewCardPopup({ className, ...props }: React.ComponentProps<typeof B
   )
 }
 
-function PreviewCardArrowGlyph(props: React.ComponentProps<'svg'>) {
-  return (
-    <svg width='20' height='10' viewBox='0 0 20 10' fill='none' aria-hidden='true' focusable='false' {...props}>
-      {/* body: container color, covers the popup border segment behind it (arrow paints above
-          the popup's own border since it is a positioned child with z-10) */}
-      <path d='M1 9 L10 1 L19 9 Z' fill='currentColor' stroke='none' className='text-popover' />
-      {/* outer slanted edges only: border color, no base line; round joins keep the apex from
-          spiking into an asymmetric miter tip at 1x */}
-      <path
-        d='M1 9 L10 1 L19 9'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth={1}
-        strokeLinejoin='round'
-        strokeLinecap='round'
-        className='text-border'
-      />
-    </svg>
-  )
-}
-
 function PreviewCardArrow({ className, children, ...props }: React.ComponentProps<typeof BasePreviewCard.Arrow>) {
   return (
     <BasePreviewCard.Arrow
@@ -105,7 +85,7 @@ function PreviewCardArrow({ className, children, ...props }: React.ComponentProp
       )}
       {...props}
     >
-      {children ?? <PreviewCardArrowGlyph />}
+      {children ?? <PopupArrowGlyph />}
     </BasePreviewCard.Arrow>
   )
 }

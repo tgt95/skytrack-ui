@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/attachment.d.ts`](../../../../../dist-lib/components/ui/attachment.d.ts)
 - Showcase demo id: `attachment`
 - Closest demo: [`src/demos/attachment.demo.tsx`](../../../../../src/demos/attachment.demo.tsx)
-- Official guidance: [Carbon Design System File Uploader Usage](https://carbondesignsystem.com/components/file-uploader/usage/)
 
 ## Usage
 

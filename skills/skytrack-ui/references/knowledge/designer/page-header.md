@@ -8,7 +8,6 @@
 - Public type declaration: Target `./dist-lib/components/ui/page-header.d.ts` declared in [`package.json`](../../../../../package.json) is absent; exported types verified in [`src/components/ui/page-header.tsx`](../../../../../src/components/ui/page-header.tsx).
 - Showcase demo id: `page-header`
 - Closest demo: [`src/demos/page-header.demo.tsx`](../../../../../src/demos/page-header.demo.tsx)
-- Official guidance: [Carbon Design System UI Shell Header](https://carbondesignsystem.com/components/UI-shell-header/usage/)
 
 ## Usage
 

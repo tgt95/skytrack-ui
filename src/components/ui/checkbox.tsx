@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Checkbox } from '@base-ui/react/checkbox'
 import { CheckIcon, MinusIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 
 function CheckboxRoot({ className, children, ...props }: React.ComponentProps<typeof Checkbox.Root>) {
   return (

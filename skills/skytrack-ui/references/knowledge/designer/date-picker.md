@@ -8,7 +8,6 @@
 - Public type declaration: Target `./dist-lib/components/ui/date-picker.d.ts` declared in [`package.json`](../../../../../package.json) is absent from this checkout; exported types verified in [`src/components/ui/date-picker.tsx`](../../../../../src/components/ui/date-picker.tsx).
 - Showcase demo id: `date-picker`
 - Closest demo: [`src/demos/date-picker.demo.tsx`](../../../../../src/demos/date-picker.demo.tsx)
-- Official guidance: [Carbon Design System Date Picker Usage](https://carbondesignsystem.com/components/date-picker/usage/)
 
 ## Usage
 
@@ -22,20 +21,23 @@ Use Date Picker when people need to choose a date and benefit from seeing a cale
 
 ## Types
 
-Use an input-triggered calendar for field entry and an inline calendar when date navigation is the main task.
+Use an input-triggered single-date field for form entry, an inline calendar when date navigation is the main task, and a range picker when both a start and end date belong to the same task.
+
+**Live demo variant:** `DATE RANGE`
 
 ## Behavior
 
 Clicking the trigger button opens the calendar popover positioned directly beneath the control.
 
 - **Selection:** Selecting a day immediately updates the trigger value and closes the popover.
+- **Date range:** Keep the calendar open after choosing the start date; close after the end date is selected. A completed range updates the trigger and helper text together.
 - **Keyboard dismissal:** Pressing `Escape` or clicking outside dismisses the popover without altering the date.
 
 | Do                                                        | Don't                                                                           | Why                                                                       |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | Mark unavailable dates clearly and prevent choosing them. | Let people choose unavailable dates and show an error only after they continue. | Early feedback helps people choose a valid date without extra correction. |
 
-**Live demo variant:** `DEFAULT`
+**Live demo variant:** `DATE RANGE`
 
 ## Layout
 

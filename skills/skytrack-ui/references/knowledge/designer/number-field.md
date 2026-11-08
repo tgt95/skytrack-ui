@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/number-field.d.ts`](../../../../../dist-lib/components/ui/number-field.d.ts)
 - Showcase demo id: `number-field`
 - Closest demo: [`src/demos/number-field.demo.tsx`](../../../../../src/demos/number-field.demo.tsx)
-- Official guidance: [Carbon Design System Number Input Usage](https://carbondesignsystem.com/components/number-input/usage/)
 
 ## Usage
 

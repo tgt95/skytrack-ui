@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/dropzone.d.ts`](../../../../../dist-lib/components/ui/dropzone.d.ts)
 - Showcase demo id: `dropzone`
 - Closest demo: [`src/demos/dropzone.demo.tsx`](../../../../../src/demos/dropzone.demo.tsx)
-- Official guidance: [Carbon Design System File Uploader Usage](https://carbondesignsystem.com/components/file-uploader/usage/)
 
 ## Usage
 

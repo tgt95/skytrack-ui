@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/inline-edit.d.ts`](../../../../../dist-lib/components/ui/inline-edit.d.ts)
 - Showcase demo id: `inline-edit`
 - Closest demo: [`src/demos/inline-edit.demo.tsx`](../../../../../src/demos/inline-edit.demo.tsx)
-- Official guidance: [Carbon Design System Text Input Usage](https://carbondesignsystem.com/components/text-input/usage/) (related guidance only; NOT COMPARABLE)
 
 ## Usage
 

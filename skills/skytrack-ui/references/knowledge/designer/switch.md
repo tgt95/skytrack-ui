@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/switch.d.ts`](../../../../../dist-lib/components/ui/switch.d.ts)
 - Showcase demo id: `switch`
 - Closest demo: [`src/demos/switch.demo.tsx`](../../../../../src/demos/switch.demo.tsx)
-- Official guidance: [Carbon Design System Toggle Usage](https://carbondesignsystem.com/components/toggle/usage/)
 
 ## Usage
 

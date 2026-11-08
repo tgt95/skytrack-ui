@@ -11,7 +11,7 @@
 
 ## Overview
 
-The Date Picker component combines a popover trigger button with an embedded DayPicker calendar view. It provides an intuitive single-date selection workflow, displaying the chosen date in a localized medium format and closing automatically upon selection.
+The Date Picker component combines a popover trigger button with an embedded DayPicker calendar view. `DatePicker` supports a single date; `DateRangePicker` supports a start/end range and remains open until the range is complete.
 
 **Live demo variant:** `DEFAULT`
 
@@ -52,7 +52,7 @@ DatePicker composes the following parts:
 3. `PopoverPortal` (Portals calendar overlay to avoid clipping in modal dialogs or containers)
 4. `PopoverPositioner` (Positions popup aligned to bottom-start with a 4px offset)
 5. `PopoverPopup` (Container panel styled with border and background tokens)
-6. `Calendar` (Underlying single-mode calendar from `skytrack-ui/calendar`)
+6. `Calendar` (Underlying single or range calendar from `skytrack-ui/calendar`)
 
 Consuming applications invoke `DatePicker` as a unified component with customization props.
 
@@ -66,6 +66,7 @@ Supported configurations include:
 - Uncontrolled mode: via `defaultValue`.
 - States: open, closed, placeholder displayed, date selected, and `disabled`.
 - Custom calendar props: passed through `calendarProps` for min/max dates, disabled date predicates, or month navigation.
+- Range mode: use `DateRangePicker` with a `DateRange` value; the popup closes after both endpoints are selected.
 
 **Live demo variant:** `CALENDAR`
 
@@ -77,7 +78,7 @@ The trigger button includes appropriate accessible names via `aria-label` or `ar
 
 ## API & examples
 
-Import `DatePicker` and type `DatePickerProps` from `skytrack-ui/date-picker` or `@/components/ui/date-picker`. Common props include `value`, `defaultValue`, `onValueChange`, `placeholder`, `disabled`, `className`, `buttonClassName`, `calendarClassName`, and `calendarProps`.
+Import `DatePicker`, `DateRangePicker`, `DatePickerProps`, and `DateRangePickerProps` from `skytrack-ui/date-picker` or `@/components/ui/date-picker`. Both controls support `value`, `defaultValue`, `onValueChange`, `placeholder`, `disabled`, `className`, `buttonClassName`, `calendarClassName`, and `calendarProps`. Single values use `Date`; range values use `DateRange` from `react-day-picker`.
 
 **Live demo variant:** `DEFAULT`
 
@@ -86,4 +87,4 @@ Import `DatePicker` and type `DatePickerProps` from `skytrack-ui/date-picker` or
 - Package/version checked: `0.1.5`.
 - Export: [`package.json`](../../../../package.json) — `./date-picker`.
 - Source, public declarations, and closest demo: linked above.
-- Limits or unverified behavior: The generated declaration `dist-lib/components/ui/date-picker.d.ts` is absent in this release; rely on source types from `src/components/ui/date-picker.tsx`. Currently DatePicker supports single date selection only; date ranges require composing Calendar directly.
+- Limits or unverified behavior: The generated declaration `dist-lib/components/ui/date-picker.d.ts` is absent in this checkout; rely on source types from `src/components/ui/date-picker.tsx`. Time picking is not part of these controls and needs a separate time-entry composition.

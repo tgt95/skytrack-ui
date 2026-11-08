@@ -1,5 +1,5 @@
 /**
- * Packaged stylesheet entry point — `import "skytrack-ui/styles.css";`
+ * Packaged stylesheet entry point for the `skytrack-ui` styles subpath.
  *
  * Deliberately not a copy of the theme: the tokens, fonts, dark variant and base
  * layer are imported from the showcase's `index.css`, so the published package and

@@ -141,7 +141,7 @@ import miniProA8miniSvg from './images/MiniPro_A8mini_blueprint_static.svg?raw'
 const miniProA8mini = miniProA8miniSvg
 const publicAssetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`
 
-function Card ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
     <div className={`relative ${className}`}>
       <div
@@ -164,11 +164,11 @@ function Card ({ children, className = '' }: { children: React.ReactNode; classN
   )
 }
 
-function CardTitle ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function CardTitle({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return <h5 className={`h5 heading ${className}`}>{children}</h5>
 }
 
-function CardSub ({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function CardSub({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return <p className={`text-sm text-muted-foreground ${className}`}>{children}</p>
 }
 
@@ -247,7 +247,7 @@ const ICON_BUTTONS = [
   SirenIcon
 ]
 
-function IconButtonGrid () {
+function IconButtonGrid() {
   return (
     <div className='flex flex-wrap gap-2'>
       {ICON_BUTTONS.map((Icon, i) => (
@@ -268,7 +268,7 @@ const TRAFFIC: { month: string; desktop: number; mobile: number }[] = [
   { month: 'Jun', desktop: 58, mobile: 52 }
 ]
 
-function TrafficChart () {
+function TrafficChart() {
   return (
     <div>
       <div className='flex h-44 items-end justify-between gap-3'>
@@ -298,7 +298,7 @@ function TrafficChart () {
   )
 }
 
-function MiniSelect ({
+function MiniSelect({
   label,
   items,
   defaultValue
@@ -334,7 +334,7 @@ function MiniSelect ({
   )
 }
 
-function Kbd ({ children }: { children: React.ReactNode }) {
+function Kbd({ children }: { children: React.ReactNode }) {
   return (
     <Badge className='flex gap-1' status='default' size='sm' count={children} />
     // <kbd className='pointer-events-none inline-flex min-w-6 items-center justify-center border border-border bg-muted px-1.5 py-0.5 text-xs select-none'>
@@ -343,7 +343,7 @@ function Kbd ({ children }: { children: React.ReactNode }) {
   )
 }
 
-function PseudoQr ({ size = 148 }: { size?: number }) {
+function PseudoQr({ size = 148 }: { size?: number }) {
   const N = 21
   const rand: boolean[] = []
   let h = 7
@@ -381,7 +381,7 @@ function PseudoQr ({ size = 148 }: { size?: number }) {
   )
 }
 
-function BarcodeMark () {
+function BarcodeMark() {
   return (
     <div aria-hidden='true' className='flex h-12 items-stretch gap-px overflow-hidden'>
       {Array.from({ length: 52 }, (_, index) => (
@@ -394,7 +394,7 @@ function BarcodeMark () {
   )
 }
 
-function PreviewStyle0 () {
+function PreviewStyle0() {
   return (
     <Card className='lg:col-span-2 xl:col-span-1'>
       <header className='flex items-center justify-between border-b border-border pb-3 text-xs'>
@@ -473,7 +473,7 @@ function PreviewStyle0 () {
   )
 }
 
-function PreviewStyle2 () {
+function PreviewStyle2() {
   return (
     <Card className='lg:col-span-2'>
       <header className='flex flex-col gap-0.5 border-b border-border pb-4'>
@@ -537,7 +537,7 @@ function PreviewStyle2 () {
   )
 }
 
-function PreviewStyle1 () {
+function PreviewStyle1() {
   return (
     <Card className='lg:col-span-2 xl:col-span-2 gap-0! p-0!'>
       <header className='flex items-center justify-between border-b border-border p-6 pb-3 text-xs'>
@@ -580,7 +580,7 @@ function PreviewStyle1 () {
   )
 }
 
-function PreviewStyle3 () {
+function PreviewStyle3() {
   return (
     <Card className='lg:col-span-2 p-0! gap-0!'>
       <header className='flex items-start justify-between gap-4 p-6'>
@@ -639,7 +639,7 @@ function PreviewStyle3 () {
   )
 }
 
-export function OverviewStyle ({ className = '' }: { className?: string }) {
+export function OverviewStyle({ className = '' }: { className?: string }) {
   return (
     <div className={`grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 ${className}`}>
       <PreviewStyle0 />

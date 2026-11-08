@@ -47,7 +47,7 @@ const attachmentVariants = cva(
 export type AttachmentProps = React.ComponentProps<'div'> &
   VariantProps<typeof attachmentVariants> & { state?: AttachmentState }
 
-function Attachment ({
+function Attachment({
   className,
   size = 'default',
   orientation = 'horizontal',
@@ -77,7 +77,7 @@ function Attachment ({
 
 export type AttachmentMediaProps = React.ComponentProps<'div'> & { variant?: 'icon' | 'image' }
 
-function AttachmentMedia ({ variant = 'icon', className, ...props }: AttachmentMediaProps) {
+function AttachmentMedia({ variant = 'icon', className, ...props }: AttachmentMediaProps) {
   const { size, orientation } = React.useContext(AttachmentContext)
   return (
     <div
@@ -87,7 +87,7 @@ function AttachmentMedia ({ variant = 'icon', className, ...props }: AttachmentM
         'relative z-10 flex shrink-0 items-center justify-center overflow-hidden bg-muted text-muted-foreground [&>svg]:size-5 [&>svg]:shrink-0',
         variant === 'icon' && 'size-12',
         variant === 'image' && 'aspect-square w-16 [&>img]:size-full [&>img]:object-cover',
-        size === 'default' || size === 'sm' && 'rounded-(--radius)',
+        size === 'default' || (size === 'sm' && 'rounded-(--radius)'),
         size === 'sm' && variant === 'icon' && 'size-11',
         size === 'xs' && variant === 'icon' && 'size-10',
         orientation === 'vertical' && variant === 'image' && 'w-full',
@@ -98,7 +98,7 @@ function AttachmentMedia ({ variant = 'icon', className, ...props }: AttachmentM
   )
 }
 
-function AttachmentContent ({ className, ...props }: React.ComponentProps<'div'>) {
+function AttachmentContent({ className, ...props }: React.ComponentProps<'div'>) {
   const { size } = React.useContext(AttachmentContext)
   return (
     <div
@@ -113,7 +113,7 @@ function AttachmentContent ({ className, ...props }: React.ComponentProps<'div'>
   )
 }
 
-function AttachmentTitle ({ className, ...props }: React.ComponentProps<'p'>) {
+function AttachmentTitle({ className, ...props }: React.ComponentProps<'p'>) {
   const { state, size } = React.useContext(AttachmentContext)
   const inProgress = state === 'uploading' || state === 'processing'
 
@@ -133,7 +133,7 @@ function AttachmentTitle ({ className, ...props }: React.ComponentProps<'p'>) {
   )
 }
 
-function AttachmentDescription ({ className, ...props }: React.ComponentProps<'p'>) {
+function AttachmentDescription({ className, ...props }: React.ComponentProps<'p'>) {
   const { state, size } = React.useContext(AttachmentContext)
   return (
     <p
@@ -149,7 +149,7 @@ function AttachmentDescription ({ className, ...props }: React.ComponentProps<'p
   )
 }
 
-function AttachmentActions ({ className, ...props }: React.ComponentProps<'div'>) {
+function AttachmentActions({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot='attachment-actions'
@@ -161,7 +161,7 @@ function AttachmentActions ({ className, ...props }: React.ComponentProps<'div'>
 
 type AttachmentActionProps = Omit<ButtonProps, 'size'> & { size?: ButtonProps['size'] }
 
-function AttachmentAction ({ className, size = 'icon-xs', variant = 'ghost', ...props }: AttachmentActionProps) {
+function AttachmentAction({ className, size = 'icon-xs', variant = 'ghost', ...props }: AttachmentActionProps) {
   return (
     <Button
       data-slot='attachment-action'
@@ -175,7 +175,7 @@ function AttachmentAction ({ className, size = 'icon-xs', variant = 'ghost', ...
 
 export type AttachmentTriggerProps = React.ComponentProps<'button'> & { render?: React.ReactElement }
 
-function AttachmentTrigger ({ className, render, ...props }: AttachmentTriggerProps) {
+function AttachmentTrigger({ className, render, ...props }: AttachmentTriggerProps) {
   const triggerClassName = cn(
     'absolute inset-0 z-0 cursor-pointer rounded-(--radius) outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
     className
@@ -192,7 +192,7 @@ function AttachmentTrigger ({ className, render, ...props }: AttachmentTriggerPr
   return <button data-slot='attachment-trigger' type='button' className={triggerClassName} {...props} />
 }
 
-function AttachmentGroup ({ className, ...props }: React.ComponentProps<'div'>) {
+function AttachmentGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot='attachment-group'

@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/radio.d.ts`](../../../../../dist-lib/components/ui/radio.d.ts)
 - Showcase demo id: `radio`
 - Closest demo: [`src/demos/radio.demo.tsx`](../../../../../src/demos/radio.demo.tsx)
-- Official guidance: [Carbon Design System Radio Button Usage](https://carbondesignsystem.com/components/radio-button/usage/)
 
 ## Usage
 

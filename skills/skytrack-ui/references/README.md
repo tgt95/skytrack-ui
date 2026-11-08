@@ -10,6 +10,7 @@ Use this route for every UI implementation using SkyTrack UI. The repository roo
 | Information architecture, task flow, data presentation, charts, or vague references | Relevant section in [`implementation.md`](implementation.md) |
 | Product decisions, visual rules, typography, color, radius, content | Relevant section in [`UI_RULES.md`](UI_RULES.md) |
 | Candidate scan across the library | [`knowledge/COMPONENT_ROUTING.md`](knowledge/COMPONENT_ROUTING.md) |
+| Task/page pattern selection and local pattern references | [`knowledge/PATTERN_ROUTING.md`](knowledge/PATTERN_ROUTING.md) |
 | Component API, composition, types, examples | Shortlisted page in [`knowledge/README.md`](knowledge/README.md) |
 | Component purpose, selection, interaction, accessibility | Shortlisted page in [`knowledge/designer/README.md`](knowledge/designer/README.md) |
 | Package-wide theme or composition detail | Relevant heading in [`AGENT_GUIDE.md`](AGENT_GUIDE.md) only |
@@ -24,9 +25,10 @@ stage roles, approval cadence, task state, and deployment workflow.
 
 1. Read this router, [`implementation-gates.md`](implementation-gates.md), and only relevant sections from `implementation.md` and `UI_RULES.md`.
 2. Scan the full component router once. Map every distinct visible UI need, including nested controls and indicators.
-3. Shortlist library candidates. Verify exact exports, installed declaration/runtime source, and closest demo before deciding reuse or a custom fallback.
-4. Use library components and supported compositions whenever they satisfy the requirement. Record the concrete missing capability before writing local fallback UI.
-5. Keep file-read logging off by default. Only when the environment is exactly `DEBUG=true`, use `read-and-log.mjs` and pass `--read-log` to a checker. Verify each new or affected mapped need against installed source/types/demo evidence; reuse valid evidence and map rows for unaffected needs. Follow the consuming workspace's pipeline to decide whether a formal preflight adds a distinct check; do not rerun it when IA, need mapping, and package evidence are already clear and current. Reconcile the changed needs against rendered output at handoff; use broader reconciliation when the request changes the route or composition as a whole.
+3. When the task involves a reusable workflow/page pattern, scan [`knowledge/PATTERN_ROUTING.md`](knowledge/PATTERN_ROUTING.md) and inspect the selected local catalog entry/reference. Shortlist library candidates from the component router separately.
+4. Verify exact exports, installed declaration/runtime source, and closest demo before deciding reuse or a custom fallback.
+5. Use library components and supported compositions whenever they satisfy the requirement. Record the concrete missing capability before writing local fallback UI.
+6. Keep file-read logging off by default. Only when the environment is exactly `DEBUG=true`, use `read-and-log.mjs` and pass `--read-log` to a checker. Verify each new or affected mapped need against installed source/types/demo evidence; reuse valid evidence and map rows for unaffected needs. Follow the consuming workspace's pipeline to decide whether a formal preflight adds a distinct check; do not rerun it when IA, need mapping, and package evidence are already clear and current. Reconcile the changed needs against rendered output at handoff; use broader reconciliation when the request changes the route or composition as a whole.
 
 ## Conditional formal preflight
 

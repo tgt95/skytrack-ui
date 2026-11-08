@@ -5,7 +5,7 @@
  * a rendered pixel.
  *
  * Checks:
- *   1. tarball contents: only `dist-lib` + README + AGENT_GUIDE.md + package.json; no sources, demos,
+ *   1. tarball contents: only `dist-lib` + README + package.json; no sources, demos,
  *      showcase, config, lockfiles or credential-looking files
  *   2. every `exports` target and every `url()` referenced by the packaged CSS is
  *      present inside the tarball
@@ -30,7 +30,9 @@ import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
-const evidenceDir = path.resolve(root, '../../../_tasks/2026-10-04-skytrack-private-package/evidence')
+const evidenceDir = process.env.SKYTRACK_UI_CONSUMER_EVIDENCE_DIR
+  ? path.resolve(process.env.SKYTRACK_UI_CONSUMER_EVIDENCE_DIR)
+  : fs.mkdtempSync(path.join(os.tmpdir(), 'skytrack-ui-consumer-evidence-'))
 
 let failures = 0
 const ok = (msg) => console.log(`  PASS  ${msg}`)
@@ -53,6 +55,7 @@ if (!fs.existsSync(tarball)) {
   throw new Error(`Expected current-version tarball was not created: ${tarballName}`)
 }
 console.log(`[consumer] tarball: ${path.relative(root, tarball)}`)
+console.log(`[consumer] evidence: ${evidenceDir}`)
 
 console.log('\n[consumer] 1. tarball contents')
 const entries = run('tar', ['-tzf', tarball], root)
@@ -91,9 +94,15 @@ check(
   `tarball has ${entries.length} files, none of them sources, demos, showcase, config, lockfiles or credentials`,
   `forbidden files in tarball: ${forbidden.slice(0, 10).join(', ')}`
 )
+const testArtifacts = entries.filter((file) => /\.(test|spec)\.(d\.ts|js)$/.test(file))
+check(
+  testArtifacts.length === 0,
+  'tarball omits test/spec artifacts',
+  `test/spec artifacts in tarball: ${testArtifacts.join(', ')}`
+)
 const topLevel = [...new Set(entries.map((f) => f.split('/')[0]))].sort()
 check(
-  JSON.stringify(topLevel) === JSON.stringify(['AGENT_GUIDE.md', 'README.md', 'dist-lib', 'package.json']),
+  JSON.stringify(topLevel) === JSON.stringify(['README.md', 'dist-lib', 'package.json']),
   `tarball top level is exactly ${topLevel.join(', ')}`,
   `unexpected tarball top level: ${topLevel.join(', ')}`
 )

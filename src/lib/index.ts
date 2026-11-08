@@ -10,7 +10,7 @@
  * export each component's own names unchanged.
  */
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
 /* Aliased because the same name is exported by more than one component:
   alert-dialog: createHandle -> createAlertDialogHandle
@@ -27,16 +27,9 @@ import {
   AccordionHeader,
   AccordionItem,
   AccordionPanel,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-  Alert,
-  AlertAction,
-  AlertDescription,
-  AlertTitle,
-  alertVariants,
-  AlertProps,
-} from "@/components/ui/alert";
+  AccordionTrigger
+} from '@/components/ui/accordion'
+import { Alert, AlertAction, AlertDescription, AlertTitle, alertVariants, AlertProps } from '@/components/ui/alert'
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -52,8 +45,8 @@ import {
   AlertDialogViewport,
   createHandle as createAlertDialogHandle,
   AlertDialogButtonProps,
-  AlertDialogChangeEventDetails,
-} from "@/components/ui/alert-dialog";
+  AlertDialogChangeEventDetails
+} from '@/components/ui/alert-dialog'
 import {
   Attachment,
   AttachmentAction,
@@ -69,8 +62,8 @@ import {
   AttachmentProps,
   AttachmentSize,
   AttachmentState,
-  AttachmentTriggerProps,
-} from "@/components/ui/attachment";
+  AttachmentTriggerProps
+} from '@/components/ui/attachment'
 import {
   Autocomplete,
   AutocompleteArrow,
@@ -98,18 +91,10 @@ import {
   autocompleteInputVariants,
   useAutocompleteFilter,
   useAutocompleteFilteredItems,
-  AutocompleteRootProps,
-} from "@/components/ui/autocomplete";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
-import {
-  Badge,
-  badgeVariants,
-  BadgeProps,
-} from "@/components/ui/badge";
+  AutocompleteRootProps
+} from '@/components/ui/autocomplete'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge, badgeVariants, BadgeProps } from '@/components/ui/badge'
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -117,20 +102,10 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
-  Button,
-  buttonVariants,
-  controlSizeClasses,
-  focusRing,
-  ButtonProps,
-  ControlSize,
-} from "@/components/ui/button";
-import {
-  Calendar,
-  CalendarProps,
-} from "@/components/ui/calendar";
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
+import { Button, buttonVariants, controlSizeClasses, focusRing, ButtonProps, ControlSize } from '@/components/ui/button'
+import { Calendar, CalendarProps } from '@/components/ui/calendar'
 import {
   ChartContainer,
   ChartLegend,
@@ -139,15 +114,10 @@ import {
   ChartTooltipContent,
   useChart,
   ChartConfig,
-  ChartContainerProps,
-} from "@/components/ui/chart";
-import {
-  CheckboxIndicator,
-  CheckboxRoot,
-} from "@/components/ui/checkbox";
-import {
-  CheckboxGroup,
-} from "@/components/ui/checkbox-group";
+  ChartContainerProps
+} from '@/components/ui/chart'
+import { CheckboxIndicator, CheckboxRoot } from '@/components/ui/checkbox'
+import { CheckboxGroup } from '@/components/ui/checkbox-group'
 import {
   CodeBlock,
   CodeBlockActions,
@@ -161,13 +131,9 @@ import {
   CodeBlockContentProps,
   CodeBlockCopyButtonProps,
   CodeBlockLineProps,
-  CodeBlockProps,
-} from "@/components/ui/code-block";
-import {
-  Collapsible,
-  CollapsiblePanel,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  CodeBlockProps
+} from '@/components/ui/code-block'
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   Combobox,
   ComboboxArrow,
@@ -200,8 +166,8 @@ import {
   createComboboxItems,
   useComboboxFilter,
   useComboboxFilteredItems,
-  ComboboxRootProps,
-} from "@/components/ui/combobox";
+  ComboboxRootProps
+} from '@/components/ui/combobox'
 import {
   Command,
   CommandDialog,
@@ -211,8 +177,8 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
-} from "@/components/ui/command";
+  CommandShortcut
+} from '@/components/ui/command'
 import {
   ContextMenu,
   ContextMenuArrow,
@@ -235,17 +201,18 @@ import {
   ContextMenuSubmenuTrigger,
   ContextMenuTrigger,
   contextMenuItemVariants,
-  ContextMenuItemVariantProps,
-} from "@/components/ui/context-menu";
+  ContextMenuItemVariantProps
+} from '@/components/ui/context-menu'
 import {
   DataTable,
   DataTableColumnDef,
+  DataTableExpandedRowProps,
   DataTableProps,
-} from "@/components/ui/data-table";
-import {
-  DatePicker,
-  DatePickerProps,
-} from "@/components/ui/date-picker";
+  DataTableRenderProps,
+  DataTableSelectionMode,
+  DataTableSize
+} from '@/components/ui/data-table'
+import { DatePicker, DateRangePicker, DatePickerProps, DateRangePickerProps } from '@/components/ui/date-picker'
 import {
   Dialog,
   DialogBackdrop,
@@ -261,8 +228,8 @@ import {
   DialogViewport,
   createHandle as createDialogHandle,
   DialogButtonProps,
-  DialogChangeEventDetails,
-} from "@/components/ui/dialog";
+  DialogChangeEventDetails
+} from '@/components/ui/dialog'
 import {
   Drawer,
   DrawerBackdrop,
@@ -285,12 +252,9 @@ import {
   DrawerButtonProps,
   DrawerChangeEventDetails,
   DrawerSideProps,
-  DrawerSnapPoint,
-} from "@/components/ui/drawer";
-import {
-  Dropzone,
-  DropzoneProps,
-} from "@/components/ui/dropzone";
+  DrawerSnapPoint
+} from '@/components/ui/drawer'
+import { Dropzone, DropzoneProps } from '@/components/ui/dropzone'
 import {
   Field,
   FieldControl,
@@ -301,29 +265,19 @@ import {
   FieldLabel,
   FieldRoot,
   FieldRow,
-  FieldValidity,
-} from "@/components/ui/field";
-import {
-  FieldsetLegend,
-  FieldsetRoot,
-} from "@/components/ui/fieldset";
-import {
-  Form,
-} from "@/components/ui/form";
+  FieldValidity
+} from '@/components/ui/field'
+import { FieldsetLegend, FieldsetRoot } from '@/components/ui/fieldset'
+import { Form } from '@/components/ui/form'
 import {
   InlineEdit,
   InlineEditInput,
   InlineEditTrigger,
   InlineEditInputProps,
   InlineEditRootProps,
-  InlineEditTriggerProps,
-} from "@/components/ui/inline-edit";
-import {
-  Input,
-  InputAdornment,
-  InputAdornmentProps,
-  InputProps,
-} from "@/components/ui/input";
+  InlineEditTriggerProps
+} from '@/components/ui/inline-edit'
+import { Input, InputAdornment, InputAdornmentProps, InputProps } from '@/components/ui/input'
 import {
   Menu,
   MenuArrow,
@@ -349,18 +303,10 @@ import {
   createMenuHandle,
   menuItemVariants,
   MenuItemVariantProps,
-  MenuRootHandle,
-} from "@/components/ui/menu";
-import {
-  Menubar,
-} from "@/components/ui/menubar";
-import {
-  Meter,
-  MeterIndicator,
-  MeterLabel,
-  MeterTrack,
-  MeterValue,
-} from "@/components/ui/meter";
+  MenuRootHandle
+} from '@/components/ui/menu'
+import { Menubar } from '@/components/ui/menubar'
+import { Meter, MeterIndicator, MeterLabel, MeterTrack, MeterValue } from '@/components/ui/meter'
 import {
   NavigationMenu,
   NavigationMenuArrow,
@@ -374,8 +320,8 @@ import {
   NavigationMenuPortal,
   NavigationMenuPositioner,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
+  NavigationMenuViewport
+} from '@/components/ui/navigation-menu'
 import {
   NumberField,
   NumberFieldDecrement,
@@ -383,17 +329,10 @@ import {
   NumberFieldIncrement,
   NumberFieldInput,
   NumberFieldScrubArea,
-  NumberFieldScrubAreaCursor,
-} from "@/components/ui/number-field";
-import {
-  OTPField,
-  OTPFieldInput,
-  OTPFieldSeparator,
-} from "@/components/ui/otp-field";
-import {
-  PageHeader,
-  PageHeaderProps,
-} from "@/components/ui/page-header";
+  NumberFieldScrubAreaCursor
+} from '@/components/ui/number-field'
+import { OTPField, OTPFieldInput, OTPFieldSeparator } from '@/components/ui/otp-field'
+import { PageHeader, PageHeaderProps } from '@/components/ui/page-header'
 import {
   Pagination,
   PaginationContent,
@@ -401,8 +340,8 @@ import {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+  PaginationPrevious
+} from '@/components/ui/pagination'
 import {
   Popover,
   PopoverArrow,
@@ -417,8 +356,8 @@ import {
   PopoverViewport,
   createHandle as createPopoverHandle,
   PopoverChangeEventDetails,
-  PopoverTriggerProps,
-} from "@/components/ui/popover";
+  PopoverTriggerProps
+} from '@/components/ui/popover'
 import {
   PreviewCard,
   PreviewCardArrow,
@@ -430,34 +369,27 @@ import {
   PreviewCardViewport,
   createHandle as createPreviewCardHandle,
   PreviewCardChangeEventDetails,
-  PreviewCardTriggerProps,
-} from "@/components/ui/preview-card";
+  PreviewCardTriggerProps
+} from '@/components/ui/preview-card'
+import { Progress, ProgressIndicator, ProgressLabel, ProgressTrack, ProgressValue } from '@/components/ui/progress'
 import {
-  Progress,
-  ProgressIndicator,
-  ProgressLabel,
-  ProgressTrack,
-  ProgressValue,
-} from "@/components/ui/progress";
-import {
-  RadioGroup,
-  RadioIndicator,
-  RadioRoot,
-} from "@/components/ui/radio";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-  ResizableHandleProps,
-} from "@/components/ui/resizable";
+  ProgressStepIndicator,
+  ProgressIndicatorOrientation,
+  ProgressIndicatorStep,
+  ProgressStepIndicatorProps,
+  ProgressStepStatus
+} from '@/components/ui/progress-indicator'
+import { RadioGroup, RadioIndicator, RadioRoot } from '@/components/ui/radio'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup, ResizableHandleProps } from '@/components/ui/resizable'
 import {
   ScrollArea,
   ScrollAreaContent,
   ScrollAreaCorner,
   ScrollAreaScrollbar,
   ScrollAreaThumb,
-  ScrollAreaViewport,
-} from "@/components/ui/scroll-area";
+  ScrollAreaViewport
+} from '@/components/ui/scroll-area'
+import { Search, SearchProps } from '@/components/ui/search'
 import {
   Select,
   SelectArrow,
@@ -479,11 +411,9 @@ import {
   SelectTrigger,
   SelectValue,
   selectTriggerVariants,
-  SelectRootProps,
-} from "@/components/ui/select";
-import {
-  Separator,
-} from "@/components/ui/separator";
+  SelectRootProps
+} from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
 import {
   SIDEBAR_KEYBOARD_SHORTCUT,
   SIDEBAR_WIDTH,
@@ -514,8 +444,8 @@ import {
   SidebarMenuButtonProps,
   SidebarMenuSubButtonProps,
   SidebarProps,
-  SidebarProviderProps,
-} from "@/components/ui/sidebar";
+  SidebarProviderProps
+} from '@/components/ui/sidebar'
 import {
   Slider,
   SliderControl,
@@ -523,14 +453,9 @@ import {
   SliderLabel,
   SliderThumb,
   SliderTrack,
-  SliderValue,
-} from "@/components/ui/slider";
-import {
-  Switch,
-  SwitchThumb,
-  switchThumbVariants,
-  switchVariants,
-} from "@/components/ui/switch";
+  SliderValue
+} from '@/components/ui/slider'
+import { Switch, SwitchThumb, switchThumbVariants, switchVariants } from '@/components/ui/switch'
 import {
   Tabs,
   TabsContent,
@@ -541,8 +466,8 @@ import {
   TabsTrigger,
   TabsIndicatorVariantProps,
   TabsListVariantProps,
-  TabsTabVariantProps,
-} from "@/components/ui/tabs";
+  TabsTabVariantProps
+} from '@/components/ui/tabs'
 import {
   ToastAction,
   ToastArrow,
@@ -559,16 +484,10 @@ import {
   toastCloseVariants,
   toastRootVariants,
   useToastManager,
-  ToastRootProps,
-} from "@/components/ui/toast";
-import {
-  Toggle,
-  toggleVariants,
-} from "@/components/ui/toggle";
-import {
-  ToggleGroup,
-  ToggleGroupContext,
-} from "@/components/ui/toggle-group";
+  ToastRootProps
+} from '@/components/ui/toast'
+import { Toggle, toggleVariants } from '@/components/ui/toggle'
+import { ToggleGroup, ToggleGroupContext } from '@/components/ui/toggle-group'
 import {
   Toolbar,
   ToolbarButton,
@@ -577,8 +496,8 @@ import {
   ToolbarLink,
   ToolbarSeparator,
   toolbarButtonVariants,
-  ToolbarButtonVariantProps,
-} from "@/components/ui/toolbar";
+  ToolbarButtonVariantProps
+} from '@/components/ui/toolbar'
 import {
   Tooltip,
   TooltipArrow,
@@ -590,10 +509,10 @@ import {
   TooltipViewport,
   createHandle as createTooltipHandle,
   TooltipChangeEventDetails,
-  TooltipTriggerProps,
-} from "@/components/ui/tooltip";
+  TooltipTriggerProps
+} from '@/components/ui/tooltip'
 
-export { cn };
+export { cn }
 
 export {
   Accordion,
@@ -756,6 +675,7 @@ export {
   contextMenuItemVariants,
   DataTable,
   DatePicker,
+  DateRangePicker,
   Dialog,
   DialogBackdrop,
   DialogClose,
@@ -892,6 +812,7 @@ export {
   ProgressLabel,
   ProgressTrack,
   ProgressValue,
+  ProgressStepIndicator,
   RadioGroup,
   RadioIndicator,
   RadioRoot,
@@ -904,6 +825,7 @@ export {
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
+  Search,
   Select,
   SelectArrow,
   SelectBackdrop,
@@ -1003,8 +925,8 @@ export {
   TooltipProvider,
   TooltipTrigger,
   TooltipViewport,
-  createTooltipHandle,
-};
+  createTooltipHandle
+}
 
 export type {
   AlertProps,
@@ -1030,8 +952,13 @@ export type {
   ComboboxRootProps,
   ContextMenuItemVariantProps,
   DataTableColumnDef,
+  DataTableExpandedRowProps,
   DataTableProps,
+  DataTableRenderProps,
+  DataTableSelectionMode,
+  DataTableSize,
   DatePickerProps,
+  DateRangePickerProps,
   DialogButtonProps,
   DialogChangeEventDetails,
   DrawerButtonProps,
@@ -1051,7 +978,12 @@ export type {
   PopoverTriggerProps,
   PreviewCardChangeEventDetails,
   PreviewCardTriggerProps,
+  ProgressIndicatorOrientation,
+  ProgressIndicatorStep,
+  ProgressStepIndicatorProps,
+  ProgressStepStatus,
   ResizableHandleProps,
+  SearchProps,
   SelectRootProps,
   SidebarMenuButtonProps,
   SidebarMenuSubButtonProps,
@@ -1063,5 +995,5 @@ export type {
   ToastRootProps,
   ToolbarButtonVariantProps,
   TooltipChangeEventDetails,
-  TooltipTriggerProps,
-};
+  TooltipTriggerProps
+}

@@ -2,10 +2,9 @@ import * as React from 'react'
 import { Radio } from '@base-ui/react/radio'
 import { RadioGroup as BaseRadioGroup } from '@base-ui/react/radio-group'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 
 function RadioRoot({ className, children, ...props }: React.ComponentProps<typeof Radio.Root>) {
-  const newLocal = 'data-invalid:border-destructive data-invalid:ring-destructive/20'
   return (
     <Radio.Root
       data-slot='radio'
@@ -14,7 +13,7 @@ function RadioRoot({ className, children, ...props }: React.ComponentProps<typeo
         'data-checked:border-primary data-checked:bg-primary',
         'data-disabled:cursor-not-allowed data-disabled:opacity-50',
         'data-readonly:cursor-default',
-        newLocal,
+        'data-invalid:border-destructive data-invalid:ring-destructive/20',
         focusRing,
         className
       )}

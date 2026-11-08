@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { MagnifyingGlassIcon, MoonIcon, SunIcon, XIcon, PaletteIcon, CodeIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { VariantBlock, type DemoMeta } from './demo'
+import { ShowcaseBrandLink } from './brand-link'
 import { Sheet } from './sheet'
 import { OverviewStyle } from './overview-style'
 import { OverviewDashboard } from './overview-dashboard'
@@ -42,7 +43,14 @@ import {
 } from './component-guidelines'
 import { DesignerGuidelineSheet } from './component-guidelines/designer-guideline-sheet'
 import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs'
-import { CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command'
+import {
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem
+} from '@/components/ui/command'
 import skytrackLogo from '../../public/skytrack-logo-full.svg?raw'
 
 /**
@@ -169,10 +177,6 @@ export function App() {
       : demos
   }, [query])
 
-  const componentCount = demos.filter((d) => guidelinesBySlug[d.id]).length
-  const patternCount = demos.length - componentCount
-  const variantCount = demos.reduce((n, d) => n + d.variants.length, 0)
-
   const renderViewContent = (selectedAudience: Audience) =>
     view === 'components' ? (
       <div className='mx-auto max-w-7xl space-y-16 px-6 sm:px-8 py-10'>
@@ -239,14 +243,8 @@ export function App() {
         <Sidebar className='md:sticky md:top-0 md:h-screen md:w-64 md:shrink-0'>
           <SidebarHeader className='gap-0 p-0'>
             <div className='flex h-14 items-center gap-2 border-b border-sidebar-border px-5'>
-              <a
-                href='/'
-                aria-hidden='true'
-                className='block h-5 [&>svg]:block [&>svg]:h-full [&>svg]:w-full'
-                dangerouslySetInnerHTML={{ __html: skytrackLogo }}
-                aria-label={`${componentCount} components · ${patternCount} pattern · ${variantCount} variants`}
-              />
-              <Badge count='ui' status='outline'></Badge>
+              <ShowcaseBrandLink logo={skytrackLogo} />
+              <Badge count='ui' status='outline' className='rounded-(--radius)' />
             </div>
           </SidebarHeader>
           <SidebarContent className='gap-0 p-3 text-sm'>
@@ -294,11 +292,11 @@ export function App() {
               </Toggle>
             ))}
           </ToggleGroup>
-            <Input
+          <Input
             startAdornment={<MagnifyingGlassIcon />}
             endAdornment={
               <>
-                <Badge size='sm' count='⌘ K' />
+                <Badge size='sm' count='⌘ K' className='rounded-(--radius)' />
                 {query !== '' && (
                   <Button size='icon-xs' variant='ghost' aria-label='Clear filter' onClick={() => setQuery('')}>
                     <XIcon />
@@ -371,27 +369,39 @@ export function App() {
             {dark ? <SunIcon className='size-4' /> : <MoonIcon className='size-4' />}
           </Button>
         </header>
-        <TabsPanel value='designer' className={`min-w-0 outline-none ${view === 'style-overview' && 'bg-muted'}`}>
-          {renderViewContent('designer')}
-        </TabsPanel>
-        <TabsPanel value='developer' className='min-w-0 outline-none'>
-          {renderViewContent('developer')}
-        </TabsPanel>
+        <main className='min-w-0 flex-1'>
+          <TabsPanel value='designer' className={cn('min-w-0 outline-none', view === 'style-overview' && 'bg-muted')}>
+            {renderViewContent('designer')}
+          </TabsPanel>
+          <TabsPanel value='developer' className='min-w-0 outline-none'>
+            {renderViewContent('developer')}
+          </TabsPanel>
+        </main>
       </Tabs>
       <CommandDialog open={commandOpen} onOpenChange={setCommandOpen}>
         <CommandInput value={commandQuery} onValueChange={setCommandQuery} placeholder='Search components...' />
         <CommandList>
           <CommandEmpty>No components found.</CommandEmpty>
           <CommandGroup heading='Components'>
-            {demos.filter((demo) => `${demo.title} ${demo.id} ${demo.description}`.toLowerCase().includes(commandQuery.toLowerCase())).map((demo) => (
-              <CommandItem key={demo.id} value={`${demo.title} ${demo.id}`} onSelect={() => {
-                setQuery('')
-                setCommandOpen(false)
-                if (view !== 'components') navigateToView('components')
-                window.location.hash = demo.id
-                requestAnimationFrame(() => document.getElementById(demo.id)?.scrollIntoView({ block: 'start' }))
-              }}>{demo.title}</CommandItem>
-            ))}
+            {demos
+              .filter((demo) =>
+                `${demo.title} ${demo.id} ${demo.description}`.toLowerCase().includes(commandQuery.toLowerCase())
+              )
+              .map((demo) => (
+                <CommandItem
+                  key={demo.id}
+                  value={`${demo.title} ${demo.id}`}
+                  onSelect={() => {
+                    setQuery('')
+                    setCommandOpen(false)
+                    if (view !== 'components') navigateToView('components')
+                    window.location.hash = demo.id
+                    requestAnimationFrame(() => document.getElementById(demo.id)?.scrollIntoView({ block: 'start' }))
+                  }}
+                >
+                  {demo.title}
+                </CommandItem>
+              ))}
           </CommandGroup>
         </CommandList>
       </CommandDialog>

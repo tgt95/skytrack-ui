@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { CalendarBlankIcon } from '@phosphor-icons/react'
-import type { DayPickerProps } from 'react-day-picker'
+import type { DateRange, DayPickerProps } from 'react-day-picker'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverPortal, PopoverPositioner, PopoverPopup, PopoverTrigger } from '@/components/ui/popover'
@@ -22,6 +22,24 @@ export type DatePickerProps = {
   calendarClassName?: string
   calendarProps?: DistributiveOmit<
     Extract<DayPickerProps, { mode: 'single' }>,
+    'mode' | 'selected' | 'onSelect' | 'captionLayout' | 'navLayout'
+  >
+}
+
+export type DateRangePickerProps = {
+  id?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
+  value?: DateRange
+  defaultValue?: DateRange
+  onValueChange?: (value: DateRange | undefined) => void
+  placeholder?: string
+  disabled?: boolean
+  className?: string
+  buttonClassName?: string
+  calendarClassName?: string
+  calendarProps?: DistributiveOmit<
+    Extract<DayPickerProps, { mode: 'range' }>,
     'mode' | 'selected' | 'onSelect' | 'captionLayout' | 'navLayout'
   >
 }
@@ -98,4 +116,84 @@ function DatePicker(props: DatePickerProps) {
   )
 }
 
-export { DatePicker }
+function DateRangePicker(props: DateRangePickerProps) {
+  const {
+    value,
+    defaultValue,
+    onValueChange,
+    id,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledby,
+    placeholder = 'Pick a date range',
+    disabled = false,
+    className,
+    buttonClassName,
+    calendarClassName,
+    calendarProps
+  } = props
+  const [internalValue, setInternalValue] = React.useState<DateRange | undefined>(defaultValue)
+  const [open, setOpen] = React.useState(false)
+  const isControlled = Object.prototype.hasOwnProperty.call(props, 'value')
+  const selectedRange = isControlled ? value : internalValue
+  const formatDate = React.useCallback(
+    (date: Date) => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(date),
+    []
+  )
+  const label = selectedRange?.from
+    ? selectedRange.to
+      ? `${formatDate(selectedRange.from)} – ${formatDate(selectedRange.to)}`
+      : `${formatDate(selectedRange.from)} – Select end date`
+    : placeholder
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <div data-slot='date-range-picker' className={cn('w-full sm:w-64', className)}>
+        <PopoverTrigger
+          render={
+            <Button
+              variant='outline'
+              disabled={disabled}
+              id={id}
+              data-empty={!selectedRange?.from}
+              aria-label={ariaLabel ?? (id || ariaLabelledby ? undefined : label)}
+              aria-labelledby={ariaLabelledby}
+              className={cn(
+                'w-full justify-start text-left font-normal data-[empty=true]:text-muted-foreground',
+                buttonClassName
+              )}
+            />
+          }
+        >
+          <CalendarBlankIcon aria-hidden='true' />
+          <span className='truncate'>{label}</span>
+        </PopoverTrigger>
+      </div>
+      <PopoverPortal>
+        <PopoverPositioner side='bottom' align='start' sideOffset={4}>
+          <PopoverPopup className='w-auto max-w-none p-0'>
+            <Calendar
+              mode='range'
+              selected={selectedRange}
+              onSelect={(nextRange) => {
+                const isFirstDay =
+                  !selectedRange?.from &&
+                  nextRange?.from &&
+                  nextRange.to &&
+                  nextRange.from.toDateString() === nextRange.to.toDateString()
+                const normalizedRange = isFirstDay ? { from: nextRange.from } : nextRange
+
+                if (!isControlled) setInternalValue(normalizedRange)
+                onValueChange?.(normalizedRange)
+                if (normalizedRange?.from && normalizedRange.to) setOpen(false)
+              }}
+              className={calendarClassName}
+              {...calendarProps}
+            />
+          </PopoverPopup>
+        </PopoverPositioner>
+      </PopoverPortal>
+    </Popover>
+  )
+}
+
+export { DatePicker, DateRangePicker }

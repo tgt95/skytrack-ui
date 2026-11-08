@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/navigation-menu.d.ts`](../../../../../dist-lib/components/ui/navigation-menu.d.ts)
 - Showcase demo id: `navigation-menu`
 - Closest demo: [`src/demos/navigation-menu.demo.tsx`](../../../../../src/demos/navigation-menu.demo.tsx)
-- Official guidance: [Carbon Design System UI Shell Header](https://carbondesignsystem.com/components/UI-shell-header/usage/)
 
 ## Usage
 

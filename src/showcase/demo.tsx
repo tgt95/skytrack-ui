@@ -41,9 +41,7 @@ class DemoErrorBoundary extends Component<{ name: string; children: ReactNode },
 export function VariantBlock({ name, children }: { name: string; children: ReactNode }) {
   return (
     <div className='border border-border'>
-      <div className='border-b border-border px-4 py-2 text-xs sub-heading'>
-        {name}
-      </div>
+      <div className='border-b border-border px-4 py-2 text-xs sub-heading'>{name}</div>
       <div className='flex min-h-28 flex-wrap items-center gap-4 p-6'>
         <DemoErrorBoundary name={name}>{children}</DemoErrorBoundary>
       </div>

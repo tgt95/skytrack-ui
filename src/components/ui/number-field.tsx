@@ -2,8 +2,8 @@ import * as React from 'react'
 import { NumberField as BaseNumberField } from '@base-ui/react/number-field'
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
-import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/components/ui/control-sizes'
+import { focusRing } from '@/lib/focus-ring'
+import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/lib/control-sizes'
 
 function NumberField({ className, ...props }: React.ComponentProps<typeof BaseNumberField.Root>) {
   return (

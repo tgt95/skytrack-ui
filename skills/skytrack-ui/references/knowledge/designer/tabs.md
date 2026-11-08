@@ -8,7 +8,6 @@
 - Public type declaration: [`dist-lib/components/ui/tabs.d.ts`](../../../../../dist-lib/components/ui/tabs.d.ts)
 - Showcase demo id: `tabs`
 - Closest demo: [`src/demos/tabs.demo.tsx`](../../../../../src/demos/tabs.demo.tsx)
-- Official guidance: [Carbon Design System Tabs Usage](https://carbondesignsystem.com/components/tabs/usage/)
 
 ## Usage
 

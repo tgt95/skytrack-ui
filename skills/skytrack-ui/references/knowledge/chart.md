@@ -71,7 +71,12 @@ Compose in hierarchy:
 Supported chart types via Recharts:
 
 - Bar Charts: Discrete category comparisons (e.g. monthly flight counts).
+- Stacked Bar Charts: Compare category totals and their composition.
 - Line / Area Charts: Continuous telemetry and temporal trends (e.g. altitude or speed over time).
+- Pie Charts: Show a small part-to-whole distribution with no more than five distinguishable categories.
+- Scatter Charts: Explore a relationship between two numeric measures without implying causation.
+
+The six showcase variants demonstrate category comparison, time trend, stacked category composition, area magnitude, a small part-to-whole set, and a relationship between two measures: `BAR CHART`, `LINE CHART`, `STACKED BAR`, `AREA CHART`, `PIE CHART`, and `SCATTER CHART`. Every example is separate, labelled as sample data, and provides visible exact-value text below the visualization.
 
 Tooltips:
 

@@ -8,13 +8,12 @@
 - Public type declaration: [`dist-lib/components/ui/select.d.ts`](../../../../../dist-lib/components/ui/select.d.ts)
 - Showcase demo id: `select`
 - Closest demo: [`src/demos/select.demo.tsx`](../../../../../src/demos/select.demo.tsx)
-- Official guidance: [Carbon Design System Select Usage](https://carbondesignsystem.com/components/select/usage/)
 
 ## Usage
 
 Use Select when people need to choose from a compact, predefined list of options (e.g., account type, notification frequency, or export format). Single selection is the default.
 
-SkyTrack UI's Select supports multiple selection (`multiple` prop) as a local component capability. Official Carbon Select is strictly single-select (Carbon provides a separate Multiselect component for multiple values), but SkyTrack allows multi-selection directly in Select when space is constrained.
+SkyTrack UI's Select supports multiple selection (`multiple` prop) when the option set is compact and selection benefits from remaining visible.
 
 When choosing between selection components:
 - **Radio Group vs. Single Select:** Use Radio Group when a short set of mutually exclusive options fits comfortably and benefits from being visible at once. Use single Select when space is limited or people need to choose from a longer list.

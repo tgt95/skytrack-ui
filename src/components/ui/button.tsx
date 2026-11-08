@@ -2,14 +2,13 @@ import * as React from 'react'
 import { Button as BaseButton } from '@base-ui/react/button'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { CONTROL_SIZE_CLASSES } from '@/components/ui/control-sizes'
-
-/** Shared focus ring + disabled styles. Reuse in every interactive component. */
-export const focusRing = 'outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring'
+import { CONTROL_SIZE_CLASSES } from '@/lib/control-sizes'
+import { focusRing } from '@/lib/focus-ring'
 
 /** Keep existing button-subpath imports working while shared controls use the common module. */
-export { CONTROL_SIZE_CLASSES as controlSizeClasses } from '@/components/ui/control-sizes'
-export type { ControlSize } from '@/components/ui/control-sizes'
+export { focusRing }
+export { CONTROL_SIZE_CLASSES as controlSizeClasses } from '@/lib/control-sizes'
+export type { ControlSize } from '@/lib/control-sizes'
 
 export const buttonVariants = cva(
   cn(

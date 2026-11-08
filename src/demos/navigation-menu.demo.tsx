@@ -74,11 +74,7 @@ const LARGE_LINKS: LinkEntry[] = Array.from({ length: 18 }, (_, index) => ({
 function LinkCards({ links, heading }: { links: LinkEntry[]; heading?: string }) {
   return (
     <ul className='m-0 grid list-none grid-cols-1 gap-1 p-0 sm:grid-cols-2'>
-      {heading && (
-        <li className='col-span-full px-2 pt-1 pb-0.5 text-xs sub-heading'>
-          {heading}
-        </li>
-      )}
+      {heading && <li className='col-span-full px-2 pt-1 pb-0.5 text-xs sub-heading'>{heading}</li>}
       {links.map((link) => (
         <li key={link.href}>
           <NavigationMenuLink href={link.href}>

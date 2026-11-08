@@ -3,8 +3,8 @@ import { Select as BaseSelect } from '@base-ui/react/select'
 import { CaretDownIcon, CaretUpIcon, CaretUpDownIcon, CheckIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
-import { CONTROL_SIZE_CLASSES } from '@/components/ui/control-sizes'
+import { focusRing } from '@/lib/focus-ring'
+import { CONTROL_SIZE_CLASSES } from '@/lib/control-sizes'
 
 /** Props of the `Select` root, generic over the value type and `multiple` mode. */
 export type SelectRootProps<Value, Multiple extends boolean | undefined = false> = BaseSelect.Root.Props<

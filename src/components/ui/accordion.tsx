@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Accordion as BaseAccordion } from '@base-ui/react/accordion'
 import { CaretDownIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
-import { focusRing } from '@/components/ui/button'
+import { focusRing } from '@/lib/focus-ring'
 
 function Accordion({ className, ...props }: React.ComponentProps<typeof BaseAccordion.Root>) {
   return <BaseAccordion.Root data-slot='accordion' className={cn('flex w-full flex-col', className)} {...props} />

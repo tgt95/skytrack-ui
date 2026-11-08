@@ -183,6 +183,7 @@ function InlineEditInput({
 }: InlineEditInputProps) {
   const context = useInlineEditContext()
   const inputRef = React.useRef<HTMLElement>(null)
+  const textareaMinHeightRef = React.useRef(0)
 
   React.useEffect(() => {
     if (!context.editing) return
@@ -192,7 +193,10 @@ function InlineEditInput({
   }, [context.editing])
 
   React.useLayoutEffect(() => {
-    if (!context.editing) return
+    if (!context.editing) {
+      textareaMinHeightRef.current = 0
+      return
+    }
     const input = inputRef.current
     const trigger = context.triggerRef.current
     const root = context.rootRef.current
@@ -203,12 +207,13 @@ function InlineEditInput({
     const triggerStyle = window.getComputedStyle(trigger)
     const overlay = 6
     const borderWidth = 1
+    const minHeight = triggerRect.height + overlay * 2
 
     Object.assign(input.style, {
       top: `${triggerRect.top - rootRect.top - overlay}px`,
       left: `${triggerRect.left - rootRect.left - overlay}px`,
       width: `${triggerRect.width + overlay * 2}px`,
-      height: `${triggerRect.height + overlay * 2}px`,
+      height: `${minHeight}px`,
       boxSizing: 'border-box',
       font: triggerStyle.font,
       letterSpacing: triggerStyle.letterSpacing,
@@ -220,10 +225,17 @@ function InlineEditInput({
       paddingLeft: `${Number.parseFloat(triggerStyle.paddingLeft) + Number.parseFloat(triggerStyle.borderLeftWidth) + overlay - borderWidth}px`
     })
 
-    if (input instanceof HTMLTextAreaElement) {
-      input.style.height = `${Math.max(triggerRect.height + overlay * 2, input.scrollHeight)}px`
-    }
-  }, [context.editing, context.draft, context.rootRef, context.triggerRef])
+    textareaMinHeightRef.current = minHeight
+  }, [context.editing, context.rootRef, context.triggerRef])
+
+  React.useLayoutEffect(() => {
+    if (!context.editing) return
+    const input = inputRef.current
+    if (!(input instanceof HTMLTextAreaElement)) return
+
+    input.style.height = 'auto'
+    input.style.height = `${Math.max(textareaMinHeightRef.current, input.scrollHeight)}px`
+  }, [context.editing, context.draft])
 
   const input = useRender({
     defaultTagName: 'textarea',

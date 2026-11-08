@@ -99,7 +99,7 @@ function extractExports(file) {
 
 const files = fs
   .readdirSync(uiDir)
-  .filter((f) => f.endsWith('.tsx'))
+  .filter((f) => f.endsWith('.tsx') && !/\.(test|spec)\.tsx$/.test(f))
   .sort()
 
 /** @type {Record<string, {values: string[], types: string[]}>} */

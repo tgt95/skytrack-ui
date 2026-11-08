@@ -48,15 +48,24 @@ function unescapeSingle(raw) {
     if (u !== undefined) return String.fromCharCode(parseInt(u, 16))
     if (x !== undefined) return String.fromCharCode(parseInt(x, 16))
     switch (ch) {
-      case 'n': return '\n'
-      case 'r': return '\r'
-      case 't': return '\t'
-      case 'b': return '\b'
-      case 'f': return '\f'
-      case 'v': return '\v'
-      case '0': return '\0'
-      case '\n': return ''
-      default: return ch
+      case 'n':
+        return '\n'
+      case 'r':
+        return '\r'
+      case 't':
+        return '\t'
+      case 'b':
+        return '\b'
+      case 'f':
+        return '\f'
+      case 'v':
+        return '\v'
+      case '0':
+        return '\0'
+      case '\n':
+        return ''
+      default:
+        return ch
     }
   })
 }

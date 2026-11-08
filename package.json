@@ -216,6 +216,11 @@
       "import": "./dist-lib/progress.js",
       "default": "./dist-lib/progress.js"
     },
+    "./progress-indicator": {
+      "types": "./dist-lib/components/ui/progress-indicator.d.ts",
+      "import": "./dist-lib/progress-indicator.js",
+      "default": "./dist-lib/progress-indicator.js"
+    },
     "./radio": {
       "types": "./dist-lib/components/ui/radio.d.ts",
       "import": "./dist-lib/radio.js",
@@ -230,6 +235,11 @@
       "types": "./dist-lib/components/ui/scroll-area.d.ts",
       "import": "./dist-lib/scroll-area.js",
       "default": "./dist-lib/scroll-area.js"
+    },
+    "./search": {
+      "types": "./dist-lib/components/ui/search.d.ts",
+      "import": "./dist-lib/search.js",
+      "default": "./dist-lib/search.js"
     },
     "./select": {
       "types": "./dist-lib/components/ui/select.d.ts",
@@ -290,26 +300,27 @@
   },
   "files": [
     "dist-lib",
-    "README.md",
-    "AGENT_GUIDE.md"
+    "README.md"
   ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.json && vite build",
     "typecheck": "tsc -p tsconfig.json",
+    "lint": "node scripts/lint-ui-practices.mjs",
+    "test": "vitest run",
     "preview": "vite preview",
     "generate:exports": "node scripts/generate-exports.mjs",
     "build:lib": "node scripts/build-lib.mjs",
     "verify:lib": "node scripts/verify-lib.mjs",
-    "pack:local": "npm run build:lib && npm pack --pack-destination ./dist-lib-tarball",
+    "pack:local": "mkdir -p ./dist-lib-tarball && npm run build:lib && npm pack --pack-destination ./dist-lib-tarball",
     "test:consumer": "node scripts/test-consumer.mjs",
     "prepack": "node scripts/guard-publish.mjs",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "build:site": "node scripts/build-site.mjs",
     "deploy:pages": "node scripts/deploy-pages.mjs",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format": "prettier --write 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md",
+    "format:check": "prettier --check 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -337,16 +348,21 @@
     "@storybook/addon-docs": "^10.6.1",
     "@storybook/react-vite": "^10.6.1",
     "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
+    "jsdom": "^31.0.0",
     "prettier": "^3.9.9",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "storybook": "^10.6.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vite": "^8.3.2"
+    "vite": "^8.3.2",
+    "vitest": "^5.1.0"
   }
 }
