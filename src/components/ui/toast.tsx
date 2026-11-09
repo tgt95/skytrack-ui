@@ -5,6 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/lib/focus-ring'
 import { PopupArrowGlyph } from '@/lib/popup-arrow'
+import { Button, type ButtonProps } from './button'
 
 /** Props of the `Toast` root for a single toast object. */
 export type ToastRootProps<Data extends object = object> = BaseToast.Root.Props & {
@@ -115,13 +116,21 @@ export const toastCloseVariants = cva(
   }
 )
 
-type ToastCloseProps = React.ComponentProps<typeof BaseToast.Close> & VariantProps<typeof toastCloseVariants>
+type ToastCloseProps = React.ComponentProps<typeof BaseToast.Close> & Pick<ButtonProps, 'variant' | 'size'>
 
+/** Icon X by default; pass text `children` for a labelled button. `variant`/`size` always override the defaults. */
 function ToastClose({ className, size, variant, children, ...props }: ToastCloseProps) {
+  const iconOnly = children == null
   return (
     <BaseToast.Close
       data-slot='toast-close'
-      className={cn(toastCloseVariants({ size, variant }), className)}
+      className={className}
+      render={
+        <Button
+          variant={variant ?? 'outline'}
+          size={size ?? (iconOnly ? 'icon' : 'default')}
+        />
+      }
       {...props}
     >
       {children ?? <XIcon className='size-4' />}

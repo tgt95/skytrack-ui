@@ -88,7 +88,7 @@ If column visibility is omitted, no separate note is needed just to record that 
 installed DataTable API: the checked `0.1.5` version always renders its `Columns` control and has no
 table-level prop to disable it. Do not hide that internal control with consumer CSS or invent an
 API; when it materially conflicts with the IA, choose another supported composition only if it
-meets the actual data and interaction requirements. See [DataTable guidance](knowledge/data-table.md#column-visibility).
+meets the actual data and interaction requirements. See [DataTable guidance](knowledge/components/data-table.md#column-visibility).
 
 Group information by meaningful object and relationship; subdivide large groups semantically. Show decision-critical and required/safety details clearly; progressively disclose advanced or infrequent information. Prefer semantic headings/sections or `Fieldset` before surfaces. Cards remain flexible by abstraction level; nested surfaces may use `--accent` or a deeper opacity tint such as `bg-(--accent)/20` (choose opacity for context), with text contrast checked in supported themes. Do not make every small group a card by default.
 

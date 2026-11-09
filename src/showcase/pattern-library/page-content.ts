@@ -215,7 +215,7 @@ export const PAGE_COMMON_ACTIONS: PatternPageDraft = {
       blocks: [
         {
           type: 'prose',
-          text: 'Delete permanently destroys an object rather than unlinking it. Present deletion with a trash/delete icon, destructive button styling, or a destructive menu item, and escalate to a danger modal with clear consequence warnings whenever loss is non-trivial.'
+          text: 'Delete destroys the object rather than unlinking it and is usually permanent or difficult to reverse. When an item is easy to recreate or an immediate Undo is available, a lightweight action can be appropriate; confirm deletion when the potential loss is consequential.'
         }
       ],
       demoRefs: ['common-actions-delete'],
@@ -597,8 +597,8 @@ export const PAGE_COMMON_ACTIONS: PatternPageDraft = {
       id: 'common-actions-reset',
       title: 'Reset',
       sectionId: 'reset',
-      mappingStatus: 'partial-divergent',
-      scenario: 'Revert pending changes back to the baseline stored on the last Apply action.',
+      mappingStatus: 'mapped',
+      scenario: 'Discard pending filter edits and return to the last applied settings, not factory defaults.',
       teaching: {
         meaning:
           'Reset restores the last applied or saved values; this may differ from initial defaults or blank values.',
@@ -608,7 +608,7 @@ export const PAGE_COMMON_ACTIONS: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:532-542`) uses ghost button styling without showing an explicit Apply step establishing pending vs. applied values.'
+        'The example keeps pending filter values separate from the last applied view; Reset restores that checkpoint.'
     }
   ],
   components: ['Button', 'Menu', 'Input', 'Alert', 'AlertDialog', 'Search']
@@ -1471,11 +1471,11 @@ export const PAGE_DIALOGS: PatternPageDraft = {
         decision:
           'Use a modal for a required response or urgent information; keep the task short and user-initiated. Use a non-modal surface when the page must remain accessible.',
         consider:
-          'Validate fields on blur and clear inline errors as soon as valid input is supplied; keep focus trapped and visit Primary -> Secondary -> Close × in Tab order.'
+          'Validate the required route name on confirmation; clear the inline error as soon as the name is valid and keep focus inside the modal.'
       },
       interactive: true,
       _demoNote:
-        'The route-name field validates on Confirm rather than blur; a valid confirmation now closes the modal and reports its local result. Blur-triggered validation is not simulated.'
+        'The route-name field validates on blur and on confirmation; entering a valid name clears the inline error before the local confirmation closes the modal.'
     },
     {
       id: 'dialogs-non-modal-inspect',
@@ -3878,17 +3878,17 @@ export const PAGE_FLUID_STYLES: PatternPageDraft = {
       secondarySectionIds: ['fluid-accessibility'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'Group bottom container actions flush edge-to-edge with visible 3:1 dividing borders rather than floating mid-flow.',
+        'Attach related actions to a panel footer so they share its full width instead of floating in the content area.',
       teaching: {
         meaning:
-          'Fluid buttons attach along a container’s bottom edge at 25%, 50%, or 100% spans separated by 3:1 contrast dividers.',
+          'Fluid buttons attach related actions to a compound container instead of floating in its content area.',
         decision:
-          'Attach grouped fluid actions strictly at container bottoms (avoiding tertiary variants and mid-flow stretching); keep spacing when actions sit mid-page.',
-        consider: 'Verify at least 3:1 contrast along every shared border so adjacent buttons remain distinguishable.'
+          'Use them for grouped actions at a container edge, such as a panel footer; keep ordinary buttons separated in the content area.',
+        consider: 'Make each action distinct and keep shared borders visible enough to separate the choices.'
       },
       interactive: false,
       _demoNote:
-        'Live demo (`demos.tsx:1203-1238`) leaves internal padding (`p-3`) around buttons rather than bleeding flush to container edges with 3:1 separator borders.'
+        'The visual now shows a shared panel footer with equal-width, adjacent actions and a contrasting divider; it remains a static anatomy reference.'
     },
     {
       id: 'fluid-styles-form-width',
@@ -3915,17 +3915,17 @@ export const PAGE_FLUID_STYLES: PatternPageDraft = {
       secondarySectionIds: ['fluid-alignment', 'designing-best-practices'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'Demonstrate edge-to-edge stacked inputs and container borders while keeping SkyTrack Input limitations honest.',
+        'A quick workspace invite uses a compact, stacked group inside one border; keep each field label visible and reserve flush fluid inputs for implementations that support them.',
       teaching: {
         meaning: 'Fluid inputs stack edge-to-edge inside a container with 0px internal gaps and 3:1 shared borders.',
         decision:
           'In reference designs, fluid inputs fix 64px height with internal labels and tooltip-only help; when built with standard external-label inputs, preserve visible labels.',
         consider:
-          'Avoid separating truly fluid inputs with standard whitespace gaps, and always preserve visible labels—never rely solely on disappearing placeholders.'
+          'Do not treat fluid styling as a universal full-width rule. Keep labels visible; use zero-gap stacking only when the field implementation supports that anatomy.'
       },
       interactive: false,
       _demoNote:
-        'Two critical divergences: (1) `example-copy.ts:258` advises "preserve spacing between inputs", contradicting the reference 0px flush-stack rule; (2) `demos.tsx:1255-1259` omits visible labels on inputs (using placeholder + `aria-label`), violating label visibility.'
+        'The static card keeps external labels visible and explicitly identifies itself as a compact approximation; exact zero-gap fluid fields require a dedicated implementation.'
     },
     {
       id: 'fluid-styles-container-vs-fixed',
@@ -5200,7 +5200,7 @@ export const PAGE_GLOBAL_HEADER: PatternPageDraft = {
       secondarySectionIds: ['overview-anatomy', 'nav-global', 'nav-local', 'a11y-landmarks'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'Toggle between a compact header-only shell and a global header paired with a local vertical mission panel.',
+        'Compare a workspace-wide header alone with the same header beside mission-specific destinations; keep utilities and product switching separate.',
       teaching: {
         meaning:
           'A global header gives persistent access to workspace-wide destinations while local navigation supports the current mission.',
@@ -5211,7 +5211,7 @@ export const PAGE_GLOBAL_HEADER: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:1454-1533`) merges Utilities and Switcher into one dropdown Menu without a hamburger toggle, dedicated utility drawers, non-link chevron-flipping Sub-menus, or a "Skip to main content" focus link.'
+        'The desktop preview separates the Utilities menu from product switching and includes a skip link. It does not model mobile utility drawers or expandable submenu states.'
     },
     {
       id: 'global-header-organize-destinations',
@@ -5226,11 +5226,12 @@ export const PAGE_GLOBAL_HEADER: PatternPageDraft = {
           'Navigation can be organized using clear domain schemes—most recent, customized, audience, alphabetical, or product capabilities—while excluding unbounded user records from side rails.',
         decision:
           'Choose a scheme aligned to how users look up tools rather than internal company hierarchy, and move large user-created lists into drill-down index views with breadcrumbs.',
-        consider: 'Keep active account/mode visible and preserve filters in URL state across navigation pivots.'
+        consider:
+          'Keep active account/mode visible and preserve filters in URL state across navigation pivots. The preview compares five bounded destination schemes; it does not model saved account or URL state.'
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:1563-1599`) contrasts local SkyTrack labels ("Workspace first" vs. "Mission first") rather than demonstrating the six maintained organizational schemes or the unbounded-record drill-down exclusion.'
+        'The local preview compares the five bounded schemes and explains where user-created records belong; saved account mode and URL filter state are not simulated.'
     }
   ],
   components: ['Breadcrumb', 'Menu', 'Button', 'Drawer']
@@ -5463,7 +5464,7 @@ export const PAGE_LOADING: PatternPageDraft = {
       secondarySectionIds: ['accessibility'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'Show local activity feedback for one check without blocking the surrounding page, disabling its triggering and Cancel buttons while running.',
+        'Show local activity feedback for one connection check without blocking the rest of the page; the sample keeps its trigger and Cancel check unavailable while active.',
       teaching: {
         meaning:
           'Inline loading communicates that a single control or region is busy while sibling workflows remain interactive.',
@@ -5474,7 +5475,7 @@ export const PAGE_LOADING: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:1631-1636`) substitutes indeterminate `<Progress value={null}>` bar because no inline spinner component is shipped, and omits the 1.5s finished-state transition and error-state alert recovery.'
+        'Uses the supported indeterminate Progress composition and a separate completion control for the local preview; it does not simulate the source 1.5s transition or failure recovery.'
     },
     {
       id: 'loading-full-screen-save',
@@ -5493,7 +5494,7 @@ export const PAGE_LOADING: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:1650-1666`) uses indeterminate `<Progress>` rather than a full-screen spinner and leaves the toggling button ("Preview page-level loading") interactive outside the overlay.'
+        'The local overlay blocks its sample content; a labeled demo control remains outside so readers can end the preview. A real page-level save should block the rest of the page.'
     },
     {
       id: 'loading-batch-collection',
@@ -5502,17 +5503,16 @@ export const PAGE_LOADING: PatternPageDraft = {
       secondarySectionIds: ['progressive-loading'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'Append paginated batches with Load more while preserving list position and clarifying when loading completes or ends.',
+        'Reveal the next sample batch on request while preserving the list and making the end of the collection clear.',
       teaching: {
-        meaning:
-          'Load more fetches subsequent records progressively instead of downloading huge lists or breaking context with full-page reloads.',
+        meaning: 'A Load more control reveals the next portion of a collection without forcing a full-page reload.',
         decision:
           'Pair incremental initial batching with Load more when operators scan sequentially; consider multi-batch progressive loading (containers first, reserved whitespace for delayed media) on large dashboards.',
         consider: 'Preserve scroll focus/position and announce loading state cleanly.'
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:1679-1686`) reveals two additional items synchronously in memory rather than simulating async Load more batch state.'
+        'The local sample reveals its next records immediately and says it does not fetch data or simulate network delay.'
     },
     {
       id: 'loading-skeleton-list',
@@ -5531,7 +5531,7 @@ export const PAGE_LOADING: PatternPageDraft = {
       },
       interactive: false,
       _demoNote:
-        'Live demo (`demos.tsx:1693-1704`) constructs Tailwind pulse bars (noting SkyTrack lacks a `Skeleton` primitive) without an aria-busy container wrapper.'
+        'The local pulse-bar illustration now exposes `aria-busy` on its containing region and hides decorative bars from assistive technology; the package still has no Skeleton primitive.'
     }
   ],
   notes: [
@@ -5957,7 +5957,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
     ]
   },
   summary:
-    'Notifications communicate timely system events and task outcomes using two independent axes—semantic severity status and surface presentation type—while balancing urgency against operator focus and alert fatigue.',
+    'Notifications communicate events and task outcomes through three independent choices: event category, semantic status, and presentation. Keep urgency clear while limiting unnecessary interruption.',
   sections: [
     {
       id: 'overview',
@@ -5966,11 +5966,27 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
       blocks: [
         {
           type: 'prose',
-          text: 'Every effective alert stays relevant, arrives on time, and tells operators what happened plus what action to take next. Choose semantic severity separately from the UI container that delivers it:'
+          text: 'Every effective notification explains what happened and, when useful, what to do next. Decide what kind of event occurred, what status it carries, and how it should be presented as separate questions:'
         }
       ],
       _sourceCitation: { path: 'patterns/notification-pattern/index.md', heading: '## Overview', lines: '27–51' },
       children: [
+        {
+          id: 'overview-event-category',
+          heading: 'Event category axis',
+          level: 3,
+          blocks: [
+            {
+              type: 'prose',
+              text: 'Group events in language that fits the product, such as work or task activity, collaboration or access changes, and workspace or system updates. These categories describe what happened; they do not prescribe a visual treatment.'
+            }
+          ],
+          _sourceCitation: {
+            path: 'patterns/notification-pattern/index.md',
+            heading: '## Overview',
+            lines: '27–70'
+          }
+        },
         {
           id: 'overview-notification-status',
           heading: 'Notification status axis',
@@ -5978,7 +5994,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'prose',
-              text: 'Indicates informational awareness, successful confirmation, cautionary warning, or blocking error severity through consistent icon glyphs, color roles, and explicit text.'
+              text: 'Describe the event as informational, successful, cautionary, or an error. Use text and visual cues together so status is not conveyed by color alone.'
             }
           ],
           _sourceCitation: {
@@ -5994,7 +6010,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'prose',
-              text: 'Determines where the notice appears, whether it dismisses automatically, how much it interrupts flow, and whether an operator action is attached.'
+              text: 'Choose where the notice appears and how much it interrupts. Timing, persistence, and actions depend on the product policy and implementation; do not assume defaults.'
             }
           ],
           _sourceCitation: {
@@ -6124,12 +6140,12 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
     },
     {
       id: 'notification-types',
-      heading: 'Notification types',
+      heading: 'Notification presentations',
       level: 2,
       blocks: [
         {
           type: 'prose',
-          text: 'Seven notification presentations trade visibility, persistence, interaction budget, and interruption level against one another:'
+          text: 'Choose a presentation based on context, urgency, interruption, and whether a response is needed. The table describes common patterns, not default behavior guarantees:'
         }
       ],
       _sourceCitation: {
@@ -6145,45 +6161,50 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'table',
-              columns: ['Type', 'Timeout', 'Action allowed', 'Maturity / Key constraint'],
+              columns: ['Presentation', 'Typical context', 'Interaction', 'Guidance / maturity'],
               rows: [
                 [
                   'Inline',
-                  'Persists until resolved/dismissed',
-                  'Optional close (omit if critical)',
-                  '<= 2 lines beside context or above form footer'
+                  'Feedback beside affected content',
+                  'Optional action or dismissal when appropriate',
+                  'Keep close to the related task or control'
                 ],
                 [
                   'Toast',
-                  'Optional 5s if non-actionable & archived',
-                  'None (see Actionable)',
-                  'Fixed width, top-right newest-first stack'
+                  'Brief, noncritical feedback after an event',
+                  'Keep any action optional and easy to reach',
+                  'Do not assume a timeout, queue, or archive'
                 ],
                 [
                   'Actionable',
-                  'Never auto-dismisses',
-                  '1 action <= 2 words (ghost / tertiary)',
-                  'Steals focus on open; overflow uses "View more"'
+                  'A notice with a useful next step',
+                  'Offer a clear action without unexpected focus changes',
+                  'Avoid timing out a notice that needs a response'
                 ],
                 [
                   'Callout',
-                  'Never dismissible; loads with page',
-                  'None (contextual text link max)',
-                  'Informational or Warning ONLY; zero Error/Success'
+                  'Guidance tied to a page or control',
+                  'Usually informational and contextual',
+                  'Do not present it as an event or action result'
                 ],
                 [
                   'Banner',
-                  'Persists across sessions until resolved',
-                  'Optional link/dismiss',
-                  'Experimental WIP; top page scroll, max 1'
+                  'Broad, high-visibility update',
+                  'Depends on product policy',
+                  'Experimental concept; behavior is not defined here'
                 ],
                 [
                   'Notification panel',
-                  'Archived chronologically',
-                  'Per-item review & preferences',
-                  'Experimental WIP; dedupe and group items'
+                  'A place to review multiple notices',
+                  'Depends on product policy',
+                  'Experimental concept; history and preferences are not implied'
                 ],
-                ['Modal', 'User decision required', 'Explicit decision footer', 'Max 1 blocking modal at a time']
+                [
+                  'Dialog / Alert Dialog',
+                  'A blocking decision or acknowledgement',
+                  'Use a clear choice or acknowledgement',
+                  'Interaction pattern, not a notification type'
+                ]
               ]
             }
           ],
@@ -6200,7 +6221,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'prose',
-              text: 'Render inline notices beside affected inputs/panels or directly above Submit/Cancel form actions. Cap copy at two lines, never obscure nearby UI, persist until fixed or dismissed, and omit the close icon whenever resolution is mandatory.'
+              text: 'Place inline notices near the affected content or control. Keep the message concise, avoid obscuring work, and make dismissal or resolution behavior clear for the situation.'
             }
           ],
           demoRefs: ['notifications-inline-context'],
@@ -6218,7 +6239,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'prose',
-              text: 'Stack fixed-width toasts newest-first at top-right with uniform spacing. Cap text at two lines (three only when an optional timestamp is excluded consistently product-wide). Enable a 5-second auto-dismiss timer strictly when the message needs no action AND operators can re-read it inside a persistent notification panel.'
+              text: 'Use a toast for brief, noncritical feedback that should not take over the current task. Set timing, placement, and queue behavior only when the product defines them; keep required decisions and critical information available.'
             }
           ],
           demoRefs: ['notifications-toast-brief'],
@@ -6236,7 +6257,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'prose',
-              text: 'Embed at most one brief button—no longer than two words (ghost variant in inline alerts, tertiary in toasts). Never set auto-dismiss timers on actionable notices, provide a "View more" modal trigger if text overflows two lines, and deploy cautiously because spawning an actionable alert pulls keyboard focus directly onto the notice.'
+              text: 'Offer a concise, relevant next step when it helps resolve or continue the task. Do not assume an actionable notice takes focus; preserve the user’s current context unless the interaction pattern requires otherwise.'
             }
           ],
           demoRefs: ['notifications-actionable-or-modal'],
@@ -6254,7 +6275,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'prose',
-              text: 'Callouts appear automatically on initial page load (never dynamically spawned by user clicks or background jobs), cannot be dismissed, contain zero action buttons (short contextual text links only), and restrict status strictly to Informational or Warning—never Success or Error. Place a Callout directly above the form control it explains (or above any inline alert when both appear), omitting redundant heading chrome.'
+              text: 'Use a callout for supporting guidance that stays close to the content it explains. Distinguish guidance from a status update or task result, and avoid redundant copy.'
             }
           ],
           demoRefs: ['notifications-callout-on-load'],
@@ -6278,7 +6299,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
             },
             {
               type: 'prose',
-              text: 'Banners span full page width under the main global header for high-visibility system notices (maintenance windows, service announcements). Scroll banners away naturally with page content rather than pinning sticky over work, limit display to one active banner at a time, and persist dismissed/active state cleanly across navigation.'
+              text: 'A banner may provide a broad, high-visibility update. Its placement, dismissal, duration, and persistence require product-specific decisions; the experimental concept makes no behavioral guarantee.'
             }
           ],
           _sourceCitation: {
@@ -6300,7 +6321,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
             },
             {
               type: 'prose',
-              text: 'Open from a global header utility trigger to store accumulated and historical alerts chronologically. Group related items by source or urgency, deduplicate repeated alerts, and provide operator notification preference controls.'
+              text: 'A panel may collect notices for review outside the immediate task. History, ordering, grouping, unread state, preferences, and retention must be defined by the product; the experimental concept does not specify them.'
             }
           ],
           demoRefs: ['notifications-panel-review'],
@@ -6312,12 +6333,12 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
         },
         {
           id: 'type-modal',
-          heading: 'Modal notification',
+          heading: 'Dialog for blocking decisions (related interaction)',
           level: 3,
           blocks: [
             {
               type: 'prose',
-              text: 'Reserve blocking notification modals strictly for critical system interruptions requiring immediate user acknowledgment or decision, displaying at most one notification modal at any moment.'
+              text: 'Use Dialog or Alert Dialog when the user must make a blocking decision or acknowledge information. This is an interaction pattern, not another notification presentation; choose it only when blocking is necessary.'
             }
           ],
           _sourceCitation: {
@@ -6346,7 +6367,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'prose',
-              text: 'Pair high-contrast banner/dark alert treatments with urgent high-priority events and low-contrast muted surfaces with routine informational updates. Never mix high- and low-contrast styles across notifications of the same presentation type on one screen.'
+              text: 'Use the product’s semantic color and contrast system consistently. Make urgency legible through wording and structure as well as color.'
             }
           ],
           _sourceCitation: {
@@ -6378,7 +6399,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
           blocks: [
             {
               type: 'prose',
-              text: 'Omit trailing periods from notification titles. Write one or two clear body sentences without echoing the headline, provide actionable remediation steps on every error, ensure system-triggered messages stand alone with object/workspace context, and avoid bold/italic emphasis dependency since screen readers announce notification bodies as a flat string.'
+              text: 'Use a clear title and concise body without repeating the same information. Include enough context for events received outside the active task, and describe a recovery step when one is known.'
             }
           ],
           _sourceCitation: {
@@ -6397,7 +6418,7 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
       blocks: [
         {
           type: 'prose',
-          text: 'Never auto-dismiss critical, emergency, or actionable notifications (WCAG 2.2.4 No Timing) and allow operators to pause, filter, or limit routine background interruptions (WCAG 2.2.3 Interruptions). Ensure keyboard Tab reaches embedded Actionable controls before Close (×) and Escape/Enter/Space operate dismissal predictably.'
+          text: 'Provide accessible status announcements for updates that do not receive focus (WCAG 4.1.3 Status Messages). Avoid time limits that prevent users from reading or acting on important notices (WCAG 2.2.4), and let users manage interruptions where applicable (WCAG 2.2.3). Keep keyboard focus stable unless a blocking interaction requires a deliberate focus change.'
         }
       ],
       _sourceCitation: {
@@ -6437,14 +6458,12 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
       sectionId: 'type-inline',
       secondarySectionIds: ['notification-status', 'considerations-message'],
       mappingStatus: 'mapped',
-      scenario:
-        'Display persistent contextual feedback up to two lines directly beside a task or above form action buttons.',
+      scenario: 'Show concise status feedback beside the task or content it affects.',
       teaching: {
         meaning: 'An inline notification reports task status beside the work it affects.',
         decision:
-          'Select status severity independently from presentation type; omit the close icon if resolution is critical and avoid periods on notification titles.',
-        consider:
-          'Keep inline messages <= 2 lines, state next actions on errors, and never mix high- and low-contrast styles within one variant.'
+          'Choose event category, status, and presentation independently; make any next step clear when one is needed.',
+        consider: 'Keep the message concise and make status understandable without relying on color alone.'
       },
       interactive: false
     },
@@ -6453,49 +6472,45 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
       title: 'Confirm a completed action briefly',
       sectionId: 'type-toast',
       mappingStatus: 'mapped',
-      scenario: 'Confirm a finished background/routine task via fixed-width toast stacked newest-first at top-right.',
+      scenario: 'Show brief, noncritical confirmation after a routine action without taking over the current task.',
       teaching: {
         meaning: 'A toast gives brief feedback after an action completes without taking over the page.',
         decision:
-          'Use optional 5-second auto-dismiss only when the alert needs no user action AND remains accessible in a panel; keep to <= 2 lines (3 max only when product-wide timestamps are omitted).',
+          'The toast preview illustrates a local message only; timing, placement, and queue behavior are not defined by this guide.',
         consider: 'Never place required actions or critical unrecovered failures inside timed toasts.'
       },
       interactive: true
     },
     {
       id: 'notifications-callout-on-load',
-      title: 'Keep field guidance visible on page load',
+      title: 'Keep field guidance close to its control',
       sectionId: 'type-callout',
       mappingStatus: 'mapped',
-      scenario:
-        'When a pilot opens mission setup, show a short informational note above the collection field it explains; keep it visible without a dismiss or action button.',
+      scenario: 'Show a short informational note beside the control it explains.',
       teaching: {
         meaning:
           'A callout is present when the page first loads and stays beside the relevant control as persistent context.',
-        decision:
-          'Use informational or warning status only, place the callout directly above its related field, and keep its message short.',
-        consider:
-          'Do not add a close button or action. If the message needs resolution or responds to a user action, choose an inline notification instead.'
+        decision: 'Keep guidance close to the related control and separate it from status feedback.',
+        consider: 'If the message reports an event or action result, choose a status presentation instead.'
       },
       interactive: false
     },
     {
       id: 'notifications-panel-review',
-      title: 'Review accumulated notifications in a panel',
+      title: 'Review sample notifications in a panel',
       sectionId: 'type-panel',
       secondarySectionIds: ['when-system-generated'],
       mappingStatus: 'mapped',
-      scenario:
-        'Collect asynchronous system updates chronologically inside an optional notification panel with unread and severity clarity.',
+      scenario: 'Explore how multiple notices might be presented together in a panel.',
       teaching: {
-        meaning: 'A notification panel collects updates for later review rather than interrupting active work.',
+        meaning: 'A notification panel is a possible place to review multiple notices outside the immediate task.',
         decision:
-          'Use for chronological, grouped, deduplicated system alerts alongside user notification preferences; note Banner and Panel guidance remain experimental in the source.',
-        consider: 'Provide standalone context inside system messages and distinguish unread severity clearly.'
+          'This concept is experimental. History, ordering, grouping, unread state, retention, and preferences need product decisions.',
+        consider: 'The local sample does not model a notification service or stored history.'
       },
       interactive: true,
       _demoNote:
-        'The panel is a local illustration with three sample unread items and visible severity labels; persistent storage, preferences, grouping, and deduplication are not modeled. The experimental status is called out in the panel use case.'
+        'The panel is a local illustration with sample items and status labels; it does not implement history, unread state, preferences, grouping, or deduplication. The experimental status is called out in the panel use case.'
     },
     {
       id: 'notifications-actionable-or-modal',
@@ -6504,17 +6519,18 @@ export const PAGE_NOTIFICATIONS: PatternPageDraft = {
       secondarySectionIds: ['type-modal', 'accessibility'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'Present an actionable alert with one concise step (or escalate critical blockers into at most one modal) without auto-timeout.',
+        'Compare a contextual next step, an experimental broad update concept, and a blocking acknowledgement interaction.',
       teaching: {
         meaning:
-          'Actionable or modal notifications surface alerts requiring user response without timed disappearance (WCAG 2.2.4).',
+          'An actionable notice offers a relevant next step; a dialog is a separate interaction for a blocking acknowledgement.',
         decision:
-          'Limit actionable notices to one button <= 2 words (ghost inside inline, tertiary inside toast; "View more" for overflow) and reserve interrupting Modals strictly for one urgent blocking notice at a time.',
-        consider: 'Spawning an Actionable alert steals keyboard focus—use sparingly so operators are not disoriented.'
+          'Do not assume a timeout or focus change. Use a dialog only when the user must respond before continuing.',
+        consider:
+          'The dialog sample uses Alert Dialog; the broad update is a dismissible local Alert illustration, not a global Banner implementation.'
       },
       interactive: true,
       _demoNote:
-        'The contextual action uses the source-recommended ghost treatment. The sample copy fits without overflow, so the View more modal path is not shown; the notification is present on initial render rather than dynamically spawned, so focus capture is not modeled. The dismissible Banner is an explicitly experimental preview.'
+        'The contextual action changes only local helper text. The blocking acknowledgement uses Alert Dialog as an interaction pattern. The broad update is labeled experimental and does not implement global placement or persistence.'
     }
   ],
   notes: [],
@@ -7020,7 +7036,7 @@ export const PAGE_READ_ONLY_STATES: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live `<Input readOnly />` (`demos.tsx:2104, 2121`) retains standard editable border/background styling instead of blending subtly into container background with arrow cursor; also does not test a prerequisite-disabled item preserved inside a read-only viewport.'
+        'Read-only text fields use a subtle transparent, borderless treatment while staying focusable for review and copy; the disabled prerequisite remains visibly separate.'
     },
     {
       id: 'read-only-selected-bound',
@@ -8061,7 +8077,7 @@ export const PAGE_STATUS_INDICATORS: PatternPageDraft = {
       secondarySectionIds: ['badge-with-number', 'badge-without-number'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'Place numbered (capped at 999+) and dot badges cleanly on ghost icon button triggers, hiding zero states cleanly.',
+        'Illustrate a capped unread count, a new-item dot, and a hidden zero badge on navigation icons; production badges belong on actionable icon buttons.',
       teaching: {
         meaning:
           'A badge indicator overlays unread counts or presence dots onto interactive icon buttons until acknowledged.',
@@ -8072,7 +8088,7 @@ export const PAGE_STATUS_INDICATORS: PatternPageDraft = {
       },
       interactive: false,
       _demoNote:
-        'Static reference uses labeled icon illustrations, overlays unread/dot badges on the icons, and hides the zero badge. It does not demonstrate the 999+ cap or provide operable navigation buttons.'
+        'Static reference uses labeled icon illustrations, overlays unread/dot badges, demonstrates the 999+ cap, and hides the zero badge; it does not provide operable navigation buttons.'
     },
     {
       id: 'status-differential-trends',
@@ -9220,7 +9236,7 @@ export const PAGE_COMMUNITY_CHATBOTS: PatternPageDraft = {
       sectionId: 'flows-error-states',
       mappingStatus: 'partial-divergent',
       scenario:
-        'If the assistant connection drops, make the failed state clear and offer a retry instead of leaving the user uncertain.',
+        'Show a clear failed state and preview retry recovery; this local example does not send a real message.',
       teaching: {
         meaning:
           'Send failures require visible inline status and an immediate recovery path so operators know their prompt did not go through.',
@@ -9231,7 +9247,7 @@ export const PAGE_COMMUNITY_CHATBOTS: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:2626-2651`) renders an inline Alert + Retry and posts a permanent assistant message on reconnect, omitting per-message failure badges and temporary reconnect-banner auto-clearing.'
+        'Retry updates a local preview only; it does not resend a message or contact a service. Per-message failure badges and transient reconnect-banner clearing are not modeled.'
     },
     {
       id: 'chatbots-human-handoff',
@@ -9240,7 +9256,7 @@ export const PAGE_COMMUNITY_CHATBOTS: PatternPageDraft = {
       secondarySectionIds: ['flows-mt-user-initiates', 'flows-mt-notify', 'overview-user-needs-dont'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'When the scripted helper cannot resolve an issue, show the change in conversation context and preserve a clear route back to the product.',
+        'Preview a support handoff and preserve a return path; this example does not contact a support teammate.',
       teaching: {
         meaning:
           'Sensitive, complex, or repeatedly unresolved requests need a transparent escalation path to a human teammate.',
@@ -9251,7 +9267,7 @@ export const PAGE_COMMUNITY_CHATBOTS: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:2652-2669`) toggles a single static Alert without a dual toast + in-thread message, agent role indicators, or unread thread badges/counts.'
+        'The handoff changes only the preview; it does not open a support thread. Toast + in-thread notifications, agent role indicators, and unread thread badges/counts are not modeled.'
     }
   ],
   _implementationNotes: [
@@ -10321,14 +10337,14 @@ export const PAGE_COMMUNITY_CREATE_FLOWS: PatternPageDraft = {
       secondarySectionIds: ['full-page-anatomy', 'full-page-leaving', 'designing-triggers'],
       mappingStatus: 'mapped',
       scenario:
-        'Complete required mission setup before dispatch can schedule it; this preview uses a dedicated canvas with two navigable steps.',
+        'Set up the initial flight-operations workspace that dispatchers must complete before mission planning is available; the preview uses a dedicated two-step canvas.',
       teaching: {
         meaning:
           'Full-page creation is a rare surface reserved for setup the operator must complete before a product or service becomes usable.',
         decision:
           'Do NOT use Full page merely because a creation flow is long or multi-step—use a Wide tearsheet instead unless prerequisite blocking requires a dedicated page. On multi-step flows, disable Back on step 1 and gate Next/Create.',
         consider:
-          'Confirm navigation away whenever the user exits via breadcrumbs or page links instead of explicitly clicking Cancel.'
+          'Confirm before discarding when users leave through workspace navigation as well as Cancel. This preview demonstrates the Cancel path; navigation is not routed.'
       },
       interactive: true
     },
@@ -10337,27 +10353,29 @@ export const PAGE_COMMUNITY_CREATE_FLOWS: PatternPageDraft = {
       title: 'Use a narrow tearsheet for a compact create task',
       sectionId: 'narrow-tearsheet',
       secondarySectionIds: ['narrow-tearsheet-when-to-use', 'designing-dismissing'],
-      mappingStatus: 'partial-divergent',
+      mappingStatus: 'mapped',
       scenario:
-        'Show the focused, narrow side sheet layout for a short task while keeping a sense of the collection behind it.',
+        'When a create form needs vertical scrolling, use a narrow tearsheet to group related fields while keeping its actions visible.',
       teaching: {
-        meaning: 'A narrow tearsheet provides an overlay-backed focused sheet when a form outgrows a small modal.',
+        meaning:
+          'A narrow tearsheet provides an overlay-backed form when a create task is too tall for a modal or its fields need section headers.',
         decision:
-          'Switch from Modal to Narrow tearsheet when fields require scrolling or split cleanly beneath section headers, provided no multi-step progress indicator is needed.',
-        consider: 'Omit a top-right close icon so Cancel stays explicit, and verify small-viewport fit.'
+          'Choose it for a single-step form that needs vertical scrolling or clear field sections; choose a Wide tearsheet when progress across multiple steps must stay visible.',
+        consider:
+          'Keep Cancel and Create visible while the body scrolls. This static layout preview is not an interactive `skytrack-ui` Tearsheet.'
       },
       interactive: false,
       _demoNote:
-        'Live demo (`demos.tsx:3006-3030`) renders a static non-submitting layout card because Tearsheet is not shipped in `skytrack-ui`.'
+        'Static layout reference uses a scrollable, sectioned form with fixed actions; Tearsheet is not shipped in `skytrack-ui`.'
     },
     {
       id: 'create-flows-wide-tearsheet',
       title: 'Use a wide tearsheet when the task needs more room',
       sectionId: 'wide-tearsheet',
       secondarySectionIds: ['wide-tearsheet-anatomy', 'wide-tearsheet-behaviors', 'designing-dismissing'],
-      mappingStatus: 'partial-divergent',
+      mappingStatus: 'mapped',
       scenario:
-        'Provide a wider sheet layout for related fields and contextual review while preserving a responsive single-column form.',
+        'Show a multi-step mission setup that needs a progress rail and roomy review area; the overlay blocks the page until operators finish or exit the flow.',
       teaching: {
         meaning:
           'A wide tearsheet hosts 2+ distinct steps (with a 256px/320px vertical progress rail) or one spacious interactive canvas (progress rail omitted).',
@@ -10368,7 +10386,7 @@ export const PAGE_COMMUNITY_CREATE_FLOWS: PatternPageDraft = {
       },
       interactive: false,
       _demoNote:
-        'Live demo (`demos.tsx:3036-3072`) shows a 1-step form + static Review aside without a 256px/320px vertical progress indicator, Back/Next step flow, or "Show all available options" toggle.'
+        'Static two-step illustration includes progress rail, review guidance, and a fixed footer; Tearsheet is not a shipped `skytrack-ui` component, so no fields or actions are interactive.'
     },
     {
       id: 'create-flows-completion-loading',
@@ -10983,18 +11001,18 @@ export const PAGE_COMMUNITY_EXPORT: PatternPageDraft = {
       secondarySectionIds: ['choosing-export-format', 'specify-location', 'accessibility-focus'],
       mappingStatus: 'partial-divergent',
       scenario:
-        'When users can change the filename, format, or destination, show a focused configuration flow with a sensible default.',
+        'When users need to rename a report or choose its format, collect those choices in a dialog before preparing the export.',
       teaching: {
         meaning:
-          'An export dialog collects filename edits, format choices, or destination handoffs only when the task requires them.',
+          'An export dialog collects the file name and format when the user must make those choices before preparation.',
         decision:
-          'Hide file extensions on Download, validate edited filenames for valid extensions on Export, use radio buttons with brief format guidance for 2–5 formats, and hand custom download locations to the browser save picker.',
+          'Keep the selected format and file extension consistent, provide concise guidance for each radio option, and let the browser handle the save location when a workflow downloads a file.',
         consider:
-          'Open focus on the first required input before Export and Cancel when user input is mandatory, or on Export -> Cancel -> inputs when defaults are ready.'
+          'With a sensible default selected, place initial focus on Export, then let Tab move to Cancel and the editable fields. The preview does not open a native save dialog or create a file.'
       },
       interactive: true,
       _demoNote:
-        'Divergences in `demos.tsx:3371-3469`: (1) renders inline fields rather than an Export modal with focus rules; (2) locks `.format` as an external `endAdornment`, skipping extension validation; (3) uses Button pills without format guidance instead of 2–5 radio buttons; (4) renders custom destination buttons instead of explaining the browser native Save dialog; (5) uses an inline Alert instead of a modal error.'
+        'The local preview now uses a Dialog, a guided RadioGroup, extension validation, and a modal failure state. It explains the browser Save dialog for real downloads but does not invoke the system dialog or create a file.'
     },
     {
       id: 'export-progress-and-error',
@@ -11014,7 +11032,7 @@ export const PAGE_COMMUNITY_EXPORT: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live demo now uses an indeterminate Progress only while preparation is active and offers retry in the same example. The busy/error states are inline rather than the source modal/spinner composition.'
+        'Live demo uses an indeterminate Progress only while preparation is active. The simulated failure appears in a Dialog with initial focus on its close control; retry restarts the local preparation preview.'
     },
     {
       id: 'export-confirm-completion',
@@ -11033,12 +11051,12 @@ export const PAGE_COMMUNITY_EXPORT: PatternPageDraft = {
       },
       interactive: true,
       _demoNote:
-        'Live demo (`demos.tsx:3504-3530`) renders an inline Alert + Toast notification rather than an actual passive success modal with initial focus on the close icon.'
+        'The preview opens a passive success Dialog with initial focus on its close control; a separate action previews the optional Toast. Neither action creates or saves a file.'
     }
   ],
   _implementationNotes: [
-    'ExportDemoWithProvider uses ToastProvider, Field, Input, Button, Progress, and Alert (`demos.tsx:3344-3546`).',
-    '`catalog.ts:553` recommends `Menu or Buttons` for format selection; update to `RadioGroup` with guidance for 2–5 formats.'
+    'ExportDemoWithProvider uses Dialog, Fieldset, Field, Input, RadioGroup, RadioRoot, Button, Progress, Alert, and Toast (`demos.tsx:4566-4860`).',
+    'Use the package RadioGroup for 2–5 mutually exclusive format choices and include a short use-case description for each option.'
   ]
 }
 
@@ -11308,18 +11326,19 @@ export const PAGE_COMMUNITY_API_KEY: PatternPageDraft = {
         'show-in-context'
       ],
       mappingStatus: 'partial-divergent',
-      scenario: 'Name a sample key, restrict its permissions when needed, then reveal or hide the illustrative value.',
+      scenario:
+        'Set a key name and access level, choose where a real key would be retrieved, then review a separate sample result before closing it.',
       teaching: {
         meaning:
-          'Safe key generation clarifies purpose, scope, destination, and later retrievability before revealing a credential.',
+          'People need to understand what an API key can access and whether its value can be retrieved again before they create one.',
         decision:
-          'Collect name first, order optional scope controls as Name -> Permitted actions -> Target resources inside a non-scrolling multi-step modal, show Generating... while creating, reveal the secret in a fresh modal view with Copy/visibility controls, and add a JSON download option when shown once.',
+          'Ask for a recognizable name, explain the access level, and state the retrieval policy before generation. Show a separate result view; if the key is one-time, warn people to save it and offer a secure download. This preview uses a fixed placeholder and skips real generation, waiting, copying, and file download.',
         consider:
-          'Local security extension note: rotation and revocation actions shown in this demo extend guidance beyond the community reference; never expose or persist real secrets in UI demos.'
+          'Keep access limited to what the integration needs. Provide recovery or rotation guidance, and never expose or persist real secrets in a UI example.'
       },
       interactive: true,
       _demoNote:
-        'Divergences: the result is inline rather than a modal, there is no Generating state or one-time JSON download, and permissions use General/Restricted access rather than Name -> Actions -> Resources. Copy/rotation/revocation controls are explicitly local previews and do not access the clipboard or change credentials.'
+        'The preview opens a configuration dialog and a separate result dialog. It shows only a fixed sample value: no credential is created, no clipboard is accessed, and no file is downloaded. Retrieval choices explain product decisions but do not implement a retrieval service.'
     },
     {
       id: 'api-key-edit-existing',
@@ -11343,7 +11362,7 @@ export const PAGE_COMMUNITY_API_KEY: PatternPageDraft = {
     }
   ],
   _implementationNotes: [
-    'ApiKeyDemo uses Field, Input, Button, Badge, Alert, and Menu (`demos.tsx:3548-3827`); all credentials and clipboard states are strictly non-secret local placeholders.'
+    'ApiKeyDemo uses Dialog, Field, Fieldset, Input, RadioGroup, RadioRoot, Button, Alert, and Menu; the key value is a fixed non-secret placeholder, and copy/download controls report preview-only outcomes.'
   ]
 }
 
@@ -11801,7 +11820,7 @@ export const PAGE_COMMUNITY_REMOVE: PatternPageDraft = {
     ]
   },
   summary:
-    'Removing moves or unlinks information from one place to another and can be non-destructive or destructive; deletion is the destructive form that permanently destroys data—requiring confirmation proportionate to reversibility and loss.',
+    'Removing can unlink information or destroy it. Deletion is usually permanent or difficult to reverse, while low-risk items may be recoverable or easy to recreate; match confirmation to the possible loss and available recovery.',
   sections: [
     {
       id: 'delete-remove-variations',

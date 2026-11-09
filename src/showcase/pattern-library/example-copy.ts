@@ -243,10 +243,10 @@ export const PATTERN_EXAMPLE_TEACHING: Record<PatternId, Record<string, PatternE
       consider: 'Do not stretch every action by default; preserve hierarchy and legibility as the container narrows.'
     },
     'Align related actions in a compact panel': {
-      meaning: 'Fluid controls can align related actions to the edges of a compound container.',
+      meaning: 'Fluid controls attach related actions to a compound container instead of floating in its content area.',
       decision:
-        "Use them when the container's structure benefits from edge alignment; choose default spacing when actions need separation.",
-      consider: 'Make the relationship between actions clear and retain adequate spacing for touch and visual scanning.'
+        'Use them for grouped actions at a container edge, such as a panel footer; keep ordinary buttons separated in the content area.',
+      consider: 'Make each action distinct and keep shared borders visible enough to separate the choices.'
     },
     'Let a fluid form follow its available width': {
       meaning: 'A fluid form can adapt its width to its container instead of imposing a fixed form width.',
@@ -260,7 +260,7 @@ export const PATTERN_EXAMPLE_TEACHING: Record<PatternId, Record<string, PatternE
       decision:
         'Use this for a short, straightforward form; avoid it when complex fields need whitespace and grouping.',
       consider:
-        'Do not treat fluid styling as a universal full-width rule; preserve spacing between inputs and sections.'
+        'Do not treat fluid styling as a universal full-width rule. Keep labels visible; use zero-gap stacking only when the field implementation supports that anatomy.'
     },
     'Choose a fluid container or fixed side panel': {
       meaning:
@@ -340,7 +340,7 @@ export const PATTERN_EXAMPLE_TEACHING: Record<PatternId, Record<string, PatternE
     },
     'Load a collection in batches': {
       meaning:
-        'Progressive loading makes part of a collection useful before all items arrive; a load-more action requests another portion.',
+        'Progressive loading makes part of a collection useful before all items arrive; a Load more action reveals another portion.',
       decision:
         'Use it when showing results incrementally helps users start sooner; use pagination or another pattern if users need stable position or total scope.',
       consider: "Preserve the user's place and indicate when more results are loading or no more remain."

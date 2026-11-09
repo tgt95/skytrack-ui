@@ -24,7 +24,7 @@ type PatternLibraryProps = {
   onClearSearch: () => void
 }
 
-function blockSearchText (block: ContentBlock): string {
+function blockSearchText(block: ContentBlock): string {
   switch (block.type) {
     case 'prose':
       return block.text
@@ -45,7 +45,7 @@ function blockSearchText (block: ContentBlock): string {
   }
 }
 
-function sectionSearchText (sections: SectionNode[]): string {
+function sectionSearchText(sections: SectionNode[]): string {
   return sections
     .flatMap((section) => [
       section.heading,
@@ -55,7 +55,7 @@ function sectionSearchText (sections: SectionNode[]): string {
     .join(' ')
 }
 
-function pageSearchText (page: PatternPageDraft): string {
+function pageSearchText(page: PatternPageDraft): string {
   return [
     page.title,
     page.summary,
@@ -77,7 +77,7 @@ const GROUP_FILTERS: Array<{ label: PatternGroupFilter; count: number }> = [
   { label: 'Community', count: COMMUNITY_PATTERN_COUNT }
 ]
 
-function PatternNavigation ({
+function PatternNavigation({
   patterns,
   selectedPatternId,
   onSelect
@@ -125,11 +125,11 @@ function PatternNavigation ({
   )
 }
 
-function SourceStatusBadge ({ pattern }: { pattern: PatternDefinition }) {
+function SourceStatusBadge({ pattern }: { pattern: PatternDefinition }) {
   return <Badge count={pattern.sourceStatus} status='outline' className='rounded-(--radius)' />
 }
 
-export function PatternLibrary ({ query, audience, onClearSearch }: PatternLibraryProps) {
+export function PatternLibrary({ query, audience, onClearSearch }: PatternLibraryProps) {
   const [groupFilter, setGroupFilter] = useState<PatternGroupFilter>('All')
   const [selectedPatternId, setSelectedPatternId] = useState<PatternId>('common-actions')
   const [browseOpen, setBrowseOpen] = useState(false)
@@ -163,7 +163,7 @@ export function PatternLibrary ({ query, audience, onClearSearch }: PatternLibra
   return (
     <div className='mx-auto w-full min-w-0 max-w-7xl space-y-8 px-6 py-10 sm:px-8'>
       <header className='space-y-3'>
-        <div className='h2'>Design patterns</div>
+        <h1 className='h1'>Design patterns</h1>
         <p className='max-w-3xl text-muted-foreground'>
           Each pattern explains the user need, the decision the team must make, and the result in a concrete example.
           Use the guidance to choose a fitting approach; demo controls update sample state only.
@@ -176,8 +176,8 @@ export function PatternLibrary ({ query, audience, onClearSearch }: PatternLibra
         className='min-w-0'
       >
         <div className='grid min-w-0 gap-6 xl:grid-cols-[minmax(16rem,20rem)_minmax(0,1fr)]'>
-          <div className='min-w-0 self-start xl:sticky xl:top-18 xl:flex xl:h-[calc(100dvh-6rem)] xl:min-h-0 xl:flex-col'>
-            <aside className='min-w-0 overflow-hidden rounded-(--radius) border border-border p-4 xl:flex xl:min-h-0 xl:flex-1 xl:flex-col'>
+          <div className='min-w-0 xl:sticky xl:top-18 xl:h-[calc(100dvh-6rem)] xl:min-h-0 xl:self-start'>
+            <aside className='min-w-0 overflow-hidden rounded-(--radius) border border-border p-4 xl:flex xl:h-full xl:min-h-0 xl:flex-1 xl:flex-col'>
               <TabsList
                 variant='filled'
                 aria-label='Filter patterns by source group'

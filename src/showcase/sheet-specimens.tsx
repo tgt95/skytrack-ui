@@ -1,6 +1,50 @@
 import * as React from 'react'
 import { ArrowUUpLeftIcon, MagnifyingGlassIcon, PlusIcon, XIcon } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { Button, buttonVariants } from '@/components/ui/button'
+import type { ControlSize } from '@/lib/control-sizes'
+import { Calendar } from '@/components/ui/calendar'
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig
+} from '@/components/ui/chart'
+import {
+  CodeBlock,
+  CodeBlockActions,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockHeader,
+  CodeBlockLine,
+  CodeBlockTitle
+} from '@/components/ui/code-block'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '@/components/ui/command'
+import { DataTable, type DataTableColumnDef, type DataTableSize } from '@/components/ui/data-table'
+import { DatePicker, DateRangePicker } from '@/components/ui/date-picker'
+import { InlineEdit, InlineEditInput, InlineEditTrigger } from '@/components/ui/inline-edit'
+import { PageHeader } from '@/components/ui/page-header'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from '@/components/ui/pagination'
+import { ProgressStepIndicator, type ProgressIndicatorStep } from '@/components/ui/progress-indicator'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
+import { Search } from '@/components/ui/search'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import {
   Attachment,
@@ -311,6 +355,7 @@ function BreadcrumbSpecimen() {
 /* ------------------------------------------------------------------ Toggle */
 
 function ToggleSpecimen({ variant, size }: { variant?: string; size?: string }) {
+  const isIcon = size?.startsWith('icon')
   return (
     <Toggle
       variant={variant as React.ComponentProps<typeof Toggle>['variant']}
@@ -318,7 +363,7 @@ function ToggleSpecimen({ variant, size }: { variant?: string; size?: string }) 
       defaultPressed
       aria-label={`toggle ${variant ?? size ?? ''}`}
     >
-      Bold
+      {isIcon ? <PlusIcon aria-hidden /> : 'Bold'}
     </Toggle>
   )
 }
@@ -555,14 +600,15 @@ function ConfiguredComboboxSpecimen({
 
 /* ------------------------------------------------------------------- Input */
 
-function InputSpecimen({ adornment }: { adornment: string }) {
+function InputSpecimen({ adornment = 'none', size = 'default' }: { adornment?: string; size?: ControlSize }) {
   const start = adornment === 'start' || adornment === 'both'
   const end = adornment === 'end' || adornment === 'both'
   return (
     <Input
+      size={size}
       className='w-40'
       placeholder='Value'
-      aria-label={`input ${adornment}`}
+      aria-label={`input ${adornment} ${size}`}
       startAdornment={start ? <MagnifyingGlassIcon aria-hidden /> : undefined}
       endAdornment={end ? <span className='text-xs'>kg</span> : undefined}
     />
@@ -571,14 +617,14 @@ function InputSpecimen({ adornment }: { adornment: string }) {
 
 /* ------------------------------------------------------------ Number field */
 
-function NumberFieldSpecimen({ size }: { size: string }) {
-  const dense = size !== 'default'
+function NumberFieldSpecimen({ size = 'default' }: { size?: string }) {
+  const controlSize = size as ControlSize
   return (
     <NumberField defaultValue={100}>
-      <NumberFieldGroup className={dense ? 'h-6' : undefined}>
-        {dense ? null : <NumberFieldDecrement aria-label='Decrease' />}
-        <NumberFieldInput size={size as React.ComponentProps<typeof NumberFieldInput>['size']} aria-label='Amount' />
-        {dense ? null : <NumberFieldIncrement aria-label='Increase' />}
+      <NumberFieldGroup size={controlSize}>
+        <NumberFieldDecrement aria-label='Decrease' />
+        <NumberFieldInput size={controlSize} aria-label='Amount' />
+        <NumberFieldIncrement aria-label='Increase' />
       </NumberFieldGroup>
     </NumberField>
   )
@@ -957,10 +1003,10 @@ function TabsSpecimen({
 
 /* ------------------------------------------------------------ Avatar */
 
-function AvatarSpecimen() {
+function AvatarSpecimen({ size = 'default' }: { size?: ControlSize }) {
   return (
     <div className='flex items-center gap-3'>
-      <Avatar>
+      <Avatar size={size}>
         <AvatarImage
           src='https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?w=96&h=96&dpr=2&q=80'
           width='48'
@@ -969,7 +1015,7 @@ function AvatarSpecimen() {
         />
         <AvatarFallback>LT</AvatarFallback>
       </Avatar>
-      <Avatar>
+      <Avatar size={size}>
         <AvatarFallback>SK</AvatarFallback>
       </Avatar>
     </div>
@@ -1077,8 +1123,8 @@ function ProgressSpecimen() {
 
 /* ----------------------------------------------------------- Accordion */
 
-function AccordionSpecimen({ variant = 'default' }: { variant?: 'default' | 'compact' }) {
-  return <AccountFaqAccordion compact={variant === 'compact'} defaultOpen multiple />
+function AccordionSpecimen() {
+  return <AccountFaqAccordion defaultOpen multiple />
 }
 
 /* --------------------------------------------------------- Collapsible */
@@ -1345,6 +1391,306 @@ function NavigationMenuSpecimen() {
   )
 }
 
+/* ---------------------------------------------------------------- Calendar */
+
+function CalendarSpecimen() {
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  return (
+    <Calendar
+      mode='single'
+      selected={date}
+      onSelect={setDate}
+      className='rounded-(--radius) border border-border shadow-xs'
+    />
+  )
+}
+
+/* ------------------------------------------------------------------- Chart */
+
+const chartSpecimenConfig: ChartConfig = {
+  planned: { label: 'Planned', color: 'var(--color-primary)' },
+  completed: { label: 'Completed', color: 'var(--color-muted-foreground)' }
+}
+
+const chartSpecimenData = [
+  { month: 'Jan', planned: 18, completed: 14 },
+  { month: 'Feb', planned: 22, completed: 19 },
+  { month: 'Mar', planned: 25, completed: 21 },
+  { month: 'Apr', planned: 20, completed: 17 }
+]
+
+function ChartSpecimen() {
+  return (
+    <ChartContainer config={chartSpecimenConfig} className='h-48 w-full max-w-sm'>
+      <BarChart data={chartSpecimenData} accessibilityLayer>
+        <CartesianGrid vertical={false} />
+        <XAxis dataKey='month' tickLine={false} tickMargin={8} axisLine={false} />
+        <ChartTooltip content={<ChartTooltipContent />} />
+        <ChartLegend content={<ChartLegendContent />} />
+        <Bar dataKey='planned' fill='var(--color-planned)' radius={2} />
+        <Bar dataKey='completed' fill='var(--color-completed)' radius={2} />
+      </BarChart>
+    </ChartContainer>
+  )
+}
+
+/* -------------------------------------------------------------- Code block */
+
+function CodeBlockSpecimen({
+  variant = 'default',
+  size = 'default'
+}: {
+  variant?: 'default' | 'destructive'
+  size?: 'default' | 'sm' | 'xs'
+}) {
+  const code = 'const ready = true\nconsole.log(ready)'
+  return (
+    <CodeBlock variant={variant} size={size} className='w-full max-w-sm'>
+      <CodeBlockHeader>
+        <CodeBlockTitle>index.ts</CodeBlockTitle>
+        <CodeBlockActions>
+          <CodeBlockCopyButton value={code} />
+        </CodeBlockActions>
+      </CodeBlockHeader>
+      <CodeBlockContent>
+        <CodeBlockLine>const ready = true</CodeBlockLine>
+        <CodeBlockLine>console.log(ready)</CodeBlockLine>
+      </CodeBlockContent>
+    </CodeBlock>
+  )
+}
+
+/* ----------------------------------------------------------------- Command */
+
+function CommandSpecimen() {
+  return (
+    <Command className='w-full max-w-sm rounded-(--radius) border border-border shadow-xs'>
+      <CommandInput placeholder='Search actions...' />
+      <CommandList className='max-h-40'>
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading='Workspace'>
+          <CommandItem value='calendar'>Calendar</CommandItem>
+          <CommandItem value='projects'>Projects</CommandItem>
+          <CommandItem value='settings'>Settings</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  )
+}
+
+/* -------------------------------------------------------------- Data table */
+
+type DataTableSample = {
+  id: string
+  name: string
+  status: string
+}
+
+const dataTableSampleData: DataTableSample[] = [
+  { id: '1', name: 'Alpha Flight', status: 'Active' },
+  { id: '2', name: 'Beta Patrol', status: 'Standby' },
+  { id: '3', name: 'Gamma Survey', status: 'Complete' }
+]
+
+const dataTableSampleColumns: DataTableColumnDef<DataTableSample>[] = [
+  { accessorKey: 'id', header: 'ID' },
+  { accessorKey: 'name', header: 'Name' },
+  { accessorKey: 'status', header: 'Status' }
+]
+
+function DataTableSpecimen({
+  size = 'md',
+  selection = 'none'
+}: {
+  size?: DataTableSize
+  selection?: string
+}) {
+  const enableSelection = selection === 'single' || selection === 'multiple'
+  const selectionMode = selection === 'single' ? 'single' : 'multiple'
+  return (
+    <div className='w-full max-w-lg'>
+      <DataTable
+        columns={dataTableSampleColumns}
+        data={dataTableSampleData}
+        size={size}
+        enableRowSelection={enableSelection}
+        selectionMode={selectionMode}
+        pageSize={5}
+      />
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------- Date picker */
+
+function DatePickerSpecimen({ mode = 'single' }: { mode?: string }) {
+  if (mode === 'range') {
+    return <DateRangePicker className='w-full max-w-xs' />
+  }
+  return <DatePicker className='w-full max-w-xs' />
+}
+
+/* ------------------------------------------------------------- Inline edit */
+
+function InlineEditSpecimen() {
+  const [value, setValue] = React.useState('Click to edit mission')
+  return (
+    <div className='w-full max-w-xs'>
+      <InlineEdit value={value} onValueChange={setValue} label='Mission'>
+        <InlineEditTrigger
+          render={
+            <Button
+              variant='ghost'
+              className='h-auto w-full justify-start px-2 py-1 text-left text-sm font-medium'
+            />
+          }
+        />
+        <InlineEditInput />
+      </InlineEdit>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------- Page header */
+
+function PageHeaderSpecimen() {
+  return (
+    <div className='w-full max-w-xl overflow-hidden rounded-(--radius) border border-border'>
+      <PageHeader
+        title='Mission Overview'
+        breadcrumbs={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Home</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Missions</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+        toolbar={
+          <Button size='sm' variant='outline'>
+            Edit
+          </Button>
+        }
+      />
+    </div>
+  )
+}
+
+/* -------------------------------------------------------------- Pagination */
+
+function PaginationSpecimen({
+  linkSize = 'icon',
+  linkVariant = 'ghost'
+}: {
+  linkSize?: 'default' | 'sm' | 'lg' | 'icon'
+  linkVariant?: 'ghost' | 'outline'
+}) {
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious href='#' size={linkSize} />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink
+            href='#'
+            isActive={linkVariant === 'outline'}
+            size={linkSize}
+            className={linkVariant === 'outline' ? buttonVariants({ variant: 'outline', size: linkSize }) : undefined}
+          >
+            1
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink
+            href='#'
+            isActive={false}
+            size={linkSize}
+            className={linkVariant === 'outline' ? buttonVariants({ variant: 'outline', size: linkSize }) : undefined}
+          >
+            2
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationEllipsis />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationNext href='#' size={linkSize} />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  )
+}
+
+/* ------------------------------------------------------ Progress indicator */
+
+const progressSteps: ProgressIndicatorStep[] = [
+  { label: 'Details', status: 'complete' },
+  { label: 'Review', status: 'current' },
+  { label: 'Launch', status: 'upcoming' }
+]
+
+function ProgressIndicatorSpecimen({
+  orientation = 'horizontal'
+}: {
+  orientation?: 'horizontal' | 'vertical'
+}) {
+  return (
+    <div className={orientation === 'vertical' ? 'w-48' : 'w-full max-w-md'}>
+      <ProgressStepIndicator steps={progressSteps} orientation={orientation} />
+    </div>
+  )
+}
+
+/* --------------------------------------------------------------- Resizable */
+
+function ResizableSpecimen({
+  orientation = 'horizontal',
+  withHandle = 'false'
+}: {
+  orientation?: string
+  withHandle?: string
+}) {
+  const isHorizontal = orientation === 'horizontal'
+  return (
+    <div className='h-32 w-full max-w-sm rounded-(--radius) border border-border p-1'>
+      <ResizablePanelGroup orientation={isHorizontal ? 'horizontal' : 'vertical'}>
+        <ResizablePanel defaultSize={50} minSize={20} className='flex items-center justify-center p-2'>
+          <span className='text-xs text-muted-foreground'>Panel One</span>
+        </ResizablePanel>
+        <ResizableHandle withHandle={withHandle === 'true'} />
+        <ResizablePanel defaultSize={50} minSize={20} className='flex items-center justify-center p-2'>
+          <span className='text-xs text-muted-foreground'>Panel Two</span>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ Search */
+
+function SearchSpecimen({
+  appearance = 'default',
+  size = 'default'
+}: {
+  appearance?: 'default' | 'fluid'
+  size?: ControlSize
+}) {
+  return (
+    <div className='w-full max-w-xs'>
+      <Search
+        appearance={appearance}
+        size={size}
+        placeholder='Search missions...'
+        defaultValue='Initial query'
+      />
+    </div>
+  )
+}
+
 /* --------------------------------------------------------------- Registry */
 
 type SpecimenRenderer = (value: string) => React.ReactNode
@@ -1426,7 +1772,24 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
     shape: (value) => <ComboboxSpecimen shape={value} />
   },
   input: {
-    adornment: (value) => <InputSpecimen adornment={value} />
+    size: (value) => <InputSpecimen size={value as ControlSize} />,
+    adornment: (value) => <InputSpecimen adornment={value} />,
+    states: () => <InputSpecimen />
+  },
+  calendar: {
+    states: () => <CalendarSpecimen />
+  },
+  'date-picker': {
+    mode: (value) => <DatePickerSpecimen mode={value} />,
+    states: () => <DatePickerSpecimen />
+  },
+  'inline-edit': {
+    states: () => <InlineEditSpecimen />
+  },
+  search: {
+    appearance: (value) => <SearchSpecimen appearance={value as 'default' | 'fluid'} />,
+    size: (value) => <SearchSpecimen size={value as ControlSize} />,
+    states: () => <SearchSpecimen />
   },
   'number-field': {
     size: (value) => <NumberFieldSpecimen size={value} />
@@ -1492,6 +1855,7 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
     'focus loop': (value) => <TabsSpecimen focusLoop={value as 'loop' | 'stop'} />
   },
   avatar: {
+    size: (value) => <AvatarSpecimen size={value as ControlSize} />,
     states: () => <AvatarSpecimen />
   },
   checkbox: {
@@ -1531,7 +1895,6 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
     states: () => <ProgressSpecimen />
   },
   accordion: {
-    'trigger variant': (value) => <AccordionSpecimen variant={value as 'default' | 'compact'} />,
     states: () => <AccordionSpecimen />
   },
   collapsible: {
@@ -1567,6 +1930,39 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   },
   'navigation-menu': {
     states: () => <NavigationMenuSpecimen />
+  },
+  command: {
+    states: () => <CommandSpecimen />
+  },
+  pagination: {
+    'link size': (value) => <PaginationSpecimen linkSize={value as 'default' | 'sm' | 'lg' | 'icon'} />,
+    'link variant': (value) => <PaginationSpecimen linkVariant={value as 'ghost' | 'outline'} />,
+    states: () => <PaginationSpecimen />
+  },
+  chart: {
+    states: () => <ChartSpecimen />
+  },
+  'code-block': {
+    variant: (value) => <CodeBlockSpecimen variant={value as 'default' | 'destructive'} />,
+    size: (value) => <CodeBlockSpecimen size={value as 'default' | 'sm' | 'xs'} />,
+    states: () => <CodeBlockSpecimen />
+  },
+  'data-table': {
+    size: (value) => <DataTableSpecimen size={value as DataTableSize} />,
+    selection: (value) => <DataTableSpecimen selection={value} />,
+    states: () => <DataTableSpecimen />
+  },
+  'progress-indicator': {
+    orientation: (value) => <ProgressIndicatorSpecimen orientation={value as 'horizontal' | 'vertical'} />,
+    states: () => <ProgressIndicatorSpecimen />
+  },
+  'page-header': {
+    states: () => <PageHeaderSpecimen />
+  },
+  resizable: {
+    orientation: (value) => <ResizableSpecimen orientation={value} />,
+    withHandle: (value) => <ResizableSpecimen withHandle={value} />,
+    states: () => <ResizableSpecimen />
   }
 }
 
@@ -1620,7 +2016,88 @@ export function renderConfiguredSpecimen(specId: string, settings: SpecimenSetti
         />
       )
     case 'input':
-      return <InputSpecimen adornment={setting(settings, 'adornment', 'none')} />
+      return (
+        <InputSpecimen
+          adornment={setting(settings, 'adornment', 'none')}
+          size={setting(settings, 'size', 'default') as ControlSize}
+        />
+      )
+    case 'calendar':
+      return <CalendarSpecimen />
+    case 'date-picker':
+      return <DatePickerSpecimen mode={setting(settings, 'mode', 'single')} />
+    case 'inline-edit':
+      return <InlineEditSpecimen />
+    case 'search':
+      return (
+        <SearchSpecimen
+          appearance={setting(settings, 'appearance', 'default') as 'default' | 'fluid'}
+          size={setting(settings, 'size', 'default') as ControlSize}
+        />
+      )
+    case 'number-field':
+      return <NumberFieldSpecimen size={setting(settings, 'size', 'default')} />
+    case 'otp-field':
+      return <OtpFieldSpecimen orientation={setting(settings, 'separator orientation', 'horizontal')} />
+    case 'select':
+      return <SelectSpecimen size={setting(settings, 'size (trigger)', 'default')} />
+    case 'slider':
+      return <SliderSpecimen orientation={setting(settings, 'orientation', 'horizontal')} />
+    case 'switch':
+      return <SwitchSpecimen size={setting(settings, 'size', 'default')} />
+    case 'alert':
+      return <AlertSpecimen variant={setting(settings, 'variant', 'default')} />
+    case 'attachment':
+      return (
+        <AttachmentSpecimen
+          state={setting(settings, 'state', 'done')}
+          size={setting(settings, 'size', 'default')}
+          orientation={setting(settings, 'orientation', 'horizontal')}
+          media={setting(settings, 'media variant', 'icon')}
+        />
+      )
+    case 'avatar':
+      return <AvatarSpecimen size={setting(settings, 'size', 'default') as ControlSize} />
+    case 'chart':
+      return <ChartSpecimen />
+    case 'code-block':
+      return (
+        <CodeBlockSpecimen
+          variant={setting(settings, 'variant', 'default') as 'default' | 'destructive'}
+          size={setting(settings, 'size', 'default') as 'default' | 'sm' | 'xs'}
+        />
+      )
+    case 'data-table':
+      return (
+        <DataTableSpecimen
+          size={setting(settings, 'size', 'md') as DataTableSize}
+          selection={setting(settings, 'selection', 'none')}
+        />
+      )
+    case 'progress-indicator':
+      return (
+        <ProgressIndicatorSpecimen
+          orientation={setting(settings, 'orientation', 'horizontal') as 'horizontal' | 'vertical'}
+        />
+      )
+    case 'command':
+      return <CommandSpecimen />
+    case 'pagination':
+      return (
+        <PaginationSpecimen
+          linkSize={setting(settings, 'link size', 'icon') as 'default' | 'sm' | 'lg' | 'icon'}
+          linkVariant={setting(settings, 'link variant', 'ghost') as 'ghost' | 'outline'}
+        />
+      )
+    case 'page-header':
+      return <PageHeaderSpecimen />
+    case 'resizable':
+      return (
+        <ResizableSpecimen
+          orientation={setting(settings, 'orientation', 'horizontal')}
+          withHandle={setting(settings, 'withHandle', 'false')}
+        />
+      )
     case 'number-field':
       return <NumberFieldSpecimen size={setting(settings, 'size', 'default')} />
     case 'otp-field':
@@ -1718,7 +2195,7 @@ export function renderConfiguredSpecimen(specId: string, settings: SpecimenSetti
     case 'separator':
       return <SeparatorSpecimen orientation={setting(settings, 'orientation', 'horizontal')} />
     case 'accordion':
-      return <AccordionSpecimen variant={setting(settings, 'trigger variant', 'default') as 'default' | 'compact'} />
+      return <AccordionSpecimen />
     case 'scroll-area':
       return <ScrollAreaSpecimen orientation={setting(settings, 'orientation', 'vertical')} />
     case 'tabs':

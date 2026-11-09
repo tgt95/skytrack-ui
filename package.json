@@ -306,7 +306,8 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.json && vite build",
     "typecheck": "tsc -p tsconfig.json",
-    "lint": "node scripts/lint-ui-practices.mjs",
+    "lint": "node scripts/lint-ui-practices.mjs && node scripts/sync-sheet-specs.mjs",
+    "sync:sheet": "node scripts/sync-sheet-specs.mjs",
     "test": "vitest run",
     "preview": "vite preview",
     "generate:exports": "node scripts/generate-exports.mjs",
@@ -319,6 +320,7 @@
     "build-storybook": "storybook build",
     "build:site": "node scripts/build-site.mjs",
     "deploy:pages": "node scripts/deploy-pages.mjs",
+    "sync:guide": "node scripts/sync-to-design-guide.mjs",
     "format": "prettier --write 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md",
     "format:check": "prettier --check 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md"
   },

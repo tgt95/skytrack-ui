@@ -161,7 +161,7 @@ function CopyValue({
         aria-label={`Copy ${value}`}
         onClick={copy}
         className={cn(
-          'inline cursor-copy rounded-(--radius) text-left font-mono text-[11px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-ring',
+          'inline cursor-copy rounded-(--radius) text-left font-mono  text-muted-foreground underline-offset-2 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-ring',
           className
         )}
       >
@@ -212,7 +212,7 @@ function TokenTable({ tokens }: { tokens: string[] }) {
             return (
               <tr key={token} className='border-t border-border align-middle'>
                 <td className='px-2 py-2 sm:px-3'>
-                  <code className='text-[11px]'>{token}</code>
+                  <code className=''>{token}</code>
                 </td>
                 <td className='px-2 py-2 sm:px-3'>
                   <span className='flex items-center gap-2'>
@@ -269,9 +269,9 @@ function TypographyTable() {
           {TYPE_SCALE.map((row) => (
             <tr key={row.className} className='border-t border-border'>
               <td className='whitespace-nowrap px-2 py-2 sm:px-3'>
-                <code className='text-[11px]'>{row.className}</code>
+                <code className=''>{row.className}</code>
               </td>
-              <td className='whitespace-nowrap px-2 py-2 text-[11px] text-muted-foreground sm:px-3'>
+              <td className='whitespace-nowrap px-2 py-2  text-muted-foreground sm:px-3'>
                 {row.size}px / {row.line}px
               </td>
               <td className='px-2 py-2 sm:px-3'>
@@ -360,10 +360,14 @@ const SPECS: ComponentSpec[] = [
     group: 'Actions',
     axes: [
       { name: 'variant', values: ['default', 'outline', 'segmented', 'brand'], default: 'default' },
-      { name: 'size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' }
+      {
+        name: 'size',
+        values: ['default', 'xs', 'sm', 'lg', 'icon', 'icon-xs', 'icon-sm', 'icon-lg'],
+        default: 'default'
+      }
     ],
     states: ['pressed', 'unpressed', 'disabled', 'focus-visible'],
-    sizes: 'Heights: default 36 · xs 24 · sm 32 · lg 40 px.',
+    sizes: 'Heights: default 36 · xs 24 · sm 32 · lg 40 px. Icon sizes match: 36 · 24 · 32 · 40 px.',
     note: 'segmented and brand only read differently while pressed; pair them with Toggle Group.'
   },
   {
@@ -372,7 +376,11 @@ const SPECS: ComponentSpec[] = [
     group: 'Actions',
     axes: [
       { name: 'variant', values: ['default', 'outline', 'segmented', 'brand'], default: 'default' },
-      { name: 'size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' },
+      {
+        name: 'size',
+        values: ['default', 'xs', 'sm', 'lg', 'icon', 'icon-xs', 'icon-sm', 'icon-lg'],
+        default: 'default'
+      },
       { name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' }
     ],
     states: ['single selection (default)', 'multiple selection', 'pressed', 'disabled'],
@@ -398,12 +406,19 @@ const SPECS: ComponentSpec[] = [
     group: 'Forms',
     axes: [
       { name: 'input context', values: ['standalone', 'group'], default: 'standalone' },
-      { name: 'input size', values: ['default', 'sm'], default: 'default' },
-      { name: 'input group size', values: ['default', 'sm'], default: 'default' }
+      { name: 'input size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' },
+      { name: 'input group size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' }
     ],
     states: ['placeholder', 'filled', 'disabled', 'invalid', 'empty', 'highlighted'],
-    sizes: 'Input group heights: default 36 · sm 32 px.',
+    sizes: 'Input group heights: default 36 · xs 24 · sm 32 · lg 40 px.',
     note: 'Use context=group when the input sits inside AutocompleteInputGroup; standalone draws its own border.'
+  },
+  {
+    id: 'calendar',
+    title: 'Calendar',
+    group: 'Forms',
+    states: ['single selection', 'range', 'disabled days'],
+    note: 'Day picker supporting single or range selection, with month and year selectors.'
   },
   {
     id: 'checkbox',
@@ -425,13 +440,21 @@ const SPECS: ComponentSpec[] = [
     title: 'Combobox',
     group: 'Forms',
     axes: [
-      { name: 'size (input group)', values: ['default', 'sm'], default: 'default' },
+      { name: 'size (input group)', values: ['default', 'xs', 'sm', 'lg'], default: 'default' },
       { name: 'shape', values: ['input', 'chips'], default: 'input' },
-      { name: 'size (standalone trigger)', values: ['default', 'sm'], default: 'default' }
+      { name: 'size (standalone trigger)', values: ['default', 'xs', 'sm', 'lg'], default: 'default' }
     ],
     states: ['placeholder', 'filled', 'focused', 'disabled', 'invalid', 'selected', 'empty'],
-    sizes: 'Input group heights: default 36 · sm 32 px.',
+    sizes: 'Input group heights: default 36 · xs 24 · sm 32 · lg 40 px.',
     note: 'shape=chips wraps selected values as chips inside the field.'
+  },
+  {
+    id: 'date-picker',
+    title: 'Date Picker',
+    group: 'Forms',
+    axes: [{ name: 'mode', values: ['single', 'range'], default: 'single' }],
+    states: ['open', 'preset selection', 'disabled'],
+    note: 'Single date or date range selection via popover calendar.'
   },
   {
     id: 'field',
@@ -462,22 +485,32 @@ const SPECS: ComponentSpec[] = [
     note: 'Accepts accept, multiple, disabled, hint and buttonLabel props; onFilesSelected receives the selected File array.'
   },
   {
+    id: 'inline-edit',
+    title: 'Inline Edit',
+    group: 'Forms',
+    states: ['viewing', 'editing', 'submitting', 'disabled'],
+    note: 'Switches between static text and an editable input in place.'
+  },
+  {
     id: 'input',
     title: 'Input',
     group: 'Forms',
-    axes: [{ name: 'adornment', values: ['none', 'start', 'end', 'both'], default: 'none' }],
+    axes: [
+      { name: 'size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' },
+      { name: 'adornment', values: ['none', 'start', 'end', 'both'], default: 'none' }
+    ],
     states: ['default', 'filled', 'disabled', 'invalid'],
-    sizes: 'Height 36 px, including start and end adornments.',
+    sizes: 'Heights: default 36 · xs 24 · sm 32 · lg 40 px, including start and end adornments.',
     note: 'Native type passes through: text, email, password, number, date and the rest.'
   },
   {
     id: 'number-field',
     title: 'Number Field',
     group: 'Forms',
-    axes: [{ name: 'size', values: ['default', 'xs'], default: 'default' }],
+    axes: [{ name: 'size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' }],
     states: ['disabled', 'readonly', 'invalid', 'scrubbing'],
-    sizes: 'Input heights: default 36 · xs 24 px. Group is 36 px with 36 px steppers.',
-    note: 'xs matches the 24 px Button range.'
+    sizes: 'Heights: default 36 · xs 24 · sm 32 · lg 40 px.',
+    note: 'Increment and decrement buttons attach inside the border; scrubbing is built-in.'
   },
   {
     id: 'otp-field',
@@ -497,12 +530,24 @@ const SPECS: ComponentSpec[] = [
     note: 'RadioGroup controls layout; RadioRoot is the control. Both are required for a working group.'
   },
   {
+    id: 'search',
+    title: 'Search',
+    group: 'Forms',
+    axes: [
+      { name: 'appearance', values: ['default', 'fluid'], default: 'default' },
+      { name: 'size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' }
+    ],
+    states: ['placeholder', 'filled with clear button', 'disabled'],
+    sizes: 'Heights: default 36 · xs 24 · sm 32 · lg 40 px.',
+    note: 'Input with search icon and optional clear button.'
+  },
+  {
     id: 'select',
     title: 'Select',
     group: 'Forms',
-    axes: [{ name: 'size (trigger)', values: ['default', 'sm'], default: 'default' }],
+    axes: [{ name: 'size (trigger)', values: ['default', 'xs', 'sm', 'lg'], default: 'default' }],
     states: ['placeholder', 'filled', 'disabled', 'invalid', 'pressed', 'highlighted'],
-    sizes: 'Trigger min-heights: default 36 · sm 32 px.',
+    sizes: 'Trigger min-heights: default 36 · xs 24 · sm 32 · lg 40 px.',
     note: 'Trigger, value, list, item, item indicator, group label and separator parts ship together.'
   },
   {
@@ -627,6 +672,13 @@ const SPECS: ComponentSpec[] = [
     note: 'Item styling is shared with Menu. inset adds a 32 px left indent for icon alignment.'
   },
   {
+    id: 'command',
+    title: 'Command',
+    group: 'Menus & Navigation',
+    states: ['dialog', 'inline list', 'empty state', 'grouping'],
+    note: 'Fast filterable command palette and menu with keyboard shortcuts.'
+  },
+  {
     id: 'menu',
     title: 'Menu',
     group: 'Menus & Navigation',
@@ -652,12 +704,31 @@ const SPECS: ComponentSpec[] = [
     note: 'Trigger, icon, content, viewport, positioner and arrow parts are included. No visual variants.'
   },
   {
+    id: 'pagination',
+    title: 'Pagination',
+    group: 'Menus & Navigation',
+    axes: [
+      { name: 'link size', values: ['default', 'sm', 'lg', 'icon'], default: 'icon' },
+      { name: 'link variant', values: ['ghost', 'outline'], default: 'ghost' }
+    ],
+    states: ['active page', 'disabled previous/next', 'ellipsis'],
+    note: 'Accessible multi-page navigation links with previous and next buttons.'
+  },
+  {
+    id: 'breadcrumb',
+    title: 'Breadcrumb',
+    group: 'Menus & Navigation',
+    states: ['link', 'current page', 'separator', 'ellipsis'],
+    note: 'Breadcrumb has no built-in style variants; compose the exported list, item, link, page, separator and ellipsis parts.'
+  },
+  {
     id: 'avatar',
     title: 'Avatar',
     group: 'Data Display',
+    axes: [{ name: 'size', values: ['default', 'xs', 'sm', 'lg'], default: 'default' }],
     states: ['image', 'fallback'],
-    sizes: 'Default 32 px square (size-8); resize through className.',
-    note: 'Rounded-full mask. Fallback text is 14 px medium.'
+    sizes: 'Heights: default 36 · xs 24 · sm 32 · lg 40 px square.',
+    note: 'Rounded-full mask. Fallback text adjusts with size.'
   },
   {
     id: 'attachment',
@@ -689,11 +760,33 @@ const SPECS: ComponentSpec[] = [
     note: 'maxCount is 99 by default; showZero is off. dot ignores count and size.'
   },
   {
-    id: 'breadcrumb',
-    title: 'Breadcrumb',
-    group: 'Menus & Navigation',
-    states: ['link', 'current page', 'separator', 'ellipsis'],
-    note: 'Breadcrumb has no built-in style variants; compose the exported list, item, link, page, separator and ellipsis parts.'
+    id: 'chart',
+    title: 'Chart',
+    group: 'Data Display',
+    states: ['categorical series', 'custom tooltip', 'legend'],
+    note: 'Composable recharts wrapper with design tokens, tooltip and legend styling.'
+  },
+  {
+    id: 'code-block',
+    title: 'Code Block',
+    group: 'Data Display',
+    axes: [
+      { name: 'variant', values: ['default', 'destructive'], default: 'default' },
+      { name: 'size', values: ['default', 'sm', 'xs'], default: 'default' }
+    ],
+    states: ['header', 'footer', 'copy action', 'line numbers'],
+    note: 'Syntax-highlighted code container with header title, copy button and line numbers.'
+  },
+  {
+    id: 'data-table',
+    title: 'Data Table',
+    group: 'Data Display',
+    axes: [
+      { name: 'size', values: ['xs', 'sm', 'md', 'lg', 'xl'], default: 'md' },
+      { name: 'selection', values: ['none', 'single', 'multiple'], default: 'none' }
+    ],
+    states: ['sorting', 'filtering', 'column visibility', 'expanded row', 'pagination'],
+    note: 'TanStack Table composition with built-in search, column toggles, row selection and pagination.'
   },
   {
     id: 'meter',
@@ -711,6 +804,32 @@ const SPECS: ComponentSpec[] = [
     note: 'Composes Label, Value, Track and Indicator; indeterminate fills the track.'
   },
   {
+    id: 'progress-indicator',
+    title: 'Progress Indicator',
+    group: 'Data Display',
+    axes: [{ name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' }],
+    states: ['complete', 'current', 'upcoming', 'error', 'disabled'],
+    note: 'Step-by-step progress tracking with numbered or checked step badges and connector lines.'
+  },
+  {
+    id: 'page-header',
+    title: 'Page Header',
+    group: 'Layout',
+    states: ['with breadcrumbs', 'with toolbar', 'with tabs'],
+    note: 'Page heading composition with breadcrumbs, title and toolbar action slots.'
+  },
+  {
+    id: 'resizable',
+    title: 'Resizable',
+    group: 'Layout',
+    axes: [
+      { name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' },
+      { name: 'withHandle', values: ['false', 'true'], default: 'false' }
+    ],
+    states: ['dragging', 'min size limit', 'max size limit'],
+    note: 'Resizable panel group with drag handles and collapse bounds.'
+  },
+  {
     id: 'separator',
     title: 'Separator',
     group: 'Layout',
@@ -722,8 +841,7 @@ const SPECS: ComponentSpec[] = [
     id: 'accordion',
     title: 'Accordion',
     group: 'Layout',
-    axes: [{ name: 'trigger variant', values: ['default', 'compact'], default: 'default' }],
-    states: ['closed', 'open', 'disabled'],
+    states: ['single expansion', 'multiple expansion', 'compact', 'disabled'],
     note: 'Single vs multiple open items comes from the Base UI openMultiple prop. Header and Trigger are separate parts.'
   },
   {
@@ -788,7 +906,7 @@ function Chip({ children, shaded }: { children: ReactNode; shaded?: boolean }) {
   return (
     <code
       className={cn(
-        'inline-flex items-center border px-1.5 py-0.5 text-[11px] leading-4',
+        'inline-flex items-center border px-1.5 py-0.5  leading-4',
         shaded ? 'border-foreground/60 bg-muted font-medium text-foreground' : 'border-border text-muted-foreground'
       )}
     >
@@ -809,13 +927,13 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
   return (
     <div id={spec.id} className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8'>
       <div className='flex flex-col gap-1'>
-        <h4 className='h6 heading'>{spec.title}</h4>
-        <p className='text-xs text-muted-foreground'>{meta}</p>
+        <div className='h5'>{spec.title}</div>
+        <p className='text-base text-muted-foreground'>{meta}</p>
       </div>
       <div className='flex min-w-0 flex-col gap-2.5'>
         {spec.axes?.map((axis) => (
           <div key={axis.name} className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
-            <span className='pt-0.5 text-[11px] text-muted-foreground'>{axis.name}</span>
+            <span className='text-muted-foreground'>{axis.name}</span>
             <div role='group' aria-label={`${spec.title} ${axis.name}`} className='flex flex-wrap gap-1.5'>
               {axis.values.map((value) => {
                 const active = selected[axis.name] === value
@@ -827,7 +945,7 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
                     title={axis.default === value ? 'Component default' : undefined}
                     onClick={() => setSelected((current) => ({ ...current, [axis.name]: value }))}
                     className={cn(
-                      'inline-flex min-h-7 items-center border px-2 py-1 text-[11px] leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
+                      'inline-flex min-h-7 items-center border px-2 py-1  leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
                       active
                         ? 'border-primary bg-primary text-primary-foreground'
                         : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -844,10 +962,10 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
         {spec.axes?.length ? (
           <div className='mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
             <div className='flex flex-wrap items-center justify-between gap-2'>
-              <span className='text-[11px] font-medium text-muted-foreground'>Live preview · selected combination</span>
+              <span className=' font-medium text-muted-foreground'>Live preview · selected combination</span>
               <button
                 type='button'
-                className='text-[11px] text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
+                className=' text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
                 onClick={() =>
                   setSelected(
                     Object.fromEntries((spec.axes ?? []).map((axis) => [axis.name, axis.default ?? axis.values[0]]))
@@ -857,15 +975,15 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
                 Reset defaults
               </button>
             </div>
-            <div className='flex min-h-12 min-w-0 items-center overflow-x-auto py-1'>
+            <div className='flex min-h-12 min-w-0 items-center overflow-x-auto p-2 -mx-2'>
               {renderConfiguredSpecimen(spec.id, selected)}
             </div>
           </div>
         ) : null}
         {spec.states && (
           <div className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-3'>
-            <span className='pt-0.5 text-[11px] text-muted-foreground'>states &amp; modes</span>
-            <span className='text-[11px] leading-5 text-muted-foreground'>{spec.states.join(' · ')}</span>
+            <span className='text-muted-foreground'>states &amp; modes</span>
+            <span className='text-muted-foreground'>{spec.states.join(' · ')}</span>
           </div>
         )}
         {renderStateSpecimen(spec.id) && (
@@ -874,9 +992,9 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
           </div>
         )}
         {spec.sizes && !spec.axes?.some((axis) => axis.name.toLowerCase().includes('size')) && (
-          <p className='text-[11px] leading-5 text-muted-foreground'>{spec.sizes}</p>
+          <p className='text-muted-foreground'>{spec.sizes}</p>
         )}
-        {spec.note && <p className='text-xs leading-5 text-muted-foreground'>{spec.note}</p>}
+        {spec.note && <p className='text-sm leading-5 text-muted-foreground'>{spec.note}</p>}
       </div>
     </div>
   )

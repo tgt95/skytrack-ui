@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Select as BaseSelect } from '@base-ui/react/select'
-import { CaretDownIcon, CaretUpIcon, CaretUpDownIcon, CheckIcon } from '@phosphor-icons/react'
+import { CaretDownIcon, CaretUpIcon, CheckIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/lib/focus-ring'
@@ -77,7 +77,7 @@ function SelectIcon({ className, children, ...props }: React.ComponentProps<type
       className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className)}
       {...props}
     >
-      {children ?? <CaretUpDownIcon className='size-4' />}
+      {children ?? <CaretDownIcon className='size-4' />}
     </BaseSelect.Icon>
   )
 }

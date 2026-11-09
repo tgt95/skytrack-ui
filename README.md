@@ -275,7 +275,38 @@ npm run build:lib      # publishable library -> dist-lib/ (JS + types + styles.c
 npm run verify:lib     # re-run the dist-lib checks on their own
 npm run pack:local     # build:lib + npm pack -> dist-lib-tarball/
 npm run test:consumer  # install the tarball in an isolated offline project and use it
+npm run sync:guide     # sync source changes to ../skytrack-design-guide
 ```
+
+## Dual-repository sync (`skytrack-design-guide`)
+
+This workspace coordinates two GitHub repositories with distinct commit identities:
+
+1. **`skytrack-ui`** (`https://github.com/tgt95/skytrack-ui`): Main package development repository, authored by `tgt95`.
+2. **`skytrack-design-guide`** (`https://github.com/allandaoskytrack/skytrack-design-guide`): Shared organization design guide repository, authored by `tuantrinhatskytrack`.
+
+### How to sync changes
+
+After developing and committing in `skytrack-ui`:
+
+1. **Run the sync command**:
+   - **Via CLI**:
+     ```bash
+     npm run sync:guide
+     ```
+   - **Via Fork GUI**:
+     In Fork (tab `skytrack-ui`), select **Repository** -> **Custom Commands** -> **Sync to Design Guide** (or right-click in the repository view).
+
+2. **Commit and push from `skytrack-design-guide`**:
+   - In Fork, switch to tab **`skytrack-design-guide`**.
+   - Review the uncommitted changes in the Changes view.
+   - Enter your commit message and click **Commit** (the commit author will automatically be `tuantrinhatskytrack`).
+   - Click **Push** to update `origin/main` on `allandaoskytrack/skytrack-design-guide`.
+
+### Sync rules & exclusions
+
+The sync script (`scripts/sync-to-design-guide.mjs`) automatically mirrors `src/`, `public/`, `skills/`, package definitions, and build scripts while safely preserving target-specific files in `skytrack-design-guide` (`.git/`, `node_modules/`, `design/`, `ci/`, `CHANGELOG.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `docs/PRESENTATIONS.md`, and `scripts/export-design.mjs`).
+
 
 `build:lib` runs, in order: clean `dist-lib` → regenerate the export map → Vite ESM bundle
 (`vite.lib.config.ts`) → compile `src/styles.css` (`vite.lib.css.config.ts`) → emit `.d.ts`

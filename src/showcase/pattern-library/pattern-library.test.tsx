@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { PATTERNS, type PatternId } from './catalog'
@@ -22,6 +22,19 @@ function renderPatternDemo(patternId: PatternId) {
 }
 
 describe('Pattern Library teaching content', () => {
+  it('distinguishes read-only values visually while keeping them reviewable', () => {
+    const { container } = renderPatternDemo('read-only-states')
+    const example = container.querySelector<HTMLElement>('[data-pattern-example-id="read-only-mission-settings"]')!
+    const readOnly = within(example).getByLabelText('Workspace ID · read-only')
+
+    expect(readOnly).toHaveProperty('readOnly', true)
+    expect(readOnly.className).toContain('border-transparent')
+    expect(readOnly.className).toContain('bg-transparent')
+    expect(readOnly.className).toContain('px-0')
+    expect(within(example).getByLabelText('Workspace ID · editable')).not.toHaveProperty('readOnly', true)
+    expect(within(example).getByLabelText('Launch approval · disabled')).toHaveProperty('disabled', true)
+  })
+
   it('has source-shaped content for every Core and Community pattern', () => {
     expect(PATTERNS).toHaveLength(26)
     expect(PATTERNS.filter((pattern) => pattern.group === 'Core')).toHaveLength(17)
@@ -169,6 +182,7 @@ describe('Pattern Library teaching content', () => {
   it('renders source headings and on-page navigation instead of generic page headings', () => {
     render(<PatternLibrary query='' audience='designer' onClearSearch={() => undefined} />)
 
+    expect(screen.getByRole('heading', { level: 1, name: 'Design patterns' })).toBeTruthy()
     expect(screen.getAllByRole('heading', { name: 'Add' })).toHaveLength(1)
     expect(screen.getAllByRole('heading', { name: 'Hierarchy and placement' })).toHaveLength(2)
     expect(screen.queryByRole('heading', { name: 'What this pattern is' })).toBeNull()
@@ -188,25 +202,28 @@ describe('Pattern Library teaching content', () => {
     expect(addTocLink?.firstElementChild?.className).toContain('h-px')
     expect(desktopTableOfContents?.className).toContain('max-h-[calc(100vh-2rem)]')
     expect(desktopTableOfContents?.className).toContain('overflow-y-auto')
-    const addTocPreview = addTocLink?.parentElement?.querySelector<HTMLElement>('[aria-hidden="true"]')
-    expect(addTocPreview?.textContent).toContain('Add')
-    expect(addTocPreview?.className).toContain('group-hover:opacity-100')
-    expect(addTocPreview?.className).toContain('group-focus-within:opacity-100')
-    expect(desktopTableOfContents?.textContent).toContain('Add attaches an existing record, user, or resource')
+    expect(addTocLink?.getAttribute('aria-haspopup')).toBe('dialog')
+    expect(addTocLink?.getAttribute('aria-controls')).toBe('pattern-outline-common-actions')
+    expect(addTocLink?.getAttribute('aria-expanded')).toBe('false')
     const groupFilters = screen.getByRole('tablist', { name: 'Filter patterns by source group' })
     const patternNavigation = screen.getByRole('navigation', { name: 'Pattern catalog navigation' })
     expect(groupFilters.getAttribute('data-variant')).toBe('filled')
-    expect(groupFilters.closest('aside')).toBeNull()
+    expect(groupFilters.closest('aside')).toBeTruthy()
+    expect(groupFilters.compareDocumentPosition(patternNavigation) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     const patternNavCard = patternNavigation.closest('aside')
     expect(patternNavCard).toBeTruthy()
-    expect(patternNavCard?.parentElement?.className).toContain('xl:h-[calc(100dvh-8rem)]')
-    expect(patternNavCard?.parentElement?.className).toContain('xl:min-h-0')
+    expect(patternNavCard?.parentElement?.className).toContain('xl:sticky')
+    expect(patternNavCard?.parentElement?.className).toContain('xl:top-18')
+    expect(patternNavCard?.parentElement?.className).toContain('xl:h-[calc(100dvh-6rem)]')
+    expect(patternNavCard?.parentElement?.className).toContain('xl:self-start')
     const navCardPosition = patternNavCard?.compareDocumentPosition(groupFilters) ?? 0
     expect(navCardPosition & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     expect(patternNavCard?.className).toContain('overflow-hidden')
+    expect(patternNavCard?.className).toContain('xl:h-full')
+    expect(patternNavCard?.className).toContain('xl:min-h-0')
     expect(patternNavigation.parentElement?.className).toContain('xl:overflow-y-auto')
     expect(groupFilters.className).toContain('bg-muted')
-    expect(groupFilters.parentElement?.className).toContain('shrink-0')
+    expect(groupFilters.className).toContain('shrink-0')
 
     const patternTitle = document.querySelector<HTMLElement>('#selected-pattern-title')
     const addSection = document.querySelector<HTMLElement>('#pattern-section-common-actions-add')
@@ -215,6 +232,31 @@ describe('Pattern Library teaching content', () => {
     expect(patternTitle?.classList.contains('h3')).toBe(true)
     expect(addHeading?.classList.contains('h4')).toBe(true)
     expect(addExample?.querySelector('[data-pattern-demo-card]')).toBeTruthy()
+  })
+
+  it('keeps example headings below the source sections they illustrate', () => {
+    renderPatternDemo('dialogs')
+
+    expect(screen.getByRole('heading', { level: 5, name: 'Task completion and loading' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 6, name: 'Show progress after confirming a longer task' })).toBeTruthy()
+  })
+
+  it('qualifies deletion reversibility and describes the Wide tearsheet as blocking', () => {
+    const flattenSections = (sections: SectionNode[]): SectionNode[] =>
+      sections.flatMap((section) => [section, ...flattenSections(section.children ?? [])])
+    const deleteSection = flattenSections(PATTERN_PAGE_CONTENT['common-actions'].sections).find(
+      (section) => section.id === 'delete'
+    )
+    const removeSummary = PATTERN_PAGE_CONTENT['community-remove'].summary
+    const wideTearsheet = PATTERN_PAGE_CONTENT['community-create-flows'].demos.find(
+      (demo) => demo.id === 'create-flows-wide-tearsheet'
+    )
+
+    expect(JSON.stringify(deleteSection?.blocks)).toMatch(/usually permanent or difficult to reverse/i)
+    expect(deleteSection?.children?.[0]?.heading).toBe('Low-impact deletion')
+    expect(removeSummary).toMatch(/usually permanent or difficult to reverse/i)
+    expect(wideTearsheet?.scenario).toMatch(/overlay blocks the page until operators finish or exit/i)
+    expect(wideTearsheet?.scenario).not.toMatch(/still use the rest of the product/i)
   })
 
   it('navigates through every catalog entry and renders all of its examples', async () => {
@@ -248,19 +290,19 @@ describe('Pattern Library teaching content', () => {
     const groupTabs = screen.getByRole('tablist', { name: 'Filter patterns by source group' })
     expect(groupTabs.querySelectorAll('[role="tab"]')).toHaveLength(3)
     expect(groupTabs.getAttribute('data-variant')).toBe('filled')
-    expect(groupTabs.parentElement?.previousElementSibling?.tagName).toBe('ASIDE')
+    expect(groupTabs.closest('aside')).toBeTruthy()
+    const initialNavigation = screen.getByRole('navigation', { name: 'Pattern catalog navigation' })
+    expect(groupTabs.compareDocumentPosition(initialNavigation) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
 
-    await user.click(screen.getByRole('tab', { name: /Core\s*17/i }))
-    expect(screen.getByText('17 patterns shown')).toBeTruthy()
+    await user.click(groupTabs.querySelectorAll<HTMLElement>('[role="tab"]')[1])
     let navigation = screen.getByRole('navigation', { name: 'Pattern catalog navigation' })
-    expect(within(navigation).getByRole('heading', { name: 'Core patterns' })).toBeTruthy()
-    expect(within(navigation).queryByRole('heading', { name: 'Community patterns' })).toBeNull()
+    expect(within(navigation).getByText('Core patterns')).toBeTruthy()
+    expect(within(navigation).queryByText('Community patterns')).toBeNull()
 
-    await user.click(screen.getByRole('tab', { name: /Community\s*9/i }))
-    expect(screen.getByText('9 patterns shown')).toBeTruthy()
+    await user.click(groupTabs.querySelectorAll<HTMLElement>('[role="tab"]')[2])
     navigation = screen.getByRole('navigation', { name: 'Pattern catalog navigation' })
-    expect(within(navigation).getByRole('heading', { name: 'Community patterns' })).toBeTruthy()
-    expect(within(navigation).queryByRole('heading', { name: 'Core patterns' })).toBeNull()
+    expect(within(navigation).getByText('Community patterns')).toBeTruthy()
+    expect(within(navigation).queryByText('Core patterns')).toBeNull()
 
     view.rerender(<PatternLibrary query='API key' audience='designer' onClearSearch={clearSearch} />)
     expect(screen.getByText(/matching patterns/)).toBeTruthy()
@@ -274,7 +316,6 @@ describe('Pattern Library teaching content', () => {
     expect(clearSearchCount).toBe(1)
 
     view.rerender(<PatternLibrary query='' audience='designer' onClearSearch={clearSearch} />)
-    expect(screen.getByText('26 patterns shown')).toBeTruthy()
   })
 
   it('renders interactive demos inside the section they explain', () => {
@@ -298,9 +339,22 @@ describe('Pattern Library teaching content', () => {
         const id = example.dataset.patternExampleId
         const demo = page.demos.find((item) => item.id === id)
         const demoCard = example.querySelector<HTMLElement>('[data-pattern-demo-card]')
+        const instruction = demoCard?.querySelector<HTMLElement>('[data-pattern-demo-instruction]')
         expect(container.querySelector(`[data-pattern-demo-slot="${id}"]`)?.contains(example)).toBe(true)
         expect(demoCard?.textContent).toContain(demo?.interactive ? 'Interactive example' : 'Visual example')
-        expect(demoCard?.querySelector('[data-pattern-demo-instruction]')).toBeTruthy()
+        expect(instruction).toBeTruthy()
+        if (demo?.scenario) expect(example.textContent).toContain(demo.scenario)
+        if (demo?.interactive) {
+          expect(demoCard?.textContent).toContain('Try it')
+          expect(instruction?.textContent).toBe(
+            'Use a control below, then look for the sample result in this example. Changes stay in this preview.'
+          )
+        } else {
+          expect(demoCard?.textContent).toContain('Reference')
+          expect(instruction?.textContent).toBe(
+            'Visual reference only. The sample shows this pattern’s state or layout without a live interaction.'
+          )
+        }
       }
       expect(container.querySelector('a[href^="#pattern-example-"]')).toBeNull()
       unmount()
@@ -330,6 +384,30 @@ describe('Pattern Library teaching content', () => {
     expect(screen.getAllByRole('heading', { name: 'Add' })).toHaveLength(1)
     expect(screen.getByText(/After success, animate the item out of the list/)).toBeTruthy()
     expect(screen.getByText(/when available/)).toBeTruthy()
+  })
+
+  it('resets pending filters to the latest applied checkpoint instead of factory defaults', async () => {
+    const user = userEvent.setup()
+    const { container } = renderPatternDemo('common-actions')
+    const example = container.querySelector<HTMLElement>('[data-pattern-example-id="common-actions-reset"]')!
+    const statusFilters = within(example).getByRole('group', { name: 'Mission status filters · pending' })
+
+    await user.click(within(example).getByRole('button', { name: 'Reset to last applied' }))
+    expect(within(statusFilters).getByRole('checkbox', { name: 'Ready' }).getAttribute('aria-checked')).toBe('true')
+    expect(within(statusFilters).getByRole('checkbox', { name: 'In review' }).getAttribute('aria-checked')).toBe(
+      'false'
+    )
+    expect(within(example).getByRole('status').textContent).toContain('last applied selection is restored')
+
+    await user.click(within(statusFilters).getByRole('checkbox', { name: 'In review' }))
+    await user.click(within(example).getByRole('button', { name: 'Apply filters' }))
+    expect(within(example).getByText('ready, review · Coast')).toBeTruthy()
+
+    await user.click(within(statusFilters).getByRole('checkbox', { name: 'Complete' }))
+    await user.click(within(example).getByRole('button', { name: 'Reset to last applied' }))
+    expect(within(statusFilters).getByRole('checkbox', { name: 'In review' }).getAttribute('aria-checked')).toBe('true')
+    expect(within(statusFilters).getByRole('checkbox', { name: 'Complete' }).getAttribute('aria-checked')).toBe('false')
+    expect(within(example).getByText('ready, review · Coast')).toBeTruthy()
   })
 
   it('shows a persistent Callout beside its field and limits brief toasts to non-actionable outcomes', async () => {
@@ -497,17 +575,13 @@ describe('Pattern Library teaching content', () => {
     expect(within(metadataExample as HTMLElement).getByRole('status').textContent).toContain('No data was imported')
   })
 
-  it('labels Export actions as previews and shows progress only while preparation runs', async () => {
+  it('aligns Export configuration, failure, and completion dialogs with visible local outcomes', async () => {
     const user = userEvent.setup()
     const { container } = renderPatternDemo('community-export')
     const configExample = container.querySelector<HTMLElement>('[data-pattern-example-id="export-customize"]')
     const progressExample = container.querySelector<HTMLElement>(
       '[data-pattern-example-id="export-progress-and-error"]'
     )
-
-    await user.click(within(configExample as HTMLElement).getByRole('button', { name: 'Show export error' }))
-    await user.click(within(configExample as HTMLElement).getByRole('button', { name: 'Retry' }))
-    expect(within(configExample as HTMLElement).getByRole('status').textContent).toContain('Retry completed')
 
     const downloadExample = container.querySelector<HTMLElement>(
       '[data-pattern-example-id="export-intuitive-download"]'
@@ -517,8 +591,36 @@ describe('Pattern Library teaching content', () => {
       'does not create or download a file'
     )
 
-    await user.click(within(configExample as HTMLElement).getByRole('button', { name: 'Prepare CSV preview' }))
-    expect(within(configExample as HTMLElement).getByRole('status').textContent).toContain('No download occurred')
+    expect(within(configExample as HTMLElement).getByText(/browser’s Save dialog/)).toBeTruthy()
+    await user.click(within(configExample as HTMLElement).getByRole('button', { name: 'Configure export' }))
+    const configuration = await screen.findByRole('dialog', { name: 'Export mission report' })
+    await waitFor(() =>
+      expect(document.activeElement).toBe(within(configuration).getByRole('button', { name: 'Prepare export' }))
+    )
+    await user.tab()
+    expect(document.activeElement).toBe(within(configuration).getByRole('button', { name: 'Cancel' }))
+    await user.tab()
+    expect(document.activeElement).toBe(within(configuration).getByRole('textbox', { name: 'File name' }))
+    expect(within(configuration).getByRole('radiogroup', { name: 'Export format' })).toBeTruthy()
+    expect(within(configuration).getByText('Use for spreadsheet workflows.')).toBeTruthy()
+    expect(within(configuration).getByText('Keep structured record fields.')).toBeTruthy()
+    expect(within(configuration).getByText('Include geographic coordinates.')).toBeTruthy()
+    expect(within(configuration).getByRole('radio', { name: /CSV/ }).getAttribute('aria-checked')).toBe('true')
+
+    const fileName = within(configuration).getByRole('textbox', { name: 'File name' })
+    await user.clear(fileName)
+    await user.type(fileName, 'mission-report.json')
+    await user.click(within(configuration).getByRole('button', { name: 'Prepare export' }))
+    expect(within(configuration).getByText('Use the .csv extension for the selected format.')).toBeTruthy()
+    expect(screen.getByRole('dialog', { name: 'Export mission report' })).toBeTruthy()
+    const exportFormats = within(configuration).getByRole('radiogroup', { name: 'Export format' })
+    await user.click(within(exportFormats).getAllByRole('radio')[1])
+    await user.click(within(configuration).getByRole('button', { name: 'Prepare export' }))
+    expect(screen.queryByRole('dialog', { name: 'Export mission report' })).toBeNull()
+    expect(within(configExample as HTMLElement).getByRole('status').textContent).toContain(
+      'mission-report.json is prepared as JSON'
+    )
+    expect(within(configExample as HTMLElement).getByRole('status').textContent).toContain('No file was created')
 
     await user.click(within(progressExample as HTMLElement).getByRole('button', { name: 'Start preparation' }))
     expect(within(progressExample as HTMLElement).getByRole('progressbar')).toBeTruthy()
@@ -526,10 +628,35 @@ describe('Pattern Library teaching content', () => {
     expect(within(progressExample as HTMLElement).getByRole('status').textContent).toContain('complete')
     expect(within(progressExample as HTMLElement).queryByRole('progressbar')).toBeNull()
 
-    await user.click(within(progressExample as HTMLElement).getByRole('button', { name: 'Preview destination error' }))
-    await user.click(within(progressExample as HTMLElement).getByRole('button', { name: 'Retry preparation' }))
+    await user.click(within(progressExample as HTMLElement).getByRole('button', { name: 'Preview export failure' }))
+    const failure = await screen.findByRole('dialog', { name: 'Export preparation failed' })
+    await waitFor(() =>
+      expect(document.activeElement).toBe(within(failure).getByRole('button', { name: 'Close error' }))
+    )
+    expect(within(failure).getByText('This is a local failure preview. No file was created.')).toBeTruthy()
+    await user.click(within(failure).getByRole('button', { name: 'Retry preparation' }))
     expect(within(progressExample as HTMLElement).getByRole('progressbar')).toBeTruthy()
     expect(within(progressExample as HTMLElement).getByRole('status').textContent).toContain('Retrying export')
+
+    const completionExample = container.querySelector<HTMLElement>(
+      '[data-pattern-example-id="export-confirm-completion"]'
+    )
+    await user.click(
+      within(completionExample as HTMLElement).getByRole('button', { name: 'Preview completion dialog' })
+    )
+    const completion = await screen.findByRole('dialog', { name: 'Export prepared' })
+    await waitFor(() =>
+      expect(document.activeElement).toBe(within(completion).getByRole('button', { name: 'Close completion message' }))
+    )
+    expect(within(completion).getByText(/No file was created or saved/)).toBeTruthy()
+    await user.click(within(completion).getByRole('button', { name: 'Close completion message' }))
+    await user.click(
+      within(completionExample as HTMLElement).getByRole('button', { name: 'Preview success notification' })
+    )
+    expect(await screen.findByText('Export ready')).toBeTruthy()
+    expect(within(completionExample as HTMLElement).getByRole('status').textContent).toContain(
+      'Success notification preview shown'
+    )
   })
 
   it('keeps Search results local and supports type-ahead keyboard selection and dismissal', async () => {
@@ -612,11 +739,36 @@ describe('Pattern Library teaching content', () => {
     expect(within(authExample!).getByRole('textbox', { name: 'Verification code' })).toBeTruthy()
   })
 
-  it('keeps Global Header breadcrumb previews local and type-ahead focus on visible suggestions', async () => {
+  it('keeps Global Header destinations local and type-ahead focus on visible suggestions', async () => {
     const user = userEvent.setup()
     const { container } = renderPatternDemo('global-header')
     const headerExample = container.querySelector<HTMLElement>(
       '[data-pattern-example-id="global-header-with-local-nav"]'
+    )
+
+    expect(within(headerExample as HTMLElement).getByRole('link', { name: 'Skip to main content' })).toHaveProperty(
+      'hash',
+      '#global-header-main-content'
+    )
+    await user.click(within(headerExample as HTMLElement).getByRole('button', { name: 'Utilities' }))
+    expect(await screen.findByRole('menuitem', { name: 'Notifications · 2' })).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'System settings' })).toBeTruthy()
+    expect(screen.queryByRole('menuitem', { name: 'Switch product' })).toBeNull()
+    await user.click(within(headerExample as HTMLElement).getByRole('button', { name: 'Switch product' }))
+    expect(within(headerExample as HTMLElement).getByText(/Product switcher opened/)).toBeTruthy()
+
+    const schemeExample = container.querySelector<HTMLElement>(
+      '[data-pattern-example-id="global-header-organize-destinations"]'
+    )!
+    for (const name of ['Most recent', 'Customized', 'Audience', 'Alphabetical', 'Product domains']) {
+      expect(within(schemeExample).getByRole('button', { name })).toBeTruthy()
+    }
+    await user.click(within(schemeExample).getByRole('button', { name: 'Audience' }))
+    expect(within(schemeExample).getByRole('navigation', { name: 'Audience navigation preview' })).toBeTruthy()
+    expect(within(schemeExample).getByText(/growing user-created mission lists in a drill-down view/)).toBeTruthy()
+    await user.click(within(schemeExample).getByRole('button', { name: 'Dispatcher tools' }))
+    expect(within(schemeExample).getByRole('status').textContent).toContain(
+      'Opened Dispatcher tools in the audience preview'
     )
 
     const currentHash = window.location.hash
@@ -668,12 +820,28 @@ describe('Pattern Library teaching content', () => {
       '[data-pattern-example-id="filtering-combine-categories"]'
     )
 
+    expect(
+      within(multiExample as HTMLElement)
+        .getByRole('button', { name: 'Clear selections' })
+        .hasAttribute('disabled')
+    ).toBe(true)
+    expect(
+      within(multiExample as HTMLElement)
+        .getByRole('button', { name: 'Reset all filters' })
+        .hasAttribute('disabled')
+    ).toBe(true)
+
     await user.click(within(singleExample as HTMLElement).getByRole('radio', { name: 'Ready' }))
     expect(within(singleExample as HTMLElement).getByRole('status').textContent).toContain('2 missions shown for ready')
     expect(within(multiExample as HTMLElement).getByRole('status').textContent).toContain('4 missions shown')
 
     await user.click(within(multiExample as HTMLElement).getByRole('button', { name: 'Batch' }))
     await user.click(within(multiExample as HTMLElement).getByRole('checkbox', { name: 'Planning' }))
+    expect(
+      within(multiExample as HTMLElement)
+        .getByRole('button', { name: 'Clear selections' })
+        .hasAttribute('disabled')
+    ).toBe(false)
     expect(within(multiExample as HTMLElement).getByRole('status').textContent).toContain('4 missions shown')
     expect(within(multiExample as HTMLElement).getByRole('status').textContent).toContain('1 pending selection')
     await user.click(within(multiExample as HTMLElement).getByRole('button', { name: 'Apply filters' }))
@@ -717,11 +885,14 @@ describe('Pattern Library teaching content', () => {
     const { container } = renderPatternDemo('common-actions')
     const example = container.querySelector<HTMLElement>('[data-pattern-example-id="common-actions-clear"]')!
     const status = within(example).getByRole('status')
+    const clearToDefault = within(example).getByRole('button', { name: 'Clear to default' })
+    expect(clearToDefault.hasAttribute('disabled')).toBe(true)
 
     const statusChoices = within(example).getAllByRole('radio')
     await user.click(statusChoices[2])
     expect(status.textContent).toBe('Status filter: Complete.')
-    await user.click(within(example).getByRole('button', { name: 'Clear to default' }))
+    expect(clearToDefault.hasAttribute('disabled')).toBe(false)
+    await user.click(clearToDefault)
     expect(status.textContent).toBe('Status filter: Ready.')
   })
 
@@ -907,8 +1078,14 @@ describe('Pattern Library teaching content', () => {
     expect(within(contactExample as HTMLElement).getByRole('status').textContent).toContain('Contact details are valid')
     expect(within(validationExample as HTMLElement).queryByRole('status')).toBeNull()
 
+    const clearEmail = within(validationExample as HTMLElement).getByRole('button', { name: 'Clear email' })
+    expect(clearEmail.hasAttribute('disabled')).toBe(true)
     await user.click(within(validationExample as HTMLElement).getByRole('button', { name: 'Validate email' }))
     expect(within(validationExample as HTMLElement).getByText('Enter an email address that includes @.')).toBeTruthy()
+    expect(clearEmail.hasAttribute('disabled')).toBe(false)
+    await user.click(clearEmail)
+    expect(within(validationExample as HTMLElement).getByLabelText('Notification email')).toHaveProperty('value', '')
+    expect(within(validationExample as HTMLElement).queryByText('Enter an email address that includes @.')).toBeNull()
     await user.type(within(validationExample as HTMLElement).getByLabelText('Notification email'), 'pilot@example.com')
     await user.click(within(validationExample as HTMLElement).getByRole('button', { name: 'Validate email' }))
     expect(within(validationExample as HTMLElement).getByRole('status').textContent).toContain('Email format is valid')
@@ -1027,12 +1204,22 @@ describe('Pattern Library teaching content', () => {
 
   it('explains what happens after a one-time key result is dismissed', async () => {
     const user = userEvent.setup()
-    renderPatternDemo('community-api-key')
+    const { container } = renderPatternDemo('community-api-key')
+    const example = container.querySelector<HTMLElement>('[data-pattern-example-id="api-key-create-and-manage"]')!
 
-    await user.click(screen.getByRole('button', { name: 'Generate key' }))
-    await user.click(screen.getByRole('button', { name: 'Leave key result' }))
+    await user.click(within(example).getByRole('button', { name: 'Configure API key' }))
+    const configuration = await screen.findByRole('dialog', { name: 'Configure API key' })
+    expect(within(configuration).getByRole('radiogroup', { name: 'Access' })).toBeTruthy()
+    expect(within(configuration).getByRole('radiogroup', { name: 'Key retrieval' })).toBeTruthy()
+    await user.click(within(configuration).getByRole('button', { name: 'Generate key' }))
+    const result = await screen.findByRole('dialog', { name: 'API key result preview' })
+    expect(within(result).getByText(/no credential was created/i)).toBeTruthy()
+    expect(within(result).getByRole('button', { name: 'Preview JSON download' })).toBeTruthy()
+    await user.click(within(result).getByRole('button', { name: 'Preview JSON download' }))
+    expect(within(example).getByRole('status').textContent).toContain('No file was downloaded')
+    await user.click(within(result).getByRole('button', { name: 'Leave key result' }))
 
-    const alertText = screen
+    const alertText = within(example)
       .getAllByRole('alert')
       .find((alert) => alert.textContent?.includes('One-time result closed'))?.textContent
     expect(alertText).toBeTruthy()
@@ -1040,19 +1227,65 @@ describe('Pattern Library teaching content', () => {
     expect(alertText).toContain('recovery would require a new key')
   })
 
+  it('carries selected API-key access and retrieval choices into the result', async () => {
+    const user = userEvent.setup()
+    const { container } = renderPatternDemo('community-api-key')
+    const example = container.querySelector<HTMLElement>('[data-pattern-example-id="api-key-create-and-manage"]')!
+
+    await user.click(within(example).getByRole('button', { name: 'Configure API key' }))
+    const configuration = await screen.findByRole('dialog', { name: 'Configure API key' })
+    const restricted = within(configuration).getByRole('radio', { name: /Restricted access/ })
+    await user.click(restricted)
+    expect(restricted.getAttribute('aria-checked')).toBe('true')
+
+    const availableInProduct = within(configuration).getByRole('radio', { name: 'Available again in this product' })
+    const availableOnAnotherPlatform = within(configuration).getByRole('radio', {
+      name: 'Available from another platform'
+    })
+    await user.click(availableOnAnotherPlatform)
+    expect(availableOnAnotherPlatform.getAttribute('aria-checked')).toBe('true')
+    expect(
+      within(configuration).getByText('Link to instructions for retrieving the key on the separate platform.')
+    ).toBeTruthy()
+
+    await user.click(availableInProduct)
+    expect(availableInProduct.getAttribute('aria-checked')).toBe('true')
+    expect(
+      within(configuration).getByText('Tell users where to return in the product to retrieve this key.')
+    ).toBeTruthy()
+    expect(within(configuration).queryByRole('alert')).toBeNull()
+
+    await user.click(within(configuration).getByRole('button', { name: 'Generate key' }))
+    const result = await screen.findByRole('dialog', { name: 'API key result preview' })
+    expect(within(result).getByText(/Restricted · Missions read-only/)).toBeTruthy()
+    expect(within(result).queryByRole('button', { name: 'Preview JSON download' })).toBeNull()
+
+    const keyValue = within(result).getByText('sk_demo_7f3a••••••••••••9b2c')
+    await user.click(within(result).getByRole('button', { name: 'Reveal key' }))
+    expect(within(result).getByText('sk_demo_7f3a9d41b820c67f9b2c')).toBeTruthy()
+    await user.click(within(result).getByRole('button', { name: 'Hide key' }))
+    expect(keyValue).toBeTruthy()
+  })
+
   it('labels API-key copy, rotation, and revocation as local previews', async () => {
     const user = userEvent.setup()
     const { container } = renderPatternDemo('community-api-key')
     const createExample = container.querySelector<HTMLElement>('[data-pattern-example-id="api-key-create-and-manage"]')
 
-    await user.click(within(createExample as HTMLElement).getByRole('button', { name: 'Generate key' }))
-    await user.click(within(createExample as HTMLElement).getByRole('button', { name: 'Preview copy feedback' }))
+    await user.click(within(createExample as HTMLElement).getByRole('button', { name: 'Configure API key' }))
+    const result = await screen.findByRole('dialog', { name: 'Configure API key' })
+    await user.click(within(result).getByRole('button', { name: 'Generate key' }))
+    const generated = await screen.findByRole('dialog', { name: 'API key result preview' })
+    await user.click(within(generated).getByRole('button', { name: 'Preview copy feedback' }))
     expect(within(createExample as HTMLElement).getByRole('status').textContent).toContain('Clipboard was not accessed')
-    expect(within(createExample as HTMLElement).getByRole('button', { name: 'Copy preview shown' })).toBeTruthy()
+    expect(within(generated).getByRole('button', { name: 'Copy preview shown' })).toBeTruthy()
 
-    await user.click(within(createExample as HTMLElement).getByRole('button', { name: 'Manage key' }))
-    expect(await screen.findByRole('menuitem', { name: 'Preview key rotation' })).toBeTruthy()
-    expect(screen.getByRole('menuitem', { name: 'Preview key revocation' })).toBeTruthy()
+    await user.click(within(generated).getByRole('button', { name: 'Manage key' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Preview key rotation' }))
+    expect(within(createExample as HTMLElement).getByRole('status').textContent).toContain('no credential was changed')
+    await user.click(within(generated).getByRole('button', { name: 'Manage key' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Preview key revocation' }))
+    expect(within(createExample as HTMLElement).getByRole('status').textContent).toContain('no credential was revoked')
   })
 
   it('shows a local destination when a chatbot hands work back to standard navigation', async () => {
@@ -1148,10 +1381,14 @@ describe('Pattern Library teaching content', () => {
     const routeExample = container.querySelector<HTMLElement>('[data-pattern-example-id="dialogs-modal-confirm"]')!
 
     await user.click(within(routeExample).getByRole('button', { name: 'Review route change' }))
-    await user.click(await screen.findByRole('button', { name: 'Confirm route' }))
-    expect(screen.getByRole('dialog', { name: 'Confirm the route change' })).toBeTruthy()
-    await user.type(within(screen.getByRole('dialog')).getByLabelText('New route name'), 'River mapping revision')
-    await user.click(screen.getByRole('button', { name: 'Confirm route' }))
+    const dialog = await screen.findByRole('dialog', { name: 'Confirm the route change' })
+    const routeName = within(dialog).getByLabelText('New route name')
+    fireEvent.blur(routeName)
+    expect(within(dialog).getByText('Please enter a route name to continue.')).toBeTruthy()
+    await user.click(routeName)
+    await user.type(routeName, 'River mapping revision')
+    expect(within(dialog).queryByText('Please enter a route name to continue.')).toBeNull()
+    await user.click(within(dialog).getByRole('button', { name: 'Confirm route' }))
     expect(screen.queryByRole('dialog', { name: 'Confirm the route change' })).toBeNull()
     expect(within(routeExample).getByRole('status').textContent).toContain(
       'Route change confirmed locally: River mapping revision'
@@ -1193,30 +1430,66 @@ describe('Pattern Library teaching content', () => {
     expect(within(sidePanelExample).getByRole('status').textContent).toContain('no mission was saved')
 
     const fullPageExample = container.querySelector<HTMLElement>('[data-pattern-example-id="create-flows-full-page"]')!
-    await user.click(within(fullPageExample).getByRole('button', { name: 'Preview full-page creation' }))
+    await user.click(within(fullPageExample).getByRole('button', { name: 'Preview required workspace setup' }))
     const fullPage = within(fullPageExample)
-    const fullPageName = fullPage.getByLabelText('Mission name')
-    await user.clear(fullPageName)
-    await user.type(fullPageName, 'River mapping')
+    const workspaceName = fullPage.getByLabelText('Workspace name')
+    await user.clear(workspaceName)
+    expect(fullPage.getByRole('button', { name: 'Next step' }).hasAttribute('disabled')).toBe(true)
+    await user.type(workspaceName, 'River Operations')
+    await user.click(fullPage.getByRole('button', { name: 'Cancel setup' }))
+    const discardDialog = await screen.findByRole('alertdialog', { name: 'Discard workspace setup?' })
+    await user.click(within(discardDialog).getByRole('button', { name: 'Discard setup' }))
+    await user.click(fullPage.getByRole('button', { name: 'Preview required workspace setup' }))
+    expect(fullPage.getByLabelText('Workspace name').getAttribute('value')).toBe('Northstar Flight Operations')
+    const retainedWorkspaceName = fullPage.getByLabelText('Workspace name')
+    await user.clear(retainedWorkspaceName)
+    await user.type(retainedWorkspaceName, 'River Operations')
     await user.click(fullPage.getByRole('button', { name: 'Next step' }))
-    expect(fullPage.getByText('Step 2 of 2 · Flight area')).toBeTruthy()
+    expect(fullPage.getByText('Step 2 of 2 · Operating area')).toBeTruthy()
     expect(
-      fullPage.getByRole('list', { name: 'Mission setup steps' }).querySelector('[aria-current="step"]')?.textContent
-    ).toContain('Flight area')
-    expect(fullPage.getByText('Mission: River mapping · Purpose: Coastal mapping')).toBeTruthy()
-    const flightArea = fullPage.getByLabelText('Flight area')
-    await user.clear(flightArea)
-    expect(fullPage.getByRole('button', { name: 'Create mission' }).hasAttribute('disabled')).toBe(true)
-    await user.type(flightArea, 'River delta')
-    await user.click(fullPage.getByRole('button', { name: 'Create mission' }))
-    expect(fullPage.getByRole('status').textContent).toContain('River mapping for River delta prepared')
-    expect(fullPage.getByRole('status').textContent).toContain('local example')
+      fullPage.getByRole('list', { name: 'Workspace setup steps' }).querySelector('[aria-current="step"]')?.textContent
+    ).toContain('Operating area')
+    expect(fullPage.getByText('Workspace: River Operations')).toBeTruthy()
+    const operatingArea = fullPage.getByLabelText('Primary operating area')
+    await user.clear(operatingArea)
+    expect(fullPage.getByRole('button', { name: 'Complete setup' }).hasAttribute('disabled')).toBe(true)
+    await user.type(operatingArea, 'River delta')
+    await user.click(fullPage.getByRole('button', { name: 'Complete setup' }))
+    expect(fullPage.getByRole('status').textContent).toContain('Initial setup for River Operations is complete')
+    expect(fullPage.getByRole('status').textContent).toContain('no workspace was saved')
+
+    const wideTearsheet = container.querySelector<HTMLElement>(
+      '[data-pattern-example-id="create-flows-wide-tearsheet"]'
+    )!
+    expect(within(wideTearsheet).getByRole('complementary', { name: 'Setup progress' })).toBeTruthy()
+    expect(
+      within(wideTearsheet).getByRole('list', { name: 'Mission setup steps' }).querySelector('[aria-current="step"]')
+    ).toBeTruthy()
+    expect(
+      within(wideTearsheet).getByText(/overlay blocks the page until operators finish or exit the flow/i)
+    ).toBeTruthy()
+
+    const narrowTearsheet = container.querySelector<HTMLElement>(
+      '[data-pattern-example-id="create-flows-narrow-tearsheet"]'
+    )!
+    expect(within(narrowTearsheet).getByText('Narrow tearsheet · scrollable form')).toBeTruthy()
+    expect(narrowTearsheet.querySelector('.overflow-y-auto')).toBeTruthy()
+    expect(within(narrowTearsheet).getByRole('heading', { name: 'Mission details' })).toBeTruthy()
+    expect(within(narrowTearsheet).getByRole('heading', { name: 'Flight settings' })).toBeTruthy()
+    expect(within(narrowTearsheet).getByRole('button', { name: 'Cancel' }).hasAttribute('disabled')).toBe(true)
+    expect(within(narrowTearsheet).getByRole('button', { name: 'Create' }).hasAttribute('disabled')).toBe(true)
 
     const progressExample = container.querySelector<HTMLElement>(
       '[data-pattern-example-id="create-flows-completion-loading"]'
     )!
+    const resetProgress = within(progressExample).getByRole('button', { name: 'Reset sample' })
+    expect(resetProgress.hasAttribute('disabled')).toBe(true)
     await user.click(within(progressExample).getByRole('button', { name: 'Submit sample mission' }))
     expect(within(progressExample).getByText('50%')).toBeTruthy()
+    expect(resetProgress.hasAttribute('disabled')).toBe(false)
+    await user.click(resetProgress)
+    expect(within(progressExample).getByText('0%')).toBeTruthy()
+    await user.click(within(progressExample).getByRole('button', { name: 'Submit sample mission' }))
     await user.click(within(progressExample).getByRole('button', { name: 'Continue preparation' }))
     expect(within(progressExample).getByRole('alert').textContent).toContain('No mission was saved')
   })
@@ -1228,10 +1501,32 @@ describe('Pattern Library teaching content', () => {
 
     await user.click(within(retryExample).getByRole('button', { name: 'Simulate connection error' }))
     expect(within(retryExample).getByRole('alert').textContent).toContain('was not sent')
-    await user.click(within(retryExample).getByRole('button', { name: 'Retry message' }))
-    expect(within(retryExample).getByRole('status').textContent).toContain('Message sent after reconnect')
+    await user.click(within(retryExample).getByRole('button', { name: 'Preview retry' }))
+    expect(within(retryExample).getByRole('status').textContent).toContain('The sample did not send it')
+
+    const handoffExample = container.querySelector<HTMLElement>('[data-pattern-example-id="chatbots-human-handoff"]')!
+    const returnToHelper = within(handoffExample).getByRole('button', { name: 'Return to mission helper' })
+    expect(returnToHelper.hasAttribute('disabled')).toBe(true)
+    await user.click(within(handoffExample).getByRole('button', { name: 'Preview support handoff' }))
+    expect(within(handoffExample).getByRole('alert').textContent).toContain('No teammate was contacted')
+    expect(within(handoffExample).queryByText('Support conversation started')).toBeNull()
+    expect(returnToHelper.hasAttribute('disabled')).toBe(false)
+    await user.click(returnToHelper)
+    expect(within(handoffExample).getByRole('button', { name: 'Preview support handoff' })).toBeTruthy()
     const firstChatExample = container.querySelector<HTMLElement>('[data-pattern-example-id="chatbots-mission-help"]')!
     expect(within(firstChatExample).queryByText(/How can I review my route/)).toBeNull()
+    const send = within(firstChatExample).getByRole('button', { name: 'Send' })
+    const clearConversation = within(firstChatExample).getByRole('button', { name: 'Clear conversation' })
+    expect(send.hasAttribute('disabled')).toBe(true)
+    expect(clearConversation.hasAttribute('disabled')).toBe(true)
+    await user.click(within(firstChatExample).getByRole('button', { name: 'Review route' }))
+    expect(within(firstChatExample).getByRole('log').textContent).toContain('Open Missions to review the route')
+    await user.click(within(firstChatExample).getByRole('button', { name: 'Clear conversation' }))
+    expect(within(firstChatExample).queryByText('You: How do I review a mission route?')).toBeNull()
+    await user.type(within(firstChatExample).getByRole('textbox', { name: 'Message the local demo' }), 'mission status')
+    expect(send.hasAttribute('disabled')).toBe(false)
+    await user.click(send)
+    expect(within(firstChatExample).getByRole('log').textContent).toContain('You: mission status')
 
     cleanup()
     const learningRender = renderPatternDemo('community-in-app-learning')
@@ -1261,9 +1556,40 @@ describe('Pattern Library teaching content', () => {
     )!
     expect(within(widthExample).getByText(/Visual reference only/)).toBeTruthy()
     expect(within(widthExample).getByRole('button', { name: 'Continue' }).hasAttribute('disabled')).toBe(true)
+    const actionExample = fluid.container.querySelector<HTMLElement>(
+      '[data-pattern-example-id="fluid-styles-align-actions"]'
+    )!
+    const actionFooter = actionExample.querySelector<HTMLElement>('.grid.grid-cols-2')
+    expect(actionFooter?.className).toContain('border-t')
+    expect(actionFooter?.className).not.toContain('gap-')
+    expect(actionFooter?.querySelectorAll('button')).toHaveLength(2)
+    expect(within(actionExample).getByText('Two related next steps for this mission.')).toBeTruthy()
     const edgeForm = fluid.container.querySelector<HTMLElement>('[data-pattern-example-id="fluid-styles-edge-form"]')!
     expect(within(edgeForm).getByLabelText('Teammate email').hasAttribute('readonly')).toBe(true)
     expect(within(edgeForm).getByRole('button', { name: 'Send invitation' }).hasAttribute('disabled')).toBe(true)
+    expect(
+      within(edgeForm).getByText(
+        /Exact zero-gap fluid inputs with internal labels need a dedicated field implementation/
+      )
+    ).toBeTruthy()
+
+    cleanup()
+    const loading = renderPatternDemo('loading')
+    const skeleton = loading.container.querySelector<HTMLElement>(
+      '[data-pattern-example-id="loading-skeleton-list"] [aria-label="Illustrative loading skeleton for flight plans"]'
+    )
+    expect(skeleton?.getAttribute('aria-busy')).toBe('true')
+    expect(skeleton?.getAttribute('role')).toBe('region')
+    expect(skeleton?.querySelectorAll('[aria-hidden="true"]')).toHaveLength(9)
+
+    cleanup()
+    const status = renderPatternDemo('status-indicators')
+    const badgeExample = status.container.querySelector<HTMLElement>(
+      '[data-pattern-example-id="status-badge-navigation"]'
+    )!
+    expect(within(badgeExample).getByText('999+')).toBeTruthy()
+    expect(within(badgeExample).getByText('999+ unread · capped')).toBeTruthy()
+    expect(within(badgeExample).getByText('0 unread · badge hidden')).toBeTruthy()
 
     cleanup()
     const overflow = renderPatternDemo('overflow-content')
@@ -1273,6 +1599,28 @@ describe('Pattern Library teaching content', () => {
     await user.click(within(breadcrumb).getByRole('button', { name: 'Show earlier locations' }))
     expect(await screen.findByRole('menuitem', { name: 'Organization' })).toBeTruthy()
     expect(screen.getByRole('menuitem', { name: 'Workspace' })).toBeTruthy()
+  })
+
+  it('keeps Loading previews honest about local completion and blocking scope', async () => {
+    const user = userEvent.setup()
+    const { container } = renderPatternDemo('loading')
+    const inline = container.querySelector<HTMLElement>('[data-pattern-example-id="loading-inline-check"]')!
+    await user.click(within(inline).getByRole('button', { name: 'Check aircraft connection' }))
+    expect(inline.querySelector('[aria-busy="true"]')).toBeTruthy()
+    expect(
+      (within(inline).getByRole('button', { name: 'Check aircraft connection' }) as HTMLButtonElement).disabled
+    ).toBe(true)
+    expect((within(inline).getByRole('button', { name: 'Cancel check' }) as HTMLButtonElement).disabled).toBe(true)
+    await user.click(within(inline).getByRole('button', { name: 'Complete sample check' }))
+    expect(within(inline).getByRole('status').textContent).toContain('completed in this sample')
+
+    const pageLevel = container.querySelector<HTMLElement>('[data-pattern-example-id="loading-full-screen-save"]')!
+    expect(within(pageLevel).getByText(/a real blocking save would also prevent interaction/)).toBeTruthy()
+
+    const batches = container.querySelector<HTMLElement>('[data-pattern-example-id="loading-batch-collection"]')!
+    await user.click(within(batches).getByRole('button', { name: 'Load next sample batch' }))
+    expect(within(batches).getByText('All sample items revealed.')).toBeTruthy()
+    expect(within(batches).getByText(/does not fetch data or simulate a network delay/)).toBeTruthy()
   })
 
   it('keeps the Order summary example honest about its local preview outcome', async () => {
@@ -1347,6 +1695,10 @@ describe('Pattern Library teaching content', () => {
           await user.click(await screen.findByRole('menuitem', { name: 'Edit permissions' }))
           expect(within(example!).getByText('Edit key settings')).toBeTruthy()
           showedResponse = true
+        } else if (demo.id === 'api-key-create-and-manage') {
+          await user.click(within(example!).getByRole('button', { name: 'Configure API key' }))
+          expect(await screen.findByRole('dialog', { name: 'Configure API key' })).toBeTruthy()
+          showedResponse = true
         } else if (demo.id === 'create-flows-inline') {
           await user.click(within(example!).getByRole('button', { name: 'Create mission' }))
           expect(within(example!).getByRole('alert').textContent).toContain('local sample only')
@@ -1410,6 +1762,99 @@ describe('Pattern Library teaching content', () => {
         }
         expect(showedResponse, `${demo.id} did not show a response to any available control`).toBe(true)
         unmount()
+      }
+    }
+  })
+
+  it('gives every enabled control in every interactive use case a visible response', async () => {
+    const controlSelector =
+      'button:not([disabled]):not([aria-disabled="true"]), input:not([type="hidden"]):not([disabled]):not([readonly]), textarea:not([disabled]):not([readonly]), select:not([disabled]), [role="radio"], [role="checkbox"], [role="tab"], [role="combobox"], summary'
+
+    for (const pattern of PATTERNS) {
+      for (const demo of PATTERN_PAGE_CONTENT[pattern.id].demos.filter((item) => item.interactive)) {
+        const prepare = async (container: HTMLElement, user: ReturnType<typeof userEvent.setup>) => {
+          let example = container.querySelector<HTMLElement>(`[data-pattern-example-id="${demo.id}"]`)
+          if (demo.id === 'create-flows-modal') {
+            const inline = container.querySelector<HTMLElement>('[data-pattern-example-id="create-flows-inline"]')!
+            await user.click(within(inline).getByRole('button', { name: 'Modal' }))
+            example = container.querySelector<HTMLElement>(`[data-pattern-example-id="${demo.id}"]`)
+          } else if (demo.id === 'edit-high-impact-modal') {
+            await user.click(screen.getByRole('button', { name: 'High-impact · modal' }))
+            example = container.querySelector<HTMLElement>(`[data-pattern-example-id="${demo.id}"]`)
+          }
+          expect(example, `${demo.id} is missing from ${pattern.id}`).toBeTruthy()
+          if (demo.id === 'api-key-create-and-manage') {
+            await user.click(within(example!).getByRole('button', { name: 'Configure API key' }))
+          }
+          const surface =
+            demo.id === 'api-key-create-and-manage'
+              ? await screen.findByRole('dialog', { name: 'Configure API key' })
+              : example!
+          const controls = Array.from(surface.querySelectorAll<HTMLElement>(controlSelector)).filter((control) => {
+            if (control.getAttribute('aria-hidden') === 'true' || control.closest('[aria-hidden="true"]')) return false
+            if (control.getAttribute('aria-pressed') === 'true') return false
+            if (control.getAttribute('role') === 'radio' && control.getAttribute('aria-checked') === 'true')
+              return false
+            if (control.getAttribute('role') === 'tab' && control.getAttribute('aria-selected') === 'true') return false
+            if (control instanceof HTMLInputElement && control.type === 'radio' && control.checked) return false
+            return true
+          })
+          return { surface, controls }
+        }
+
+        const initial = renderPatternDemo(pattern.id)
+        const initialSetup = await prepare(initial.container, userEvent.setup())
+        const controlCount = initialSetup.controls.length
+        expect(controlCount, `${demo.id} has no available control to audit`).toBeGreaterThan(0)
+        initial.unmount()
+        cleanup()
+
+        for (let index = 0; index < controlCount; index += 1) {
+          const { container, unmount } = renderPatternDemo(pattern.id)
+          const user = userEvent.setup()
+          const { controls } = await prepare(container, user)
+          const control = controls[index]
+          expect(control, `${pattern.id}/${demo.id} control ${index + 1} could not be located`).toBeTruthy()
+          const before = `${document.body.innerHTML}\n${window.location.hash}`
+
+          if (control instanceof HTMLInputElement && control.type === 'file') {
+            await user.upload(control, new File(['sample'], 'sample.json', { type: 'application/json' }))
+          } else if (
+            control instanceof HTMLButtonElement &&
+            control.textContent?.includes('Choose file') &&
+            control.closest('[data-slot="dropzone"]')
+          ) {
+            const fileInput = control
+              .closest('[data-slot="dropzone"]')
+              ?.querySelector<HTMLInputElement>('input[type="file"]')
+            expect(fileInput, `${pattern.id}/${demo.id} file picker has no file input`).toBeTruthy()
+            await user.upload(fileInput!, new File(['sample'], 'sample.json', { type: 'application/json' }))
+          } else if (
+            control instanceof HTMLInputElement &&
+            ['text', 'email', 'password', 'search', 'url'].includes(control.type)
+          ) {
+            await user.clear(control)
+            await user.type(control, 'sample')
+          } else if (control instanceof HTMLTextAreaElement) {
+            await user.clear(control)
+            await user.type(control, 'sample')
+          } else if (control instanceof HTMLSelectElement) {
+            const option = Array.from(control.options).find((item) => !item.selected && !item.disabled)
+            if (option) await user.selectOptions(control, option.value)
+            else await user.click(control)
+          } else {
+            await user.click(control)
+          }
+
+          await waitFor(() =>
+            expect(
+              `${document.body.innerHTML}\n${window.location.hash}`,
+              `${pattern.id}/${demo.id} control ${index + 1} did not change visible or accessible state`
+            ).not.toBe(before)
+          )
+          unmount()
+          cleanup()
+        }
       }
     }
   })

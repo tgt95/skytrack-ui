@@ -305,13 +305,14 @@ export const PATTERNS: PatternDefinition[] = [
     group: 'Core',
     sourceStatus: 'Universal',
     sourcePath: `${CORE_SOURCE}/notification-pattern/index.md`,
-    summary: 'Feedback that ranges from an inline response to a system-wide message.',
-    whenToUse: 'Choose a notification type by urgency, persistence, scope, and whether a response is required.',
+    summary: 'Timely feedback for events, task outcomes, and changes that may need attention.',
+    whenToUse: 'Choose event category, semantic status, and presentation independently based on context and urgency.',
     userBenefit: 'The right timing and reach communicate urgency without interrupting more work than necessary.',
     designGuidance: [
-      'Keep task-generated feedback near the work and reserve broad messaging for system-level updates.',
-      'Choose meaning (information, success, warning, error) separately from delivery (inline, toast, banner, panel, or modal).',
-      'Match inline, toast, actionable, callout, banner, panel, or modal treatment to the message.',
+      'Classify the event, such as work activity, collaboration/access, or workspace/system updates.',
+      'Choose informational, success, warning, or error status separately from presentation.',
+      'Select inline, toast, actionable, callout, banner, or panel presentation for the context; keep Banner and Notification panel concepts experimental.',
+      'Use Dialog or Alert Dialog as interaction patterns when a decision or acknowledgement must block progress; they are not notification types.',
       'Do not rely on a timed toast for critical information or a required decision.'
     ],
     implementationGuidance: [
@@ -319,7 +320,7 @@ export const PATTERNS: PatternDefinition[] = [
       'Give actions a clear consequence and retain a visible path to dismiss or recover.',
       'Keep success, warning, error, and information meaning explicit in text.'
     ],
-    components: ['Alert', 'Toast', 'Button']
+    components: ['Alert', 'Toast', 'AlertDialog', 'Button']
   },
   {
     id: 'overflow-content',
@@ -546,15 +547,18 @@ export const PATTERNS: PatternDefinition[] = [
       'Provide a sensible default name and let users edit it when naming matters.',
       'Name the destination and resulting format before starting work so people know where the exported copy will go.',
       'Offer format or destination choices only when the task needs them.',
+      'Present 2–5 mutually exclusive formats with a preselected default and concise guidance for each option.',
       'In a dialog, focus the first required field when input is needed; when defaults are ready, make Export the initial focus.',
       'Show progress, success, and error feedback without suggesting a file was saved before it was.'
     ],
     implementationGuidance: [
-      'Use Menu or Buttons to choose a format and show the selection in local demo state.',
+      'Use the RadioGroup for 2–5 mutually exclusive format choices and show concise guidance beside each option.',
+      'Use a dialog for required name/format choices and show extension validation before preparing the export.',
+      'Explain that the browser handles save location for downloads; do not imitate a system picker with in-page buttons.',
       'Do not claim to create or download a file in this example.',
       'Keep format conversion distinct from an unchanged download.'
     ],
-    components: ['Menu', 'Button', 'Progress'],
+    components: ['Dialog', 'Field', 'Input', 'Fieldset', 'RadioGroup', 'RadioRoot', 'Button', 'Progress', 'Toast'],
     sourceNote: 'Community pattern; export and download are distinct actions in the local reference.'
   },
   {
@@ -575,12 +579,12 @@ export const PATTERNS: PatternDefinition[] = [
       'Offer restricted access options before broad access when the use case allows.'
     ],
     implementationGuidance: [
-      'Use Field and Input to illustrate naming and security guidance only.',
-      'The example does not generate, reveal, or persist a credential.',
+      'Collect a recognizable key name and explain its access and retrieval policy before generation.',
+      'This example shows a fixed placeholder in a result dialog; it creates no credential and performs no clipboard or file operation.',
       'A real key flow must be implemented by the product security service.'
     ],
-    components: ['Field', 'Input', 'Button'],
-    sourceNote: 'Community pattern; local example is intentionally non-secret and does not create an API key.'
+    components: ['Dialog', 'Field', 'Fieldset', 'Input', 'RadioGroup', 'RadioRoot', 'Button', 'Alert', 'Menu'],
+    sourceNote: 'Community pattern; the local preview uses a fixed placeholder and does not create an API key.'
   },
   {
     id: 'community-import',

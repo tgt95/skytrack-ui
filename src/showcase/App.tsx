@@ -104,15 +104,15 @@ const VIEWS = [
   ['pattern', 'Patterns']
 ] as const
 
-type View = (typeof VIEWS)[number][0]
+type View = typeof VIEWS[number][0]
 type Audience = 'designer' | 'developer'
 
-function readViewFromUrl(): View {
+function readViewFromUrl (): View {
   const route = new URLSearchParams(window.location.search).get('view')
   return VIEWS.some(([id]) => id === route) ? (route as View) : 'components'
 }
 
-export function App() {
+export function App () {
   const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
   const [query, setQuery] = useState('')
   const [view, setView] = useState<View>(readViewFromUrl)
@@ -194,7 +194,7 @@ export function App() {
               <div className='flex flex-col gap-2'>
                 <h2 className='h2'>{d.title}</h2>
                 <p className='text-base text-muted-foreground'>
-                  {selectedAudience === 'designer' ? (designerGuideline?.description ?? d.description) : d.description}
+                  {selectedAudience === 'designer' ? designerGuideline?.description ?? d.description : d.description}
                 </p>
               </div>
 
@@ -244,7 +244,13 @@ export function App() {
           <SidebarHeader className='gap-0 p-0'>
             <div className='flex h-14 items-center gap-2 border-b border-sidebar-border px-5'>
               <ShowcaseBrandLink logo={skytrackLogo} />
-              <Badge count='ui' status='outline' className='rounded-(--radius)' />
+              <div className='relative flex items-center justify-centerh-5'>
+                <Badge count='ui' status='outline' className='rounded-(--radius) shrink-0' />
+                <div className='absolute h-2 w-2 bg-background border-input border top-0 right-0 translate-x-1/2 -translate-y-1/2' />
+                <div className='absolute h-2 w-2 bg-background border-input border top-0 left-0 -translate-x-1/2 -translate-y-1/2' />
+                <div className='absolute h-2 w-2 bg-background border-input border bottom-0 right-0 translate-x-1/2 translate-y-1/2' />
+                <div className='absolute h-2 w-2 bg-background border-input border bottom-0 left-0 -translate-x-1/2 translate-y-1/2' />
+              </div>
             </div>
           </SidebarHeader>
           <SidebarContent className='gap-0 p-3 text-sm'>

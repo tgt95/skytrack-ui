@@ -63,7 +63,7 @@ function Input({ className, size = 'default', startAdornment, endAdornment, ...p
       data-slot='input-root'
       data-size={size}
       className={cn(
-        'flex w-full items-center rounded-(--radius) border border-input bg-background transition-colors',
+        'flex w-full items-center rounded-(--radius) border border-input bg-background shadow-xs transition-colors',
         CONTROL_SIZE_CLASSES[size],
         // The border, background and focus ring live on the wrapper so the adornment
         // sits inside the box, matching MUI. `focus-within` replaces the input's own

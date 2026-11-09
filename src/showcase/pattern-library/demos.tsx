@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import {
   ArrowClockwiseIcon,
@@ -142,13 +142,21 @@ const FILTER_ITEMS = [
   { name: 'Solar array scan', status: 'Complete', category: 'Complete' }
 ]
 
+const GLOBAL_NAVIGATION_SCHEMES = [
+  { id: 'recent', label: 'Most recent', items: ['Missions', 'Aircraft', 'Team', 'Settings'] },
+  { id: 'customized', label: 'Customized', items: ['Pinned missions', 'Flight plans', 'Aircraft', 'Settings'] },
+  { id: 'audience', label: 'Audience', items: ['Pilot tools', 'Planner tools', 'Dispatcher tools', 'Settings'] },
+  { id: 'alphabetical', label: 'Alphabetical', items: ['Aircraft', 'Flight plans', 'Missions', 'Settings'] },
+  { id: 'domain', label: 'Product domains', items: ['Flight planning', 'Fleet operations', 'Workspace admin'] }
+] as const
+
 const PatternDemoContext = createContext<{ patternId: PatternId; page: PatternPageDraft } | null>(null)
 
-function findSectionHeading(sections: SectionNode[], sectionId: string): string | undefined {
+function findSection(sections: SectionNode[], sectionId: string): SectionNode | undefined {
   for (const section of sections) {
-    if (section.id === sectionId) return section.heading
-    const childHeading = findSectionHeading(section.children ?? [], sectionId)
-    if (childHeading) return childHeading
+    if (section.id === sectionId) return section
+    const childSection = findSection(section.children ?? [], sectionId)
+    if (childSection) return childSection
   }
   return undefined
 }
@@ -172,7 +180,9 @@ function UseCaseSection({ title, scenario, children }: { title: string; scenario
     throw new Error(`Missing source-mapped demo copy for ${context?.patternId ?? 'unknown pattern'}: ${title}`)
   }
 
-  const sourceSectionHeading = findSectionHeading(context.page.sections, demo.sectionId)
+  const sourceSection = findSection(context.page.sections, demo.sectionId)
+  const sourceSectionHeading = sourceSection?.heading
+  const ExampleHeading = `h${Math.min((sourceSection?.level ?? 2) + 2, 6)}` as 'h4' | 'h5' | 'h6'
 
   const content = (
     <section
@@ -182,7 +192,9 @@ function UseCaseSection({ title, scenario, children }: { title: string; scenario
       className='grid min-w-0 scroll-mt-24 gap-4 border-t border-border py-4 first:border-0 first:pt-0'
     >
       <header className='min-w-0 space-y-1'>
-        {sourceSectionHeading !== title && <h4 className='text-lg font-medium text-(--foreground)'>{title}</h4>}
+        {sourceSectionHeading !== title && (
+          <ExampleHeading className='text-lg font-medium text-(--foreground)'>{title}</ExampleHeading>
+        )}
         <p className='text-base text-muted-foreground'>{demo.scenario || scenario}</p>
       </header>
       <dl data-pattern-teaching-copy className='grid min-w-0 gap-4 md:grid-cols-3'>
@@ -259,6 +271,9 @@ function CommonActionsDemo() {
   const [refreshFailed, setRefreshFailed] = useState(true)
   const [refreshed, setRefreshed] = useState(false)
   const [resetFeedback, setResetFeedback] = useState('')
+  const [resetAppliedFilters, setResetAppliedFilters] = useState({ query: 'Coast', statuses: ['ready'] })
+  const [resetDraftQuery, setResetDraftQuery] = useState('Coast')
+  const [resetDraftStatuses, setResetDraftStatuses] = useState(['ready', 'review'])
 
   const copyMissionId = async () => {
     try {
@@ -270,10 +285,15 @@ function CommonActionsDemo() {
     }
   }
 
+  const applyResetFilters = () => {
+    setResetAppliedFilters({ query: resetDraftQuery, statuses: resetDraftStatuses })
+    setResetFeedback('Filters applied. Reset will return to this saved selection.')
+  }
+
   const reset = () => {
-    setQuery('Coast')
-    setSelectedStatuses(['ready', 'review'])
-    setResetFeedback('Filters restored to their sample defaults.')
+    setResetDraftQuery(resetAppliedFilters.query)
+    setResetDraftStatuses(resetAppliedFilters.statuses)
+    setResetFeedback('Unapplied filter changes discarded. The last applied selection is restored.')
   }
 
   return (
@@ -479,7 +499,12 @@ function CommonActionsDemo() {
               </label>
             ))}
           </RadioGroup>
-          <Button size='sm' variant='outline' onClick={() => setDefaultedStatus('Ready')}>
+          <Button
+            size='sm'
+            variant='outline'
+            disabled={defaultedStatus === 'Ready'}
+            onClick={() => setDefaultedStatus('Ready')}
+          >
             Clear to default
           </Button>
           <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
@@ -758,13 +783,47 @@ function CommonActionsDemo() {
 
       <UseCaseSection
         title='Reset'
-        scenario='Reset restores filter defaults after the user has made several selections.'
+        scenario='Discard pending filter edits and return to the last applied settings, not factory defaults.'
       >
-        <div className='flex flex-wrap items-center gap-3'>
-          <Badge count={selectedStatuses.length + ' statuses'} status='outline' />
-          <span className='text-muted-foreground'>Search: {query || 'All missions'}</span>
+        <div className='grid gap-4 sm:grid-cols-2'>
+          <FieldRoot>
+            <FieldLabel nativeLabel={false} render={<span>Mission status filters · pending</span>} />
+            <CheckboxGroup
+              aria-label='Pending mission status filters'
+              value={resetDraftStatuses}
+              onValueChange={setResetDraftStatuses}
+            >
+              {[
+                ['ready', 'Ready'],
+                ['review', 'In review'],
+                ['complete', 'Complete']
+              ].map(([value, label]) => (
+                <FieldItem key={value}>
+                  <FieldLabel className='flex items-center gap-2 font-normal'>
+                    <CheckboxRoot value={value} /> {label}
+                  </FieldLabel>
+                </FieldItem>
+              ))}
+            </CheckboxGroup>
+          </FieldRoot>
+          <FieldRoot>
+            <FieldLabel>Mission search · pending</FieldLabel>
+            <Input value={resetDraftQuery} onChange={(event) => setResetDraftQuery(event.target.value)} />
+          </FieldRoot>
+        </div>
+        <div className='space-y-2 rounded-(--radius) border border-border p-3'>
+          <p className='font-medium'>Last applied mission view</p>
+          <p className='text-muted-foreground'>
+            {resetAppliedFilters.statuses.join(', ') || 'No status'} · {resetAppliedFilters.query || 'All missions'}
+          </p>
+          <p className='text-sm text-muted-foreground'>Pending values above do not change this view until Apply.</p>
+        </div>
+        <div className='flex flex-wrap gap-2'>
+          <Button size='sm' onClick={applyResetFilters}>
+            Apply filters
+          </Button>
           <Button size='sm' variant='ghost' onClick={reset}>
-            Reset filters
+            Reset to last applied
           </Button>
         </div>
         {resetFeedback && (
@@ -808,14 +867,15 @@ function DialogsDemo() {
                 <DialogTitle>Confirm the route change</DialogTitle>
                 <DialogDescription>Check the destination before replacing the scheduled route.</DialogDescription>
               </DialogHeader>
-              <FieldRoot>
+              <FieldRoot invalid={validation && !routeName.trim()}>
                 <FieldLabel>New route name</FieldLabel>
                 <Input
                   value={routeName}
                   onChange={(event) => setRouteName(event.target.value)}
+                  onBlur={() => setValidation(true)}
                   placeholder='Enter a route name'
                 />
-                {validation && !routeName.trim() && <FieldError>Please enter a route name to continue.</FieldError>}
+                <FieldError match={validation && !routeName.trim()}>Please enter a route name to continue.</FieldError>
               </FieldRoot>
               <DialogFooter>
                 <DialogClose variant='outline'>Cancel</DialogClose>
@@ -1515,12 +1575,13 @@ function FilteringDemo() {
               Apply filters
             </Button>
           )}
-          <Button size='sm' variant='outline' onClick={() => setSelectedTypes([])}>
+          <Button size='sm' variant='outline' disabled={!selectedTypes.length} onClick={() => setSelectedTypes([])}>
             Clear selections
           </Button>
           <Button
             size='sm'
             variant='ghost'
+            disabled={mode === 'instant' && selectedTypes.length === 0 && appliedTypes.length === 0}
             onClick={() => {
               setSelectedTypes([])
               setAppliedTypes([])
@@ -1585,17 +1646,22 @@ function FluidStylesDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Align related actions in a compact panel'
-        scenario='Keep Save draft and Preview the same width when they share a small action area.'
+        scenario='Attach related actions to a panel footer so they share its full width instead of floating in the content area.'
       >
-        <div className='grid max-w-sm grid-cols-2 gap-3'>
-          <Button variant='outline' disabled>
-            Save draft
-          </Button>
-          <Button variant='outline' disabled>
-            Preview
-          </Button>
+        <div className='w-full max-w-md overflow-hidden border border-border'>
+          <div className='space-y-1 p-4'>
+            <p className='font-medium'>Route review</p>
+            <p className='text-sm text-muted-foreground'>Two related next steps for this mission.</p>
+          </div>
+          <div className='grid grid-cols-2 border-t border-border'>
+            <Button variant='outline' className='w-full rounded-none border-0' disabled>
+              Save draft
+            </Button>
+            <Button variant='outline' className='w-full rounded-none border-0 border-s-2 border-foreground' disabled>
+              Preview
+            </Button>
+          </div>
         </div>
-        <p className='text-sm text-muted-foreground'>The related actions share the same width in this compact panel.</p>
       </UseCaseSection>
       <UseCaseSection
         title='Let a fluid form follow its available width'
@@ -1611,7 +1677,7 @@ function FluidStylesDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Attach a simple form to its container edges'
-        scenario='A quick workspace invite uses a compact, edge-to-edge group; use this for one-step tasks, not dense multi-section forms.'
+        scenario='A quick workspace invite uses a compact, stacked group inside one border; keep each field label visible and reserve flush fluid inputs for implementations that support them.'
       >
         <div className='w-full max-w-md overflow-hidden border border-border'>
           <label className='block space-y-1 border-b border-border p-2 text-sm'>
@@ -1631,6 +1697,10 @@ function FluidStylesDemo() {
             Send invitation
           </Button>
         </div>
+        <p className='text-sm text-muted-foreground'>
+          This card keeps external labels visible. Exact zero-gap fluid inputs with internal labels need a dedicated
+          field implementation.
+        </p>
       </UseCaseSection>
       <UseCaseSection
         title='Choose a fluid container or fixed side panel'
@@ -1761,6 +1831,7 @@ function FormsDemo() {
             <Button
               type='button'
               variant='outline'
+              disabled={!validationEmail && !validationSubmitted && !validationTouched && !serverRejected}
               onClick={() => {
                 setValidationEmail('')
                 setValidationSubmitted(false)
@@ -1881,14 +1952,15 @@ function FormsDemo() {
 
 function GlobalHeaderDemo() {
   const [configuration, setConfiguration] = useState<'header' | 'panel'>('header')
-  const [organization, setOrganization] = useState<'workspace' | 'mission'>('workspace')
+  const [organization, setOrganization] = useState<(typeof GLOBAL_NAVIGATION_SCHEMES)[number]['id']>('recent')
   const [headerMessage, setHeaderMessage] = useState('Current location: Missions / North coast survey')
   const [schemeMessage, setSchemeMessage] = useState('Choose a destination to preview this navigation scheme.')
+  const activeScheme = GLOBAL_NAVIGATION_SCHEMES.find((scheme) => scheme.id === organization)!
   return (
     <DemoFrame>
       <UseCaseSection
         title='Global header with local mission navigation'
-        scenario='Compare a workspace-wide header alone with the same header beside mission-specific destinations and a breadcrumb.'
+        scenario='Compare a workspace-wide header alone with the same header beside mission-specific destinations; keep utilities and product switching separate.'
       >
         <div className='flex flex-wrap gap-2'>
           <Button
@@ -1909,6 +1981,12 @@ function GlobalHeaderDemo() {
           </Button>
         </div>
         <div className='overflow-hidden rounded-(--radius) border border-border'>
+          <a
+            href='#global-header-main-content'
+            className='sr-only focus:not-sr-only focus:inline-flex focus:px-3 focus:py-2'
+          >
+            Skip to main content
+          </a>
           <header className='flex flex-wrap items-center justify-between gap-3 border-b border-border bg-card px-4 py-3'>
             <strong>SkyTrack Mission workspace</strong>
             <nav aria-label='Global navigation' className='flex flex-wrap gap-1'>
@@ -1933,11 +2011,13 @@ function GlobalHeaderDemo() {
                         Notifications · 2
                       </MenuItem>
                       <MenuItem onClick={() => setHeaderMessage('System settings opened.')}>System settings</MenuItem>
-                      <MenuItem onClick={() => setHeaderMessage('Product switcher opened.')}>Switch product</MenuItem>
                     </MenuPopup>
                   </MenuPositioner>
                 </MenuPortal>
               </Menu>
+              <Button size='sm' variant='ghost' onClick={() => setHeaderMessage('Product switcher opened.')}>
+                Switch product
+              </Button>
             </nav>
           </header>
           <div className='flex min-h-40'>
@@ -1973,7 +2053,7 @@ function GlobalHeaderDemo() {
                 </Button>
               </nav>
             )}
-            <div className='min-w-0 flex-1 space-y-3 p-4'>
+            <main id='global-header-main-content' className='min-w-0 flex-1 space-y-3 p-4'>
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem>
@@ -2022,7 +2102,7 @@ function GlobalHeaderDemo() {
                   Settings
                 </ToolbarButton>
               </Toolbar>
-            </div>
+            </main>
           </div>
         </div>
         <p aria-live='polite' className='text-muted-foreground'>
@@ -2031,41 +2111,42 @@ function GlobalHeaderDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Organize destinations around workspace or current mission'
-        scenario='Choose whether navigation groups broad workspace areas first or puts the active mission workflow first.'
+        scenario='Compare five ways to group product destinations, and keep user-created mission records in a drill-down list instead of the global shell.'
       >
         <div className='flex flex-wrap gap-2'>
-          <Button
-            size='sm'
-            variant={organization === 'workspace' ? 'secondary' : 'outline'}
-            aria-pressed={organization === 'workspace'}
-            onClick={() => setOrganization('workspace')}
-          >
-            Workspace first
-          </Button>
-          <Button
-            size='sm'
-            variant={organization === 'mission' ? 'secondary' : 'outline'}
-            aria-pressed={organization === 'mission'}
-            onClick={() => setOrganization('mission')}
-          >
-            Mission first
-          </Button>
+          {GLOBAL_NAVIGATION_SCHEMES.map((scheme) => (
+            <Button
+              key={scheme.id}
+              size='sm'
+              variant={organization === scheme.id ? 'secondary' : 'outline'}
+              aria-pressed={organization === scheme.id}
+              onClick={() => {
+                setOrganization(scheme.id)
+                setSchemeMessage(`Showing the ${scheme.label.toLowerCase()} navigation scheme.`)
+              }}
+            >
+              {scheme.label}
+            </Button>
+          ))}
         </div>
-        <nav aria-label='Selected navigation scheme' className='flex flex-wrap gap-1 border border-border p-2'>
-          {(organization === 'workspace'
-            ? ['Home', 'Projects', 'Team', 'Settings']
-            : ['Overview', 'Flight plans', 'Aircraft', 'Settings']
-          ).map((item) => (
+        <nav
+          aria-label={`${activeScheme.label} navigation preview`}
+          className='flex flex-wrap gap-1 border border-border p-2'
+        >
+          {activeScheme.items.map((item, index) => (
             <Button
               key={item}
               size='sm'
-              variant={item === (organization === 'workspace' ? 'Projects' : 'Overview') ? 'secondary' : 'ghost'}
-              onClick={() => setSchemeMessage(`Opened ${item} in the ${organization}-first scheme.`)}
+              variant={index === 0 ? 'secondary' : 'ghost'}
+              onClick={() => setSchemeMessage(`Opened ${item} in the ${activeScheme.label.toLowerCase()} preview.`)}
             >
               {item}
             </Button>
           ))}
         </nav>
+        <p className='text-sm text-muted-foreground'>
+          Keep the global shell bounded. Put growing user-created mission lists in a drill-down view with breadcrumbs.
+        </p>
         <p role='status' aria-live='polite' className='text-sm text-muted-foreground'>
           {schemeMessage}
         </p>
@@ -2077,6 +2158,7 @@ function GlobalHeaderDemo() {
 function LoadingDemo() {
   const [progress, setProgress] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [inlineStatus, setInlineStatus] = useState('Ready to check connection.')
   const [pageLoading, setPageLoading] = useState(false)
   const [visibleCount, setVisibleCount] = useState(2)
   return (
@@ -2100,21 +2182,49 @@ function LoadingDemo() {
         title='Keep an inline check responsive'
         scenario='Aircraft connection duration is unknown, so indicate activity beside the rest of the page.'
       >
-        {loading ? (
-          <Progress value={null}>
-            <ProgressLabel>Checking aircraft connection</ProgressLabel>
-            <ProgressTrack>
-              <ProgressIndicator />
-            </ProgressTrack>
-          </Progress>
-        ) : (
-          <p role='status' className='text-muted-foreground'>
-            Ready to check connection
-          </p>
-        )}
-        <Button size='sm' variant='outline' onClick={() => setLoading((current) => !current)}>
-          {loading ? 'Finish sample loading' : 'Show inline loading'}
-        </Button>
+        <div aria-busy={loading} className='space-y-3'>
+          {loading ? (
+            <Progress value={null}>
+              <ProgressLabel>Checking aircraft connection</ProgressLabel>
+              <ProgressTrack>
+                <ProgressIndicator />
+              </ProgressTrack>
+            </Progress>
+          ) : (
+            <p role='status' className='text-muted-foreground'>
+              {inlineStatus}
+            </p>
+          )}
+          <div className='flex flex-wrap gap-2'>
+            <Button
+              size='sm'
+              variant='outline'
+              disabled={loading}
+              onClick={() => {
+                setInlineStatus('')
+                setLoading(true)
+              }}
+            >
+              Check aircraft connection
+            </Button>
+            {loading && (
+              <>
+                <Button size='sm' variant='outline' disabled>
+                  Cancel check
+                </Button>
+                <Button
+                  size='sm'
+                  onClick={() => {
+                    setLoading(false)
+                    setInlineStatus('Connection check completed in this sample.')
+                  }}
+                >
+                  Complete sample check
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
       </UseCaseSection>
       <UseCaseSection
         title='Block the page while a save completes'
@@ -2137,6 +2247,9 @@ function LoadingDemo() {
         <Button size='sm' variant='outline' onClick={() => setPageLoading((current) => !current)}>
           {pageLoading ? 'Finish save' : 'Preview page-level loading'}
         </Button>
+        <p className='text-sm text-muted-foreground'>
+          Demo control only: a real blocking save would also prevent interaction with the rest of the page.
+        </p>
       </UseCaseSection>
       <UseCaseSection
         title='Load a collection in batches'
@@ -2151,29 +2264,38 @@ function LoadingDemo() {
         </ul>
         {visibleCount < SAMPLE_ITEMS.length ? (
           <Button size='sm' variant='outline' onClick={() => setVisibleCount(SAMPLE_ITEMS.length)}>
-            Load more
+            Load next sample batch
           </Button>
         ) : (
           <p role='status' className='text-muted-foreground'>
-            All sample items loaded.
+            All sample items revealed.
           </p>
         )}
+        <p className='text-sm text-muted-foreground'>
+          This sample reveals the next records immediately; it does not fetch data or simulate a network delay.
+        </p>
       </UseCaseSection>
       <UseCaseSection
         title='Reserve the shape of a list while its first data loads'
         scenario='When the page structure is known but its records are not, use a restrained placeholder to reduce layout shift.'
       >
-        <div aria-label='Illustrative loading skeleton for flight plans' className='max-w-xl space-y-3' role='img'>
+        <div
+          aria-label='Illustrative loading skeleton for flight plans'
+          aria-busy='true'
+          className='max-w-xl space-y-3'
+          role='region'
+        >
           {[1, 2, 3].map((row) => (
             <div key={row} className='flex items-center gap-3 border-b border-border py-3'>
-              <span className='size-8 animate-pulse rounded-(--radius) bg-muted' />
-              <span className='h-4 flex-1 animate-pulse rounded-(--radius) bg-muted' />
-              <span className='h-4 w-20 animate-pulse rounded-(--radius) bg-muted' />
+              <span aria-hidden='true' className='size-8 animate-pulse rounded-(--radius) bg-muted' />
+              <span aria-hidden='true' className='h-4 flex-1 animate-pulse rounded-(--radius) bg-muted' />
+              <span aria-hidden='true' className='h-4 w-20 animate-pulse rounded-(--radius) bg-muted' />
             </div>
           ))}
         </div>
         <p className='text-muted-foreground'>
-          Local Tailwind illustration: this library does not ship a Skeleton component.
+          Local illustration: this library does not ship a Skeleton component; mark the containing region busy while it
+          loads.
         </p>
       </UseCaseSection>
       <p className='text-muted-foreground'>
@@ -2418,16 +2540,16 @@ function NotificationsDemo() {
   const [updateVisible, setUpdateVisible] = useState(true)
   const [actionMessage, setActionMessage] = useState('Choose an action to preview its local result.')
   const statuses = [
-    { type: 'info', label: 'Information', message: 'A sample mission summary is ready.' },
-    { type: 'success', label: 'Success', message: 'Sample changes saved.' },
-    { type: 'warning', label: 'Warning', message: 'Some mission details are incomplete in this sample.' },
-    { type: 'error', label: 'Error', message: 'Sync failed. Check connection and retry.' }
+    { type: 'info', label: 'Information', message: 'A workspace update is available.' },
+    { type: 'success', label: 'Success', message: 'Your changes have been saved.' },
+    { type: 'warning', label: 'Warning', message: 'Review this setting before continuing.' },
+    { type: 'error', label: 'Error', message: "We couldn't save your changes. Try again." }
   ] as const
   return (
     <DemoFrame>
       <UseCaseSection
         title='Keep important status in context'
-        scenario='A flight-plan page needs persistent feedback that remains visible while the user reviews the record.'
+        scenario='Show feedback beside the content or task it describes.'
       >
         <div className='grid gap-2 md:grid-cols-2'>
           {statuses.map(({ type, label, message }) => (
@@ -2439,23 +2561,23 @@ function NotificationsDemo() {
         </div>
       </UseCaseSection>
       <UseCaseSection
-        title='Keep field guidance visible on page load'
-        scenario='When a pilot opens mission setup, show a short informational note above the collection field it explains; keep it visible without a dismiss or action button.'
+        title='Keep field guidance close to its control'
+        scenario='Show a short informational note beside the control it explains.'
       >
         <div className='mx-auto w-full max-w-xl space-y-2'>
           <Alert variant='info' role='note' aria-label='Page-load callout'>
-            <AlertDescription>Choose a collection to keep this mission with the right review team.</AlertDescription>
+            <AlertDescription>Choose a workspace to keep related work in the right place.</AlertDescription>
           </Alert>
           <FieldRoot>
-            <FieldLabel>Review collection</FieldLabel>
-            <FieldControl render={<Input value='Coastal operations' readOnly aria-label='Review collection' />} />
+            <FieldLabel>Workspace name</FieldLabel>
+            <FieldControl render={<Input value='Operations team' readOnly aria-label='Workspace name' />} />
             <FieldDescription>The callout stays beside the field it explains.</FieldDescription>
           </FieldRoot>
         </div>
       </UseCaseSection>
       <UseCaseSection
         title='Confirm a completed action briefly'
-        scenario='After saving a flight plan, show a short-lived message that does not interrupt the next task.'
+        scenario='Preview brief, noncritical feedback after a routine action. Timing and queue behavior are not specified here.'
       >
         <div className='flex flex-wrap gap-2'>
           {statuses
@@ -2473,12 +2595,14 @@ function NotificationsDemo() {
         </div>
       </UseCaseSection>
       <UseCaseSection
-        title='Review accumulated notifications in a panel'
-        scenario='A pilot opens the notification center to distinguish task reminders from system-generated updates.'
+        title='Review sample notifications in a panel'
+        scenario='Explore an experimental panel concept for viewing sample notices together.'
       >
-        <p className='text-xs text-muted-foreground'>Experimental preview · panel contents are sample notifications.</p>
+        <p className='text-xs text-muted-foreground'>
+          Experimental local illustration · no history, unread state, preferences, or service is implemented.
+        </p>
         <Button variant='outline' aria-expanded={panelOpen} onClick={() => setPanelOpen((open) => !open)}>
-          {panelOpen ? 'Close notifications · 3 unread' : 'Notifications · 3 unread'}
+          {panelOpen ? 'Close sample panel' : 'Open sample panel'}
         </Button>
         {panelOpen && (
           <div
@@ -2488,43 +2612,40 @@ function NotificationsDemo() {
           >
             <div className='space-y-1 p-3'>
               <div className='flex flex-wrap items-center gap-2'>
-                <p className='font-medium'>Task · Draft review pending</p>
-                <Badge count='Unread' status='processing' />
+                <p className='font-medium'>Work · Review requested</p>
                 <Badge count='Information' status='outline' />
               </div>
-              <p className='text-muted-foreground'>A sample task is waiting for review.</p>
+              <p className='text-muted-foreground'>A sample item is ready for review.</p>
             </div>
             <div className='space-y-1 p-3'>
               <div className='flex flex-wrap items-center gap-2'>
-                <p className='font-medium'>System · Map data refreshed</p>
-                <Badge count='Unread' status='processing' />
+                <p className='font-medium'>Workspace · Update available</p>
                 <Badge count='Success' status='success' />
               </div>
-              <p className='text-muted-foreground'>The latest coverage is available for route planning.</p>
+              <p className='text-muted-foreground'>A sample workspace change is complete.</p>
             </div>
             <div className='space-y-1 p-3'>
               <div className='flex flex-wrap items-center gap-2'>
-                <p className='font-medium'>Priority · Notification access updated</p>
-                <Badge count='Unread' status='processing' />
+                <p className='font-medium'>Collaboration · Access changed</p>
                 <Badge count='Warning' status='warning' />
               </div>
-              <p className='text-muted-foreground'>A workspace access setting changed in this sample.</p>
+              <p className='text-muted-foreground'>A sample access setting needs review.</p>
             </div>
           </div>
         )}
       </UseCaseSection>
       <UseCaseSection
         title='Offer a next step or acknowledge a critical notice'
-        scenario='Compare a contextual action, a dismissible service update, and a modal for a service interruption.'
+        scenario='Compare a contextual next step, an experimental broad update concept, and a blocking acknowledgement interaction.'
       >
         <Alert variant='warning'>
           <AlertTitle>Action needed</AlertTitle>
-          <AlertDescription>A sample mission record is missing an optional description.</AlertDescription>
+          <AlertDescription>A sample item needs one more detail before it is ready.</AlertDescription>
           <AlertAction>
             <Button
               size='sm'
               variant='ghost'
-              onClick={() => setActionMessage('Description editor preview opened; no record was changed.')}
+              onClick={() => setActionMessage('Edit preview opened; no item was changed.')}
             >
               Edit description
             </Button>
@@ -2533,11 +2654,11 @@ function NotificationsDemo() {
         {updateVisible ? (
           <div className='space-y-2'>
             <p className='text-xs text-muted-foreground'>
-              Experimental preview · banner guidance is still being explored.
+              Experimental banner concept · this local Alert does not implement global placement or persistence.
             </p>
             <Alert variant='info' className='items-center'>
               <AlertDescription>
-                <strong>Service update:</strong> A sample feature update is available.
+                <strong>Workspace update:</strong> A sample update is available.
               </AlertDescription>
               <AlertAction>
                 <Button size='sm' variant='ghost' onClick={() => setUpdateVisible(false)}>
@@ -2554,23 +2675,23 @@ function NotificationsDemo() {
         <p role='status' aria-live='polite' className='text-muted-foreground'>
           {actionMessage}
         </p>
-        <Dialog>
-          <DialogTrigger render={<Button variant='outline'>Show blocking maintenance notice</Button>} />
-          <DialogPortal>
-            <DialogBackdrop />
-            <DialogPopup>
-              <DialogHeader>
-                <DialogTitle>Sample service interruption</DialogTitle>
-                <DialogDescription>
-                  This modal illustrates a blocking service notice. No real service status is represented.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose>Acknowledge</DialogClose>
-              </DialogFooter>
-            </DialogPopup>
-          </DialogPortal>
-        </Dialog>
+        <AlertDialog>
+          <AlertDialogTrigger render={<Button variant='outline'>Show blocking acknowledgement</Button>} />
+          <AlertDialogPortal>
+            <AlertDialogBackdrop />
+            <AlertDialogPopup>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Sample blocking notice</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This Alert Dialog illustrates an acknowledgement interaction. No real service status is represented.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogClose>Acknowledge</AlertDialogClose>
+              </AlertDialogFooter>
+            </AlertDialogPopup>
+          </AlertDialogPortal>
+        </AlertDialog>
       </UseCaseSection>
     </DemoFrame>
   )
@@ -2691,7 +2812,7 @@ function ReadOnlyDemo() {
           </FieldRoot>
           <FieldRoot>
             <FieldLabel>Workspace ID · read-only</FieldLabel>
-            <Input value={value} readOnly />
+            <Input value={value} readOnly className='border-transparent bg-transparent px-0 shadow-none' />
             <FieldDescription>Focus, select, and copy; editing is unavailable in this context.</FieldDescription>
           </FieldRoot>
           <FieldRoot>
@@ -2708,12 +2829,17 @@ function ReadOnlyDemo() {
         <div className='grid min-w-0 gap-4 md:grid-cols-2'>
           <FieldRoot>
             <FieldLabel>Assigned aircraft · read-only</FieldLabel>
-            <Input value='SkyTrack Scout 04' readOnly />
+            <Input value='SkyTrack Scout 04' readOnly className='border-transparent bg-transparent px-0 shadow-none' />
             <FieldDescription>The selected value remains visible for approval.</FieldDescription>
           </FieldRoot>
           <FieldRoot>
             <FieldLabel>Launch window · read-only</FieldLabel>
-            <Input type='text' value='Nov 5, 2026' readOnly />
+            <Input
+              type='text'
+              value='Nov 5, 2026'
+              readOnly
+              className='border-transparent bg-transparent px-0 shadow-none'
+            />
             <FieldDescription>The saved date stays readable; this view does not offer a date picker.</FieldDescription>
           </FieldRoot>
           <label className='flex items-center gap-2'>
@@ -3062,7 +3188,7 @@ function StatusIndicatorsDemo() {
         title='Summarize unread work in navigation'
         scenario='Show a queue count, an unread item, and the meaningful zero state.'
       >
-        <div className='grid grid-cols-3 gap-4 text-center'>
+        <div className='grid grid-cols-2 gap-4 text-center sm:grid-cols-4'>
           <div className='grid justify-items-center gap-1'>
             <span
               role='img'
@@ -3073,6 +3199,17 @@ function StatusIndicatorsDemo() {
               <Badge count={4} status='error' className='absolute -end-1 -top-1' />
             </span>
             <span className='text-sm text-muted-foreground'>4 unread</span>
+          </div>
+          <div className='grid justify-items-center gap-1'>
+            <span
+              role='img'
+              aria-label='Operations icon with 999 or more unread items'
+              className='relative inline-flex size-10 items-center justify-center rounded-(--radius) border border-border'
+            >
+              <FileTextIcon aria-hidden='true' className='size-4' />
+              <Badge count={1200} maxCount={999} status='error' className='absolute -end-1 -top-1' />
+            </span>
+            <span className='text-sm text-muted-foreground'>999+ unread · capped</span>
           </div>
           <div className='grid justify-items-center gap-1'>
             <span
@@ -3417,9 +3554,11 @@ function ChatbotsDemo() {
             aria-label='Message the local demo'
             placeholder='Ask about mission planning'
           />
-          <Button type='submit'>Send</Button>
+          <Button type='submit' disabled={!message.trim()}>
+            Send
+          </Button>
         </form>
-        <Button size='sm' variant='ghost' onClick={() => setSent([])}>
+        <Button size='sm' variant='ghost' disabled={!sent.length} onClick={() => setSent([])}>
           Clear conversation
         </Button>
       </UseCaseSection>
@@ -3449,7 +3588,7 @@ function ChatbotsDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Recover when a message cannot be sent'
-        scenario='If the assistant connection drops, make the failed state clear and offer a retry instead of leaving the user uncertain.'
+        scenario='Show a clear failed state and preview retry recovery; this local example does not send a real message.'
       >
         {connectionError ? (
           <Alert variant='destructive'>
@@ -3463,10 +3602,12 @@ function ChatbotsDemo() {
                 variant='outline'
                 onClick={() => {
                   setConnectionError(false)
-                  setRetryResult('Message sent after reconnect: “How can I review my route?”')
+                  setRetryResult(
+                    'Retry preview complete: this message would be sent after reconnect. The sample did not send it.'
+                  )
                 }}
               >
-                Retry message
+                Preview retry
               </Button>
             </AlertAction>
           </Alert>
@@ -3488,19 +3629,22 @@ function ChatbotsDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Hand off a complex request to a person'
-        scenario='When the scripted helper cannot resolve an issue, show the change in conversation context and preserve a clear route back to the product.'
+        scenario='Preview a support handoff and preserve a return path; this example does not contact a support teammate.'
       >
         {humanHandoff ? (
           <Alert>
-            <AlertTitle>Support conversation started</AlertTitle>
-            <AlertDescription>A support teammate can continue from the mission details you shared.</AlertDescription>
+            <AlertTitle>Support handoff preview</AlertTitle>
+            <AlertDescription>
+              No teammate was contacted and no conversation was sent. In a product, explain what context would be shared
+              and whether support is available.
+            </AlertDescription>
           </Alert>
         ) : (
           <Button size='sm' variant='outline' onClick={() => setHumanHandoff(true)}>
-            Continue with support
+            Preview support handoff
           </Button>
         )}
-        <Button size='sm' variant='ghost' onClick={() => setHumanHandoff(false)}>
+        <Button size='sm' variant='ghost' disabled={!humanHandoff} onClick={() => setHumanHandoff(false)}>
           Return to mission helper
         </Button>
       </UseCaseSection>
@@ -3673,6 +3817,9 @@ function CreateFlowsDemo() {
   const [open, setOpen] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
   const [fullPageOpen, setFullPageOpen] = useState(false)
+  const [setupStep, setSetupStep] = useState(1)
+  const [workspaceName, setWorkspaceName] = useState('Northstar Flight Operations')
+  const [operatingArea, setOperatingArea] = useState('North coast survey zone')
   const [discardOpen, setDiscardOpen] = useState(false)
   const [createProgress, setCreateProgress] = useState(0)
   const [name, setName] = useState('North coast survey')
@@ -3847,34 +3994,85 @@ function CreateFlowsDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Give a multi-step creation task a full-page canvas'
-        scenario='Use the whole workspace when route setup needs a broader safety and map context; this is a local layout illustration, not a routed page component.'
+        scenario='Set up the initial flight-operations workspace that dispatchers must complete before mission planning is available. This preview uses a dedicated two-step canvas.'
       >
         {fullPageOpen ? (
-          <section className='space-y-3 border border-border p-4'>
-            <p className='sub-heading'>NEW MISSION · FULL-PAGE LAYOUT PREVIEW</p>
-            <h5 className='text-base font-medium text-(--foreground)'>Configure flight area</h5>
-            {fields}
-            <div className='flex flex-wrap gap-2'>
+          <section className='space-y-4 border border-border p-4'>
+            <p className='sub-heading'>REQUIRED INITIAL SETUP · FULL-PAGE PREVIEW</p>
+            <div className='grid gap-4 md:grid-cols-[16rem_minmax(0,1fr)]'>
+              <ol aria-label='Workspace setup steps' className='space-y-3 border-s border-border ps-4'>
+                <li aria-current={setupStep === 1 ? 'step' : undefined}>
+                  <span className={setupStep === 1 ? 'font-medium text-(--foreground)' : 'text-muted-foreground'}>
+                    1. Workspace details
+                  </span>
+                </li>
+                <li aria-current={setupStep === 2 ? 'step' : undefined}>
+                  <span className={setupStep === 2 ? 'font-medium text-(--foreground)' : 'text-muted-foreground'}>
+                    2. Operating area
+                  </span>
+                </li>
+              </ol>
+              <div className='min-w-0 space-y-3'>
+                <h5 className='text-base font-medium text-(--foreground)'>
+                  Step {setupStep} of 2 · {setupStep === 1 ? 'Workspace details' : 'Operating area'}
+                </h5>
+                {setupStep === 1 ? (
+                  <FieldRoot>
+                    <FieldLabel>Workspace name</FieldLabel>
+                    <Input value={workspaceName} onChange={(event) => setWorkspaceName(event.target.value)} required />
+                  </FieldRoot>
+                ) : (
+                  <>
+                    <FieldRoot>
+                      <FieldLabel>Primary operating area</FieldLabel>
+                      <Input
+                        value={operatingArea}
+                        onChange={(event) => setOperatingArea(event.target.value)}
+                        required
+                      />
+                    </FieldRoot>
+                    <p className='text-sm text-muted-foreground'>Workspace: {workspaceName}</p>
+                    <p className='text-sm text-muted-foreground'>
+                      Mission planning is unavailable until setup finishes.
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+            <div className='flex flex-wrap justify-end gap-2 border-t border-border pt-3'>
               <Button variant='outline' onClick={() => setDiscardOpen(true)}>
-                Leave with unsaved changes
+                Cancel setup
               </Button>
-              <Button
-                disabled={!name.trim()}
-                onClick={() => {
-                  setFullPageResult(`${name.trim() || 'Untitled mission'} marked created in this local example.`)
-                  setFullPageOpen(false)
-                }}
-              >
-                Create mission
-              </Button>
+              {setupStep === 2 && (
+                <Button variant='outline' onClick={() => setSetupStep(1)}>
+                  Previous step
+                </Button>
+              )}
+              {setupStep === 1 ? (
+                <Button disabled={!workspaceName.trim()} onClick={() => setSetupStep(2)}>
+                  Next step
+                </Button>
+              ) : (
+                <Button
+                  disabled={!workspaceName.trim() || !operatingArea.trim()}
+                  onClick={() => {
+                    setFullPageResult(
+                      `Initial setup for ${workspaceName.trim()} is complete in this local preview; no workspace was saved.`
+                    )
+                    setFullPageOpen(false)
+                  }}
+                >
+                  Complete setup
+                </Button>
+              )}
             </div>
             <AlertDialog open={discardOpen} onOpenChange={setDiscardOpen}>
               <AlertDialogPortal>
                 <AlertDialogBackdrop />
                 <AlertDialogPopup>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Discard this mission draft?</AlertDialogTitle>
-                    <AlertDialogDescription>Your unsaved sample changes will be discarded.</AlertDialogDescription>
+                    <AlertDialogTitle>Discard workspace setup?</AlertDialogTitle>
+                    <AlertDialogDescription>Your unsaved setup details will be discarded.</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogClose>Keep editing</AlertDialogClose>
@@ -3882,10 +4080,13 @@ function CreateFlowsDemo() {
                       variant='destructive'
                       onClick={() => {
                         setFullPageOpen(false)
+                        setSetupStep(1)
+                        setWorkspaceName('Northstar Flight Operations')
+                        setOperatingArea('North coast survey zone')
                         setDiscardOpen(false)
                       }}
                     >
-                      Discard draft
+                      Discard setup
                     </Button>
                   </AlertDialogFooter>
                 </AlertDialogPopup>
@@ -3893,8 +4094,14 @@ function CreateFlowsDemo() {
             </AlertDialog>
           </section>
         ) : (
-          <Button variant='outline' onClick={() => setFullPageOpen(true)}>
-            Preview full-page creation
+          <Button
+            variant='outline'
+            onClick={() => {
+              setSetupStep(1)
+              setFullPageOpen(true)
+            }}
+          >
+            Preview required workspace setup
           </Button>
         )}
         {fullPageResult && (
@@ -3905,22 +4112,44 @@ function CreateFlowsDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Use a narrow tearsheet for a compact create task'
-        scenario='Show the focused, narrow side sheet layout for a short task while keeping a sense of the collection behind it.'
+        scenario='When a create form needs vertical scrolling, use a narrow tearsheet to group related fields while keeping its actions visible.'
       >
-        <div className='mx-auto flex min-h-72 w-full max-w-sm flex-col border border-border bg-background shadow-sm'>
+        <div className='mx-auto flex h-96 w-full max-w-sm flex-col border border-border bg-background shadow-sm'>
           <div className='space-y-1 border-b border-border p-4'>
-            <h5 className='text-base font-medium text-(--foreground)'>New mission · narrow tearsheet</h5>
-            <p className='text-muted-foreground'>Compact task layout illustration</p>
+            <h5 className='text-base font-medium text-(--foreground)'>New mission</h5>
+            <p className='text-muted-foreground'>Narrow tearsheet · scrollable form</p>
           </div>
-          <div className='flex-1 space-y-3 p-4'>
-            <FieldRoot>
-              <FieldLabel>Mission name</FieldLabel>
-              <Input defaultValue='Coastal survey' readOnly />
-            </FieldRoot>
-            <FieldRoot>
-              <FieldLabel>Collection</FieldLabel>
-              <Input defaultValue='North region' readOnly />
-            </FieldRoot>
+          <div className='min-h-0 flex-1 space-y-4 overflow-y-auto p-4'>
+            <section aria-labelledby='narrow-tearsheet-mission-details' className='space-y-3'>
+              <h6 id='narrow-tearsheet-mission-details' className='font-medium'>
+                Mission details
+              </h6>
+              <FieldRoot>
+                <FieldLabel>Mission name</FieldLabel>
+                <Input defaultValue='Coastal survey' readOnly />
+              </FieldRoot>
+              <FieldRoot>
+                <FieldLabel>Collection</FieldLabel>
+                <Input defaultValue='North region' readOnly />
+              </FieldRoot>
+            </section>
+            <section aria-labelledby='narrow-tearsheet-flight-settings' className='space-y-3'>
+              <h6 id='narrow-tearsheet-flight-settings' className='font-medium'>
+                Flight settings
+              </h6>
+              <FieldRoot>
+                <FieldLabel>Operating area</FieldLabel>
+                <Input defaultValue='North coast survey zone' readOnly />
+              </FieldRoot>
+              <FieldRoot>
+                <FieldLabel>Return reserve</FieldLabel>
+                <Input defaultValue='25% battery' readOnly />
+              </FieldRoot>
+              <FieldRoot>
+                <FieldLabel>Review owner</FieldLabel>
+                <Input defaultValue='Flight operations' readOnly />
+              </FieldRoot>
+            </section>
           </div>
           <div className='flex flex-wrap justify-end gap-2 border-t border-border p-4'>
             <Button size='sm' variant='outline' disabled>
@@ -3931,39 +4160,43 @@ function CreateFlowsDemo() {
             </Button>
           </div>
         </div>
-        <p className='text-muted-foreground'>
-          Tearsheet is not a shipped `skytrack-ui` component; this static preview illustrates its layout only.
-        </p>
+        <p className='text-muted-foreground'>Static layout preview; Tearsheet is not shipped in `skytrack-ui`.</p>
       </UseCaseSection>
       <UseCaseSection
         title='Use a wide tearsheet when the task needs more room'
-        scenario='Provide a wider sheet layout for related fields and contextual review while preserving a responsive single-column form.'
+        scenario='Show a multi-step mission setup that needs a progress rail and roomy review area; the overlay blocks the page until operators finish or exit the flow.'
       >
-        <div className='mx-auto grid min-h-72 w-full max-w-4xl grid-cols-1 border border-border bg-background shadow-sm md:grid-cols-[minmax(0,1fr)_minmax(14rem,0.7fr)]'>
+        <div className='mx-auto grid min-h-72 w-full max-w-4xl grid-cols-1 border border-border bg-background shadow-sm md:grid-cols-[15rem_minmax(0,1fr)]'>
+          <aside aria-label='Setup progress' className='border-b border-border p-4 md:border-b-0 md:border-r'>
+            <p className='sub-heading'>MISSION SETUP · STEP 2 OF 2</p>
+            <ol aria-label='Mission setup steps' className='mt-4 space-y-3'>
+              <li className='text-muted-foreground'>1. Mission details · complete</li>
+              <li aria-current='step' className='font-medium text-(--foreground)'>
+                2. Review operating area
+              </li>
+            </ol>
+          </aside>
           <div className='flex min-w-0 flex-col'>
             <div className='space-y-1 border-b border-border p-4'>
-              <h5 className='text-base font-medium text-(--foreground)'>Configure mission · wide tearsheet</h5>
-              <p className='text-muted-foreground'>Expanded create layout illustration</p>
+              <h5 className='text-base font-medium text-(--foreground)'>Review mission setup</h5>
+              <p className='text-muted-foreground'>The progress rail keeps this two-step task oriented.</p>
             </div>
-            <div className='grid flex-1 gap-3 p-4 sm:grid-cols-2'>
+            <div className='grid flex-1 gap-3 p-4'>
               <FieldRoot>
                 <FieldLabel>Mission name</FieldLabel>
-                <Input defaultValue='Coastal survey' readOnly />
+                <Input defaultValue='North coast survey' readOnly />
               </FieldRoot>
               <FieldRoot>
-                <FieldLabel>Collection</FieldLabel>
-                <Input defaultValue='North region' readOnly />
-              </FieldRoot>
-              <FieldRoot className='sm:col-span-2'>
-                <FieldLabel>Description</FieldLabel>
-                <Input defaultValue='Map the coastal sample area' readOnly />
+                <FieldLabel>Operating area</FieldLabel>
+                <Input defaultValue='North coast survey zone' readOnly />
               </FieldRoot>
             </div>
           </div>
-          <aside className='space-y-2 border-t border-border bg-muted/30 p-4 md:border-t-0 md:border-l'>
-            <h5 className='text-base font-medium text-(--foreground)'>Review</h5>
+          <aside className='space-y-2 border-t border-border bg-muted/30 p-4 md:col-span-2'>
+            <h5 className='text-base font-medium text-(--foreground)'>Why this surface fits</h5>
             <p className='text-muted-foreground'>
-              Name and collection are shown together before the local sample is created.
+              Use a wide tearsheet when users need a progress rail and spacious review, but the full product does not
+              need to remain blocked until setup is complete.
             </p>
           </aside>
           <div className='flex flex-wrap justify-end gap-2 border-t border-border p-4 md:col-span-2'>
@@ -4000,7 +4233,7 @@ function CreateFlowsDemo() {
             {createProgress === 0 ? 'Submit sample mission' : 'Continue preparation'}
           </Button>
         )}
-        <Button size='sm' variant='ghost' onClick={() => setCreateProgress(0)}>
+        <Button size='sm' variant='ghost' disabled={createProgress === 0} onClick={() => setCreateProgress(0)}>
           Reset sample
         </Button>
       </UseCaseSection>
@@ -4345,18 +4578,33 @@ function EditDemo() {
 function ExportDemo() {
   const toastManager = useToastManager()
   const [format, setFormat] = useState('CSV')
-  const [location, setLocation] = useState('Downloads')
   const [preparing, setPreparing] = useState(false)
   const [progressError, setProgressError] = useState(false)
-  const [downloadStatus, setDownloadStatus] = useState('Choose the standard report action; no file will be generated.')
-  const [configurationStatus, setConfigurationStatus] = useState(
-    'Choose format and destination; no file will be generated.'
-  )
+  const [downloadStatus, setDownloadStatus] = useState('No download preview has been opened.')
+  const [configurationStatus, setConfigurationStatus] = useState('No export configuration has been prepared.')
   const [progressStatus, setProgressStatus] = useState('Export preparation has not started.')
-  const [completionStatus, setCompletionStatus] = useState('No success notification has been shown.')
-  const [fileName, setFileName] = useState('mission-report')
+  const [completionStatus, setCompletionStatus] = useState('No completion preview has been opened.')
+  const [fileName, setFileName] = useState('mission-report.csv')
   const [exportError, setExportError] = useState('')
-  const [destinationError, setDestinationError] = useState(false)
+  const [configurationOpen, setConfigurationOpen] = useState(false)
+  const [completionOpen, setCompletionOpen] = useState(false)
+  const prepareExportRef = useRef<HTMLButtonElement>(null)
+  const progressErrorCloseRef = useRef<HTMLButtonElement>(null)
+  const completionCloseRef = useRef<HTMLButtonElement>(null)
+  const prepareExport = () => {
+    const normalizedName = fileName.trim()
+    if (!normalizedName) {
+      setExportError('Enter a file name before preparing the export.')
+      return
+    }
+    if (!normalizedName.toLowerCase().endsWith(`.${format.toLowerCase()}`)) {
+      setExportError(`Use the .${format.toLowerCase()} extension for the selected format.`)
+      return
+    }
+    setExportError('')
+    setConfigurationOpen(false)
+    setConfigurationStatus(`${normalizedName} is prepared as ${format} in this preview. No file was created.`)
+  }
   return (
     <DemoFrame>
       <UseCaseSection
@@ -4378,108 +4626,78 @@ function ExportDemo() {
       </UseCaseSection>
       <UseCaseSection
         title='Customize a report before export'
-        scenario='When users can change the filename, format, or destination, show a focused configuration flow with a sensible default.'
+        scenario='When users need to rename a report or choose its format, collect those choices in a dialog before preparing the export.'
       >
-        <FieldRoot>
-          <FieldLabel>File name</FieldLabel>
-          <Input
-            value={fileName}
-            onChange={(event) => {
-              setFileName(event.target.value)
-              setExportError('')
-            }}
-            endAdornment={<span>.{format.toLowerCase()}</span>}
-          />
-          <FieldDescription>Use an intuitive default name; edit it before preparing the sample.</FieldDescription>
-          <FieldError match={Boolean(exportError)}>{exportError}</FieldError>
-        </FieldRoot>
-        <FieldRoot>
-          <FieldLabel>Export format</FieldLabel>
-          <div className='flex flex-wrap gap-2'>
-            {['CSV', 'JSON', 'GeoJSON'].map((option) => (
-              <Button
-                key={option}
-                variant={format === option ? 'secondary' : 'outline'}
-                aria-pressed={format === option}
-                onClick={() => {
-                  setFormat(option)
-                  setDestinationError(false)
-                  setConfigurationStatus(`${option} selected for the local example.`)
-                }}
-              >
-                {option}
-              </Button>
-            ))}
-          </div>
-        </FieldRoot>
-        <FieldRoot>
-          <FieldLabel>Destination</FieldLabel>
-          <div className='flex flex-wrap gap-2'>
-            {['Downloads', 'Mission files'].map((option) => (
-              <Button
-                key={option}
-                size='sm'
-                variant={location === option ? 'secondary' : 'outline'}
-                aria-pressed={location === option}
-                onClick={() => {
-                  setLocation(option)
-                  setDestinationError(false)
-                  setConfigurationStatus(`${option} selected as the local export destination.`)
-                }}
-              >
-                {option}
-              </Button>
-            ))}
-          </div>
-          <FieldDescription>Choose where the exported report would be saved in a real workflow.</FieldDescription>
-        </FieldRoot>
-        <div className='flex flex-wrap gap-2'>
-          <Button
-            onClick={() =>
-              !fileName.trim()
-                ? setExportError('Enter a file name before exporting.')
-                : (setExportError(''),
-                  setDestinationError(false),
-                  setConfigurationStatus(
-                    `${fileName}.${format.toLowerCase()} prepared for ${location}. No download occurred.`
-                  ))
-            }
-          >
-            Prepare {format} preview
-          </Button>
-          <Button
-            variant='outline'
-            onClick={() => {
-              setDestinationError(true)
-              setConfigurationStatus('Export failed in the local sample.')
-            }}
-          >
-            Show export error
-          </Button>
-        </div>
-        {destinationError && (
-          <Alert variant='destructive'>
-            <AlertTitle>Export failed</AlertTitle>
-            <AlertDescription>The sample destination is unavailable. Choose another option or retry.</AlertDescription>
-            <AlertAction>
-              <Button
-                size='sm'
-                variant='outline'
-                onClick={() => {
-                  setDestinationError(false)
-                  setConfigurationStatus(
-                    `Retry completed in the sample: ${fileName}.${format.toLowerCase()} is prepared. No file was created.`
-                  )
-                }}
-              >
-                Retry
-              </Button>
-            </AlertAction>
-          </Alert>
-        )}
+        <p className='text-sm text-muted-foreground'>
+          Choose a format with its guidance. A browser download uses the browser’s Save dialog for location; this
+          preview does not open that system dialog or create a file.
+        </p>
+        <Button onClick={() => setConfigurationOpen(true)}>Configure export</Button>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
           {configurationStatus}
         </p>
+        <Dialog open={configurationOpen} onOpenChange={setConfigurationOpen}>
+          <DialogPortal>
+            <DialogBackdrop />
+            <DialogPopup initialFocus={prepareExportRef}>
+              <DialogHeader>
+                <DialogTitle>Export mission report</DialogTitle>
+                <DialogDescription>Choose a file name and format before preparing the report.</DialogDescription>
+              </DialogHeader>
+              <DialogFooter className='order-last sm:flex-row-reverse'>
+                <Button ref={prepareExportRef} onClick={prepareExport}>
+                  Prepare export
+                </Button>
+                <DialogClose variant='outline'>Cancel</DialogClose>
+              </DialogFooter>
+              <FieldRoot invalid={Boolean(exportError)}>
+                <FieldLabel>File name</FieldLabel>
+                <Input
+                  value={fileName}
+                  onChange={(event) => {
+                    setFileName(event.target.value)
+                    setExportError('')
+                  }}
+                />
+                <FieldDescription>Include the extension that matches the selected format.</FieldDescription>
+                <FieldError match={Boolean(exportError)}>{exportError}</FieldError>
+              </FieldRoot>
+              <FieldsetRoot>
+                <FieldsetLegend>Export format</FieldsetLegend>
+                <RadioGroup
+                  aria-label='Export format'
+                  value={format}
+                  onValueChange={(nextValue) => {
+                    setFormat(String(nextValue))
+                    setExportError('')
+                  }}
+                >
+                  <label className='flex items-start gap-2'>
+                    <RadioRoot value='CSV' />
+                    <span>
+                      <span className='block text-sm font-medium'>CSV</span>
+                      <span className='block text-sm text-muted-foreground'>Use for spreadsheet workflows.</span>
+                    </span>
+                  </label>
+                  <label className='flex items-start gap-2'>
+                    <RadioRoot value='JSON' />
+                    <span>
+                      <span className='block text-sm font-medium'>JSON</span>
+                      <span className='block text-sm text-muted-foreground'>Keep structured record fields.</span>
+                    </span>
+                  </label>
+                  <label className='flex items-start gap-2'>
+                    <RadioRoot value='GeoJSON' />
+                    <span>
+                      <span className='block text-sm font-medium'>GeoJSON</span>
+                      <span className='block text-sm text-muted-foreground'>Include geographic coordinates.</span>
+                    </span>
+                  </label>
+                </RadioGroup>
+              </FieldsetRoot>
+            </DialogPopup>
+          </DialogPortal>
+        </Dialog>
       </UseCaseSection>
       <UseCaseSection
         title='Track preparation and recover from an export failure'
@@ -4519,59 +4737,90 @@ function ExportDemo() {
               setProgressStatus('A destination error is being previewed.')
             }}
           >
-            Preview destination error
+            Preview export failure
           </Button>
         </div>
-        {progressError && (
-          <Alert variant='destructive'>
-            <AlertTitle>Export preparation failed</AlertTitle>
-            <AlertDescription>The sample destination is unavailable. Retry to preview recovery.</AlertDescription>
-            <AlertAction>
-              <Button
-                size='sm'
-                variant='outline'
-                onClick={() => {
-                  setProgressError(false)
-                  setPreparing(true)
-                  setProgressStatus('Retrying export preparation in this preview.')
-                }}
-              >
-                Retry preparation
-              </Button>
-            </AlertAction>
-          </Alert>
-        )}
         <p role='status' aria-live='polite' className='text-muted-foreground'>
           {progressStatus}
         </p>
+        <Dialog open={progressError} onOpenChange={setProgressError}>
+          <DialogPortal>
+            <DialogBackdrop />
+            <DialogPopup initialFocus={progressErrorCloseRef}>
+              <DialogHeader>
+                <DialogTitle>Export preparation failed</DialogTitle>
+                <DialogDescription>The report could not be prepared. Retry or close this message.</DialogDescription>
+              </DialogHeader>
+              <Alert variant='destructive'>
+                <AlertTitle>Destination unavailable</AlertTitle>
+                <AlertDescription>This is a local failure preview. No file was created.</AlertDescription>
+              </Alert>
+              <DialogFooter>
+                <DialogClose ref={progressErrorCloseRef} variant='outline'>
+                  Close error
+                </DialogClose>
+                <Button
+                  onClick={() => {
+                    setProgressError(false)
+                    setPreparing(true)
+                    setProgressStatus('Retrying export preparation in this preview.')
+                  }}
+                >
+                  Retry preparation
+                </Button>
+              </DialogFooter>
+            </DialogPopup>
+          </DialogPortal>
+        </Dialog>
       </UseCaseSection>
       <UseCaseSection
         title='Confirm export completion without implying a download'
         scenario='After a successful export, show a passive completion message and a separate brief notification; make the local-only result explicit.'
       >
-        <Alert variant='success'>
-          <AlertTitle>Export prepared</AlertTitle>
-          <AlertDescription>
-            {fileName}.{format.toLowerCase()} is ready in this sample. No file was created or saved.
-          </AlertDescription>
-        </Alert>
-        <Button
-          size='sm'
-          variant='outline'
-          onClick={() => {
-            setCompletionStatus('Success notification preview shown; no file was downloaded.')
-            toastManager.add({
-              type: 'success',
-              title: 'Export ready',
-              description: `${fileName}.${format.toLowerCase()} was prepared in this sample. No file was created.`
-            })
-          }}
-        >
-          Preview success notification
-        </Button>
+        <p className='text-sm text-muted-foreground'>The completion dialog and notification below are previews only.</p>
+        <div className='flex flex-wrap gap-2'>
+          <Button
+            size='sm'
+            variant='outline'
+            onClick={() => {
+              setCompletionOpen(true)
+              setCompletionStatus('Completion dialog preview opened; no file was created or saved.')
+            }}
+          >
+            Preview completion dialog
+          </Button>
+          <Button
+            size='sm'
+            variant='outline'
+            onClick={() => {
+              setCompletionStatus('Success notification preview shown; no file was downloaded.')
+              toastManager.add({
+                type: 'success',
+                title: 'Export ready',
+                description: `${fileName}.${format.toLowerCase()} was prepared in this sample. No file was created.`
+              })
+            }}
+          >
+            Preview success notification
+          </Button>
+        </div>
         <p role='status' aria-live='polite' className='text-muted-foreground'>
           {completionStatus}
         </p>
+        <Dialog open={completionOpen} onOpenChange={setCompletionOpen}>
+          <DialogPortal>
+            <DialogBackdrop />
+            <DialogPopup initialFocus={completionCloseRef}>
+              <DialogHeader>
+                <DialogTitle>Export prepared</DialogTitle>
+                <DialogDescription>{fileName} is ready in this sample. No file was created or saved.</DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose ref={completionCloseRef}>Close completion message</DialogClose>
+              </DialogFooter>
+            </DialogPopup>
+          </DialogPortal>
+        </Dialog>
       </UseCaseSection>
     </DemoFrame>
   )
@@ -4591,14 +4840,14 @@ function ExportDemoWithProvider() {
 }
 
 function ApiKeyDemo() {
-  const [creationNotice, setCreationNotice] = useState(
-    'Name the key and choose its access before generating the sample.'
-  )
+  const [creationNotice, setCreationNotice] = useState('Choose the sample key settings before generating.')
   const [managementNotice, setManagementNotice] = useState('Existing key settings have not changed.')
   const [name, setName] = useState('Mission planning integration')
   const [restricted, setRestricted] = useState(false)
   const [generated, setGenerated] = useState(false)
   const [oneTimeResultDismissed, setOneTimeResultDismissed] = useState(false)
+  const [configurationOpen, setConfigurationOpen] = useState(false)
+  const [resultOpen, setResultOpen] = useState(false)
   const [visible, setVisible] = useState(false)
   const [copied, setCopied] = useState(false)
   const [retrieval, setRetrieval] = useState<'product' | 'platform' | 'once'>('once')
@@ -4606,189 +4855,208 @@ function ApiKeyDemo() {
   const [existingRestricted, setExistingRestricted] = useState(true)
   const [editingExisting, setEditingExisting] = useState(false)
   const sampleKey = 'sk_demo_7f3a••••••••••••9b2c'
+  const generateKeyRef = useRef<HTMLButtonElement>(null)
+  const resultCloseRef = useRef<HTMLButtonElement>(null)
+  const generateSampleKey = () => {
+    setGenerated(true)
+    setOneTimeResultDismissed(false)
+    setVisible(false)
+    setCopied(false)
+    setCreationNotice('Sample key value generated for this preview. No credential was created.')
+    setConfigurationOpen(false)
+    setResultOpen(true)
+  }
   return (
     <DemoFrame>
       <UseCaseSection
         title='Create and manage an API key safely'
-        scenario='Name a sample key, restrict its permissions when needed, then reveal or hide the illustrative value.'
+        scenario='Choose a recognizable name, review the sample access and retrieval warning, then inspect the separate key-result view.'
       >
-        <FieldRoot>
-          <FieldLabel>Key name</FieldLabel>
-          <Input
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder='e.g. Mission planning integration'
-          />
-          <FieldDescription>Use a descriptive name so you can identify this key later.</FieldDescription>
-        </FieldRoot>
-        <FieldRoot>
-          <FieldLabel>Access</FieldLabel>
-          <div className='flex flex-wrap gap-2'>
-            <Button
-              type='button'
-              size='sm'
-              variant={!restricted ? 'secondary' : 'outline'}
-              aria-pressed={!restricted}
-              onClick={() => setRestricted(false)}
-            >
-              General access
-            </Button>
-            <Button
-              type='button'
-              size='sm'
-              variant={restricted ? 'secondary' : 'outline'}
-              aria-pressed={restricted}
-              onClick={() => setRestricted(true)}
-            >
-              Restricted access
-            </Button>
-          </div>
-          <FieldDescription>
-            {restricted
-              ? 'Limit the sample key to mission read access.'
-              : 'The sample key represents general workspace access.'}
-          </FieldDescription>
-        </FieldRoot>
-        <FieldRoot>
-          <FieldLabel>How can this key be retrieved later?</FieldLabel>
-          <div className='flex flex-wrap gap-2'>
-            {(
-              [
-                ['product', 'In this product'],
-                ['platform', 'Another platform'],
-                ['once', 'Shown once']
-              ] as const
-            ).map(([value, label]) => (
-              <Button
-                key={value}
-                size='sm'
-                variant={retrieval === value ? 'secondary' : 'outline'}
-                aria-pressed={retrieval === value}
-                onClick={() => {
-                  setRetrieval(value)
-                  setOneTimeResultDismissed(false)
-                }}
-              >
-                {label}
-              </Button>
-            ))}
-          </div>
-          <FieldDescription>
-            {retrieval === 'product'
-              ? 'The sample management page can display this key again later.'
-              : retrieval === 'platform'
-                ? 'Provide a link to the separate platform where the key can be retrieved.'
-                : 'The sample value is shown only in the result view. Its preview copy action does not use the clipboard.'}
-          </FieldDescription>
-          {retrieval === 'product' && (
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() => setCreationNotice('Key management page preview selected; no external page opened.')}
-            >
-              Preview key management
-            </Button>
-          )}
-          {retrieval === 'platform' && (
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() =>
-                setCreationNotice('Separate-platform instructions preview selected; no external service opened.')
-              }
-            >
-              Preview retrieval instructions
-            </Button>
-          )}
-        </FieldRoot>
-        {restricted && (
-          <div className='flex flex-wrap gap-2' aria-label='Restricted permissions'>
-            <Badge count='Missions · Read' status='outline' />
-            <Badge count='Billing · No access' status='outline' />
-            <Badge count='Team · No access' status='outline' />
-          </div>
-        )}
-        <Alert variant='warning'>
-          <AlertTitle>{retrieval === 'once' ? 'One-time key preview' : 'Key retrieval details'}</AlertTitle>
-          <AlertDescription>
-            {retrieval === 'once'
-              ? 'This sample shows a one-time retrieval warning. It does not create a real credential; a product should explain safe storage and recovery.'
-              : retrieval === 'product'
-                ? 'This sample says the key can be retrieved later in the product.'
-                : 'This sample says the key can be retrieved in a separate platform and should link to its instructions.'}
-          </AlertDescription>
-        </Alert>
-        <Button
-          disabled={!name.trim()}
-          onClick={() => {
-            setGenerated(true)
-            setOneTimeResultDismissed(false)
-            setVisible(false)
-            setCopied(false)
-            setCreationNotice('Sample key value generated for this preview. No credential was created.')
+        <p className='text-sm text-muted-foreground'>
+          Restricted access options depend on the product. This compact sample illustrates general access or read-only
+          mission scope; it does not create a credential.
+        </p>
+        <Button onClick={() => setConfigurationOpen(true)}>
+          {generated ? 'Configure another sample key' : 'Configure API key'}
+        </Button>
+        <Dialog open={configurationOpen} onOpenChange={setConfigurationOpen}>
+          <DialogPortal>
+            <DialogBackdrop />
+            <DialogPopup initialFocus={generateKeyRef}>
+              <DialogHeader>
+                <DialogTitle>Configure API key</DialogTitle>
+                <DialogDescription>
+                  Name the key, review its access, and decide how it can be retrieved.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className='order-last sm:flex-row-reverse'>
+                <Button ref={generateKeyRef} disabled={!name.trim()} onClick={generateSampleKey}>
+                  Generate key
+                </Button>
+                <DialogClose variant='outline'>Cancel</DialogClose>
+              </DialogFooter>
+              <FieldRoot>
+                <FieldLabel>Key name</FieldLabel>
+                <Input
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  placeholder='e.g. Mission planning integration'
+                />
+                <FieldDescription>Use a descriptive name so you can identify this key later.</FieldDescription>
+              </FieldRoot>
+              <FieldsetRoot>
+                <FieldsetLegend>Access</FieldsetLegend>
+                <RadioGroup
+                  aria-label='Access'
+                  value={restricted ? 'restricted' : 'general'}
+                  onValueChange={(value) => setRestricted(value === 'restricted')}
+                >
+                  <label className='flex items-center gap-2'>
+                    <RadioRoot value='general' />
+                    <span>General access</span>
+                  </label>
+                  <label className='flex items-start gap-2'>
+                    <RadioRoot value='restricted' />
+                    <span>
+                      <span className='block'>Restricted access · Missions read-only</span>
+                      <span className='block text-sm text-muted-foreground'>Billing and Team have no access.</span>
+                    </span>
+                  </label>
+                </RadioGroup>
+              </FieldsetRoot>
+              <FieldsetRoot>
+                <FieldsetLegend>Key retrieval</FieldsetLegend>
+                <RadioGroup
+                  aria-label='Key retrieval'
+                  value={retrieval}
+                  onValueChange={(value) => {
+                    setRetrieval(value as 'product' | 'platform' | 'once')
+                    setOneTimeResultDismissed(false)
+                  }}
+                >
+                  <label className='flex items-center gap-2'>
+                    <RadioRoot value='product' />
+                    <span>Available again in this product</span>
+                  </label>
+                  <label className='flex items-center gap-2'>
+                    <RadioRoot value='platform' />
+                    <span>Available from another platform</span>
+                  </label>
+                  <label className='flex items-center gap-2'>
+                    <RadioRoot value='once' />
+                    <span>Shown once</span>
+                  </label>
+                </RadioGroup>
+                <p className='text-sm text-muted-foreground'>
+                  {retrieval === 'product'
+                    ? 'Tell users where to return in the product to retrieve this key.'
+                    : retrieval === 'platform'
+                      ? 'Link to instructions for retrieving the key on the separate platform.'
+                      : 'Warn users to store the key safely. A real one-time key should offer a secure download.'}
+                </p>
+              </FieldsetRoot>
+              {retrieval === 'once' && (
+                <Alert variant='warning'>
+                  <AlertTitle>This key will be shown once</AlertTitle>
+                  <AlertDescription>
+                    Store the key securely before closing the result. This local preview shows a sample value only.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </DialogPopup>
+          </DialogPortal>
+        </Dialog>
+        <Dialog
+          open={resultOpen}
+          onOpenChange={(open) => {
+            setResultOpen(open)
+            if (!open && retrieval === 'once') {
+              setOneTimeResultDismissed(true)
+              setCreationNotice('One-time sample result closed. A real lost key would need to be generated again.')
+            }
           }}
         >
-          {generated ? 'Generate another sample key' : 'Generate key'}
-        </Button>
-        {generated && !oneTimeResultDismissed && (
-          <section className='space-y-3 rounded-(--radius) border border-border p-4'>
-            <div>
-              <h4 className='font-medium'>{name || 'API key'}</h4>
-              <p className='text-muted-foreground'>
-                {restricted ? 'Restricted · Missions read-only' : 'General workspace access'}
-              </p>
-            </div>
-            <code className='block break-all rounded-(--radius) border border-border bg-muted p-3'>
-              {visible ? 'sk_demo_7f3a9d41b820c67f9b2c' : sampleKey}
-            </code>
-            <div className='flex flex-wrap gap-2'>
-              <Button size='sm' variant='outline' onClick={() => setVisible((value) => !value)}>
-                {visible ? 'Hide key' : 'Reveal key'}
-              </Button>
-              <Button
-                size='sm'
-                onClick={() => {
-                  setCopied(true)
-                  setCreationNotice('Sample copy feedback shown. Clipboard was not accessed.')
-                }}
-              >
-                {copied ? 'Copy preview shown' : 'Preview copy feedback'}
-              </Button>
-            </div>
-            <Menu>
-              <MenuTrigger
-                render={
-                  <Button size='sm' variant='ghost'>
-                    Manage key
+          <DialogPortal>
+            <DialogBackdrop />
+            <DialogPopup initialFocus={resultCloseRef}>
+              <DialogHeader>
+                <DialogTitle>API key result preview</DialogTitle>
+                <DialogDescription>
+                  {name} · {restricted ? 'Restricted · Missions read-only' : 'General workspace access'}. This is a
+                  placeholder; no credential was created.
+                </DialogDescription>
+              </DialogHeader>
+              {retrieval === 'once' && (
+                <Alert variant='warning'>
+                  <AlertTitle>Shown once</AlertTitle>
+                  <AlertDescription>
+                    A real key that cannot be retrieved later should include a secure JSON download option.
+                  </AlertDescription>
+                </Alert>
+              )}
+              <code className='block break-all rounded-(--radius) border border-border bg-muted p-3'>
+                {visible ? 'sk_demo_7f3a9d41b820c67f9b2c' : sampleKey}
+              </code>
+              <div className='flex flex-wrap gap-2'>
+                <Button size='sm' variant='outline' onClick={() => setVisible((value) => !value)}>
+                  {visible ? 'Hide key' : 'Reveal key'}
+                </Button>
+                <Button
+                  size='sm'
+                  onClick={() => {
+                    setCopied(true)
+                    setCreationNotice('Sample copy feedback shown. Clipboard was not accessed.')
+                  }}
+                >
+                  {copied ? 'Copy preview shown' : 'Preview copy feedback'}
+                </Button>
+                {retrieval === 'once' && (
+                  <Button
+                    size='sm'
+                    variant='outline'
+                    onClick={() => setCreationNotice('JSON download preview selected. No file was downloaded.')}
+                  >
+                    Preview JSON download
                   </Button>
-                }
-              />
-              <MenuPortal>
-                <MenuPositioner side='bottom' align='start' sideOffset={4}>
-                  <MenuPopup>
-                    <MenuItem
-                      onClick={() => setCreationNotice('Key rotation preview selected; no credential was changed.')}
-                    >
-                      Preview key rotation
-                    </MenuItem>
-                    <MenuItem onClick={() => setCreationNotice('Revoke preview selected; no credential was revoked.')}>
-                      Preview key revocation
-                    </MenuItem>
-                  </MenuPopup>
-                </MenuPositioner>
-              </MenuPortal>
-            </Menu>
-            <p className='text-muted-foreground'>
-              Generated view: reveal, hide, and copy feedback are local illustrations only; no credential or clipboard
-              access.
-            </p>
-            {retrieval === 'once' && (
-              <Button size='sm' variant='ghost' onClick={() => setOneTimeResultDismissed(true)}>
-                Leave key result
-              </Button>
-            )}
-          </section>
-        )}
+                )}
+                <Menu>
+                  <MenuTrigger
+                    render={
+                      <Button size='sm' variant='ghost'>
+                        Manage key
+                      </Button>
+                    }
+                  />
+                  <MenuPortal>
+                    <MenuPositioner side='bottom' align='start' sideOffset={4}>
+                      <MenuPopup>
+                        <MenuItem
+                          onClick={() => setCreationNotice('Key rotation preview selected; no credential was changed.')}
+                        >
+                          Preview key rotation
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => setCreationNotice('Revoke preview selected; no credential was revoked.')}
+                        >
+                          Preview key revocation
+                        </MenuItem>
+                      </MenuPopup>
+                    </MenuPositioner>
+                  </MenuPortal>
+                </Menu>
+              </div>
+              <p className='text-sm text-muted-foreground'>
+                Reveal, copy, and download controls are previews only; they do not expose a real secret, access the
+                clipboard, or download a file.
+              </p>
+              <DialogFooter>
+                <DialogClose ref={resultCloseRef} variant='outline'>
+                  Leave key result
+                </DialogClose>
+              </DialogFooter>
+            </DialogPopup>
+          </DialogPortal>
+        </Dialog>
         {generated && oneTimeResultDismissed && (
           <Alert variant='warning'>
             <AlertTitle>One-time result closed</AlertTitle>
