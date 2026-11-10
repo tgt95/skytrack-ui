@@ -66,7 +66,7 @@ function CommandEmpty({ className, ...props }: React.ComponentProps<typeof Comma
   return (
     <CommandPrimitive.Empty
       data-slot='command-empty'
-      className={cn('px-3 py-6 text-center text-sm text-muted-foreground', className)}
+      className={cn('px-3 py-6 text-center text-base text-muted-foreground', className)}
       {...props}
     />
   )
@@ -77,7 +77,7 @@ function CommandGroup({ className, ...props }: React.ComponentProps<typeof Comma
     <CommandPrimitive.Group
       data-slot='command-group'
       className={cn(
-        'overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground',
+        'overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:sub-heading',
         className
       )}
       {...props}

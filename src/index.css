@@ -244,14 +244,6 @@
     font-family: var(--font-heading);
   }
 
-  .sub-heading {
-    font-family: var(--font-sans);
-  }
-
-  .sub-heading {
-    @apply uppercase tracking-wider text-muted-foreground font-medium;
-  }
-
   .h1,
   .h2,
   .h3,
@@ -261,4 +253,18 @@
   .heading {
     @apply tracking-tight;
   }
+}
+
+/**
+ * Sub-heading label style (uppercase, tracked, muted, medium).
+ *
+ * Declared as a utility, not a component class, so it works both as a plain
+ * class (`class="sub-heading"`) and with variants
+ * (`[&_[cmdk-group-heading]]:sub-heading`). `src/styles.css` pins it with
+ * `@source inline("sub-heading")` so the packaged stylesheet always ships it,
+ * even when no component in `src/components` references it.
+ */
+@utility sub-heading {
+  font-family: var(--font-sans);
+  @apply uppercase tracking-wider text-muted-foreground font-medium;
 }

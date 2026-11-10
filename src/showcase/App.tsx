@@ -88,8 +88,13 @@ const calendarDemo: DemoMeta | null =
       }
     : null
 
-const demos: DemoMeta[] = (calendarDemo ? [...rawDemos, calendarDemo] : rawDemos).sort((a, b) =>
-  a.title.localeCompare(b.title)
+const groupRank = (group: DemoMeta['group']) => {
+  const index = GROUP_ORDER.indexOf(group)
+  return index === -1 ? GROUP_ORDER.length : index
+}
+
+const demos: DemoMeta[] = (calendarDemo ? [...rawDemos, calendarDemo] : rawDemos).sort(
+  (a, b) => groupRank(a.group) - groupRank(b.group) || a.title.localeCompare(b.title)
 )
 
 const demosMap = demos.reduce<Record<string, DemoMeta>>((acc, d) => {
@@ -389,27 +394,33 @@ export function App () {
         <CommandInput value={commandQuery} onValueChange={setCommandQuery} placeholder='Search components...' />
         <CommandList>
           <CommandEmpty>No components found.</CommandEmpty>
-          <CommandGroup heading='Components'>
-            {demos
-              .filter((demo) =>
+          {GROUP_ORDER.map((group) => {
+            const items = demos.filter(
+              (demo) =>
+                demo.group === group &&
                 `${demo.title} ${demo.id} ${demo.description}`.toLowerCase().includes(commandQuery.toLowerCase())
-              )
-              .map((demo) => (
-                <CommandItem
-                  key={demo.id}
-                  value={`${demo.title} ${demo.id}`}
-                  onSelect={() => {
-                    setQuery('')
-                    setCommandOpen(false)
-                    if (view !== 'components') navigateToView('components')
-                    window.location.hash = demo.id
-                    requestAnimationFrame(() => document.getElementById(demo.id)?.scrollIntoView({ block: 'start' }))
-                  }}
-                >
-                  {demo.title}
-                </CommandItem>
-              ))}
-          </CommandGroup>
+            )
+            if (!items.length) return null
+            return (
+              <CommandGroup key={group} heading={group}>
+                {items.map((demo) => (
+                  <CommandItem
+                    key={demo.id}
+                    value={`${demo.title} ${demo.id}`}
+                    onSelect={() => {
+                      setQuery('')
+                      setCommandOpen(false)
+                      if (view !== 'components') navigateToView('components')
+                      window.location.hash = demo.id
+                      requestAnimationFrame(() => document.getElementById(demo.id)?.scrollIntoView({ block: 'start' }))
+                    }}
+                  >
+                    {demo.title}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )
+          })}
         </CommandList>
       </CommandDialog>
     </SidebarProvider>
