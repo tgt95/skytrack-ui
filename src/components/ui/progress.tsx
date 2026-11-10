@@ -46,7 +46,11 @@ function ProgressIndicator({ className, ...props }: React.ComponentProps<typeof 
   return (
     <BaseProgress.Indicator
       data-slot='progress-indicator'
-      className={cn('h-full bg-primary transition-[width] duration-500', 'data-indeterminate:w-full', className)}
+      className={cn(
+        'h-full bg-primary transition-[width] duration-500',
+        'data-indeterminate:w-1/3 data-indeterminate:animate-[progress-indeterminate_1.5s_infinite_ease-in-out]',
+        className
+      )}
       {...props}
     />
   )

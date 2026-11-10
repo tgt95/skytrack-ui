@@ -20,8 +20,8 @@ function InputAdornment({ className, position, ...props }: InputAdornmentProps) 
       data-slot='input-adornment'
       data-position={position}
       className={cn(
-        'flex h-9 shrink-0 items-center text-muted-foreground',
-        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        'flex h-full shrink-0 items-center text-muted-foreground',
+        '[&_svg]:pointer-events-none [&_svg]:shrink-0',
         className
       )}
       {...props}
@@ -42,7 +42,7 @@ function Input({ className, size = 'default', startAdornment, endAdornment, ...p
         data-slot='input'
         data-size={size}
         className={cn(
-          'flex w-full min-w-0 rounded-(--radius) border border-input bg-background px-3 py-1 text-foreground shadow-xs transition-colors',
+          'flex w-full min-w-0 rounded-(--radius) border border-input bg-background py-1 text-foreground shadow-xs transition-colors',
           CONTROL_SIZE_CLASSES[size],
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
@@ -75,7 +75,7 @@ function Input({ className, size = 'default', startAdornment, endAdornment, ...p
       )}
     >
       {startAdornment != null && (
-        <InputAdornment position='start' className='h-full pl-3'>
+        <InputAdornment position='start' className='h-full'>
           {startAdornment}
         </InputAdornment>
       )}
@@ -83,17 +83,15 @@ function Input({ className, size = 'default', startAdornment, endAdornment, ...p
         data-slot='input'
         data-size={size}
         className={cn(
-          'flex h-full min-w-0 flex-1 rounded-(--radius) bg-transparent px-3 py-1 text-sm text-foreground outline-hidden transition-colors',
+          'flex h-full min-w-0 flex-1 rounded-(--radius) bg-transparent py-1 text-inherit outline-hidden transition-colors',
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
-          inputClassName,
-          startAdornment != null && 'pl-2',
-          endAdornment != null && 'pr-2'
+          inputClassName
         )}
         {...props}
       />
       {endAdornment != null && (
-        <InputAdornment position='end' className='h-full pr-3'>
+        <InputAdornment position='end' className='h-full'>
           {endAdornment}
         </InputAdornment>
       )}

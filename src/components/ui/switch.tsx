@@ -36,10 +36,12 @@ type SwitchProps = React.ComponentProps<typeof BaseSwitch.Root> & VariantProps<t
 type SwitchSize = VariantProps<typeof switchVariants>['size']
 const SwitchSizeContext = React.createContext<SwitchSize>('default')
 
-function Switch({ className, size, ...props }: SwitchProps) {
+function Switch({ className, size, children, ...props }: SwitchProps) {
   return (
     <SwitchSizeContext.Provider value={size ?? 'default'}>
-      <BaseSwitch.Root data-slot='switch' className={cn(switchVariants({ size }), className)} {...props} />
+      <BaseSwitch.Root data-slot='switch' className={cn(switchVariants({ size }), className)} {...props}>
+        {children ?? <SwitchThumb />}
+      </BaseSwitch.Root>
     </SwitchSizeContext.Provider>
   )
 }

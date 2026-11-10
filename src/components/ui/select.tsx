@@ -28,7 +28,7 @@ function SelectLabel({ className, ...props }: React.ComponentProps<typeof BaseSe
 
 export const selectTriggerVariants = cva(
   cn(
-    'flex w-full cursor-pointer items-center justify-between gap-2 rounded-(--radius) border border-input bg-background px-3 text-foreground shadow-xs transition-colors',
+    'flex w-full cursor-pointer items-center justify-between rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
     'data-placeholder:text-muted-foreground',
     'hover:not-data-disabled:bg-accent hover:not-data-disabled:text-accent-foreground',
     'active:not-data-disabled:bg-accent',
@@ -74,10 +74,10 @@ function SelectIcon({ className, children, ...props }: React.ComponentProps<type
   return (
     <BaseSelect.Icon
       data-slot='select-icon'
-      className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className)}
+      className={cn('flex shrink-0 items-center justify-center text-muted-foreground', className)}
       {...props}
     >
-      {children ?? <CaretDownIcon className='size-4' />}
+      {children ?? <CaretDownIcon />}
     </BaseSelect.Icon>
   )
 }

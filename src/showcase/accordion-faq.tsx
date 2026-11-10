@@ -23,16 +23,18 @@ type AccountFaqAccordionProps = {
   compact?: boolean
   defaultOpen?: boolean
   multiple?: boolean
+  disabled?: boolean
 }
 
 export function AccountFaqAccordion({
   className = 'w-full',
   compact = false,
   defaultOpen = false,
-  multiple = false
+  multiple = false,
+  disabled = false
 }: AccountFaqAccordionProps) {
   return (
-    <Accordion className={className} defaultValue={defaultOpen ? ['account-security'] : undefined} multiple={multiple}>
+    <Accordion className={className} defaultValue={defaultOpen ? ['account-security'] : undefined} multiple={multiple} disabled={disabled}>
       {ACCOUNT_FAQ.map((item) => (
         <AccordionItem key={item.id} value={item.id}>
           <AccordionTrigger

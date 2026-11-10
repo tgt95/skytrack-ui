@@ -1,7 +1,17 @@
 import * as React from 'react'
-import { ArrowUUpLeftIcon, MagnifyingGlassIcon, PlusIcon, XIcon } from '@phosphor-icons/react'
+import {
+  ArrowUUpLeftIcon,
+  CheckCircleIcon,
+  InfoIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+  WarningCircleIcon,
+  WarningIcon,
+  XIcon
+} from '@phosphor-icons/react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import type { ControlSize } from '@/lib/control-sizes'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -42,7 +52,11 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination'
-import { ProgressStepIndicator, type ProgressIndicatorStep } from '@/components/ui/progress-indicator'
+import {
+  ProgressStepIndicator,
+  type ProgressIndicatorStep,
+  type ProgressStepStatus
+} from '@/components/ui/progress-indicator'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Search } from '@/components/ui/search'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -55,7 +69,9 @@ import {
 } from '@/components/ui/attachment'
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator
@@ -296,11 +312,46 @@ function ButtonSpecimen({ variant, size }: { variant?: string; size?: string }) 
   )
 }
 
+const ALERT_VARIANTS_CONTENT: Record<
+  string,
+  { icon: React.ReactNode; title: string; description: string }
+> = {
+  default: {
+    icon: <InfoIcon className='size-5 shrink-0' aria-hidden='true' />,
+    title: 'Heads up',
+    description: 'Review this information before continuing your mission setup.'
+  },
+  info: {
+    icon: <InfoIcon className='size-5 shrink-0' aria-hidden='true' />,
+    title: 'New flight plan tools',
+    description: 'Drafts now support reusable routes and shared checkpoints.'
+  },
+  success: {
+    icon: <CheckCircleIcon className='size-5 shrink-0' aria-hidden='true' />,
+    title: 'Mission saved',
+    description: 'Your changes are ready for review.'
+  },
+  warning: {
+    icon: <WarningIcon className='size-5 shrink-0' aria-hidden='true' />,
+    title: 'Battery reserve is low',
+    description: 'Check the return-to-home margin before launching.'
+  },
+  destructive: {
+    icon: <WarningCircleIcon className='size-5 shrink-0' aria-hidden='true' />,
+    title: 'Connection lost',
+    description: 'Telemetry stopped. Confirm the aircraft link before proceeding.'
+  }
+}
+
 function AlertSpecimen({ variant = 'default' }: { variant?: string }) {
+  const content = ALERT_VARIANTS_CONTENT[variant] ?? ALERT_VARIANTS_CONTENT.default
   return (
-    <Alert variant={variant as React.ComponentProps<typeof Alert>['variant']} className='max-w-sm'>
-      <AlertTitle>Flight plan updated</AlertTitle>
-      <AlertDescription>Changes are saved and ready to sync.</AlertDescription>
+    <Alert variant={variant as React.ComponentProps<typeof Alert>['variant']} className='w-full max-w-xl'>
+      {content.icon}
+      <div className='grid gap-1'>
+        <AlertTitle>{content.title}</AlertTitle>
+        <AlertDescription>{content.description}</AlertDescription>
+      </div>
     </Alert>
   )
 }
@@ -336,16 +387,32 @@ function AttachmentSpecimen({
   )
 }
 
-function BreadcrumbSpecimen() {
+function BreadcrumbSpecimen({ state = 'link' }: { state?: string }) {
+  const isCurrent = state === 'current page'
+  const isSeparator = state === 'separator'
+  const isEllipsis = state === 'ellipsis'
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>Projects</BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>Mission Alpha</BreadcrumbItem>
-        <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Plan</BreadcrumbPage>
+          <BreadcrumbLink href='#'>Projects</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>{isSeparator ? '/' : undefined}</BreadcrumbSeparator>
+        {isEllipsis && (
+          <>
+            <BreadcrumbItem>
+              <BreadcrumbEllipsis />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>{isSeparator ? '/' : undefined}</BreadcrumbSeparator>
+          </>
+        )}
+        <BreadcrumbItem>
+          {isCurrent ? (
+            <BreadcrumbPage>Plan</BreadcrumbPage>
+          ) : (
+            <BreadcrumbLink href='#'>Mission Alpha</BreadcrumbLink>
+          )}
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
@@ -587,11 +654,11 @@ function ConfiguredComboboxSpecimen({
   return (
     <div className='flex flex-col gap-2'>
       <div className='flex flex-wrap items-center gap-2'>
-        <span className='w-28 text-[11px] text-muted-foreground'>Input group</span>
+        <span className='w-28 text-xs text-muted-foreground'>Input group</span>
         <ComboboxSpecimen size={size} shape={shape} />
       </div>
       <div className='flex flex-wrap items-center gap-2'>
-        <span className='w-28 text-[11px] text-muted-foreground'>Standalone trigger</span>
+        <span className='w-28 text-xs text-muted-foreground'>Standalone trigger</span>
         <ComboboxSpecimen standaloneTriggerSize={standaloneTriggerSize} />
       </div>
     </div>
@@ -679,17 +746,25 @@ function SelectSpecimen({ size }: { size: string }) {
 
 /* ------------------------------------------------------------------ Slider */
 
-function SliderSpecimen({ orientation }: { orientation: string }) {
+function SliderSpecimen({ orientation = 'horizontal', state }: { orientation?: string; state?: string }) {
+  const isDragging = state === 'dragging'
+  const isDisabled = state === 'disabled'
+  const defaultValue = isDragging ? 75 : isDisabled ? 30 : 40
+
   return (
     <Slider
       orientation={orientation as React.ComponentProps<typeof Slider>['orientation']}
-      defaultValue={40}
-      className={orientation === 'vertical' ? 'h-28 w-8' : 'w-40'}
+      defaultValue={defaultValue}
+      disabled={isDisabled}
+      className={orientation === 'vertical' ? 'h-28 w-8' : 'w-48'}
     >
       <SliderControl>
         <SliderTrack>
           <SliderIndicator />
-          <SliderThumb aria-label={`slider ${orientation}`} />
+          <SliderThumb
+            aria-label={`slider ${orientation}`}
+            className={isDragging ? 'shadow-md ring-2 ring-primary' : undefined}
+          />
         </SliderTrack>
       </SliderControl>
     </Slider>
@@ -698,9 +773,18 @@ function SliderSpecimen({ orientation }: { orientation: string }) {
 
 /* ------------------------------------------------------------------ Switch */
 
-function SwitchSpecimen({ size }: { size: string }) {
+function SwitchSpecimen({ size = 'default', state }: { size?: string; state?: string }) {
+  const isChecked = state ? state === 'checked' : true
+  const isDisabled = state === 'disabled'
+  const isFocusVisible = state === 'focus-visible'
   return (
-    <Switch size={size as React.ComponentProps<typeof Switch>['size']} defaultChecked aria-label={`switch ${size}`}>
+    <Switch
+      size={size as React.ComponentProps<typeof Switch>['size']}
+      defaultChecked={isChecked}
+      disabled={isDisabled}
+      autoFocus={isFocusVisible}
+      aria-label={`switch ${size}`}
+    >
       <SwitchThumb />
     </Switch>
   )
@@ -827,16 +911,18 @@ function ToastList({
           <ToastTitle />
           <ToastDescription />
         </div>
-        {(actionSize || actionVariant) && (
-          <ToastAction
-            size={actionSize}
-            variant={actionVariant}
-            aria-label={actionSize === 'icon' ? 'Undo' : undefined}
-          >
-            {actionSize === 'icon' ? <ArrowUUpLeftIcon aria-hidden /> : 'Undo'}
-          </ToastAction>
-        )}
-        <ToastClose size={closeSize} variant={closeVariant} aria-label='Dismiss' />
+        <div className='flex shrink-0 items-center gap-2'>
+          {(actionSize || actionVariant) && (
+            <ToastAction
+              size={actionSize}
+              variant={actionVariant}
+              aria-label={actionSize === 'icon' ? 'Undo' : undefined}
+            >
+              {actionSize === 'icon' ? <ArrowUUpLeftIcon aria-hidden /> : 'Undo'}
+            </ToastAction>
+          )}
+          <ToastClose size={closeSize} variant={closeVariant} aria-label='Dismiss' />
+        </div>
       </ToastContent>
     </ToastRoot>
   ))
@@ -849,7 +935,7 @@ function ContextMenuSpecimen({ variant, inset }: { variant?: string; inset?: str
   return (
     <ContextMenu>
       <ContextMenuTrigger>
-        <div className='flex h-16 w-32 items-center justify-center border border-dashed border-border text-[11px] text-muted-foreground select-none'>
+        <div className='flex h-16 w-32 items-center justify-center border border-dashed border-border text-xs text-muted-foreground select-none'>
           right-click
         </div>
       </ContextMenuTrigger>
@@ -1022,34 +1108,80 @@ function AvatarSpecimen({ size = 'default' }: { size?: ControlSize }) {
   )
 }
 
-/* ---------------------------------------------------------- Checkbox */
+/* ---------------------------------------------------------- Dropzone */
 
-function CheckboxSpecimen() {
-  return (
-    <div className='flex flex-col gap-2'>
-      <CheckboxRoot defaultChecked aria-label='Checked checkbox' />
-      <CheckboxRoot aria-label='Unchecked checkbox' />
-      <CheckboxRoot indeterminate aria-label='Indeterminate checkbox' />
-    </div>
-  )
+function DropzoneSpecimen({ state = 'idle' }: { state?: string }) {
+  if (state === 'disabled') {
+    return <Dropzone disabled className='w-full max-w-sm' />
+  }
+  if (state === 'dragging') {
+    return (
+      <Dropzone
+        data-dragging=''
+        className='w-full max-w-sm border-primary bg-primary/5'
+        hint='Drop file here to upload'
+      />
+    )
+  }
+  return <Dropzone className='w-full max-w-sm' />
 }
 
-function CheckboxGroupSpecimen() {
+/* ---------------------------------------------------------- Checkbox */
+
+function CheckboxSpecimen({ state = 'checked' }: { state?: string }) {
+  if (state === 'unchecked') {
+    return <CheckboxRoot aria-label='Unchecked checkbox' />
+  }
+  if (state === 'indeterminate') {
+    return <CheckboxRoot indeterminate aria-label='Indeterminate checkbox' />
+  }
+  if (state === 'disabled') {
+    return <CheckboxRoot disabled defaultChecked aria-label='Disabled checkbox' />
+  }
+  if (state === 'invalid') {
+    return <CheckboxRoot aria-invalid defaultChecked aria-label='Invalid checkbox' />
+  }
+  return <CheckboxRoot defaultChecked aria-label='Checked checkbox' />
+}
+
+function CheckboxGroupSpecimen({ state = 'multiple values' }: { state?: string }) {
+  const disabled = state === 'disabled'
   return (
-    <CheckboxGroup defaultValue={['a']} aria-label='Checkbox group'>
+    <CheckboxGroup disabled={disabled} defaultValue={['a', 'b']} aria-label='Checkbox group' className='flex gap-3'>
       <CheckboxRoot value='a' aria-label='Option A' />
       <CheckboxRoot value='b' aria-label='Option B' />
+      <CheckboxRoot value='c' aria-label='Option C' />
     </CheckboxGroup>
   )
 }
 
 /* ----------------------------------------------------------- Field */
 
-function FieldSpecimen() {
+function FieldSpecimen({ state = 'filled' }: { state?: string }) {
+  if (state === 'invalid') {
+    return (
+      <FieldRoot invalid className='w-64'>
+        <FieldLabel className='text-destructive'>Email address</FieldLabel>
+        <FieldControl value='invalid-email' aria-label='Email input' />
+        <span data-slot='field-error' className='text-sm leading-normal font-medium text-destructive'>
+          Please enter a valid email address.
+        </span>
+      </FieldRoot>
+    )
+  }
+  if (state === 'disabled') {
+    return (
+      <FieldRoot disabled className='w-64'>
+        <FieldLabel>Email address</FieldLabel>
+        <FieldControl placeholder='name@example.com' aria-label='Email input' />
+        <FieldDescription>Editing is not available.</FieldDescription>
+      </FieldRoot>
+    )
+  }
   return (
-    <FieldRoot>
+    <FieldRoot className='w-64'>
       <FieldLabel>Email address</FieldLabel>
-      <FieldControl placeholder='name@example.com' aria-label='Email input' />
+      <FieldControl defaultValue='name@example.com' aria-label='Email input' />
       <FieldDescription>We never share your email.</FieldDescription>
     </FieldRoot>
   )
@@ -1057,9 +1189,10 @@ function FieldSpecimen() {
 
 /* ---------------------------------------------------------- Fieldset */
 
-function FieldsetSpecimen() {
+function FieldsetSpecimen({ state = 'enabled' }: { state?: string }) {
+  const disabled = state === 'disabled'
   return (
-    <FieldsetRoot>
+    <FieldsetRoot disabled={disabled} className='w-64'>
       <FieldsetLegend>Delivery details</FieldsetLegend>
       <FieldRoot>
         <FieldLabel>Address</FieldLabel>
@@ -1071,22 +1204,44 @@ function FieldsetSpecimen() {
 
 /* ---------------------------------------------------------------- Form */
 
-function FormSpecimen() {
+function FormSpecimen({ state = 'valid' }: { state?: string }) {
+  const isInvalid = state === 'invalid'
   return (
-    <Form>
-      <FieldRoot>
-        <FieldLabel>Username</FieldLabel>
-        <FieldControl placeholder='jdoe' aria-label='Username input' />
+    <Form className='flex w-64 flex-col gap-3' onSubmit={(e) => e.preventDefault()}>
+      <FieldRoot invalid={isInvalid}>
+        <FieldLabel className={isInvalid ? 'text-destructive' : undefined}>Username</FieldLabel>
+        <FieldControl defaultValue={isInvalid ? 'a' : 'pilot'} aria-label='Username input' />
+        {isInvalid ? (
+          <span data-slot='field-error' className='text-sm leading-normal font-medium text-destructive'>
+            Username must be at least 3 characters.
+          </span>
+        ) : (
+          <FieldDescription>Ready to submit.</FieldDescription>
+        )}
       </FieldRoot>
+      <Button size='sm' type='submit'>Submit</Button>
     </Form>
   )
 }
 
 /* --------------------------------------------------------------- Radio */
 
-function RadioSpecimen() {
+function RadioSpecimen({ state = 'checked' }: { state?: string }) {
+  const isUnchecked = state === 'unchecked'
+  const isDisabled = state === 'disabled'
+  const isReadOnly = state === 'readonly'
+  const isInvalid = state === 'invalid'
+
   return (
-    <RadioGroup defaultValue='a' aria-label='Radio group'>
+    <RadioGroup
+      key={state}
+      defaultValue={isUnchecked ? undefined : 'a'}
+      disabled={isDisabled}
+      readOnly={isReadOnly}
+      aria-invalid={isInvalid}
+      aria-label='Radio group'
+      className='flex gap-3'
+    >
       <RadioRoot value='a' aria-label='Option A' />
       <RadioRoot value='b' aria-label='Option B' />
     </RadioGroup>
@@ -1109,30 +1264,47 @@ function MeterSpecimen() {
 
 /* ------------------------------------------------------------- Progress */
 
-function ProgressSpecimen() {
+function ProgressSpecimen({ state = 'determinate' }: { state?: string }) {
+  const isIndeterminate = state === 'indeterminate'
   return (
-    <Progress value={60}>
-      <ProgressLabel>Upload</ProgressLabel>
+    <Progress value={isIndeterminate ? null : 60} className='w-60'>
+      <ProgressLabel>{isIndeterminate ? 'Connecting...' : 'Upload'}</ProgressLabel>
       <ProgressTrack>
-        <ProgressIndicator className='w-60' />
+        <ProgressIndicator />
       </ProgressTrack>
-      <span className='text-right text-sm text-foreground'>60%</span>
+      {!isIndeterminate && <span className='text-right text-sm text-foreground'>60%</span>}
     </Progress>
   )
 }
 
 /* ----------------------------------------------------------- Accordion */
 
-function AccordionSpecimen() {
-  return <AccountFaqAccordion defaultOpen multiple />
+function AccordionSpecimen({ state = 'multiple expansion' }: { state?: string }) {
+  const isSingle = state === 'single expansion'
+  const isCompact = state === 'compact'
+  const isDisabled = state === 'disabled'
+
+  return (
+    <div key={state} className='w-full max-w-sm'>
+      <AccountFaqAccordion
+        defaultOpen
+        multiple={!isSingle}
+        compact={isCompact}
+        disabled={isDisabled}
+      />
+    </div>
+  )
 }
 
 /* --------------------------------------------------------- Collapsible */
 
-function CollapsibleSpecimen() {
+function CollapsibleSpecimen({ state = 'open' }: { state?: string }) {
+  const isOpen = state === 'open'
+  const isDisabled = state === 'disabled'
+
   return (
-    <Collapsible defaultOpen>
-      <CollapsibleTrigger>Show details</CollapsibleTrigger>
+    <Collapsible key={state} defaultOpen={isOpen} disabled={isDisabled}>
+      <CollapsibleTrigger disabled={isDisabled}>Show details</CollapsibleTrigger>
       <CollapsiblePanel>
         <p className='m-0 text-sm'>Here are the details you asked for.</p>
       </CollapsiblePanel>
@@ -1329,11 +1501,12 @@ function PreviewCardSpecimen({ variant = 'link', size }: { variant?: string; siz
 
 /* ------------------------------------------------------------- Menubar */
 
-function MenubarSpecimen() {
+function MenubarSpecimen({ state = 'enabled' }: { state?: string }) {
+  const disabled = state === 'disabled'
   return (
     <Menubar>
       <Menu>
-        <MenuTrigger>File</MenuTrigger>
+        <MenuTrigger disabled={disabled}>File</MenuTrigger>
         <MenuPortal>
           <MenuPositioner side='bottom' align='start' sideOffset={4}>
             <MenuPopup>
@@ -1344,7 +1517,7 @@ function MenubarSpecimen() {
         </MenuPortal>
       </Menu>
       <Menu>
-        <MenuTrigger>Edit</MenuTrigger>
+        <MenuTrigger disabled={disabled}>Edit</MenuTrigger>
         <MenuPortal>
           <MenuPositioner side='bottom' align='start' sideOffset={4}>
             <MenuPopup>
@@ -1360,21 +1533,27 @@ function MenubarSpecimen() {
 
 /* -------------------------------------------------------- Navigation menu */
 
-function NavigationMenuSpecimen() {
+function NavigationMenuSpecimen({ state = 'active' }: { state?: string }) {
+  const isDisabled = state === 'disabled'
+  const isPopupOpen = state === 'popup-open'
+  const isInstant = state === 'instant'
+
   return (
-    <NavigationMenu>
+    <NavigationMenu key={state} defaultValue={isPopupOpen || isInstant ? 'overview' : undefined} delay={isInstant ? 0 : undefined}>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger value='overview'>Overview</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className='flex flex-col gap-1'>
+            <div className='flex flex-col gap-1 p-2'>
               <NavigationMenuLink href='#projects'>Projects</NavigationMenuLink>
               <NavigationMenuLink href='#releases'>Releases</NavigationMenuLink>
             </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger value='account'>Account</NavigationMenuTrigger>
+          <NavigationMenuTrigger value='account' disabled={isDisabled}>
+            Account
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
             <NavigationMenuLink href='#settings'>Settings</NavigationMenuLink>
           </NavigationMenuContent>
@@ -1393,13 +1572,29 @@ function NavigationMenuSpecimen() {
 
 /* ---------------------------------------------------------------- Calendar */
 
-function CalendarSpecimen() {
+function CalendarSpecimen({ state = 'single selection' }: { state?: string }) {
+  const isRange = state === 'range'
+  const isDisabledDays = state === 'disabled days'
   const [date, setDate] = React.useState<Date | undefined>(new Date())
+
+  if (isRange) {
+    return (
+      <Calendar
+        key={state}
+        mode='range'
+        selected={{ from: new Date(), to: new Date(Date.now() + 4 * 86400000) }}
+        className='rounded-(--radius) border border-border shadow-xs'
+      />
+    )
+  }
+
   return (
     <Calendar
+      key={state}
       mode='single'
       selected={date}
       onSelect={setDate}
+      disabled={isDisabledDays ? (d) => d.getDay() === 0 || d.getDay() === 6 : undefined}
       className='rounded-(--radius) border border-border shadow-xs'
     />
   )
@@ -1419,16 +1614,24 @@ const chartSpecimenData = [
   { month: 'Apr', planned: 20, completed: 17 }
 ]
 
-function ChartSpecimen() {
+function ChartSpecimen({ state = 'categorical series' }: { state?: string }) {
+  const isCategorical = state === 'categorical series'
+  const isCustomTooltip = state === 'custom tooltip'
+  const isLegend = state === 'legend'
+
   return (
-    <ChartContainer config={chartSpecimenConfig} className='h-48 w-full max-w-sm'>
+    <ChartContainer key={state} config={chartSpecimenConfig} className='h-48 w-full max-w-sm'>
       <BarChart data={chartSpecimenData} accessibilityLayer>
         <CartesianGrid vertical={false} />
         <XAxis dataKey='month' tickLine={false} tickMargin={8} axisLine={false} />
-        <ChartTooltip content={<ChartTooltipContent />} />
-        <ChartLegend content={<ChartLegendContent />} />
+        {isCustomTooltip ? (
+          <ChartTooltip defaultIndex={1} content={<ChartTooltipContent hideLabel />} />
+        ) : (
+          <ChartTooltip content={<ChartTooltipContent />} />
+        )}
+        {(isLegend || isCategorical) && <ChartLegend content={<ChartLegendContent />} />}
         <Bar dataKey='planned' fill='var(--color-planned)' radius={2} />
-        <Bar dataKey='completed' fill='var(--color-completed)' radius={2} />
+        {isCategorical && <Bar dataKey='completed' fill='var(--color-completed)' radius={2} />}
       </BarChart>
     </ChartContainer>
   )
@@ -1462,20 +1665,40 @@ function CodeBlockSpecimen({
 
 /* ----------------------------------------------------------------- Command */
 
-function CommandSpecimen() {
-  return (
-    <Command className='w-full max-w-sm rounded-(--radius) border border-border shadow-xs'>
-      <CommandInput placeholder='Search actions...' />
+function CommandSpecimen({ state = 'inline list' }: { state?: string }) {
+  const isEmpty = state === 'empty state'
+  const isDialog = state === 'dialog'
+
+  const content = (
+    <Command key={state} className='w-full max-w-sm rounded-(--radius) border border-border shadow-xs'>
+      <CommandInput placeholder='Search actions...' defaultValue={isEmpty ? 'nonexistent-query' : ''} />
       <CommandList className='max-h-40'>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading='Workspace'>
-          <CommandItem value='calendar'>Calendar</CommandItem>
-          <CommandItem value='projects'>Projects</CommandItem>
-          <CommandItem value='settings'>Settings</CommandItem>
-        </CommandGroup>
+        {!isEmpty && (
+          <>
+            <CommandGroup heading='Workspace'>
+              <CommandItem value='calendar'>Calendar</CommandItem>
+              <CommandItem value='projects'>Projects</CommandItem>
+            </CommandGroup>
+            <CommandGroup heading='Settings'>
+              <CommandItem value='theme'>Theme</CommandItem>
+            </CommandGroup>
+          </>
+        )}
       </CommandList>
     </Command>
   )
+
+  if (isDialog) {
+    return (
+      <div key={state} className='flex flex-col gap-2'>
+        <span className='text-xs text-muted-foreground'>Command dialog overlay view:</span>
+        {content}
+      </div>
+    )
+  }
+
+  return content
 }
 
 /* -------------------------------------------------------------- Data table */
@@ -1532,20 +1755,34 @@ function DatePickerSpecimen({ mode = 'single' }: { mode?: string }) {
 
 /* ------------------------------------------------------------- Inline edit */
 
-function InlineEditSpecimen() {
-  const [value, setValue] = React.useState('Click to edit mission')
+function InlineEditSpecimen({ state = 'viewing' }: { state?: string }) {
+  const [value, setValue] = React.useState('Design is how it works')
+  const isEditing = state === 'editing'
+  const isSubmitting = state === 'submitting'
+  const isDisabled = state === 'disabled' || isSubmitting
+
   return (
-    <div className='w-full max-w-xs'>
-      <InlineEdit value={value} onValueChange={setValue} label='Mission'>
+    <div key={state} className='w-full max-w-xs'>
+      <InlineEdit
+        value={isSubmitting ? 'Saving changes...' : value}
+        onValueChange={setValue}
+        defaultEditing={isEditing}
+        disabled={isDisabled}
+        label='Mission'
+      >
         <InlineEditTrigger
           render={
             <Button
               variant='ghost'
-              className='h-auto w-full justify-start px-2 py-1 text-left text-sm font-medium'
+              disabled={isDisabled}
+              className={cn(
+                'h-auto w-full justify-start px-2 py-1 text-left text-sm font-medium',
+                isSubmitting && 'opacity-60'
+              )}
             />
           }
         />
-        <InlineEditInput />
+        <InlineEditInput autoFocus={isEditing} />
       </InlineEdit>
     </div>
   )
@@ -1553,28 +1790,43 @@ function InlineEditSpecimen() {
 
 /* ------------------------------------------------------------- Page header */
 
-function PageHeaderSpecimen() {
+function PageHeaderSpecimen({ state = 'with breadcrumbs' }: { state?: string }) {
+  const hasBreadcrumbs = state === 'with breadcrumbs'
+  const hasToolbar = state === 'with toolbar'
+  const hasTabs = state === 'with tabs'
+
   return (
     <div className='w-full max-w-xl overflow-hidden rounded-(--radius) border border-border'>
       <PageHeader
         title='Mission Overview'
         breadcrumbs={
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>Home</BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Missions</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          hasBreadcrumbs ? (
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>Home</BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Missions</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          ) : undefined
         }
         toolbar={
-          <Button size='sm' variant='outline'>
-            Edit
-          </Button>
+          hasToolbar ? (
+            <Button size='sm' variant='outline'>
+              Edit
+            </Button>
+          ) : undefined
         }
       />
+      {hasTabs && (
+        <div className='flex gap-4 border-t border-border px-4 py-2 text-xs font-medium text-muted-foreground'>
+          <span className='border-b-2 border-primary pb-1 text-foreground'>Overview</span>
+          <span>Waypoints</span>
+          <span>Telemetry</span>
+        </div>
+      )}
     </div>
   )
 }
@@ -1634,13 +1886,52 @@ const progressSteps: ProgressIndicatorStep[] = [
 ]
 
 function ProgressIndicatorSpecimen({
-  orientation = 'horizontal'
+  orientation = 'horizontal',
+  state
 }: {
   orientation?: 'horizontal' | 'vertical'
+  state?: ProgressStepStatus
 }) {
+  const steps: ProgressIndicatorStep[] = React.useMemo(() => {
+    if (!state) return progressSteps
+    if (state === 'error') {
+      return [
+        { label: 'Details', status: 'complete' },
+        { label: 'Review', status: 'error', description: 'Action failed' },
+        { label: 'Launch', status: 'upcoming' }
+      ]
+    }
+    if (state === 'disabled') {
+      return [
+        { label: 'Details', status: 'complete' },
+        { label: 'Review', status: 'current' },
+        { label: 'Launch', status: 'disabled' }
+      ]
+    }
+    if (state === 'complete') {
+      return [
+        { label: 'Details', status: 'complete' },
+        { label: 'Review', status: 'complete' },
+        { label: 'Launch', status: 'complete' }
+      ]
+    }
+    if (state === 'upcoming') {
+      return [
+        { label: 'Details', status: 'upcoming' },
+        { label: 'Review', status: 'upcoming' },
+        { label: 'Launch', status: 'upcoming' }
+      ]
+    }
+    return [
+      { label: 'Details', status: 'complete' },
+      { label: 'Review', status: 'current' },
+      { label: 'Launch', status: 'upcoming' }
+    ]
+  }, [state])
+
   return (
     <div className={orientation === 'vertical' ? 'w-48' : 'w-full max-w-md'}>
-      <ProgressStepIndicator steps={progressSteps} orientation={orientation} />
+      <ProgressStepIndicator steps={steps} orientation={orientation} />
     </div>
   )
 }
@@ -1695,24 +1986,72 @@ function SearchSpecimen({
 
 type SpecimenRenderer = (value: string) => React.ReactNode
 type ComponentSpecimens = Record<string, SpecimenRenderer | undefined> & {
-  states?: () => React.ReactNode
+  states?: (state?: string) => React.ReactNode
 }
 
 function SidebarSpecimen({
   side = 'left',
   variant = 'sidebar',
-  collapsible = 'offcanvas'
+  collapsible = 'offcanvas',
+  state
 }: {
   side?: 'left' | 'right'
   variant?: 'sidebar' | 'floating' | 'inset'
   collapsible?: 'offcanvas' | 'icon' | 'none'
+  state?: string
 }) {
+  const isCollapsed = state === 'collapsed'
+  const isMobileDrawer = state === 'mobile drawer'
+  const isFocusVisible = state === 'focus-visible'
+  const isActiveMenuItem = state ? state === 'active menu item' : true
+  const resolvedCollapsible = isCollapsed ? 'icon' : collapsible
+  const defaultOpen = !isCollapsed
+
+  if (isMobileDrawer) {
+    return (
+      <div className='relative h-64 w-80 overflow-hidden rounded-lg border border-border bg-background shadow-md'>
+        <div className='flex h-9 items-center justify-between border-b border-border bg-muted/40 px-3'>
+          <span className='text-xs font-medium text-foreground'>Mobile Viewport (18rem)</span>
+          <span className='rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary'>Drawer Open</span>
+        </div>
+        <div className='relative flex h-[calc(100%-2.25rem)] w-full'>
+          <div className='z-10 h-full w-56 border-r border-sidebar-border bg-sidebar p-2 text-sidebar-foreground shadow-2xl'>
+            <SidebarContent>
+              <SidebarGroup>
+                <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton isActive>Overview</SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton>Missions</SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            </SidebarContent>
+          </div>
+          <div className='flex-1 bg-black/50 p-2'>
+            <div className='rounded border border-dashed border-white/20 p-2 text-center text-[10px] text-white/60'>
+              Backdrop overlay
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <SidebarProvider className='relative h-56 min-h-0 w-full overflow-hidden border border-border'>
+    <SidebarProvider
+      defaultOpen={defaultOpen}
+      key={`${state}-${collapsible}`}
+      className='relative h-56 min-h-0 w-full overflow-hidden border border-border'
+    >
       <Sidebar
         side={side}
         variant={variant}
-        collapsible={collapsible}
+        collapsible={resolvedCollapsible}
         gapClassName='!h-full !min-h-0'
         containerClassName='!absolute !h-full'
       >
@@ -1722,7 +2061,14 @@ function SidebarSpecimen({
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton isActive>Overview</SidebarMenuButton>
+                  <SidebarMenuButton
+                    isActive={isActiveMenuItem}
+                    autoFocus={isFocusVisible}
+                    data-focus-visible={isFocusVisible ? '' : undefined}
+                    className={isFocusVisible ? 'ring-2 ring-sidebar-ring ring-offset-2 ring-offset-sidebar' : undefined}
+                  >
+                    Overview
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>Missions</SidebarMenuButton>
@@ -1774,22 +2120,35 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   input: {
     size: (value) => <InputSpecimen size={value as ControlSize} />,
     adornment: (value) => <InputSpecimen adornment={value} />,
-    states: () => <InputSpecimen />
+    states: (state) => {
+      if (state === 'filled') return <Input defaultValue='Active waypoint' className='w-48' />
+      if (state === 'disabled') return <Input disabled placeholder='Disabled' className='w-48' />
+      if (state === 'invalid') return <Input aria-invalid defaultValue='Invalid coordinate' className='w-48' />
+      return <Input placeholder='Search or enter...' className='w-48' />
+    }
   },
   calendar: {
-    states: () => <CalendarSpecimen />
+    states: (state) => <CalendarSpecimen state={state} />
   },
   'date-picker': {
     mode: (value) => <DatePickerSpecimen mode={value} />,
-    states: () => <DatePickerSpecimen />
+    states: (state) => {
+      if (state === 'disabled') return <DatePicker disabled className='w-full max-w-xs' />
+      if (state === 'preset selection') return <DatePicker defaultValue={new Date()} className='w-full max-w-xs' />
+      return <DatePicker className='w-full max-w-xs' />
+    }
   },
   'inline-edit': {
-    states: () => <InlineEditSpecimen />
+    states: (state) => <InlineEditSpecimen state={state} />
   },
   search: {
     appearance: (value) => <SearchSpecimen appearance={value as 'default' | 'fluid'} />,
     size: (value) => <SearchSpecimen size={value as ControlSize} />,
-    states: () => <SearchSpecimen />
+    states: (state) => {
+      if (state === 'filled with clear button') return <Search defaultValue='Flight path 12' className='w-60' />
+      if (state === 'disabled') return <Search disabled placeholder='Search disabled' className='w-60' />
+      return <Search placeholder='Search missions...' className='w-60' />
+    }
   },
   'number-field': {
     size: (value) => <NumberFieldSpecimen size={value} />
@@ -1801,10 +2160,12 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
     'size (trigger)': (value) => <SelectSpecimen size={value} />
   },
   slider: {
-    orientation: (value) => <SliderSpecimen orientation={value} />
+    orientation: (value) => <SliderSpecimen orientation={value} />,
+    states: (state) => <SliderSpecimen state={state} />
   },
   switch: {
-    size: (value) => <SwitchSpecimen size={value} />
+    size: (value) => <SwitchSpecimen size={value} />,
+    states: (state) => <SwitchSpecimen state={state} />
   },
   drawer: {
     side: (value) => <DrawerSpecimen side={value} />,
@@ -1841,7 +2202,7 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
     side: (value) => <SidebarSpecimen side={value as 'left' | 'right'} />,
     variant: (value) => <SidebarSpecimen variant={value as 'sidebar' | 'floating' | 'inset'} />,
     collapsible: (value) => <SidebarSpecimen collapsible={value as 'offcanvas' | 'icon' | 'none'} />,
-    states: () => <SidebarSpecimen collapsible='icon' />
+    states: (state) => <SidebarSpecimen state={state} />
   },
   tabs: {
     'default value': (value) => <TabsSpecimen defaultTab={value as 'none' | 'one' | 'two' | 'three'} />,
@@ -1856,49 +2217,88 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   },
   avatar: {
     size: (value) => <AvatarSpecimen size={value as ControlSize} />,
-    states: () => <AvatarSpecimen />
+    states: (state) => {
+      if (state === 'fallback') {
+        return (
+          <Avatar>
+            <AvatarFallback>SK</AvatarFallback>
+          </Avatar>
+        )
+      }
+      return (
+        <Avatar>
+          <AvatarImage
+            src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&h=96&fit=crop&crop=faces'
+            alt='Pilot'
+          />
+          <AvatarFallback>PL</AvatarFallback>
+        </Avatar>
+      )
+    }
   },
   checkbox: {
-    states: () => <CheckboxSpecimen />
+    states: (state) => <CheckboxSpecimen state={state} />
   },
   'checkbox-group': {
-    states: () => <CheckboxGroupSpecimen />
+    states: (state) => <CheckboxGroupSpecimen state={state} />
   },
   field: {
-    states: () => <FieldSpecimen />
+    states: (state) => <FieldSpecimen state={state} />
   },
   fieldset: {
-    states: () => <FieldsetSpecimen />
+    states: (state) => <FieldsetSpecimen state={state} />
   },
   form: {
-    states: () => <FormSpecimen />
+    states: (state) => <FormSpecimen state={state} />
   },
   dropzone: {
-    states: () => <Dropzone className='w-full max-w-sm' />
+    states: (state) => <DropzoneSpecimen state={state} />
   },
   attachment: {
-    states: () => <AttachmentSpecimen />
+    states: (state) => <AttachmentSpecimen state={state ?? 'done'} />
   },
   alert: {
-    states: () => <AlertSpecimen />
+    variant: (value) => <AlertSpecimen variant={value} />,
+    states: (state) => {
+      if (state === 'informative role') {
+        return (
+          <Alert role='status' variant='info' className='w-full max-w-xl'>
+            <InfoIcon className='size-5 shrink-0' aria-hidden='true' />
+            <div className='grid gap-1'>
+              <AlertTitle>New flight plan tools (role=&quot;status&quot;)</AlertTitle>
+              <AlertDescription>Drafts now support reusable routes and shared checkpoints.</AlertDescription>
+            </div>
+          </Alert>
+        )
+      }
+      return (
+        <Alert role='alert' variant='destructive' className='w-full max-w-xl'>
+          <WarningCircleIcon className='size-5 shrink-0' aria-hidden='true' />
+          <div className='grid gap-1'>
+            <AlertTitle>Connection lost (role=&quot;alert&quot;)</AlertTitle>
+            <AlertDescription>Telemetry stopped. Confirm the aircraft link before proceeding.</AlertDescription>
+          </div>
+        </Alert>
+      )
+    }
   },
   breadcrumb: {
-    states: () => <BreadcrumbSpecimen />
+    states: (state) => <BreadcrumbSpecimen state={state} />
   },
   radio: {
-    states: () => <RadioSpecimen />
+    states: (state) => <RadioSpecimen state={state} />
   },
   meter: {
     states: () => <MeterSpecimen />
   },
   progress: {
-    states: () => <ProgressSpecimen />
+    states: (state) => <ProgressSpecimen state={state} />
   },
   accordion: {
-    states: () => <AccordionSpecimen />
+    states: (state) => <AccordionSpecimen state={state} />
   },
   collapsible: {
-    states: () => <CollapsibleSpecimen />
+    states: (state) => <CollapsibleSpecimen state={state} />
   },
   tooltip: {
     'trigger variant': (value) => <TooltipSpecimen variant={value} />,
@@ -1926,13 +2326,13 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
     states: () => <PreviewCardSpecimen />
   },
   menubar: {
-    states: () => <MenubarSpecimen />
+    states: (state) => <MenubarSpecimen state={state} />
   },
   'navigation-menu': {
-    states: () => <NavigationMenuSpecimen />
+    states: (state) => <NavigationMenuSpecimen state={state} />
   },
   command: {
-    states: () => <CommandSpecimen />
+    states: (state) => <CommandSpecimen state={state} />
   },
   pagination: {
     'link size': (value) => <PaginationSpecimen linkSize={value as 'default' | 'sm' | 'lg' | 'icon'} />,
@@ -1940,7 +2340,7 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
     states: () => <PaginationSpecimen />
   },
   chart: {
-    states: () => <ChartSpecimen />
+    states: (state) => <ChartSpecimen state={state} />
   },
   'code-block': {
     variant: (value) => <CodeBlockSpecimen variant={value as 'default' | 'destructive'} />,
@@ -1954,10 +2354,10 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   },
   'progress-indicator': {
     orientation: (value) => <ProgressIndicatorSpecimen orientation={value as 'horizontal' | 'vertical'} />,
-    states: () => <ProgressIndicatorSpecimen />
+    states: (state) => <ProgressIndicatorSpecimen state={state as ProgressStepStatus} />
   },
   'page-header': {
-    states: () => <PageHeaderSpecimen />
+    states: (state) => <PageHeaderSpecimen state={state} />
   },
   resizable: {
     orientation: (value) => <ResizableSpecimen orientation={value} />,
@@ -2098,27 +2498,6 @@ export function renderConfiguredSpecimen(specId: string, settings: SpecimenSetti
           withHandle={setting(settings, 'withHandle', 'false')}
         />
       )
-    case 'number-field':
-      return <NumberFieldSpecimen size={setting(settings, 'size', 'default')} />
-    case 'otp-field':
-      return <OtpFieldSpecimen orientation={setting(settings, 'separator orientation', 'horizontal')} />
-    case 'select':
-      return <SelectSpecimen size={setting(settings, 'size (trigger)', 'default')} />
-    case 'slider':
-      return <SliderSpecimen orientation={setting(settings, 'orientation', 'horizontal')} />
-    case 'switch':
-      return <SwitchSpecimen size={setting(settings, 'size', 'default')} />
-    case 'alert':
-      return <AlertSpecimen variant={setting(settings, 'variant', 'default')} />
-    case 'attachment':
-      return (
-        <AttachmentSpecimen
-          state={setting(settings, 'state', 'done')}
-          size={setting(settings, 'size', 'default')}
-          orientation={setting(settings, 'orientation', 'horizontal')}
-          media={setting(settings, 'media variant', 'icon')}
-        />
-      )
     case 'alert-dialog':
       return (
         <AlertDialogSpecimen
@@ -2231,6 +2610,6 @@ export function renderSpecimen(specId: string, axisName: string, value: string):
 }
 
 /** Returns the live specimen for a state-only component (no axes). */
-export function renderStateSpecimen(specId: string): React.ReactNode | undefined {
-  return SPECIMENS[specId]?.states?.()
+export function renderStateSpecimen(specId: string, state?: string): React.ReactNode | undefined {
+  return SPECIMENS[specId]?.states?.(state)
 }

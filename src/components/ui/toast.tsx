@@ -70,7 +70,7 @@ function ToastContent({ className, ...props }: React.ComponentProps<typeof BaseT
     <BaseToast.Content
       data-slot='toast-content'
       className={cn(
-        'flex items-start gap-3 overflow-hidden transition-opacity duration-200',
+        'flex items-center gap-3 overflow-hidden transition-opacity duration-200',
         'data-behind:opacity-0 data-expanded:opacity-100',
         className
       )}
@@ -121,6 +121,14 @@ type ToastCloseProps = React.ComponentProps<typeof BaseToast.Close> & Pick<Butto
 /** Icon X by default; pass text `children` for a labelled button. `variant`/`size` always override the defaults. */
 function ToastClose({ className, size, variant, children, ...props }: ToastCloseProps) {
   const iconOnly = children == null
+  const resolvedSize: ButtonProps['size'] = iconOnly
+    ? size === 'default'
+      ? 'icon'
+      : size === 'sm' || size === 'icon'
+        ? 'icon-sm'
+        : (size as ButtonProps['size']) ?? 'icon-sm'
+    : size ?? 'sm'
+
   return (
     <BaseToast.Close
       data-slot='toast-close'
@@ -128,7 +136,7 @@ function ToastClose({ className, size, variant, children, ...props }: ToastClose
       render={
         <Button
           variant={variant ?? 'outline'}
-          size={size ?? (iconOnly ? 'icon' : 'default')}
+          size={resolvedSize}
         />
       }
       {...props}
@@ -138,18 +146,32 @@ function ToastClose({ className, size, variant, children, ...props }: ToastClose
   )
 }
 
+type ToastActionProps = React.ComponentProps<typeof BaseToast.Action> & Pick<ButtonProps, 'variant' | 'size'>
+
 function ToastAction({
   className,
   size,
   variant,
+  children,
   ...props
-}: React.ComponentProps<typeof BaseToast.Action> & VariantProps<typeof toastCloseVariants>) {
+}: ToastActionProps) {
+  const resolvedSize: ButtonProps['size'] =
+    size === 'icon' ? 'icon-sm' : (size as ButtonProps['size']) ?? 'sm'
+
   return (
     <BaseToast.Action
       data-slot='toast-action'
-      className={cn(toastCloseVariants({ size, variant }), className)}
+      className={className}
+      render={
+        <Button
+          variant={variant ?? 'outline'}
+          size={resolvedSize}
+        />
+      }
       {...props}
-    />
+    >
+      {children}
+    </BaseToast.Action>
   )
 }
 

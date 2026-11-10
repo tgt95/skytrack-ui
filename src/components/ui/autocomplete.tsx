@@ -23,22 +23,22 @@ function Autocomplete<ItemValue>(props: AutocompleteRootProps<ItemValue>) {
 
 export const autocompleteInputVariants = cva(
   cn(
-    'w-full min-w-0 border-0 bg-transparent text-sm text-foreground outline-hidden',
+    'w-full min-w-0 border-0 bg-transparent text-foreground outline-hidden',
     'placeholder:text-muted-foreground'
   ),
   {
     variants: {
       /** `group` = input inside `AutocompleteInputGroup`, `standalone` = bordered input. */
       context: {
-        group: 'h-full px-1',
+        group: 'h-full px-0 text-inherit',
         standalone:
-          'rounded-(--radius) border border-input bg-background px-3 shadow-xs focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
+          'rounded-(--radius) border border-input bg-background shadow-xs focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
       },
       size: {
         xs: 'text-xs',
         sm: 'text-sm',
         default: 'text-sm',
-        lg: 'text-sm'
+        lg: 'text-base'
       }
     },
     compoundVariants: (['xs', 'sm', 'default', 'lg'] as const).map((size) => ({
@@ -66,19 +66,18 @@ function AutocompleteInput({ className, context, size, ...props }: AutocompleteI
 
 export const autocompleteInputGroupVariants = cva(
   cn(
-    'relative flex w-full items-center gap-1 rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
+    'relative flex w-full items-center rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
-    'has-[button]:px-1',
     'data-disabled:cursor-not-allowed data-disabled:opacity-50',
     'data-invalid:border-destructive data-invalid:ring-destructive/20'
   ),
   {
     variants: {
       size: {
-        xs: 'min-h-6 px-2',
-        sm: 'min-h-8 px-2',
-        default: 'min-h-9 px-2',
-        lg: 'min-h-10 px-2'
+        xs: 'min-h-6',
+        sm: 'min-h-8',
+        default: 'min-h-10',
+        lg: 'min-h-12'
       }
     },
     compoundVariants: (['xs', 'sm', 'default', 'lg'] as const).map((size) => ({
@@ -108,7 +107,7 @@ function AutocompleteTrigger({ className, children, ...props }: React.ComponentP
     <BaseAutocomplete.Trigger
       data-slot='autocomplete-trigger'
       className={cn(
-        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
+        'flex cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-pressed:bg-accent data-pressed:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
@@ -117,7 +116,7 @@ function AutocompleteTrigger({ className, children, ...props }: React.ComponentP
       )}
       {...props}
     >
-      {children ?? <CaretDownIcon className='size-4' />}
+      {children ?? <CaretDownIcon />}
     </BaseAutocomplete.Trigger>
   )
 }
@@ -134,7 +133,7 @@ function AutocompleteTriggerButton({
       data-slot='autocomplete-trigger-button'
       data-size={size}
       className={cn(
-        'flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-(--radius) border border-input bg-background px-3 text-foreground shadow-xs transition-colors',
+        'flex w-full cursor-pointer items-center justify-between whitespace-nowrap rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
         CONTROL_SIZE_CLASSES[size],
         'data-placeholder:text-muted-foreground',
         'hover:not-data-disabled:bg-accent hover:not-data-disabled:text-accent-foreground',
@@ -144,7 +143,7 @@ function AutocompleteTriggerButton({
       )}
       {...props}
     >
-      {children ?? <MagnifyingGlassIcon className='size-4 shrink-0 text-muted-foreground' />}
+      {children ?? <MagnifyingGlassIcon className='shrink-0 text-muted-foreground' />}
     </BaseAutocomplete.Trigger>
   )
 }
@@ -153,10 +152,10 @@ function AutocompleteIcon({ className, children, ...props }: React.ComponentProp
   return (
     <BaseAutocomplete.Icon
       data-slot='autocomplete-icon'
-      className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className)}
+      className={cn('flex shrink-0 items-center justify-center text-muted-foreground', className)}
       {...props}
     >
-      {children ?? <CaretDownIcon className='size-4' />}
+      {children ?? <CaretDownIcon />}
     </BaseAutocomplete.Icon>
   )
 }
@@ -166,7 +165,7 @@ function AutocompleteClear({ className, children, ...props }: React.ComponentPro
     <BaseAutocomplete.Clear
       data-slot='autocomplete-clear'
       className={cn(
-        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
+        'flex cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         focusRing,
@@ -174,7 +173,7 @@ function AutocompleteClear({ className, children, ...props }: React.ComponentPro
       )}
       {...props}
     >
-      {children ?? <XIcon className='size-4' />}
+      {children ?? <XIcon />}
     </BaseAutocomplete.Clear>
   )
 }

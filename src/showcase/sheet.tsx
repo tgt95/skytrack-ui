@@ -916,13 +916,24 @@ function Chip({ children, shaded }: { children: ReactNode; shaded?: boolean }) {
 }
 
 function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
+  const isSizeAxisName = (name: string) => name.toLowerCase().includes('size')
+
   const [selected, setSelected] = useState<Record<string, string>>(() =>
-    Object.fromEntries((spec.axes ?? []).map((axis) => [axis.name, axis.default ?? axis.values[0]]))
+    Object.fromEntries(
+      (spec.axes ?? []).map((axis) => [
+        axis.name,
+        isSizeAxisName(axis.name) ? 'all' : (axis.default ?? axis.values[0])
+      ])
+    )
   )
+  const [selectedState, setSelectedState] = useState<string | undefined>(spec.states?.[0])
   const combinations = combinationCount(spec)
   const meta = spec.axes?.length
     ? `${spec.axes.length} props · ${combinations.toLocaleString()} combinations`
     : 'no visual props'
+
+  const sizeAxes = (spec.axes ?? []).filter((axis) => isSizeAxisName(axis.name))
+  const allActiveSizeAxes = sizeAxes.filter((axis) => selected[axis.name] === 'all')
 
   return (
     <div id={spec.id} className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8'>
@@ -931,64 +942,135 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
         <p className='text-base text-muted-foreground'>{meta}</p>
       </div>
       <div className='flex min-w-0 flex-col gap-2.5'>
-        {spec.axes?.map((axis) => (
-          <div key={axis.name} className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
-            <span className='text-muted-foreground'>{axis.name}</span>
-            <div role='group' aria-label={`${spec.title} ${axis.name}`} className='flex flex-wrap gap-1.5'>
-              {axis.values.map((value) => {
-                const active = selected[axis.name] === value
-                return (
-                  <button
-                    key={value}
-                    type='button'
-                    aria-pressed={active}
-                    title={axis.default === value ? 'Component default' : undefined}
-                    onClick={() => setSelected((current) => ({ ...current, [axis.name]: value }))}
-                    className={cn(
-                      'inline-flex min-h-7 items-center border px-2 py-1  leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
-                      active
-                        ? 'border-primary bg-primary text-primary-foreground'
-                        : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
-                    )}
-                  >
-                    {value}
-                    {axis.default === value && <span className='ml-1 opacity-75'>· default</span>}
-                  </button>
-                )
-              })}
+        {spec.axes?.map((axis) => {
+          const isSizeAxis = isSizeAxisName(axis.name)
+          const values = isSizeAxis ? ['all', ...axis.values] : axis.values
+          return (
+            <div key={axis.name} className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
+              <span className='text-muted-foreground'>{axis.name}</span>
+              <div role='group' aria-label={`${spec.title} ${axis.name}`} className='flex flex-wrap gap-1.5'>
+                {values.map((value) => {
+                  const active = selected[axis.name] === value
+                  const isDefault = isSizeAxis ? value === 'all' : axis.default === value
+                  return (
+                    <button
+                      key={value}
+                      type='button'
+                      aria-pressed={active}
+                      title={isDefault ? 'Component default' : undefined}
+                      onClick={() => setSelected((current) => ({ ...current, [axis.name]: value }))}
+                      className={cn(
+                        'inline-flex min-h-7 items-center border px-2 py-1 leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
+                        active
+                          ? 'border-primary bg-primary text-primary-foreground'
+                          : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
+                      )}
+                    >
+                      {value === 'all' ? 'All' : value}
+                      {isDefault && <span className='ml-1 opacity-75'>· default</span>}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
         {spec.axes?.length ? (
           <div className='mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
             <div className='flex flex-wrap items-center justify-between gap-2'>
-              <span className=' font-medium text-muted-foreground'>Live preview · selected combination</span>
+              <span className='font-medium text-muted-foreground'>Live preview · selected combination</span>
               <button
                 type='button'
-                className=' text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
+                className='text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
                 onClick={() =>
                   setSelected(
-                    Object.fromEntries((spec.axes ?? []).map((axis) => [axis.name, axis.default ?? axis.values[0]]))
+                    Object.fromEntries(
+                      (spec.axes ?? []).map((axis) => [
+                        axis.name,
+                        isSizeAxisName(axis.name) ? 'all' : (axis.default ?? axis.values[0])
+                      ])
+                    )
                   )
                 }
               >
                 Reset defaults
               </button>
             </div>
-            <div className='flex min-h-12 min-w-0 items-center overflow-x-auto p-2 -mx-2'>
-              {renderConfiguredSpecimen(spec.id, selected)}
+            <div className='flex min-h-12 min-w-0 items-center overflow-x-auto -mx-2 px-2 py-1'>
+              {allActiveSizeAxes.length === 0 ? (
+                renderConfiguredSpecimen(spec.id, selected)
+              ) : (
+                <div className='flex flex-wrap items-start gap-6'>
+                  {allActiveSizeAxes[0].values.map((sizeVal) => {
+                    const variantSettings: Record<string, string> = { ...selected }
+                    for (const axis of allActiveSizeAxes) {
+                      if (axis.values.includes(sizeVal)) {
+                        variantSettings[axis.name] = sizeVal
+                      } else {
+                        variantSettings[axis.name] = axis.default ?? axis.values[0]
+                      }
+                    }
+                    return (
+                      <div key={sizeVal} className='flex flex-col items-start gap-1.5'>
+                        <span className='font-mono text-xs text-muted-foreground'>{sizeVal}</span>
+                        <div className='flex items-center'>
+                          {renderConfiguredSpecimen(spec.id, variantSettings)}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           </div>
         ) : null}
         {spec.states && (
-          <div className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-3'>
+          <div className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
             <span className='text-muted-foreground'>states &amp; modes</span>
-            <span className='text-muted-foreground'>{spec.states.join(' · ')}</span>
+            <div role='group' aria-label={`${spec.title} states`} className='flex flex-wrap gap-1.5'>
+              {spec.states.map((state, idx) => {
+                const active = (selectedState ?? spec.states![0]) === state
+                const isDefault = idx === 0
+                return (
+                  <button
+                    key={state}
+                    type='button'
+                    aria-pressed={active}
+                    onClick={() => setSelectedState(state)}
+                    className={cn(
+                      'inline-flex min-h-7 items-center border px-2 py-1 leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
+                      active
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
+                    )}
+                  >
+                    {state}
+                    {isDefault && <span className='ml-1 opacity-75'>· default</span>}
+                  </button>
+                )
+              })}
+            </div>
           </div>
         )}
-        {renderStateSpecimen(spec.id) && (
-          <div className='flex flex-wrap items-center gap-3 border border-border p-3 mt-2'>
-            {renderStateSpecimen(spec.id)}
+        {renderStateSpecimen(spec.id, selectedState ?? spec.states?.[0]) && (
+          <div className='mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
+            <div className='flex flex-wrap items-center justify-between gap-2'>
+              <span className='font-medium text-muted-foreground'>
+                {spec.axes?.length
+                  ? `State preview · ${selectedState ?? spec.states?.[0]}`
+                  : `Live preview · ${selectedState ?? spec.states?.[0]}`}
+              </span>
+              <button
+                type='button'
+                className='text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
+                onClick={() => setSelectedState(spec.states?.[0])}
+              >
+                Reset default
+              </button>
+            </div>
+            <div className='flex min-h-12 min-w-0 items-center overflow-x-auto -mx-2 px-2 py-1'>
+              {renderStateSpecimen(spec.id, selectedState ?? spec.states?.[0])}
+            </div>
           </div>
         )}
         {spec.sizes && !spec.axes?.some((axis) => axis.name.toLowerCase().includes('size')) && (

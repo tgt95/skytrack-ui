@@ -162,9 +162,11 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
 
           const activeVariant = requestedVariantName ? matchedVariant : targetDemo?.variants?.[0]
 
+          const isStacked = targetDemo?.group === 'UI shell'
+
           return (
             <TabsPanel key={tabKey} value={tabKey} className='w-full min-w-0 pt-1'>
-              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 items-start'>
+              <div className={isStacked ? 'flex flex-col gap-6 w-full min-w-0' : 'grid grid-cols-1 lg:grid-cols-2 gap-6 items-start'}>
                 {/* Guidance Column (stacked first on mobile) */}
                 <div className='min-w-0 space-y-4'>
                   <div className='space-y-3'>
@@ -186,7 +188,7 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
                 </div>
 
                 {/* Compiled Interactive Example Column */}
-                <div className='min-w-0 lg:sticky lg:top-20 space-y-2'>
+                <div className={isStacked ? 'min-w-0 w-full space-y-2' : 'min-w-0 lg:sticky lg:top-20 space-y-2'}>
                   <div className='border border-border rounded-(--radius) overflow-hidden bg-background'>
                     <div className='flex items-center justify-between border-b border-border bg-muted/30 px-3.5 py-2'>
                       <div className='flex items-center gap-2 min-w-0'>

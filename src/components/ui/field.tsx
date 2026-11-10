@@ -57,7 +57,7 @@ function FieldControl({ className, size = 'default', ...props }: FieldControlPro
       data-size={size}
       className={mergeFieldClassName<FieldControlState>(
         [
-          'flex w-full min-w-0 self-stretch rounded-(--radius) border border-input bg-background px-3 py-1 text-foreground shadow-xs transition-colors',
+          'flex w-full min-w-0 self-stretch rounded-(--radius) border border-input bg-background py-1 text-foreground shadow-xs transition-colors',
           CONTROL_SIZE_CLASSES[size],
           'placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground',
           'data-filled:border-foreground/40',

@@ -66,7 +66,8 @@ const GROUP_ORDER: DemoMeta['group'][] = [
   'Menus & Navigation',
   'Data Display',
   'Layout',
-  'Patterns'
+  'Patterns',
+  'UI shell'
 ]
 
 const rawDemos = Object.values(modules)

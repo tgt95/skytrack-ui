@@ -215,33 +215,63 @@ export function DesignerGuidelineSheet({ guideline, demo, allDemos, practices }:
                   <DesignerTypeGallery demoId={guideline.slug} demo={targetDemo} />
                 </div>
               ) : title === 'Usage' ? (
-                <div className='grid grid-cols-1 items-start gap-6 lg:grid-cols-2'>
-                  <div className='min-w-0 space-y-4'>
-                    <DesignerGuidance blocks={section.blocks} practices={practices?.[title]} />
-                  </div>
+                targetDemo?.group === 'UI shell' ? (
+                  <div className='flex flex-col gap-6 w-full min-w-0'>
+                    <div className='min-w-0 space-y-4'>
+                      <DesignerGuidance blocks={section.blocks} practices={practices?.[title]} />
+                    </div>
 
-                  <div className='min-w-0 space-y-3 lg:sticky lg:top-20'>
-                    <div className='overflow-hidden rounded-(--radius) border border-border bg-background'>
-                      <div className='flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3.5 py-2'>
-                        <span className='truncate text-xs font-medium sub-heading'>Interactive example</span>
-                        <Badge size='sm' count='Try it' />
-                      </div>
-                      <div className='flex min-h-80 w-full min-w-0 flex-wrap items-center justify-center gap-4 overflow-x-auto bg-sidebar p-4'>
-                        {liveVariant ? (
-                          <DesignerPreviewBoundary key={liveVariant.name}>
-                            {liveVariant.render()}
-                          </DesignerPreviewBoundary>
-                        ) : (
-                          <p className='text-xs text-destructive' role='alert'>
-                            {requestedVariant
-                              ? `Configured demo variant “${requestedVariant}” is missing from ${targetDemoId}.`
-                              : `No live preview is registered for ${targetDemoId}.`}
-                          </p>
-                        )}
+                    <div className='min-w-0 space-y-3 w-full'>
+                      <div className='overflow-hidden rounded-(--radius) border border-border bg-background'>
+                        <div className='flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3.5 py-2'>
+                          <span className='truncate text-xs font-medium sub-heading'>Interactive example</span>
+                          <Badge size='sm' count='Try it' />
+                        </div>
+                        <div className='flex min-h-80 w-full min-w-0 flex-wrap items-center justify-center gap-4 overflow-x-auto bg-sidebar p-4'>
+                          {liveVariant ? (
+                            <DesignerPreviewBoundary key={liveVariant.name}>
+                              {liveVariant.render()}
+                            </DesignerPreviewBoundary>
+                          ) : (
+                            <p className='text-xs text-destructive' role='alert'>
+                              {requestedVariant
+                                ? `Configured demo variant “${requestedVariant}” is missing from ${targetDemoId}.`
+                                : `No live preview is registered for ${targetDemoId}.`}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className='grid grid-cols-1 items-start gap-6 lg:grid-cols-2'>
+                    <div className='min-w-0 space-y-4'>
+                      <DesignerGuidance blocks={section.blocks} practices={practices?.[title]} />
+                    </div>
+
+                    <div className='min-w-0 space-y-3 lg:sticky lg:top-20'>
+                      <div className='overflow-hidden rounded-(--radius) border border-border bg-background'>
+                        <div className='flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3.5 py-2'>
+                          <span className='truncate text-xs font-medium sub-heading'>Interactive example</span>
+                          <Badge size='sm' count='Try it' />
+                        </div>
+                        <div className='flex min-h-80 w-full min-w-0 flex-wrap items-center justify-center gap-4 overflow-x-auto bg-sidebar p-4'>
+                          {liveVariant ? (
+                            <DesignerPreviewBoundary key={liveVariant.name}>
+                              {liveVariant.render()}
+                            </DesignerPreviewBoundary>
+                          ) : (
+                            <p className='text-xs text-destructive' role='alert'>
+                              {requestedVariant
+                                ? `Configured demo variant “${requestedVariant}” is missing from ${targetDemoId}.`
+                                : `No live preview is registered for ${targetDemoId}.`}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
               ) : (
                 <DesignerGuidance blocks={section.blocks} practices={practices?.[title]} />
               )}

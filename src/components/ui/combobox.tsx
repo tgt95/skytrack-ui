@@ -4,7 +4,14 @@ import { CaretDownIcon, CaretUpDownIcon, CheckIcon, XIcon } from '@phosphor-icon
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/lib/focus-ring'
-import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/lib/control-sizes'
+import {
+  CONTROL_SIZE_CLASSES,
+  CONTROL_PADDING_X_CLASSES,
+  CONTROL_FONT_SIZE_CLASSES,
+  CONTROL_GAP_CLASSES,
+  CONTROL_CHILD_SVG_CLASSES,
+  type ControlSize
+} from '@/lib/control-sizes'
 
 /** Props of the `Combobox` root, generic over value type, `multiple` mode and item type. */
 export type ComboboxRootProps<
@@ -31,30 +38,41 @@ function ComboboxLabel({ className, ...props }: React.ComponentProps<typeof Base
 
 export const comboboxInputGroupVariants = cva(
   cn(
-    'relative flex w-full items-center gap-1 rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
+    'relative flex w-full items-center rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
     'focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
-    'has-[button]:px-1',
     'data-disabled:cursor-not-allowed data-disabled:opacity-50',
     'data-invalid:border-destructive data-invalid:ring-destructive/20'
   ),
   {
     variants: {
       size: {
-        xs: 'min-h-6 px-2',
-        sm: 'min-h-8 px-2',
-        default: 'min-h-9 px-2',
-        lg: 'min-h-10 px-2'
+        xs: 'min-h-6',
+        sm: 'min-h-8',
+        default: 'min-h-10',
+        lg: 'min-h-12'
       },
       shape: {
         input: '',
         chips: 'flex-wrap items-center'
       }
     },
-    compoundVariants: (['xs', 'sm', 'default', 'lg'] as const).map((size) => ({
-      size,
-      shape: 'input' as const,
-      class: CONTROL_SIZE_CLASSES[size]
-    })),
+    compoundVariants: (['xs', 'sm', 'default', 'lg'] as const).flatMap((size) => [
+      {
+        size,
+        shape: 'input' as const,
+        class: CONTROL_SIZE_CLASSES[size]
+      },
+      {
+        size,
+        shape: 'chips' as const,
+        class: cn(
+          CONTROL_PADDING_X_CLASSES[size],
+          CONTROL_FONT_SIZE_CLASSES[size],
+          CONTROL_GAP_CLASSES[size],
+          CONTROL_CHILD_SVG_CLASSES[size]
+        )
+      }
+    ]),
     defaultVariants: { size: 'default', shape: 'input' }
   }
 )
@@ -78,7 +96,7 @@ function ComboboxInput({ className, ...props }: React.ComponentProps<typeof Base
     <BaseCombobox.Input
       data-slot='combobox-input'
       className={cn(
-        'h-full min-w-0 flex-1 border-0 bg-transparent px-1 text-sm outline-hidden',
+        'h-full min-w-0 flex-1 border-0 bg-transparent px-0 text-inherit outline-hidden',
         'placeholder:text-muted-foreground',
         className
       )}
@@ -92,7 +110,7 @@ function ComboboxTrigger({ className, children, ...props }: React.ComponentProps
     <BaseCombobox.Trigger
       data-slot='combobox-trigger'
       className={cn(
-        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
+        'flex cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-pressed:bg-accent data-pressed:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
@@ -101,7 +119,7 @@ function ComboboxTrigger({ className, children, ...props }: React.ComponentProps
       )}
       {...props}
     >
-      {children ?? <CaretDownIcon className='size-4' />}
+      {children ?? <CaretDownIcon />}
     </BaseCombobox.Trigger>
   )
 }
@@ -113,12 +131,20 @@ function ComboboxTriggerButton({
   children,
   ...props
 }: React.ComponentProps<typeof BaseCombobox.Trigger> & { size?: ControlSize }) {
+  const hasIcon = React.Children.toArray(children).some(
+    (c) =>
+      React.isValidElement(c) &&
+      (c.type === ComboboxIcon ||
+        (c.props as { 'data-slot'?: string })?.['data-slot'] === 'combobox-icon' ||
+        c.type === CaretUpDownIcon)
+  )
+
   return (
     <BaseCombobox.Trigger
       data-slot='combobox-trigger-button'
       data-size={size ?? 'default'}
       className={cn(
-        'flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-(--radius) border border-input bg-background px-3 text-sm text-foreground shadow-xs transition-colors',
+        'flex w-full cursor-pointer items-center justify-between whitespace-nowrap rounded-(--radius) border border-input bg-background text-foreground shadow-xs transition-colors',
         'data-placeholder:text-muted-foreground',
         'hover:not-data-disabled:bg-accent hover:not-data-disabled:text-accent-foreground',
         'data-pressed:bg-accent data-pressed:text-accent-foreground',
@@ -129,7 +155,8 @@ function ComboboxTriggerButton({
       )}
       {...props}
     >
-      {children ?? <CaretUpDownIcon className='size-4 shrink-0 text-muted-foreground' />}
+      {children}
+      {!hasIcon && <CaretUpDownIcon className='shrink-0 text-muted-foreground' />}
     </BaseCombobox.Trigger>
   )
 }
@@ -138,10 +165,10 @@ function ComboboxIcon({ className, children, ...props }: React.ComponentProps<ty
   return (
     <BaseCombobox.Icon
       data-slot='combobox-icon'
-      className={cn('flex size-4 shrink-0 items-center justify-center text-muted-foreground', className)}
+      className={cn('flex shrink-0 items-center justify-center text-muted-foreground', className)}
       {...props}
     >
-      {children ?? <CaretUpDownIcon className='size-4' />}
+      {children ?? <CaretUpDownIcon />}
     </BaseCombobox.Icon>
   )
 }
@@ -151,7 +178,7 @@ function ComboboxClear({ className, children, ...props }: React.ComponentProps<t
     <BaseCombobox.Clear
       data-slot='combobox-clear'
       className={cn(
-        'flex size-6 cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
+        'flex cursor-pointer shrink-0 items-center justify-center rounded-(--radius) border-0 bg-transparent p-0 text-muted-foreground transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         focusRing,
@@ -159,7 +186,7 @@ function ComboboxClear({ className, children, ...props }: React.ComponentProps<t
       )}
       {...props}
     >
-      {children ?? <XIcon className='size-4' />}
+      {children ?? <XIcon />}
     </BaseCombobox.Clear>
   )
 }
