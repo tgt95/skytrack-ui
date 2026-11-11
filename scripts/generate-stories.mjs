@@ -5,6 +5,7 @@
  * Never hand-write the 37 story files; this script owns them.
  */
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import path from 'node:path'
 
 const root = path.resolve(import.meta.dirname, '..')
@@ -153,4 +154,15 @@ if (failures.length > 0) {
   console.error(`generate-stories: failed to parse ${failures.length} demo file(s):\n- ${failures.join('\n- ')}`)
   process.exit(1)
 }
+
+// Generated files must satisfy the package Prettier config. Run the local
+// Prettier binary so CI never fails on generator output.
+execFileSync(
+  process.execPath,
+  [path.join(root, 'node_modules', 'prettier', 'bin', 'prettier.cjs'), '--write', outDir],
+  {
+    stdio: 'inherit'
+  }
+)
+
 console.log(`generate-stories: wrote ${storyCount} story files from ${files.length} demos`)

@@ -369,10 +369,7 @@ function DataTable<TData extends RowData>({
                         >
                           <span className='inline-flex items-center gap-1.5'>
                             <FlexRender header={header} />
-                            <SortIcon
-                              aria-hidden='true'
-                              className='size-3.5 shrink-0'
-                            />
+                            <SortIcon aria-hidden='true' className='size-3.5 shrink-0' />
                           </span>
                         </Button>
                       ) : (

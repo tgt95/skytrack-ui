@@ -81,11 +81,7 @@ export function MultiPaneShellMock() {
         </div>
 
         <div className='w-72'>
-          <Search
-            size='sm'
-            placeholder='Search invoice #, customer ID, or tag...'
-            className='h-7 text-xs'
-          />
+          <Search size='sm' placeholder='Search invoice #, customer ID, or tag...' className='h-7 text-xs' />
         </div>
 
         <div className='flex items-center gap-2'>
@@ -117,9 +113,7 @@ export function MultiPaneShellMock() {
                           <Icon className='size-3.5' />
                           <span>{folder.label}</span>
                         </SidebarMenuButton>
-                        {folder.count && (
-                          <SidebarMenuBadge className='text-[10px]'>{folder.count}</SidebarMenuBadge>
-                        )}
+                        {folder.count && <SidebarMenuBadge className='text-[10px]'>{folder.count}</SidebarMenuBadge>}
                       </SidebarMenuItem>
                     )
                   })}
@@ -177,10 +171,15 @@ export function MultiPaneShellMock() {
             <div>
               <div className='flex items-center gap-2'>
                 <h3 className='text-sm font-bold text-foreground'>{activeItem.title}</h3>
-                <Badge size='sm' count={activeItem.priority} status={activeItem.priority === 'Urgent' ? 'error' : 'outline'} />
+                <Badge
+                  size='sm'
+                  count={activeItem.priority}
+                  status={activeItem.priority === 'Urgent' ? 'error' : 'outline'}
+                />
               </div>
               <p className='mt-0.5 text-xs text-muted-foreground'>
-                Account: <span className='font-medium text-foreground'>{activeItem.customer}</span> · Created {activeItem.time}
+                Account: <span className='font-medium text-foreground'>{activeItem.customer}</span> · Created{' '}
+                {activeItem.time}
               </p>
             </div>
 
@@ -252,7 +251,8 @@ export function MultiPaneShellMock() {
 export const demo: DemoMeta = {
   id: 'multi-pane-shell',
   title: 'Multi-Pane / Three-Column Shell',
-  description: 'Three-column master-detail layout enabling rapid triage, search, and deep inspection without page context loss.',
+  description:
+    'Three-column master-detail layout enabling rapid triage, search, and deep inspection without page context loss.',
   group: 'UI shell',
   variants: [
     {

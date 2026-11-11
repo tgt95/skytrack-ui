@@ -1,13 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import {
-  CodeBlock,
-  CodeBlockActions,
-  CodeBlockContent,
-  CodeBlockLine,
-  CodeBlockLineNumbersToggle
-} from './code-block'
+import { CodeBlock, CodeBlockActions, CodeBlockContent, CodeBlockLine, CodeBlockLineNumbersToggle } from './code-block'
 
 describe('CodeBlock line index / line numbers API', () => {
   it('renders without line numbers by default', () => {

@@ -193,9 +193,6 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
-  body[data-showcase-view='style-overview'] {
-    background-color: var(--secondary);
-  }
 
   /* Explicit mono family for code-like elements. Preflight references
      `--default-mono-font-family`, which is only emitted as a `var()` chain in the

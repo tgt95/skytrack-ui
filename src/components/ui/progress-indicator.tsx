@@ -67,10 +67,7 @@ function ProgressStepIndicator({
             data-status={status}
             aria-current={isCurrent ? 'step' : undefined}
             aria-disabled={status === 'disabled' || undefined}
-            className={cn(
-              'min-w-0',
-              orientation === 'horizontal' ? 'flex flex-1 flex-col gap-2' : 'flex gap-3'
-            )}
+            className={cn('min-w-0', orientation === 'horizontal' ? 'flex flex-1 flex-col gap-2' : 'flex gap-3')}
           >
             <div
               className={cn(

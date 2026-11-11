@@ -1,0 +1,5 @@
+@layer base {
+  body[data-showcase-view='style-overview'] {
+    background-color: var(--secondary);
+  }
+}

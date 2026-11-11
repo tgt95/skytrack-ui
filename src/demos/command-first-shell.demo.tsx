@@ -12,14 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import {
-  Command,
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem
-} from '@/components/ui/command'
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command'
 import type { DemoMeta } from '@/showcase/demo'
 
 export function CommandFirstShellMock() {
@@ -60,12 +53,7 @@ export function CommandFirstShellMock() {
         </div>
 
         <div className='flex items-center gap-2'>
-          <Button
-            size='sm'
-            variant='outline'
-            onClick={() => setPaletteOpen(!paletteOpen)}
-            className='h-7 text-xs'
-          >
+          <Button size='sm' variant='outline' onClick={() => setPaletteOpen(!paletteOpen)} className='h-7 text-xs'>
             {paletteOpen ? 'Close Overlay' : 'Open Palette'}
           </Button>
           <Avatar size='xs'>

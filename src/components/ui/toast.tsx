@@ -126,19 +126,14 @@ function ToastClose({ className, size, variant, children, ...props }: ToastClose
       ? 'icon'
       : size === 'sm' || size === 'icon'
         ? 'icon-sm'
-        : (size as ButtonProps['size']) ?? 'icon-sm'
-    : size ?? 'sm'
+        : ((size as ButtonProps['size']) ?? 'icon-sm')
+    : (size ?? 'sm')
 
   return (
     <BaseToast.Close
       data-slot='toast-close'
       className={className}
-      render={
-        <Button
-          variant={variant ?? 'outline'}
-          size={resolvedSize}
-        />
-      }
+      render={<Button variant={variant ?? 'outline'} size={resolvedSize} />}
       {...props}
     >
       {children ?? <XIcon className='size-4' />}
@@ -148,26 +143,14 @@ function ToastClose({ className, size, variant, children, ...props }: ToastClose
 
 type ToastActionProps = React.ComponentProps<typeof BaseToast.Action> & Pick<ButtonProps, 'variant' | 'size'>
 
-function ToastAction({
-  className,
-  size,
-  variant,
-  children,
-  ...props
-}: ToastActionProps) {
-  const resolvedSize: ButtonProps['size'] =
-    size === 'icon' ? 'icon-sm' : (size as ButtonProps['size']) ?? 'sm'
+function ToastAction({ className, size, variant, children, ...props }: ToastActionProps) {
+  const resolvedSize: ButtonProps['size'] = size === 'icon' ? 'icon-sm' : ((size as ButtonProps['size']) ?? 'sm')
 
   return (
     <BaseToast.Action
       data-slot='toast-action'
       className={className}
-      render={
-        <Button
-          variant={variant ?? 'outline'}
-          size={resolvedSize}
-        />
-      }
+      render={<Button variant={variant ?? 'outline'} size={resolvedSize} />}
       {...props}
     >
       {children}

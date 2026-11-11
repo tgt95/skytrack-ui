@@ -58,6 +58,32 @@ for (const component of ['popover', 'preview-card', 'navigation-menu', 'toast'])
   }
 }
 
+// Every UI component ships one knowledge guide. Keep the two sets in lockstep so
+// a new component cannot land without the documentation agents read.
+const uiDir = path.join(src, 'components', 'ui')
+const guideDir = path.join(root, 'skills', 'skytrack-ui', 'references', 'knowledge', 'components')
+const componentIds = fs
+  .readdirSync(uiDir)
+  .filter((file) => file.endsWith('.tsx') && !file.includes('.test.'))
+  .map((file) => file.replace(/\.tsx$/, ''))
+  .sort()
+const guideIds = fs
+  .readdirSync(guideDir)
+  .filter((file) => file.endsWith('.md') && file !== '_template.md')
+  .map((file) => file.replace(/\.md$/, ''))
+  .sort()
+
+for (const id of componentIds.filter((id) => !guideIds.includes(id))) {
+  failures.push(
+    `skills/skytrack-ui/references/knowledge/components/${id}.md: missing guide for src/components/ui/${id}.tsx`
+  )
+}
+for (const id of guideIds.filter((id) => !componentIds.includes(id))) {
+  failures.push(
+    `skills/skytrack-ui/references/knowledge/components/${id}.md: guide has no matching src/components/ui/${id}.tsx`
+  )
+}
+
 if (failures.length) {
   console.error(failures.map((failure) => `FAIL  ${failure}`).join('\n'))
   process.exitCode = 1

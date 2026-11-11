@@ -247,10 +247,8 @@ function CodeBlockContent({
   const size = context.size
   const floatingActions = context.floatingActions
 
-  const lineNumbers =
-    propLineNumbers ?? propLineIndex ?? propShowLineNumbers ?? context.lineNumbers ?? false
-  const rawStartLine =
-    propStartLine ?? propStartLineIndex ?? context.startLine ?? 1
+  const lineNumbers = propLineNumbers ?? propLineIndex ?? propShowLineNumbers ?? context.lineNumbers ?? false
+  const rawStartLine = propStartLine ?? propStartLineIndex ?? context.startLine ?? 1
   const validStartLine = Number.isFinite(rawStartLine) && rawStartLine > 0 ? Math.floor(rawStartLine) : 1
   const childLines = typeof children === 'string' ? children.split('\n') : React.Children.toArray(children)
   const lastLineNumber = validStartLine + Math.max(0, childLines.length - 1)
@@ -319,13 +317,7 @@ export type CodeBlockLineProps = React.ComponentProps<'span'> & {
   'data-line-number'?: string
 }
 
-function CodeBlockLine({
-  variant = 'default',
-  lineNumber,
-  className,
-  children,
-  ...props
-}: CodeBlockLineProps) {
+function CodeBlockLine({ variant = 'default', lineNumber, className, children, ...props }: CodeBlockLineProps) {
   const { size } = React.useContext(CodeBlockContext)
   const resolvedLineNumber = lineNumber ?? props['data-line-number']
   const hasLineNumber = resolvedLineNumber !== undefined

@@ -382,7 +382,7 @@ export const PATTERN_EXAMPLE_TEACHING: Record<PatternId, Record<string, PatternE
         'Use it for a low-risk confirmation users do not need to act on; keep important or persistent information in a more durable location.',
       consider: 'Do not use transient feedback for a required decision or critical error that users may miss.'
     },
-    'Keep field guidance visible on page load': {
+    'Keep field guidance close to its control': {
       meaning:
         'A callout gives persistent, non-actionable guidance beside the form field it explains as soon as the page loads.',
       decision:
@@ -390,7 +390,7 @@ export const PATTERN_EXAMPLE_TEACHING: Record<PatternId, Record<string, PatternE
       consider:
         'Keep the message brief, with no dismiss control or action button, and do not use success or error status.'
     },
-    'Review accumulated notifications in a panel': {
+    'Review sample notifications in a panel': {
       meaning: 'A notification panel collects updates for later review rather than interrupting each task.',
       decision:
         'Use it for system-generated or accumulated updates users may need to revisit; use inline messages for task-specific feedback.',

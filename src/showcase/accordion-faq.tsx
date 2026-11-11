@@ -34,7 +34,12 @@ export function AccountFaqAccordion({
   disabled = false
 }: AccountFaqAccordionProps) {
   return (
-    <Accordion className={className} defaultValue={defaultOpen ? ['account-security'] : undefined} multiple={multiple} disabled={disabled}>
+    <Accordion
+      className={className}
+      defaultValue={defaultOpen ? ['account-security'] : undefined}
+      multiple={multiple}
+      disabled={disabled}
+    >
       {ACCOUNT_FAQ.map((item) => (
         <AccordionItem key={item.id} value={item.id}>
           <AccordionTrigger

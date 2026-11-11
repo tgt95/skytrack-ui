@@ -61,9 +61,30 @@ export function CombinedShellMock() {
   ]
 
   const vms: VM[] = [
-    { id: 'api-prod-01', name: 'api-prod-01', zone: 'us-east-1a', type: 'c6g.xlarge', ip: '54.210.12.8', state: 'Running' },
-    { id: 'worker-pool-04', name: 'worker-pool-04', zone: 'us-east-1b', type: 'm6i.large', ip: '54.210.14.90', state: 'Running' },
-    { id: 'db-replica-02', name: 'db-replica-02', zone: 'us-east-1c', type: 'r6g.2xlarge', ip: '10.0.4.15', state: 'Stopped' }
+    {
+      id: 'api-prod-01',
+      name: 'api-prod-01',
+      zone: 'us-east-1a',
+      type: 'c6g.xlarge',
+      ip: '54.210.12.8',
+      state: 'Running'
+    },
+    {
+      id: 'worker-pool-04',
+      name: 'worker-pool-04',
+      zone: 'us-east-1b',
+      type: 'm6i.large',
+      ip: '54.210.14.90',
+      state: 'Running'
+    },
+    {
+      id: 'db-replica-02',
+      name: 'db-replica-02',
+      zone: 'us-east-1c',
+      type: 'r6g.2xlarge',
+      ip: '10.0.4.15',
+      state: 'Stopped'
+    }
   ]
 
   const activeVm = vms.find((v) => v.id === selectedVm) ?? vms[0]
@@ -180,9 +201,7 @@ export function CombinedShellMock() {
                           <Icon className='size-3.5' />
                           <span>{item.label}</span>
                         </SidebarMenuButton>
-                        {item.count && (
-                          <SidebarMenuBadge className='text-[10px]'>{item.count}</SidebarMenuBadge>
-                        )}
+                        {item.count && <SidebarMenuBadge className='text-[10px]'>{item.count}</SidebarMenuBadge>}
                       </SidebarMenuItem>
                     )
                   })}
@@ -233,7 +252,12 @@ export function CombinedShellMock() {
                 <div className='border-b border-border pb-2'>
                   <div className='text-xs sub-heading text-muted-foreground'>Inspector</div>
                   <div className='font-mono font-bold text-foreground truncate mt-0.5'>{activeVm.name}</div>
-                  <Badge size='sm' count={activeVm.state} status={activeVm.state === 'Running' ? 'success' : 'outline'} className='mt-1' />
+                  <Badge
+                    size='sm'
+                    count={activeVm.state}
+                    status={activeVm.state === 'Running' ? 'success' : 'outline'}
+                    className='mt-1'
+                  />
                 </div>
 
                 <div className='space-y-2 text-xs'>
@@ -277,7 +301,8 @@ export function CombinedShellMock() {
 export const demo: DemoMeta = {
   id: 'combined-shell',
   title: 'Combined / Hybrid Shell',
-  description: 'Hybrid top-and-left shell separating macro strategic suite switcher from module-level tactical navigation.',
+  description:
+    'Hybrid top-and-left shell separating macro strategic suite switcher from module-level tactical navigation.',
   group: 'UI shell',
   variants: [
     {

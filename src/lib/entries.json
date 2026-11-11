@@ -517,16 +517,8 @@
       "prefix": "Accordion"
     },
     "./alert": {
-      "values": [
-        "Alert",
-        "AlertAction",
-        "AlertDescription",
-        "AlertTitle",
-        "alertVariants"
-      ],
-      "types": [
-        "AlertProps"
-      ],
+      "values": ["Alert", "AlertAction", "AlertDescription", "AlertTitle", "alertVariants"],
+      "types": ["AlertProps"],
       "prefix": "Alert"
     },
     "./alert-dialog": {
@@ -545,10 +537,7 @@
         "AlertDialogViewport",
         "createHandle"
       ],
-      "types": [
-        "AlertDialogButtonProps",
-        "AlertDialogChangeEventDetails"
-      ],
+      "types": ["AlertDialogButtonProps", "AlertDialogChangeEventDetails"],
       "prefix": "AlertDialog"
     },
     "./attachment": {
@@ -602,28 +591,17 @@
         "useAutocompleteFilter",
         "useAutocompleteFilteredItems"
       ],
-      "types": [
-        "AutocompleteRootProps"
-      ],
+      "types": ["AutocompleteRootProps"],
       "prefix": "Autocomplete"
     },
     "./avatar": {
-      "values": [
-        "Avatar",
-        "AvatarFallback",
-        "AvatarImage"
-      ],
+      "values": ["Avatar", "AvatarFallback", "AvatarImage"],
       "types": [],
       "prefix": "Avatar"
     },
     "./badge": {
-      "values": [
-        "Badge",
-        "badgeVariants"
-      ],
-      "types": [
-        "BadgeProps"
-      ],
+      "values": ["Badge", "badgeVariants"],
+      "types": ["BadgeProps"],
       "prefix": "Badge"
     },
     "./breadcrumb": {
@@ -640,25 +618,13 @@
       "prefix": "Breadcrumb"
     },
     "./button": {
-      "values": [
-        "Button",
-        "buttonVariants",
-        "controlSizeClasses",
-        "focusRing"
-      ],
-      "types": [
-        "ButtonProps",
-        "ControlSize"
-      ],
+      "values": ["Button", "buttonVariants", "controlSizeClasses", "focusRing"],
+      "types": ["ButtonProps", "ControlSize"],
       "prefix": "Button"
     },
     "./calendar": {
-      "values": [
-        "Calendar"
-      ],
-      "types": [
-        "CalendarProps"
-      ],
+      "values": ["Calendar"],
+      "types": ["CalendarProps"],
       "prefix": "Calendar"
     },
     "./chart": {
@@ -670,24 +636,16 @@
         "ChartTooltipContent",
         "useChart"
       ],
-      "types": [
-        "ChartConfig",
-        "ChartContainerProps"
-      ],
+      "types": ["ChartConfig", "ChartContainerProps"],
       "prefix": "Chart"
     },
     "./checkbox": {
-      "values": [
-        "CheckboxIndicator",
-        "CheckboxRoot"
-      ],
+      "values": ["CheckboxIndicator", "CheckboxRoot"],
       "types": [],
       "prefix": "Checkbox"
     },
     "./checkbox-group": {
-      "values": [
-        "CheckboxGroup"
-      ],
+      "values": ["CheckboxGroup"],
       "types": [],
       "prefix": "CheckboxGroup"
     },
@@ -716,22 +674,12 @@
       "prefix": "CodeBlock"
     },
     "./code-block-tree": {
-      "values": [
-        "CodeBlockTree"
-      ],
-      "types": [
-        "CodeBlockTreeNodeContext",
-        "CodeBlockTreeNodeKind",
-        "CodeBlockTreeProps"
-      ],
+      "values": ["CodeBlockTree"],
+      "types": ["CodeBlockTreeNodeContext", "CodeBlockTreeNodeKind", "CodeBlockTreeProps"],
       "prefix": "CodeBlockTree"
     },
     "./collapsible": {
-      "values": [
-        "Collapsible",
-        "CollapsiblePanel",
-        "CollapsibleTrigger"
-      ],
+      "values": ["Collapsible", "CollapsiblePanel", "CollapsibleTrigger"],
       "types": [],
       "prefix": "Collapsible"
     },
@@ -769,9 +717,7 @@
         "useComboboxFilter",
         "useComboboxFilteredItems"
       ],
-      "types": [
-        "ComboboxRootProps"
-      ],
+      "types": ["ComboboxRootProps"],
       "prefix": "Combobox"
     },
     "./command": {
@@ -813,15 +759,11 @@
         "ContextMenuTrigger",
         "contextMenuItemVariants"
       ],
-      "types": [
-        "ContextMenuItemVariantProps"
-      ],
+      "types": ["ContextMenuItemVariantProps"],
       "prefix": "ContextMenu"
     },
     "./data-table": {
-      "values": [
-        "DataTable"
-      ],
+      "values": ["DataTable"],
       "types": [
         "DataTableColumnDef",
         "DataTableExpandedRowProps",
@@ -833,16 +775,8 @@
       "prefix": "DataTable"
     },
     "./date-picker": {
-      "values": [
-        "DatePicker",
-        "DateRangePicker",
-        "DateWeekPicker"
-      ],
-      "types": [
-        "DatePickerProps",
-        "DateRangePickerProps",
-        "DateWeekPickerProps"
-      ],
+      "values": ["DatePicker", "DateRangePicker", "DateWeekPicker"],
+      "types": ["DatePickerProps", "DateRangePickerProps", "DateWeekPickerProps"],
       "prefix": "DatePicker"
     },
     "./dialog": {
@@ -861,10 +795,7 @@
         "DialogViewport",
         "createHandle"
       ],
-      "types": [
-        "DialogButtonProps",
-        "DialogChangeEventDetails"
-      ],
+      "types": ["DialogButtonProps", "DialogChangeEventDetails"],
       "prefix": "Dialog"
     },
     "./drawer": {
@@ -888,21 +819,12 @@
         "drawerPopupVariants",
         "drawerSideVariants"
       ],
-      "types": [
-        "DrawerButtonProps",
-        "DrawerChangeEventDetails",
-        "DrawerSideProps",
-        "DrawerSnapPoint"
-      ],
+      "types": ["DrawerButtonProps", "DrawerChangeEventDetails", "DrawerSideProps", "DrawerSnapPoint"],
       "prefix": "Drawer"
     },
     "./dropzone": {
-      "values": [
-        "Dropzone"
-      ],
-      "types": [
-        "DropzoneProps"
-      ],
+      "values": ["Dropzone"],
+      "types": ["DropzoneProps"],
       "prefix": "Dropzone"
     },
     "./field": {
@@ -922,42 +844,23 @@
       "prefix": "Field"
     },
     "./fieldset": {
-      "values": [
-        "FieldsetLegend",
-        "FieldsetRoot"
-      ],
+      "values": ["FieldsetLegend", "FieldsetRoot"],
       "types": [],
       "prefix": "Fieldset"
     },
     "./form": {
-      "values": [
-        "Form"
-      ],
+      "values": ["Form"],
       "types": [],
       "prefix": "Form"
     },
     "./inline-edit": {
-      "values": [
-        "InlineEdit",
-        "InlineEditInput",
-        "InlineEditTrigger"
-      ],
-      "types": [
-        "InlineEditInputProps",
-        "InlineEditRootProps",
-        "InlineEditTriggerProps"
-      ],
+      "values": ["InlineEdit", "InlineEditInput", "InlineEditTrigger"],
+      "types": ["InlineEditInputProps", "InlineEditRootProps", "InlineEditTriggerProps"],
       "prefix": "InlineEdit"
     },
     "./input": {
-      "values": [
-        "Input",
-        "InputAdornment"
-      ],
-      "types": [
-        "InputAdornmentProps",
-        "InputProps"
-      ],
+      "values": ["Input", "InputAdornment"],
+      "types": ["InputAdornmentProps", "InputProps"],
       "prefix": "Input"
     },
     "./menu": {
@@ -986,27 +889,16 @@
         "createMenuHandle",
         "menuItemVariants"
       ],
-      "types": [
-        "MenuItemVariantProps",
-        "MenuRootHandle"
-      ],
+      "types": ["MenuItemVariantProps", "MenuRootHandle"],
       "prefix": "Menu"
     },
     "./menubar": {
-      "values": [
-        "Menubar"
-      ],
+      "values": ["Menubar"],
       "types": [],
       "prefix": "Menubar"
     },
     "./meter": {
-      "values": [
-        "Meter",
-        "MeterIndicator",
-        "MeterLabel",
-        "MeterTrack",
-        "MeterValue"
-      ],
+      "values": ["Meter", "MeterIndicator", "MeterLabel", "MeterTrack", "MeterValue"],
       "types": [],
       "prefix": "Meter"
     },
@@ -1043,21 +935,13 @@
       "prefix": "NumberField"
     },
     "./otp-field": {
-      "values": [
-        "OTPField",
-        "OTPFieldInput",
-        "OTPFieldSeparator"
-      ],
+      "values": ["OTPField", "OTPFieldInput", "OTPFieldSeparator"],
       "types": [],
       "prefix": "OTPField"
     },
     "./page-header": {
-      "values": [
-        "PageHeader"
-      ],
-      "types": [
-        "PageHeaderProps"
-      ],
+      "values": ["PageHeader"],
+      "types": ["PageHeaderProps"],
       "prefix": "PageHeader"
     },
     "./pagination": {
@@ -1088,10 +972,7 @@
         "PopoverViewport",
         "createHandle"
       ],
-      "types": [
-        "PopoverChangeEventDetails",
-        "PopoverTriggerProps"
-      ],
+      "types": ["PopoverChangeEventDetails", "PopoverTriggerProps"],
       "prefix": "Popover"
     },
     "./preview-card": {
@@ -1106,27 +987,16 @@
         "PreviewCardViewport",
         "createHandle"
       ],
-      "types": [
-        "PreviewCardChangeEventDetails",
-        "PreviewCardTriggerProps"
-      ],
+      "types": ["PreviewCardChangeEventDetails", "PreviewCardTriggerProps"],
       "prefix": "PreviewCard"
     },
     "./progress": {
-      "values": [
-        "Progress",
-        "ProgressIndicator",
-        "ProgressLabel",
-        "ProgressTrack",
-        "ProgressValue"
-      ],
+      "values": ["Progress", "ProgressIndicator", "ProgressLabel", "ProgressTrack", "ProgressValue"],
       "types": [],
       "prefix": "Progress"
     },
     "./progress-indicator": {
-      "values": [
-        "ProgressStepIndicator"
-      ],
+      "values": ["ProgressStepIndicator"],
       "types": [
         "ProgressIndicatorAlignment",
         "ProgressIndicatorOrientation",
@@ -1137,23 +1007,13 @@
       "prefix": "ProgressIndicator"
     },
     "./radio": {
-      "values": [
-        "RadioGroup",
-        "RadioIndicator",
-        "RadioRoot"
-      ],
+      "values": ["RadioGroup", "RadioIndicator", "RadioRoot"],
       "types": [],
       "prefix": "Radio"
     },
     "./resizable": {
-      "values": [
-        "ResizableHandle",
-        "ResizablePanel",
-        "ResizablePanelGroup"
-      ],
-      "types": [
-        "ResizableHandleProps"
-      ],
+      "values": ["ResizableHandle", "ResizablePanel", "ResizablePanelGroup"],
+      "types": ["ResizableHandleProps"],
       "prefix": "Resizable"
     },
     "./scroll-area": {
@@ -1169,12 +1029,8 @@
       "prefix": "ScrollArea"
     },
     "./search": {
-      "values": [
-        "Search"
-      ],
-      "types": [
-        "SearchProps"
-      ],
+      "values": ["Search"],
+      "types": ["SearchProps"],
       "prefix": "Search"
     },
     "./select": {
@@ -1200,15 +1056,11 @@
         "SelectValue",
         "selectTriggerVariants"
       ],
-      "types": [
-        "SelectRootProps"
-      ],
+      "types": ["SelectRootProps"],
       "prefix": "Select"
     },
     "./separator": {
-      "values": [
-        "Separator"
-      ],
+      "values": ["Separator"],
       "types": [],
       "prefix": "Separator"
     },
@@ -1241,12 +1093,7 @@
         "SidebarTrigger",
         "useSidebar"
       ],
-      "types": [
-        "SidebarMenuButtonProps",
-        "SidebarMenuSubButtonProps",
-        "SidebarProps",
-        "SidebarProviderProps"
-      ],
+      "types": ["SidebarMenuButtonProps", "SidebarMenuSubButtonProps", "SidebarProps", "SidebarProviderProps"],
       "prefix": "Sidebar"
     },
     "./slider": {
@@ -1263,30 +1110,13 @@
       "prefix": "Slider"
     },
     "./switch": {
-      "values": [
-        "Switch",
-        "SwitchThumb",
-        "switchThumbVariants",
-        "switchVariants"
-      ],
+      "values": ["Switch", "SwitchThumb", "switchThumbVariants", "switchVariants"],
       "types": [],
       "prefix": "Switch"
     },
     "./tabs": {
-      "values": [
-        "Tabs",
-        "TabsContent",
-        "TabsIndicator",
-        "TabsList",
-        "TabsPanel",
-        "TabsTab",
-        "TabsTrigger"
-      ],
-      "types": [
-        "TabsIndicatorVariantProps",
-        "TabsListVariantProps",
-        "TabsTabVariantProps"
-      ],
+      "values": ["Tabs", "TabsContent", "TabsIndicator", "TabsList", "TabsPanel", "TabsTab", "TabsTrigger"],
+      "types": ["TabsIndicatorVariantProps", "TabsListVariantProps", "TabsTabVariantProps"],
       "prefix": "Tabs"
     },
     "./toast": {
@@ -1307,24 +1137,16 @@
         "toastRootVariants",
         "useToastManager"
       ],
-      "types": [
-        "ToastRootProps"
-      ],
+      "types": ["ToastRootProps"],
       "prefix": "Toast"
     },
     "./toggle": {
-      "values": [
-        "Toggle",
-        "toggleVariants"
-      ],
+      "values": ["Toggle", "toggleVariants"],
       "types": [],
       "prefix": "Toggle"
     },
     "./toggle-group": {
-      "values": [
-        "ToggleGroup",
-        "ToggleGroupContext"
-      ],
+      "values": ["ToggleGroup", "ToggleGroupContext"],
       "types": [],
       "prefix": "ToggleGroup"
     },
@@ -1338,9 +1160,7 @@
         "ToolbarSeparator",
         "toolbarButtonVariants"
       ],
-      "types": [
-        "ToolbarButtonVariantProps"
-      ],
+      "types": ["ToolbarButtonVariantProps"],
       "prefix": "Toolbar"
     },
     "./tooltip": {
@@ -1355,10 +1175,7 @@
         "TooltipViewport",
         "createHandle"
       ],
-      "types": [
-        "TooltipChangeEventDetails",
-        "TooltipTriggerProps"
-      ],
+      "types": ["TooltipChangeEventDetails", "TooltipTriggerProps"],
       "prefix": "Tooltip"
     }
   }

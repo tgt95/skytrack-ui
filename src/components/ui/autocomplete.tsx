@@ -22,10 +22,7 @@ function Autocomplete<ItemValue>(props: AutocompleteRootProps<ItemValue>) {
 }
 
 export const autocompleteInputVariants = cva(
-  cn(
-    'w-full min-w-0 border-0 bg-transparent text-foreground outline-hidden',
-    'placeholder:text-muted-foreground'
-  ),
+  cn('w-full min-w-0 border-0 bg-transparent text-foreground outline-hidden', 'placeholder:text-muted-foreground'),
   {
     variants: {
       /** `group` = input inside `AutocompleteInputGroup`, `standalone` = bordered input. */

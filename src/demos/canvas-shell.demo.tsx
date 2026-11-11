@@ -179,7 +179,9 @@ export function CanvasShellMock() {
                 }
               }}
               className={`w-64 cursor-pointer rounded-(--radius) border bg-card p-3 shadow-xs transition-all outline-hidden ${
-                selectedNode === 'trigger' ? 'border-primary ring-2 ring-primary/20' : 'border-border hover:border-border/80'
+                selectedNode === 'trigger'
+                  ? 'border-primary ring-2 ring-primary/20'
+                  : 'border-border hover:border-border/80'
               }`}
             >
               <div className='flex items-center justify-between'>
@@ -210,7 +212,9 @@ export function CanvasShellMock() {
                 }
               }}
               className={`w-64 cursor-pointer rounded-(--radius) border bg-card p-3 shadow-xs transition-all outline-hidden ${
-                selectedNode === 'action' ? 'border-primary ring-2 ring-primary/20' : 'border-border hover:border-border/80'
+                selectedNode === 'action'
+                  ? 'border-primary ring-2 ring-primary/20'
+                  : 'border-border hover:border-border/80'
               }`}
             >
               <div className='flex items-center justify-between'>
@@ -233,7 +237,12 @@ export function CanvasShellMock() {
               <h4 className='font-bold text-foreground text-sm mt-0.5'>
                 {selectedNode === 'trigger' ? 'Webhook Listener' : 'CRM Dispatcher'}
               </h4>
-              <Badge size='sm' count={selectedNode === 'trigger' ? 'Event Source' : 'Ready'} status='outline' className='mt-1' />
+              <Badge
+                size='sm'
+                count={selectedNode === 'trigger' ? 'Event Source' : 'Ready'}
+                status='outline'
+                className='mt-1'
+              />
             </div>
 
             <div className='space-y-2.5 text-xs'>
@@ -248,12 +257,7 @@ export function CanvasShellMock() {
               </FieldRoot>
               <FieldRoot>
                 <FieldLabel className='text-[10px] text-muted-foreground'>Retry Interval</FieldLabel>
-                <FieldControl
-                  size='sm'
-                  value='3 Retries (Backoff: 2s)'
-                  readOnly
-                  className='h-7 text-[10px]'
-                />
+                <FieldControl size='sm' value='3 Retries (Backoff: 2s)' readOnly className='h-7 text-[10px]' />
               </FieldRoot>
               <div>
                 <span className='text-muted-foreground block text-[10px] mb-1 font-medium'>Payload Mapping</span>
@@ -298,7 +302,8 @@ export function CanvasShellMock() {
 export const demo: DemoMeta = {
   id: 'canvas-shell',
   title: 'Workspace / Canvas-centric Shell',
-  description: 'Infinite visual canvas with docked toolbars and property inspector for nodal pipelines and visual editors.',
+  description:
+    'Infinite visual canvas with docked toolbars and property inspector for nodal pipelines and visual editors.',
   group: 'UI shell',
   variants: [
     {

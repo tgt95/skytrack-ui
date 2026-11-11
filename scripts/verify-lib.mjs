@@ -24,6 +24,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = path.join(root, 'dist-lib')
 const uiDir = path.join(root, 'src/components/ui')
+const libDir = path.join(root, 'src/lib')
 
 let failures = 0
 const ok = (msg) => console.log(`  PASS  ${msg}`)
@@ -200,23 +201,38 @@ const classPosition = (source) => {
   }
   return spans
 }
-for (const file of fs.readdirSync(uiDir).sort()) {
-  if (!file.endsWith('.tsx')) continue
-  const source = fs.readFileSync(path.join(uiDir, file), 'utf8')
-  // Strip comments so commented-out code (e.g. `// buttonVariants({ … size ?? "icon-sm" })`)
-  // can never harvest phantom class tokens. Runs before class-position scanning.
-  const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')
-  for (const span of classPosition(code)) {
-    for (const literal of span.matchAll(/"([^"\n]*)"|'([^'\n]*)'/g)) {
-      const text = literal[1] ?? literal[2] ?? ''
-      const before = span.slice(0, literal.index).trimEnd()
-      const after = span.slice(literal.index + literal[0].length)
-      if (/^\s*:/.test(after) || before.endsWith('[')) continue // object/computed key, e.g. `"icon-sm":` or `sizes['icon-sm']`
-      if (/[-:]/.test(text) && !/[<>{}()="']/.test(text)) {
-        for (const token of text.split(/\s+/)) {
-          if (token && token.length <= 120 && /^[-[:a-z@[]/.test(token)) candidates.add(token)
+for (const dir of [uiDir, libDir]) {
+  for (const file of fs.readdirSync(dir).sort()) {
+    if (!/\.(ts|tsx)$/.test(file) || /\.(test|spec)\./.test(file)) continue
+    const source = fs.readFileSync(path.join(dir, file), 'utf8')
+    // Strip comments so commented-out code (e.g. `// buttonVariants({ … size ?? "icon-sm" })`)
+    // can never harvest phantom class tokens. Runs before class-position scanning.
+    const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')
+    for (const span of classPosition(code)) {
+      for (const literal of span.matchAll(/"([^"\n]*)"|'([^'\n]*)'/g)) {
+        const text = literal[1] ?? literal[2] ?? ''
+        const before = span.slice(0, literal.index).trimEnd()
+        const after = span.slice(literal.index + literal[0].length)
+        if (/^\s*:/.test(after) || before.endsWith('[')) continue // object/computed key, e.g. `"icon-sm":` or `sizes['icon-sm']`
+        if (/[-:]/.test(text) && !/[<>{}()="']/.test(text)) {
+          for (const token of text.split(/\s+/)) {
+            if (token && token.length <= 120 && /^[-[:a-z@[]/.test(token)) candidates.add(token)
+          }
         }
       }
+    }
+  }
+}
+// cva configurations moved to src/lib are not wrapped in a cva()/cn() call, so the
+// span scanner above cannot see them. Harvest their class literals explicitly.
+for (const file of ['button-variants.ts', 'toggle-variants.ts']) {
+  const source = fs.readFileSync(path.join(libDir, file), 'utf8')
+  for (const line of source.split('\n')) {
+    const entry = /^\s{4,}'?([a-z0-9-]+)'?:\s*(?:"([^"\n]*)"|'([^'\n]*)')/.exec(line)
+    if (!entry) continue
+    const text = entry[2] ?? entry[3] ?? ''
+    for (const token of text.split(/\s+/)) {
+      if (token && token.length <= 120 && /^[-[:a-z@[]/.test(token)) candidates.add(token)
     }
   }
 }

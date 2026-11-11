@@ -14,6 +14,7 @@
  * added component can never silently shadow a root export.
  */
 import fs from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -212,6 +213,18 @@ const map = {
   )
 }
 fs.writeFileSync(path.join(libDir, 'entries.json'), `${JSON.stringify(map, null, 2)}\n`)
+
+// Generated files must satisfy the package Prettier config.
+execFileSync(
+  process.execPath,
+  [
+    path.join(root, 'node_modules', 'prettier', 'bin', 'prettier.cjs'),
+    '--write',
+    path.join(libDir, 'index.ts'),
+    path.join(libDir, 'entries.json')
+  ],
+  { stdio: 'inherit' }
+)
 
 const totalSub = Object.values(map.subpaths).reduce((n, m) => n + m.values.length + m.types.length, 0)
 console.log(

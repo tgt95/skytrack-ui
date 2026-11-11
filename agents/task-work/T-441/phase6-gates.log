@@ -1,0 +1,1113 @@
+npm notice run skytrack-ui@0.1.5 format
+npm notice run prettier --write 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,cjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md
+src/components/ui/accordion.tsx 22ms (unchanged)
+src/components/ui/alert-dialog.tsx 11ms (unchanged)
+src/components/ui/alert.tsx 3ms (unchanged)
+src/components/ui/attachment.tsx 9ms (unchanged)
+src/components/ui/autocomplete.tsx 14ms (unchanged)
+src/components/ui/avatar.tsx 2ms (unchanged)
+src/components/ui/badge.tsx 5ms (unchanged)
+src/components/ui/breadcrumb.tsx 3ms (unchanged)
+src/components/ui/button.tsx 1ms (unchanged)
+src/components/ui/calendar.tsx 11ms (unchanged)
+src/components/ui/chart.tsx 5ms (unchanged)
+src/components/ui/checkbox-group.tsx 1ms (unchanged)
+src/components/ui/checkbox.tsx 1ms (unchanged)
+src/components/ui/code-block-tree.tsx 22ms (unchanged)
+src/components/ui/code-block.test.tsx 4ms (unchanged)
+src/components/ui/code-block.tsx 14ms (unchanged)
+src/components/ui/collapsible.tsx 1ms (unchanged)
+src/components/ui/combobox.tsx 7ms (unchanged)
+src/components/ui/command.tsx 2ms (unchanged)
+src/components/ui/context-menu.tsx 4ms (unchanged)
+src/components/ui/data-table.tsx 12ms (unchanged)
+src/components/ui/date-picker.tsx 10ms (unchanged)
+src/components/ui/dialog.tsx 2ms (unchanged)
+src/components/ui/drawer.tsx 3ms (unchanged)
+src/components/ui/dropzone.tsx 2ms (unchanged)
+src/components/ui/field.tsx 2ms (unchanged)
+src/components/ui/fieldset.tsx 1ms (unchanged)
+src/components/ui/form.tsx 0ms (unchanged)
+src/components/ui/inline-edit.test.tsx 3ms (unchanged)
+src/components/ui/inline-edit.tsx 7ms (unchanged)
+src/components/ui/input.tsx 2ms (unchanged)
+src/components/ui/menu.tsx 4ms (unchanged)
+src/components/ui/menubar.tsx 1ms (unchanged)
+src/components/ui/meter.tsx 1ms (unchanged)
+src/components/ui/navigation-menu.tsx 2ms (unchanged)
+src/components/ui/number-field.tsx 3ms (unchanged)
+src/components/ui/otp-field.tsx 1ms (unchanged)
+src/components/ui/page-header.tsx 1ms (unchanged)
+src/components/ui/pagination.tsx 2ms (unchanged)
+src/components/ui/popover.tsx 2ms (unchanged)
+src/components/ui/preview-card.tsx 1ms (unchanged)
+src/components/ui/progress-indicator.tsx 3ms (unchanged)
+src/components/ui/progress.tsx 1ms (unchanged)
+src/components/ui/radio.tsx 1ms (unchanged)
+src/components/ui/resizable.tsx 1ms (unchanged)
+src/components/ui/scroll-area.tsx 2ms (unchanged)
+src/components/ui/search.tsx 1ms (unchanged)
+src/components/ui/select.tsx 3ms (unchanged)
+src/components/ui/separator.tsx 1ms (unchanged)
+src/components/ui/sidebar.test.tsx 2ms (unchanged)
+src/components/ui/sidebar.tsx 9ms (unchanged)
+src/components/ui/slider.tsx 1ms (unchanged)
+src/components/ui/switch.tsx 1ms (unchanged)
+src/components/ui/tabs.tsx 4ms (unchanged)
+src/components/ui/toast.tsx 3ms (unchanged)
+src/components/ui/toggle-group.tsx 1ms (unchanged)
+src/components/ui/toggle.tsx 1ms (unchanged)
+src/components/ui/toolbar.tsx 1ms (unchanged)
+src/components/ui/tooltip.tsx 2ms (unchanged)
+src/demos/accordion.demo.tsx 2ms (unchanged)
+src/demos/alert-dialog.demo.tsx 6ms (unchanged)
+src/demos/alert.demo.tsx 2ms (unchanged)
+src/demos/attachment.demo.tsx 2ms (unchanged)
+src/demos/autocomplete.demo.tsx 19ms (unchanged)
+src/demos/avatar.demo.tsx 1ms (unchanged)
+src/demos/badge.demo.tsx 2ms (unchanged)
+src/demos/breadcrumb.demo.tsx 2ms (unchanged)
+src/demos/button.demo.tsx 2ms (unchanged)
+src/demos/canvas-shell.demo.tsx 5ms (unchanged)
+src/demos/chart.demo.tsx 5ms (unchanged)
+src/demos/checkbox-group.demo.tsx 5ms (unchanged)
+src/demos/checkbox.demo.tsx 1ms (unchanged)
+src/demos/code-block-tree.demo.tsx 1ms (unchanged)
+src/demos/code-block.demo.tsx 3ms (unchanged)
+src/demos/collapsible.demo.tsx 1ms (unchanged)
+src/demos/combined-shell.demo.tsx 5ms (unchanged)
+src/demos/combobox.demo.tsx 21ms (unchanged)
+src/demos/command-first-shell.demo.tsx 3ms (unchanged)
+src/demos/command.demo.tsx 2ms (unchanged)
+src/demos/context-menu.demo.tsx 3ms (unchanged)
+src/demos/data-table.demo.tsx 15ms (unchanged)
+src/demos/date-picker.demo.tsx 2ms (unchanged)
+src/demos/dialog.demo.tsx 8ms (unchanged)
+src/demos/drawer.demo.tsx 10ms (unchanged)
+src/demos/dropzone.demo.tsx 6ms (unchanged)
+src/demos/field.demo.tsx 2ms (unchanged)
+src/demos/fieldset.demo.tsx 1ms (unchanged)
+src/demos/form.demo.tsx 5ms (unchanged)
+src/demos/inline-edit.demo.tsx 1ms (unchanged)
+src/demos/input.demo.tsx 1ms (unchanged)
+src/demos/left-nav-shell.demo.tsx 4ms (unchanged)
+src/demos/menu.demo.tsx 7ms (unchanged)
+src/demos/menubar.demo.tsx 3ms (unchanged)
+src/demos/meter.demo.tsx 1ms (unchanged)
+src/demos/multi-pane-shell.demo.tsx 4ms (unchanged)
+src/demos/multi-tab-shell.demo.tsx 4ms (unchanged)
+src/demos/navigation-menu.demo.tsx 5ms (unchanged)
+src/demos/number-field.demo.tsx 3ms (unchanged)
+src/demos/otp-field.demo.tsx 4ms (unchanged)
+src/demos/page-header.demo.tsx 4ms (unchanged)
+src/demos/pagination.demo.tsx 4ms (unchanged)
+src/demos/popover.demo.tsx 4ms (unchanged)
+src/demos/preview-card.demo.tsx 4ms (unchanged)
+src/demos/progress-indicator.demo.tsx 1ms (unchanged)
+src/demos/progress.demo.tsx 1ms (unchanged)
+src/demos/radio.demo.tsx 3ms (unchanged)
+src/demos/resizable.demo.tsx 1ms (unchanged)
+src/demos/scroll-area.demo.tsx 2ms (unchanged)
+src/demos/search.demo.tsx 1ms (unchanged)
+src/demos/select.demo.tsx 8ms (unchanged)
+src/demos/separator.demo.tsx 1ms (unchanged)
+src/demos/sidebar.demo.tsx 3ms (unchanged)
+src/demos/slider.demo.tsx 5ms (unchanged)
+src/demos/switch.demo.tsx 2ms (unchanged)
+src/demos/tabs.demo.tsx 5ms (unchanged)
+src/demos/toast.demo.tsx 7ms (unchanged)
+src/demos/toggle-group.demo.tsx 2ms (unchanged)
+src/demos/toggle.demo.tsx 1ms (unchanged)
+src/demos/toolbar.demo.tsx 4ms (unchanged)
+src/demos/tooltip.demo.tsx 3ms (unchanged)
+src/demos/top-nav-shell.demo.tsx 3ms (unchanged)
+src/index.css 18ms (unchanged)
+src/lib/button-variants.ts 1ms (unchanged)
+src/lib/control-sizes.ts 2ms (unchanged)
+src/lib/date-input.test.ts 2ms (unchanged)
+src/lib/date-input.ts 3ms (unchanged)
+src/lib/focus-ring.ts 0ms (unchanged)
+src/lib/index.ts 6ms (unchanged)
+src/lib/popup-arrow.tsx 1ms (unchanged)
+src/lib/toggle-variants.ts 1ms (unchanged)
+src/lib/utils.ts 1ms (unchanged)
+src/main.tsx 0ms (unchanged)
+src/showcase/accordion-faq.tsx 1ms (unchanged)
+src/showcase/App.tsx 27ms (unchanged)
+src/showcase/brand-link.test.tsx 1ms (unchanged)
+src/showcase/brand-link.tsx 0ms (unchanged)
+src/showcase/component-guidelines/designer-chart-type-examples.tsx 5ms (unchanged)
+src/showcase/component-guidelines/designer-guideline-sheet.tsx 7ms (unchanged)
+src/showcase/component-guidelines/designer-type-patterns.ts 5ms (unchanged)
+src/showcase/component-guidelines/guideline-sheet.tsx 5ms (unchanged)
+src/showcase/component-guidelines/index.ts 2ms (unchanged)
+src/showcase/component-guidelines/markdown-renderer.tsx 3ms (unchanged)
+src/showcase/component-guidelines/parser.ts 6ms (unchanged)
+src/showcase/component-guidelines/practice-types.ts 1ms (unchanged)
+src/showcase/component-guidelines/practices/designer-practices-a.tsx 17ms (unchanged)
+src/showcase/component-guidelines/practices/designer-practices-b.tsx 17ms (unchanged)
+src/showcase/component-guidelines/practices/designer-practices-code.tsx 2ms (unchanged)
+src/showcase/component-guidelines/practices/designer-practices-resizable.tsx 1ms (unchanged)
+src/showcase/component-guidelines/types.ts 1ms (unchanged)
+src/showcase/demo.tsx 1ms (unchanged)
+src/showcase/overview-dashboard.tsx 21ms (unchanged)
+src/showcase/overview-style.tsx 28ms (unchanged)
+src/showcase/pattern-library/catalog.ts 5ms (unchanged)
+src/showcase/pattern-library/content-renderer.tsx 7ms (unchanged)
+src/showcase/pattern-library/demos.tsx 95ms (unchanged)
+src/showcase/pattern-library/example-copy.ts 5ms (unchanged)
+src/showcase/pattern-library/index.tsx 7ms (unchanged)
+src/showcase/pattern-library/page-content.ts 89ms (unchanged)
+src/showcase/pattern-library/pattern-library.test.tsx 62ms (unchanged)
+src/showcase/sheet-specimens.tsx 42ms (unchanged)
+src/showcase/sheet.tsx 23ms (unchanged)
+src/showcase/showcase.css 1ms (unchanged)
+src/stories/accordion.stories.tsx 2ms (unchanged)
+src/stories/alert-dialog.stories.tsx 1ms (unchanged)
+src/stories/alert.stories.tsx 1ms (unchanged)
+src/stories/attachment.stories.tsx 1ms (unchanged)
+src/stories/autocomplete.stories.tsx 1ms (unchanged)
+src/stories/avatar.stories.tsx 1ms (unchanged)
+src/stories/badge.stories.tsx 1ms (unchanged)
+src/stories/breadcrumb.stories.tsx 1ms (unchanged)
+src/stories/button.stories.tsx 1ms (unchanged)
+src/stories/canvas-shell.stories.tsx 1ms (unchanged)
+src/stories/chart.stories.tsx 1ms (unchanged)
+src/stories/checkbox-group.stories.tsx 1ms (unchanged)
+src/stories/checkbox.stories.tsx 1ms (unchanged)
+src/stories/code-block-tree.stories.tsx 1ms (unchanged)
+src/stories/code-block.stories.tsx 1ms (unchanged)
+src/stories/collapsible.stories.tsx 1ms (unchanged)
+src/stories/combined-shell.stories.tsx 1ms (unchanged)
+src/stories/combobox.stories.tsx 2ms (unchanged)
+src/stories/command-first-shell.stories.tsx 1ms (unchanged)
+src/stories/command.stories.tsx 1ms (unchanged)
+src/stories/context-menu.stories.tsx 1ms (unchanged)
+src/stories/data-table.stories.tsx 2ms (unchanged)
+src/stories/date-picker.stories.tsx 1ms (unchanged)
+src/stories/dialog.stories.tsx 2ms (unchanged)
+src/stories/drawer.stories.tsx 2ms (unchanged)
+src/stories/dropzone.stories.tsx 1ms (unchanged)
+src/stories/field.stories.tsx 1ms (unchanged)
+src/stories/fieldset.stories.tsx 1ms (unchanged)
+src/stories/form.stories.tsx 1ms (unchanged)
+src/stories/inline-edit.stories.tsx 1ms (unchanged)
+src/stories/input.stories.tsx 1ms (unchanged)
+src/stories/left-nav-shell.stories.tsx 1ms (unchanged)
+src/stories/menu.stories.tsx 2ms (unchanged)
+src/stories/menubar.stories.tsx 1ms (unchanged)
+src/stories/meter.stories.tsx 1ms (unchanged)
+src/stories/multi-pane-shell.stories.tsx 1ms (unchanged)
+src/stories/multi-tab-shell.stories.tsx 1ms (unchanged)
+src/stories/navigation-menu.stories.tsx 1ms (unchanged)
+src/stories/number-field.stories.tsx 1ms (unchanged)
+src/stories/otp-field.stories.tsx 1ms (unchanged)
+src/stories/page-header.stories.tsx 1ms (unchanged)
+src/stories/pagination.stories.tsx 1ms (unchanged)
+src/stories/popover.stories.tsx 1ms (unchanged)
+src/stories/preview-card.stories.tsx 1ms (unchanged)
+src/stories/progress-indicator.stories.tsx 1ms (unchanged)
+src/stories/progress.stories.tsx 1ms (unchanged)
+src/stories/radio.stories.tsx 1ms (unchanged)
+src/stories/resizable.stories.tsx 1ms (unchanged)
+src/stories/scroll-area.stories.tsx 1ms (unchanged)
+src/stories/search.stories.tsx 1ms (unchanged)
+src/stories/select.stories.tsx 1ms (unchanged)
+src/stories/separator.stories.tsx 1ms (unchanged)
+src/stories/sidebar.stories.tsx 1ms (unchanged)
+src/stories/slider.stories.tsx 1ms (unchanged)
+src/stories/switch.stories.tsx 1ms (unchanged)
+src/stories/tabs.stories.tsx 1ms (unchanged)
+src/stories/toast.stories.tsx 1ms (unchanged)
+src/stories/toggle-group.stories.tsx 1ms (unchanged)
+src/stories/toggle.stories.tsx 1ms (unchanged)
+src/stories/toolbar.stories.tsx 1ms (unchanged)
+src/stories/tooltip.stories.tsx 1ms (unchanged)
+src/stories/top-nav-shell.stories.tsx 0ms (unchanged)
+src/styles.css 0ms (unchanged)
+src/styles/brand.css 7ms (unchanged)
+src/styles/primitive.css 10ms (unchanged)
+src/styles/shared-tokens.css 1ms (unchanged)
+scripts/architecture-guardrails.cjs 12ms
+scripts/build-lib.mjs 3ms (unchanged)
+scripts/build-site.mjs 1ms (unchanged)
+scripts/deploy-pages.mjs 1ms (unchanged)
+scripts/generate-exports.mjs 6ms (unchanged)
+scripts/generate-stories.mjs 5ms (unchanged)
+scripts/guard-publish.mjs 1ms (unchanged)
+scripts/lint-ui-practices.mjs 3ms (unchanged)
+scripts/sync-sheet-specs.mjs 2ms (unchanged)
+scripts/sync-to-design-guide.mjs 2ms (unchanged)
+scripts/test-consumer.mjs 9ms (unchanged)
+scripts/verify-lib.mjs 8ms (unchanged)
+vite.config.ts 1ms (unchanged)
+vite.lib.config.ts 2ms (unchanged)
+vite.lib.css.config.ts 1ms (unchanged)
+vitest.config.ts 1ms (unchanged)
+package.json 2ms (unchanged)
+tsconfig.json 0ms (unchanged)
+tsconfig.lib.json 0ms (unchanged)
+README.md 48ms (unchanged)
+npm notice run skytrack-ui@0.1.5 typecheck
+npm notice run tsc -p tsconfig.json
+npm notice run skytrack-ui@0.1.5 lint
+npm notice run node scripts/lint-ui-practices.mjs && node scripts/sync-sheet-specs.mjs
+PASS  audited accessibility, shared-helper, type-safety, and class-name rules
+PASS  all 56 UI components and their variant axes are registered in sheet.tsx
+npm notice run skytrack-ui@0.1.5 guardrails
+npm notice run node scripts/architecture-guardrails.cjs
+PASS  file-size budgets, import cycles, layer boundaries and deep imports
+npm notice run skytrack-ui@0.1.5 guardrails:selftest
+npm notice run node scripts/architecture-guardrails.cjs --self-test
+PASS  self-test import cycle
+PASS  self-test wrong layer
+PASS  self-test deep import
+npm notice run skytrack-ui@0.1.5 test
+npm notice run vitest run
+
+ RUN  v5.1.0 /Users/tuan.tg/Documents/Tuan'sVault/obsidian-resources/03_Work/Projects/SkyTrack/designs/components/skytrack-ui
+
+
+ Test Files  6 passed (6)
+      Tests  76 passed (76)
+   Start at  02:27:21
+   Duration  14.39s (tests 47%, import 38%, environment 14%, transform 1%)
+
+npm notice run skytrack-ui@0.1.5 format:check
+npm notice run prettier --check 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,cjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md
+Checking formatting...
+All matched files use Prettier code style!
+npm notice run skytrack-ui@0.1.5 build:lib
+npm notice run node scripts/build-lib.mjs
+
+[build:lib] clean dist-lib
+
+[build:lib] generate export map
+src/lib/index.ts 37ms
+src/lib/entries.json 13ms
+generate-exports: 56 components, 415 root values, 74 root types, 489 subpath exports, 1 collisions aliased
+collisions: createHandle
+
+[build:lib] bundle javascript (vite.lib.config.ts)
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 65 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-lib/toggle.js                          0.14 kB │ gzip: 0.11 kB
+dist-lib/date-picker.js                     0.21 kB │ gzip: 0.14 kB
+dist-lib/chunks/focus-ring-BwICtWf4.js      0.24 kB │ gzip: 0.18 kB
+dist-lib/button.js                          0.31 kB │ gzip: 0.19 kB
+dist-lib/chunks/utils-Cr_eCEw3.js           0.38 kB │ gzip: 0.23 kB
+dist-lib/form.js                            0.41 kB │ gzip: 0.28 kB
+dist-lib/checkbox-group.js                  0.51 kB │ gzip: 0.31 kB
+dist-lib/separator.js                       0.54 kB │ gzip: 0.33 kB
+dist-lib/fieldset.js                        0.71 kB │ gzip: 0.37 kB
+dist-lib/menubar.js                         0.75 kB │ gzip: 0.45 kB
+dist-lib/chunks/popup-arrow-BWLQ6_7v.js     0.79 kB │ gzip: 0.44 kB
+dist-lib/collapsible.js                     1.08 kB │ gzip: 0.45 kB
+dist-lib/otp-field.js                       1.28 kB │ gzip: 0.55 kB
+dist-lib/avatar.js                          1.29 kB │ gzip: 0.57 kB
+dist-lib/meter.js                           1.33 kB │ gzip: 0.48 kB
+dist-lib/toggle-group.js                    1.35 kB │ gzip: 0.63 kB
+dist-lib/progress.js                        1.51 kB │ gzip: 0.53 kB
+dist-lib/search.js                          1.53 kB │ gzip: 0.73 kB
+dist-lib/chunks/control-sizes-CG-tSiWV.js   1.54 kB │ gzip: 0.44 kB
+dist-lib/radio.js                           1.67 kB │ gzip: 0.67 kB
+dist-lib/alert.js                           1.72 kB │ gzip: 0.63 kB
+dist-lib/checkbox.js                        1.74 kB │ gzip: 0.70 kB
+dist-lib/page-header.js                     1.80 kB │ gzip: 0.67 kB
+dist-lib/switch.js                          1.87 kB │ gzip: 0.80 kB
+dist-lib/resizable.js                       2.24 kB │ gzip: 0.80 kB
+dist-lib/chunks/button-CbGRqxEO.js          2.31 kB │ gzip: 1.00 kB
+dist-lib/breadcrumb.js                      2.38 kB │ gzip: 0.74 kB
+dist-lib/accordion.js                       2.39 kB │ gzip: 0.85 kB
+dist-lib/slider.js                          2.42 kB │ gzip: 0.77 kB
+dist-lib/dropzone.js                        2.59 kB │ gzip: 1.08 kB
+dist-lib/pagination.js                      2.71 kB │ gzip: 0.81 kB
+dist-lib/badge.js                           2.92 kB │ gzip: 1.31 kB
+dist-lib/preview-card.js                    3.21 kB │ gzip: 1.05 kB
+dist-lib/input.js                           3.25 kB │ gzip: 1.15 kB
+dist-lib/chart.js                           3.33 kB │ gzip: 1.13 kB
+dist-lib/toolbar.js                         3.37 kB │ gzip: 1.04 kB
+dist-lib/chunks/toggle-ey_8SVK-.js          3.41 kB │ gzip: 1.15 kB
+dist-lib/field.js                           3.48 kB │ gzip: 1.04 kB
+dist-lib/command.js                         3.56 kB │ gzip: 1.07 kB
+dist-lib/scroll-area.js                     3.63 kB │ gzip: 1.13 kB
+dist-lib/alert-dialog.js                    3.90 kB │ gzip: 1.15 kB
+dist-lib/progress-indicator.js              3.96 kB │ gzip: 1.36 kB
+dist-lib/tooltip.js                         3.98 kB │ gzip: 1.58 kB
+dist-lib/popover.js                         4.11 kB │ gzip: 1.25 kB
+dist-lib/dialog.js                          4.12 kB │ gzip: 1.24 kB
+dist-lib/number-field.js                    4.95 kB │ gzip: 1.29 kB
+dist-lib/attachment.js                      5.29 kB │ gzip: 1.58 kB
+dist-lib/navigation-menu.js                 5.50 kB │ gzip: 1.34 kB
+dist-lib/drawer.js                          7.01 kB │ gzip: 1.94 kB
+dist-lib/toast.js                           7.04 kB │ gzip: 2.13 kB
+dist-lib/tabs.js                            7.27 kB │ gzip: 2.10 kB
+dist-lib/select.js                          7.31 kB │ gzip: 1.72 kB
+dist-lib/inline-edit.js                     7.36 kB │ gzip: 2.20 kB
+dist-lib/menu.js                            7.69 kB │ gzip: 1.89 kB
+dist-lib/context-menu.js                    7.71 kB │ gzip: 1.72 kB
+dist-lib/calendar.js                        9.08 kB │ gzip: 2.46 kB
+dist-lib/autocomplete.js                    9.95 kB │ gzip: 2.26 kB
+dist-lib/combobox.js                       11.50 kB │ gzip: 2.59 kB
+dist-lib/code-block.js                     11.94 kB │ gzip: 3.51 kB
+dist-lib/data-table.js                     13.47 kB │ gzip: 3.76 kB
+dist-lib/code-block-tree.js                14.82 kB │ gzip: 3.78 kB
+dist-lib/chunks/date-picker-CVv2QIfY.js    16.28 kB │ gzip: 4.39 kB
+dist-lib/index.js                          16.64 kB │ gzip: 3.09 kB
+dist-lib/sidebar.js                        19.35 kB │ gzip: 4.25 kB
+
+✓ built in 160ms
+
+[build:lib] compile stylesheet (vite.lib.css.config.ts)
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 2 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-lib/assets/ibm-plex-mono-vietnamese-500-normal-C8zxqsMH.woff       5.61 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-400-normal-DDuiU_S-.woff       5.62 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-700-normal-Bs14ezHR.woff       5.64 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-600-normal-iLQfcSjf.woff       5.71 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-700-normal-CtgKGIh5.woff     5.75 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-500-normal-BIfNGwUT.woff     5.77 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-600-normal-9HEixskS.woff     5.79 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-400-normal-DMdlQ8Kv.woff     5.82 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-400-normal-BulugwFq.woff2      5.86 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-500-normal-DZ4AoWbu.woff2      6.04 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-700-normal-apsD3J7v.woff2      6.06 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-400-normal-fK1oJ5dG.woff       6.39 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-700-normal-BV5B8Are.woff       6.42 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-600-normal-DgdngZtN.woff       6.58 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-500-normal-BEb3_waV.woff       6.58 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-400-normal-xuaO2J-f.woff2    6.91 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-600-normal-D2EvbN8M.woff2      6.93 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-500-normal-BqneJy0T.woff2    6.97 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-700-normal-BDQ-w_bc.woff2    7.18 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-400-normal-CEL4l2ZJ.woff         7.20 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-500-normal-Ael50iVv.woff         7.20 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-600-normal-fLZuRloM.woff         7.26 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-700-normal-O_YjL27c.woff         7.27 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-600-normal-V-xxqcpd.woff2    7.69 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-400-normal-DG4YqDda.woff2      8.20 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-700-normal-CkEo6LDy.woff2      8.22 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-400-normal-BSMlKf0J.woff2        8.35 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-500-normal-e4dixQRQ.woff2      8.41 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-500-normal-Bq9vWWag.woff2        8.46 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-600-normal-DpPYBSTl.woff2      8.46 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-700-normal-Bp80XfeI.woff2        8.67 kB
+dist-lib/assets/ibm-plex-sans-greek-700-normal-CkZN0sRy.woff            8.74 kB
+dist-lib/assets/ibm-plex-sans-greek-400-normal-D9ESIMu3.woff            8.76 kB
+dist-lib/assets/ibm-plex-sans-greek-500-normal-CuWXN6rf.woff            9.14 kB
+dist-lib/assets/ibm-plex-sans-greek-600-normal-D-CqTdkO.woff            9.22 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-600-normal-CTOM6hUh.woff2        9.35 kB
+dist-lib/assets/ibm-plex-sans-greek-700-normal-wyJ6jzdA.woff2           9.92 kB
+dist-lib/assets/ibm-plex-sans-greek-400-normal-_efipK4i.woff2           9.94 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-700-normal-DCQwxkRk.woff    10.16 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-400-normal-Dsrv2Tcn.woff    10.28 kB
+dist-lib/assets/ibm-plex-sans-greek-600-normal-DzTrcv_p.woff2          10.36 kB
+dist-lib/assets/ibm-plex-sans-greek-500-normal-JMMifIXV.woff2          10.37 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-500-normal-DB5PtV2g.woff    10.59 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-600-normal-Bz0x94Yp.woff    10.61 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-700-normal-Cwsjk1Jb.woff       11.64 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-400-normal-D3D2R8hC.woff       11.76 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-500-normal-CZ70TYgx.woff       11.76 kB
+dist-lib/assets/host-grotesk-latin-ext-wght-normal-B8jkyusk.woff2      11.82 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-600-normal-DmB0ttJJ.woff       11.83 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-700-normal-BmRLXWpJ.woff2   12.05 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-400-normal-g30qAdWV.woff2   12.14 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-600-normal-DUMzJB7m.woff2   12.30 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-500-normal-Cs5J6C77.woff2   12.30 kB
+dist-lib/assets/ibm-plex-mono-latin-400-normal-CvHOgSBP.woff           13.14 kB
+dist-lib/assets/ibm-plex-mono-latin-500-normal-CB9ihrfo.woff           13.15 kB
+dist-lib/assets/ibm-plex-mono-latin-600-normal-DWFSQ4vo.woff           13.20 kB
+dist-lib/assets/ibm-plex-mono-latin-700-normal-CNHXzs6v.woff           13.21 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-700-normal-RFb1v-CK.woff        13.32 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-400-normal-BmRBH3aV.woff2      13.34 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-700-normal-Dhimjc7-.woff2      13.38 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-500-normal-CAhNIIs5.woff2      13.43 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-400-normal-BTotfTJu.woff        13.51 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-500-normal-ByOcLdNv.woff        13.85 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-600-normal-BGq0mW3O.woff        13.88 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-600-normal-D38SheWl.woff2      14.32 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-400-normal-RBey6euL.woff       14.36 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-700-normal-DZH6Xh-4.woff       14.42 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-700-normal-D_uavGvn.woff2       14.57 kB
+dist-lib/assets/ibm-plex-mono-latin-400-normal-DMJ8VG8y.woff2          14.70 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-500-normal-D0aIdm-b.woff       14.73 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-600-normal-DIrixKbi.woff       14.77 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-400-normal-DZqxrq2p.woff2       14.80 kB
+dist-lib/assets/ibm-plex-mono-latin-500-normal-DSY6xOcd.woff2          14.88 kB
+dist-lib/assets/ibm-plex-mono-latin-700-normal-7sUh57Bg.woff2          14.90 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-500-normal-CocWQlwt.woff2       15.00 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-600-normal-71GNu3SW.woff2       15.04 kB
+dist-lib/assets/ibm-plex-mono-latin-600-normal-BgSNZQsw.woff2          15.62 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-400-normal-C5H60-Va.woff2      15.98 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-700-normal-aMgXseD4.woff2      16.18 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-600-normal-DOrvGEcy.woff2      16.44 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-500-normal-DakdToA3.woff2      16.45 kB
+dist-lib/assets/host-grotesk-latin-wght-normal-CBa0fl4q.woff2          20.29 kB
+dist-lib/assets/ibm-plex-sans-latin-400-normal-CYLoc0-x.woff           22.10 kB
+dist-lib/assets/ibm-plex-sans-latin-700-normal-Bth3BMcD.woff           22.28 kB
+dist-lib/assets/ibm-plex-sans-latin-400-normal-CDDApCn2.woff2          22.58 kB
+dist-lib/assets/ibm-plex-sans-latin-700-normal-Bxkt5Cjx.woff2          22.83 kB
+dist-lib/assets/ibm-plex-sans-latin-600-normal-Cu4Hd6ag.woff           23.87 kB
+dist-lib/assets/ibm-plex-sans-latin-500-normal-BgVn5rGT.woff           23.91 kB
+dist-lib/assets/ibm-plex-sans-latin-500-normal-6ng42L7E.woff2          24.18 kB
+dist-lib/assets/ibm-plex-sans-latin-600-normal-CuJfVYMP.woff2          24.25 kB
+dist-lib/styles.css                                                   116.64 kB │ gzip: 21.06 kB
+
+✓ built in 841ms
+
+[build:lib] emit declarations (tsconfig.lib.json)
+
+[build:lib] copy typesheet declaration
+
+[build:lib] rewrite @/ aliases in declarations
+  rewrote 0 declaration file(s):
+
+[build:lib] verify dist-lib
+
+[verify] 1. entry points
+  PASS  root JS entry dist-lib/index.js
+  PASS  root declarations dist-lib/lib/index.d.ts
+  PASS  56 component JS entries present
+  PASS  56 component declaration entries present
+
+[verify] 2. no unresolved @/ aliases
+  PASS  no @/ specifier in 129 emitted JS/declaration files
+  PASS  no test/spec declarations in dist-lib
+
+[verify] 3. package metadata
+  PASS  exports map has 59 entries (root, 56 subpaths, styles.css, package.json)
+  PASS  every exports target resolves to a file on disk
+  PASS  private: true (publication guard for the local phase)
+  PASS  no publishConfig (no registry destination configured)
+  PASS  files whitelist: ["dist-lib","README.md"]
+  PASS  react and react-dom are peer dependencies (^19.0.0 / ^19.0.0)
+  PASS  sideEffects preserves CSS: ["**/styles.css"]
+
+[verify] 4. stylesheet assets
+  PASS  dist-lib/styles.css present
+  PASS  all 90 url() references in styles.css resolve inside dist-lib
+  PASS  styles.css declares both IBM Plex Sans and IBM Plex Mono
+  PASS  styles.css ships the heading font and maps heading classes to --font-heading
+  PASS  styles.css carries the theme tokens and the class-based dark variant
+  PASS  styles.css exposes info/favorite tokens and text utilities
+
+[verify] 5. utility coverage in styles.css
+  PASS  all 434/434 Tailwind classes used by the shipped components are compiled into styles.css (consumers need no Tailwind scan)
+  PASS  all Tailwind classes used by the shipped components resolve to generated CSS
+
+[verify] 6. runtime exports (node import, no rendering)
+  PASS  root entry exports exactly the 415 documented value names
+  PASS  all 56 subpath entries import cleanly and export exactly their own value names
+
+[verify] PASS — all checks green
+
+
+[build:lib] done — 8 steps, output in dist-lib/
+npm notice run skytrack-ui@0.1.5 verify:lib
+npm notice run node scripts/verify-lib.mjs
+
+[verify] 1. entry points
+  PASS  root JS entry dist-lib/index.js
+  PASS  root declarations dist-lib/lib/index.d.ts
+  PASS  56 component JS entries present
+  PASS  56 component declaration entries present
+
+[verify] 2. no unresolved @/ aliases
+  PASS  no @/ specifier in 129 emitted JS/declaration files
+  PASS  no test/spec declarations in dist-lib
+
+[verify] 3. package metadata
+  PASS  exports map has 59 entries (root, 56 subpaths, styles.css, package.json)
+  PASS  every exports target resolves to a file on disk
+  PASS  private: true (publication guard for the local phase)
+  PASS  no publishConfig (no registry destination configured)
+  PASS  files whitelist: ["dist-lib","README.md"]
+  PASS  react and react-dom are peer dependencies (^19.0.0 / ^19.0.0)
+  PASS  sideEffects preserves CSS: ["**/styles.css"]
+
+[verify] 4. stylesheet assets
+  PASS  dist-lib/styles.css present
+  PASS  all 90 url() references in styles.css resolve inside dist-lib
+  PASS  styles.css declares both IBM Plex Sans and IBM Plex Mono
+  PASS  styles.css ships the heading font and maps heading classes to --font-heading
+  PASS  styles.css carries the theme tokens and the class-based dark variant
+  PASS  styles.css exposes info/favorite tokens and text utilities
+
+[verify] 5. utility coverage in styles.css
+  PASS  all 434/434 Tailwind classes used by the shipped components are compiled into styles.css (consumers need no Tailwind scan)
+  PASS  all Tailwind classes used by the shipped components resolve to generated CSS
+
+[verify] 6. runtime exports (node import, no rendering)
+  PASS  root entry exports exactly the 415 documented value names
+  PASS  all 56 subpath entries import cleanly and export exactly their own value names
+
+[verify] PASS — all checks green
+
+npm notice run skytrack-ui@0.1.5 pack:local
+npm notice run mkdir -p ./dist-lib-tarball && npm run build:lib && npm pack --pack-destination ./dist-lib-tarball
+npm notice run skytrack-ui@0.1.5 build:lib
+npm notice run node scripts/build-lib.mjs
+
+[build:lib] clean dist-lib
+
+[build:lib] generate export map
+src/lib/index.ts 41ms
+src/lib/entries.json 17ms
+generate-exports: 56 components, 415 root values, 74 root types, 489 subpath exports, 1 collisions aliased
+collisions: createHandle
+
+[build:lib] bundle javascript (vite.lib.config.ts)
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 65 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-lib/toggle.js                          0.14 kB │ gzip: 0.11 kB
+dist-lib/date-picker.js                     0.21 kB │ gzip: 0.14 kB
+dist-lib/chunks/focus-ring-BwICtWf4.js      0.24 kB │ gzip: 0.18 kB
+dist-lib/button.js                          0.31 kB │ gzip: 0.19 kB
+dist-lib/chunks/utils-Cr_eCEw3.js           0.38 kB │ gzip: 0.23 kB
+dist-lib/form.js                            0.41 kB │ gzip: 0.28 kB
+dist-lib/checkbox-group.js                  0.51 kB │ gzip: 0.31 kB
+dist-lib/separator.js                       0.54 kB │ gzip: 0.33 kB
+dist-lib/fieldset.js                        0.71 kB │ gzip: 0.37 kB
+dist-lib/menubar.js                         0.75 kB │ gzip: 0.45 kB
+dist-lib/chunks/popup-arrow-BWLQ6_7v.js     0.79 kB │ gzip: 0.44 kB
+dist-lib/collapsible.js                     1.08 kB │ gzip: 0.45 kB
+dist-lib/otp-field.js                       1.28 kB │ gzip: 0.55 kB
+dist-lib/avatar.js                          1.29 kB │ gzip: 0.57 kB
+dist-lib/meter.js                           1.33 kB │ gzip: 0.48 kB
+dist-lib/toggle-group.js                    1.35 kB │ gzip: 0.63 kB
+dist-lib/progress.js                        1.51 kB │ gzip: 0.53 kB
+dist-lib/search.js                          1.53 kB │ gzip: 0.73 kB
+dist-lib/chunks/control-sizes-CG-tSiWV.js   1.54 kB │ gzip: 0.44 kB
+dist-lib/radio.js                           1.67 kB │ gzip: 0.67 kB
+dist-lib/alert.js                           1.72 kB │ gzip: 0.63 kB
+dist-lib/checkbox.js                        1.74 kB │ gzip: 0.70 kB
+dist-lib/page-header.js                     1.80 kB │ gzip: 0.67 kB
+dist-lib/switch.js                          1.87 kB │ gzip: 0.80 kB
+dist-lib/resizable.js                       2.24 kB │ gzip: 0.80 kB
+dist-lib/chunks/button-CbGRqxEO.js          2.31 kB │ gzip: 1.00 kB
+dist-lib/breadcrumb.js                      2.38 kB │ gzip: 0.74 kB
+dist-lib/accordion.js                       2.39 kB │ gzip: 0.85 kB
+dist-lib/slider.js                          2.42 kB │ gzip: 0.77 kB
+dist-lib/dropzone.js                        2.59 kB │ gzip: 1.08 kB
+dist-lib/pagination.js                      2.71 kB │ gzip: 0.81 kB
+dist-lib/badge.js                           2.92 kB │ gzip: 1.31 kB
+dist-lib/preview-card.js                    3.21 kB │ gzip: 1.05 kB
+dist-lib/input.js                           3.25 kB │ gzip: 1.15 kB
+dist-lib/chart.js                           3.33 kB │ gzip: 1.13 kB
+dist-lib/toolbar.js                         3.37 kB │ gzip: 1.04 kB
+dist-lib/chunks/toggle-ey_8SVK-.js          3.41 kB │ gzip: 1.15 kB
+dist-lib/field.js                           3.48 kB │ gzip: 1.04 kB
+dist-lib/command.js                         3.56 kB │ gzip: 1.07 kB
+dist-lib/scroll-area.js                     3.63 kB │ gzip: 1.13 kB
+dist-lib/alert-dialog.js                    3.90 kB │ gzip: 1.15 kB
+dist-lib/progress-indicator.js              3.96 kB │ gzip: 1.36 kB
+dist-lib/tooltip.js                         3.98 kB │ gzip: 1.58 kB
+dist-lib/popover.js                         4.11 kB │ gzip: 1.25 kB
+dist-lib/dialog.js                          4.12 kB │ gzip: 1.24 kB
+dist-lib/number-field.js                    4.95 kB │ gzip: 1.29 kB
+dist-lib/attachment.js                      5.29 kB │ gzip: 1.58 kB
+dist-lib/navigation-menu.js                 5.50 kB │ gzip: 1.34 kB
+dist-lib/drawer.js                          7.01 kB │ gzip: 1.94 kB
+dist-lib/toast.js                           7.04 kB │ gzip: 2.13 kB
+dist-lib/tabs.js                            7.27 kB │ gzip: 2.10 kB
+dist-lib/select.js                          7.31 kB │ gzip: 1.72 kB
+dist-lib/inline-edit.js                     7.36 kB │ gzip: 2.20 kB
+dist-lib/menu.js                            7.69 kB │ gzip: 1.89 kB
+dist-lib/context-menu.js                    7.71 kB │ gzip: 1.72 kB
+dist-lib/calendar.js                        9.08 kB │ gzip: 2.46 kB
+dist-lib/autocomplete.js                    9.95 kB │ gzip: 2.26 kB
+dist-lib/combobox.js                       11.50 kB │ gzip: 2.59 kB
+dist-lib/code-block.js                     11.94 kB │ gzip: 3.51 kB
+dist-lib/data-table.js                     13.47 kB │ gzip: 3.76 kB
+dist-lib/code-block-tree.js                14.82 kB │ gzip: 3.78 kB
+dist-lib/chunks/date-picker-CVv2QIfY.js    16.28 kB │ gzip: 4.39 kB
+dist-lib/index.js                          16.64 kB │ gzip: 3.09 kB
+dist-lib/sidebar.js                        19.35 kB │ gzip: 4.25 kB
+
+✓ built in 1.17s
+
+[build:lib] compile stylesheet (vite.lib.css.config.ts)
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 2 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-lib/assets/ibm-plex-mono-vietnamese-500-normal-C8zxqsMH.woff       5.61 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-400-normal-DDuiU_S-.woff       5.62 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-700-normal-Bs14ezHR.woff       5.64 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-600-normal-iLQfcSjf.woff       5.71 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-700-normal-CtgKGIh5.woff     5.75 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-500-normal-BIfNGwUT.woff     5.77 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-600-normal-9HEixskS.woff     5.79 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-400-normal-DMdlQ8Kv.woff     5.82 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-400-normal-BulugwFq.woff2      5.86 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-500-normal-DZ4AoWbu.woff2      6.04 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-700-normal-apsD3J7v.woff2      6.06 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-400-normal-fK1oJ5dG.woff       6.39 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-700-normal-BV5B8Are.woff       6.42 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-600-normal-DgdngZtN.woff       6.58 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-500-normal-BEb3_waV.woff       6.58 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-400-normal-xuaO2J-f.woff2    6.91 kB
+dist-lib/assets/ibm-plex-mono-vietnamese-600-normal-D2EvbN8M.woff2      6.93 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-500-normal-BqneJy0T.woff2    6.97 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-700-normal-BDQ-w_bc.woff2    7.18 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-400-normal-CEL4l2ZJ.woff         7.20 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-500-normal-Ael50iVv.woff         7.20 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-600-normal-fLZuRloM.woff         7.26 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-700-normal-O_YjL27c.woff         7.27 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-ext-600-normal-V-xxqcpd.woff2    7.69 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-400-normal-DG4YqDda.woff2      8.20 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-700-normal-CkEo6LDy.woff2      8.22 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-400-normal-BSMlKf0J.woff2        8.35 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-500-normal-e4dixQRQ.woff2      8.41 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-500-normal-Bq9vWWag.woff2        8.46 kB
+dist-lib/assets/ibm-plex-sans-vietnamese-600-normal-DpPYBSTl.woff2      8.46 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-700-normal-Bp80XfeI.woff2        8.67 kB
+dist-lib/assets/ibm-plex-sans-greek-700-normal-CkZN0sRy.woff            8.74 kB
+dist-lib/assets/ibm-plex-sans-greek-400-normal-D9ESIMu3.woff            8.76 kB
+dist-lib/assets/ibm-plex-sans-greek-500-normal-CuWXN6rf.woff            9.14 kB
+dist-lib/assets/ibm-plex-sans-greek-600-normal-D-CqTdkO.woff            9.22 kB
+dist-lib/assets/ibm-plex-mono-cyrillic-600-normal-CTOM6hUh.woff2        9.35 kB
+dist-lib/assets/ibm-plex-sans-greek-700-normal-wyJ6jzdA.woff2           9.92 kB
+dist-lib/assets/ibm-plex-sans-greek-400-normal-_efipK4i.woff2           9.94 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-700-normal-DCQwxkRk.woff    10.16 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-400-normal-Dsrv2Tcn.woff    10.28 kB
+dist-lib/assets/ibm-plex-sans-greek-600-normal-DzTrcv_p.woff2          10.36 kB
+dist-lib/assets/ibm-plex-sans-greek-500-normal-JMMifIXV.woff2          10.37 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-500-normal-DB5PtV2g.woff    10.59 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-600-normal-Bz0x94Yp.woff    10.61 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-700-normal-Cwsjk1Jb.woff       11.64 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-400-normal-D3D2R8hC.woff       11.76 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-500-normal-CZ70TYgx.woff       11.76 kB
+dist-lib/assets/host-grotesk-latin-ext-wght-normal-B8jkyusk.woff2      11.82 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-600-normal-DmB0ttJJ.woff       11.83 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-700-normal-BmRLXWpJ.woff2   12.05 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-400-normal-g30qAdWV.woff2   12.14 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-600-normal-DUMzJB7m.woff2   12.30 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-ext-500-normal-Cs5J6C77.woff2   12.30 kB
+dist-lib/assets/ibm-plex-mono-latin-400-normal-CvHOgSBP.woff           13.14 kB
+dist-lib/assets/ibm-plex-mono-latin-500-normal-CB9ihrfo.woff           13.15 kB
+dist-lib/assets/ibm-plex-mono-latin-600-normal-DWFSQ4vo.woff           13.20 kB
+dist-lib/assets/ibm-plex-mono-latin-700-normal-CNHXzs6v.woff           13.21 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-700-normal-RFb1v-CK.woff        13.32 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-400-normal-BmRBH3aV.woff2      13.34 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-700-normal-Dhimjc7-.woff2      13.38 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-500-normal-CAhNIIs5.woff2      13.43 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-400-normal-BTotfTJu.woff        13.51 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-500-normal-ByOcLdNv.woff        13.85 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-600-normal-BGq0mW3O.woff        13.88 kB
+dist-lib/assets/ibm-plex-mono-latin-ext-600-normal-D38SheWl.woff2      14.32 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-400-normal-RBey6euL.woff       14.36 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-700-normal-DZH6Xh-4.woff       14.42 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-700-normal-D_uavGvn.woff2       14.57 kB
+dist-lib/assets/ibm-plex-mono-latin-400-normal-DMJ8VG8y.woff2          14.70 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-500-normal-D0aIdm-b.woff       14.73 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-600-normal-DIrixKbi.woff       14.77 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-400-normal-DZqxrq2p.woff2       14.80 kB
+dist-lib/assets/ibm-plex-mono-latin-500-normal-DSY6xOcd.woff2          14.88 kB
+dist-lib/assets/ibm-plex-mono-latin-700-normal-7sUh57Bg.woff2          14.90 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-500-normal-CocWQlwt.woff2       15.00 kB
+dist-lib/assets/ibm-plex-sans-cyrillic-600-normal-71GNu3SW.woff2       15.04 kB
+dist-lib/assets/ibm-plex-mono-latin-600-normal-BgSNZQsw.woff2          15.62 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-400-normal-C5H60-Va.woff2      15.98 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-700-normal-aMgXseD4.woff2      16.18 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-600-normal-DOrvGEcy.woff2      16.44 kB
+dist-lib/assets/ibm-plex-sans-latin-ext-500-normal-DakdToA3.woff2      16.45 kB
+dist-lib/assets/host-grotesk-latin-wght-normal-CBa0fl4q.woff2          20.29 kB
+dist-lib/assets/ibm-plex-sans-latin-400-normal-CYLoc0-x.woff           22.10 kB
+dist-lib/assets/ibm-plex-sans-latin-700-normal-Bth3BMcD.woff           22.28 kB
+dist-lib/assets/ibm-plex-sans-latin-400-normal-CDDApCn2.woff2          22.58 kB
+dist-lib/assets/ibm-plex-sans-latin-700-normal-Bxkt5Cjx.woff2          22.83 kB
+dist-lib/assets/ibm-plex-sans-latin-600-normal-Cu4Hd6ag.woff           23.87 kB
+dist-lib/assets/ibm-plex-sans-latin-500-normal-BgVn5rGT.woff           23.91 kB
+dist-lib/assets/ibm-plex-sans-latin-500-normal-6ng42L7E.woff2          24.18 kB
+dist-lib/assets/ibm-plex-sans-latin-600-normal-CuJfVYMP.woff2          24.25 kB
+dist-lib/styles.css                                                   116.64 kB │ gzip: 21.06 kB
+
+✓ built in 508ms
+
+[build:lib] emit declarations (tsconfig.lib.json)
+
+[build:lib] copy typesheet declaration
+
+[build:lib] rewrite @/ aliases in declarations
+  rewrote 0 declaration file(s):
+
+[build:lib] verify dist-lib
+
+[verify] 1. entry points
+  PASS  root JS entry dist-lib/index.js
+  PASS  root declarations dist-lib/lib/index.d.ts
+  PASS  56 component JS entries present
+  PASS  56 component declaration entries present
+
+[verify] 2. no unresolved @/ aliases
+  PASS  no @/ specifier in 129 emitted JS/declaration files
+  PASS  no test/spec declarations in dist-lib
+
+[verify] 3. package metadata
+  PASS  exports map has 59 entries (root, 56 subpaths, styles.css, package.json)
+  PASS  every exports target resolves to a file on disk
+  PASS  private: true (publication guard for the local phase)
+  PASS  no publishConfig (no registry destination configured)
+  PASS  files whitelist: ["dist-lib","README.md"]
+  PASS  react and react-dom are peer dependencies (^19.0.0 / ^19.0.0)
+  PASS  sideEffects preserves CSS: ["**/styles.css"]
+
+[verify] 4. stylesheet assets
+  PASS  dist-lib/styles.css present
+  PASS  all 90 url() references in styles.css resolve inside dist-lib
+  PASS  styles.css declares both IBM Plex Sans and IBM Plex Mono
+  PASS  styles.css ships the heading font and maps heading classes to --font-heading
+  PASS  styles.css carries the theme tokens and the class-based dark variant
+  PASS  styles.css exposes info/favorite tokens and text utilities
+
+[verify] 5. utility coverage in styles.css
+  PASS  all 434/434 Tailwind classes used by the shipped components are compiled into styles.css (consumers need no Tailwind scan)
+  PASS  all Tailwind classes used by the shipped components resolve to generated CSS
+
+[verify] 6. runtime exports (node import, no rendering)
+  PASS  root entry exports exactly the 415 documented value names
+  PASS  all 56 subpath entries import cleanly and export exactly their own value names
+
+[verify] PASS — all checks green
+
+
+[build:lib] done — 8 steps, output in dist-lib/
+npm notice run skytrack-ui@0.1.5 prepack
+npm notice run node scripts/guard-publish.mjs
+[guard] private package, no publishConfig — packing for local/private use only.
+
+[verify] 1. entry points
+  PASS  root JS entry dist-lib/index.js
+  PASS  root declarations dist-lib/lib/index.d.ts
+  PASS  56 component JS entries present
+  PASS  56 component declaration entries present
+
+[verify] 2. no unresolved @/ aliases
+  PASS  no @/ specifier in 129 emitted JS/declaration files
+  PASS  no test/spec declarations in dist-lib
+
+[verify] 3. package metadata
+  PASS  exports map has 59 entries (root, 56 subpaths, styles.css, package.json)
+  PASS  every exports target resolves to a file on disk
+  PASS  private: true (publication guard for the local phase)
+  PASS  no publishConfig (no registry destination configured)
+  PASS  files whitelist: ["dist-lib","README.md"]
+  PASS  react and react-dom are peer dependencies (^19.0.0 / ^19.0.0)
+  PASS  sideEffects preserves CSS: ["**/styles.css"]
+
+[verify] 4. stylesheet assets
+  PASS  dist-lib/styles.css present
+  PASS  all 90 url() references in styles.css resolve inside dist-lib
+  PASS  styles.css declares both IBM Plex Sans and IBM Plex Mono
+  PASS  styles.css ships the heading font and maps heading classes to --font-heading
+  PASS  styles.css carries the theme tokens and the class-based dark variant
+  PASS  styles.css exposes info/favorite tokens and text utilities
+
+[verify] 5. utility coverage in styles.css
+  PASS  all 434/434 Tailwind classes used by the shipped components are compiled into styles.css (consumers need no Tailwind scan)
+  PASS  all Tailwind classes used by the shipped components resolve to generated CSS
+
+[verify] 6. runtime exports (node import, no rendering)
+  PASS  root entry exports exactly the 415 documented value names
+  PASS  all 56 subpath entries import cleanly and export exactly their own value names
+
+[verify] PASS — all checks green
+
+npm notice
+npm notice 📦  skytrack-ui@0.1.5
+npm notice Tarball Contents
+npm notice 17.1kB README.md
+npm notice 2.4kB dist-lib/accordion.js
+npm notice 3.9kB dist-lib/alert-dialog.js
+npm notice 1.7kB dist-lib/alert.js
+npm notice 11.8kB dist-lib/assets/host-grotesk-latin-ext-wght-normal-B8jkyusk.woff2
+npm notice 20.3kB dist-lib/assets/host-grotesk-latin-wght-normal-CBa0fl4q.woff2
+npm notice 8.4kB dist-lib/assets/ibm-plex-mono-cyrillic-400-normal-BSMlKf0J.woff2
+npm notice 7.2kB dist-lib/assets/ibm-plex-mono-cyrillic-400-normal-CEL4l2ZJ.woff
+npm notice 7.2kB dist-lib/assets/ibm-plex-mono-cyrillic-500-normal-Ael50iVv.woff
+npm notice 8.5kB dist-lib/assets/ibm-plex-mono-cyrillic-500-normal-Bq9vWWag.woff2
+npm notice 9.4kB dist-lib/assets/ibm-plex-mono-cyrillic-600-normal-CTOM6hUh.woff2
+npm notice 7.3kB dist-lib/assets/ibm-plex-mono-cyrillic-600-normal-fLZuRloM.woff
+npm notice 8.7kB dist-lib/assets/ibm-plex-mono-cyrillic-700-normal-Bp80XfeI.woff2
+npm notice 7.3kB dist-lib/assets/ibm-plex-mono-cyrillic-700-normal-O_YjL27c.woff
+npm notice 5.8kB dist-lib/assets/ibm-plex-mono-cyrillic-ext-400-normal-DMdlQ8Kv.woff
+npm notice 6.9kB dist-lib/assets/ibm-plex-mono-cyrillic-ext-400-normal-xuaO2J-f.woff2
+npm notice 5.8kB dist-lib/assets/ibm-plex-mono-cyrillic-ext-500-normal-BIfNGwUT.woff
+npm notice 7.0kB dist-lib/assets/ibm-plex-mono-cyrillic-ext-500-normal-BqneJy0T.woff2
+npm notice 5.8kB dist-lib/assets/ibm-plex-mono-cyrillic-ext-600-normal-9HEixskS.woff
+npm notice 7.7kB dist-lib/assets/ibm-plex-mono-cyrillic-ext-600-normal-V-xxqcpd.woff2
+npm notice 7.2kB dist-lib/assets/ibm-plex-mono-cyrillic-ext-700-normal-BDQ-w_bc.woff2
+npm notice 5.8kB dist-lib/assets/ibm-plex-mono-cyrillic-ext-700-normal-CtgKGIh5.woff
+npm notice 13.1kB dist-lib/assets/ibm-plex-mono-latin-400-normal-CvHOgSBP.woff
+npm notice 14.7kB dist-lib/assets/ibm-plex-mono-latin-400-normal-DMJ8VG8y.woff2
+npm notice 13.2kB dist-lib/assets/ibm-plex-mono-latin-500-normal-CB9ihrfo.woff
+npm notice 14.9kB dist-lib/assets/ibm-plex-mono-latin-500-normal-DSY6xOcd.woff2
+npm notice 15.6kB dist-lib/assets/ibm-plex-mono-latin-600-normal-BgSNZQsw.woff2
+npm notice 13.2kB dist-lib/assets/ibm-plex-mono-latin-600-normal-DWFSQ4vo.woff
+npm notice 14.9kB dist-lib/assets/ibm-plex-mono-latin-700-normal-7sUh57Bg.woff2
+npm notice 13.2kB dist-lib/assets/ibm-plex-mono-latin-700-normal-CNHXzs6v.woff
+npm notice 13.3kB dist-lib/assets/ibm-plex-mono-latin-ext-400-normal-BmRBH3aV.woff2
+npm notice 11.8kB dist-lib/assets/ibm-plex-mono-latin-ext-400-normal-D3D2R8hC.woff
+npm notice 13.4kB dist-lib/assets/ibm-plex-mono-latin-ext-500-normal-CAhNIIs5.woff2
+npm notice 11.8kB dist-lib/assets/ibm-plex-mono-latin-ext-500-normal-CZ70TYgx.woff
+npm notice 14.3kB dist-lib/assets/ibm-plex-mono-latin-ext-600-normal-D38SheWl.woff2
+npm notice 11.8kB dist-lib/assets/ibm-plex-mono-latin-ext-600-normal-DmB0ttJJ.woff
+npm notice 11.6kB dist-lib/assets/ibm-plex-mono-latin-ext-700-normal-Cwsjk1Jb.woff
+npm notice 13.4kB dist-lib/assets/ibm-plex-mono-latin-ext-700-normal-Dhimjc7-.woff2
+npm notice 5.9kB dist-lib/assets/ibm-plex-mono-vietnamese-400-normal-BulugwFq.woff2
+npm notice 5.6kB dist-lib/assets/ibm-plex-mono-vietnamese-400-normal-DDuiU_S-.woff
+npm notice 5.6kB dist-lib/assets/ibm-plex-mono-vietnamese-500-normal-C8zxqsMH.woff
+npm notice 6.0kB dist-lib/assets/ibm-plex-mono-vietnamese-500-normal-DZ4AoWbu.woff2
+npm notice 6.9kB dist-lib/assets/ibm-plex-mono-vietnamese-600-normal-D2EvbN8M.woff2
+npm notice 5.7kB dist-lib/assets/ibm-plex-mono-vietnamese-600-normal-iLQfcSjf.woff
+npm notice 6.1kB dist-lib/assets/ibm-plex-mono-vietnamese-700-normal-apsD3J7v.woff2
+npm notice 5.6kB dist-lib/assets/ibm-plex-mono-vietnamese-700-normal-Bs14ezHR.woff
+npm notice 13.5kB dist-lib/assets/ibm-plex-sans-cyrillic-400-normal-BTotfTJu.woff
+npm notice 14.8kB dist-lib/assets/ibm-plex-sans-cyrillic-400-normal-DZqxrq2p.woff2
+npm notice 13.9kB dist-lib/assets/ibm-plex-sans-cyrillic-500-normal-ByOcLdNv.woff
+npm notice 15.0kB dist-lib/assets/ibm-plex-sans-cyrillic-500-normal-CocWQlwt.woff2
+npm notice 15.0kB dist-lib/assets/ibm-plex-sans-cyrillic-600-normal-71GNu3SW.woff2
+npm notice 13.9kB dist-lib/assets/ibm-plex-sans-cyrillic-600-normal-BGq0mW3O.woff
+npm notice 14.6kB dist-lib/assets/ibm-plex-sans-cyrillic-700-normal-D_uavGvn.woff2
+npm notice 13.3kB dist-lib/assets/ibm-plex-sans-cyrillic-700-normal-RFb1v-CK.woff
+npm notice 10.3kB dist-lib/assets/ibm-plex-sans-cyrillic-ext-400-normal-Dsrv2Tcn.woff
+npm notice 12.1kB dist-lib/assets/ibm-plex-sans-cyrillic-ext-400-normal-g30qAdWV.woff2
+npm notice 12.3kB dist-lib/assets/ibm-plex-sans-cyrillic-ext-500-normal-Cs5J6C77.woff2
+npm notice 10.6kB dist-lib/assets/ibm-plex-sans-cyrillic-ext-500-normal-DB5PtV2g.woff
+npm notice 10.6kB dist-lib/assets/ibm-plex-sans-cyrillic-ext-600-normal-Bz0x94Yp.woff
+npm notice 12.3kB dist-lib/assets/ibm-plex-sans-cyrillic-ext-600-normal-DUMzJB7m.woff2
+npm notice 12.1kB dist-lib/assets/ibm-plex-sans-cyrillic-ext-700-normal-BmRLXWpJ.woff2
+npm notice 10.2kB dist-lib/assets/ibm-plex-sans-cyrillic-ext-700-normal-DCQwxkRk.woff
+npm notice 9.9kB dist-lib/assets/ibm-plex-sans-greek-400-normal-_efipK4i.woff2
+npm notice 8.8kB dist-lib/assets/ibm-plex-sans-greek-400-normal-D9ESIMu3.woff
+npm notice 9.1kB dist-lib/assets/ibm-plex-sans-greek-500-normal-CuWXN6rf.woff
+npm notice 10.4kB dist-lib/assets/ibm-plex-sans-greek-500-normal-JMMifIXV.woff2
+npm notice 9.2kB dist-lib/assets/ibm-plex-sans-greek-600-normal-D-CqTdkO.woff
+npm notice 10.4kB dist-lib/assets/ibm-plex-sans-greek-600-normal-DzTrcv_p.woff2
+npm notice 8.7kB dist-lib/assets/ibm-plex-sans-greek-700-normal-CkZN0sRy.woff
+npm notice 9.9kB dist-lib/assets/ibm-plex-sans-greek-700-normal-wyJ6jzdA.woff2
+npm notice 22.6kB dist-lib/assets/ibm-plex-sans-latin-400-normal-CDDApCn2.woff2
+npm notice 22.1kB dist-lib/assets/ibm-plex-sans-latin-400-normal-CYLoc0-x.woff
+npm notice 24.2kB dist-lib/assets/ibm-plex-sans-latin-500-normal-6ng42L7E.woff2
+npm notice 23.9kB dist-lib/assets/ibm-plex-sans-latin-500-normal-BgVn5rGT.woff
+npm notice 23.9kB dist-lib/assets/ibm-plex-sans-latin-600-normal-Cu4Hd6ag.woff
+npm notice 24.3kB dist-lib/assets/ibm-plex-sans-latin-600-normal-CuJfVYMP.woff2
+npm notice 22.3kB dist-lib/assets/ibm-plex-sans-latin-700-normal-Bth3BMcD.woff
+npm notice 22.8kB dist-lib/assets/ibm-plex-sans-latin-700-normal-Bxkt5Cjx.woff2
+npm notice 16.0kB dist-lib/assets/ibm-plex-sans-latin-ext-400-normal-C5H60-Va.woff2
+npm notice 14.4kB dist-lib/assets/ibm-plex-sans-latin-ext-400-normal-RBey6euL.woff
+npm notice 14.7kB dist-lib/assets/ibm-plex-sans-latin-ext-500-normal-D0aIdm-b.woff
+npm notice 16.5kB dist-lib/assets/ibm-plex-sans-latin-ext-500-normal-DakdToA3.woff2
+npm notice 14.8kB dist-lib/assets/ibm-plex-sans-latin-ext-600-normal-DIrixKbi.woff
+npm notice 16.4kB dist-lib/assets/ibm-plex-sans-latin-ext-600-normal-DOrvGEcy.woff2
+npm notice 16.2kB dist-lib/assets/ibm-plex-sans-latin-ext-700-normal-aMgXseD4.woff2
+npm notice 14.4kB dist-lib/assets/ibm-plex-sans-latin-ext-700-normal-DZH6Xh-4.woff
+npm notice 8.2kB dist-lib/assets/ibm-plex-sans-vietnamese-400-normal-DG4YqDda.woff2
+npm notice 6.4kB dist-lib/assets/ibm-plex-sans-vietnamese-400-normal-fK1oJ5dG.woff
+npm notice 6.6kB dist-lib/assets/ibm-plex-sans-vietnamese-500-normal-BEb3_waV.woff
+npm notice 8.4kB dist-lib/assets/ibm-plex-sans-vietnamese-500-normal-e4dixQRQ.woff2
+npm notice 6.6kB dist-lib/assets/ibm-plex-sans-vietnamese-600-normal-DgdngZtN.woff
+npm notice 8.5kB dist-lib/assets/ibm-plex-sans-vietnamese-600-normal-DpPYBSTl.woff2
+npm notice 6.4kB dist-lib/assets/ibm-plex-sans-vietnamese-700-normal-BV5B8Are.woff
+npm notice 8.2kB dist-lib/assets/ibm-plex-sans-vietnamese-700-normal-CkEo6LDy.woff2
+npm notice 5.3kB dist-lib/attachment.js
+npm notice 10.0kB dist-lib/autocomplete.js
+npm notice 1.3kB dist-lib/avatar.js
+npm notice 2.9kB dist-lib/badge.js
+npm notice 2.4kB dist-lib/breadcrumb.js
+npm notice 316B dist-lib/button.js
+npm notice 9.1kB dist-lib/calendar.js
+npm notice 3.3kB dist-lib/chart.js
+npm notice 514B dist-lib/checkbox-group.js
+npm notice 1.7kB dist-lib/checkbox.js
+npm notice 2.3kB dist-lib/chunks/button-CbGRqxEO.js
+npm notice 1.5kB dist-lib/chunks/control-sizes-CG-tSiWV.js
+npm notice 16.3kB dist-lib/chunks/date-picker-CVv2QIfY.js
+npm notice 246B dist-lib/chunks/focus-ring-BwICtWf4.js
+npm notice 790B dist-lib/chunks/popup-arrow-BWLQ6_7v.js
+npm notice 3.4kB dist-lib/chunks/toggle-ey_8SVK-.js
+npm notice 380B dist-lib/chunks/utils-Cr_eCEw3.js
+npm notice 14.8kB dist-lib/code-block-tree.js
+npm notice 11.9kB dist-lib/code-block.js
+npm notice 1.1kB dist-lib/collapsible.js
+npm notice 11.5kB dist-lib/combobox.js
+npm notice 3.6kB dist-lib/command.js
+npm notice 945B dist-lib/components/ui/accordion.d.ts
+npm notice 2.7kB dist-lib/components/ui/alert-dialog.d.ts
+npm notice 874B dist-lib/components/ui/alert.d.ts
+npm notice 2.3kB dist-lib/components/ui/attachment.d.ts
+npm notice 5.3kB dist-lib/components/ui/autocomplete.d.ts
+npm notice 629B dist-lib/components/ui/avatar.d.ts
+npm notice 1.7kB dist-lib/components/ui/badge.d.ts
+npm notice 1.1kB dist-lib/components/ui/breadcrumb.d.ts
+npm notice 1.0kB dist-lib/components/ui/button.d.ts
+npm notice 432B dist-lib/components/ui/calendar.d.ts
+npm notice 1.5kB dist-lib/components/ui/chart.d.ts
+npm notice 266B dist-lib/components/ui/checkbox-group.d.ts
+npm notice 396B dist-lib/components/ui/checkbox.d.ts
+npm notice 2.5kB dist-lib/components/ui/code-block-tree.d.ts
+npm notice 3.5kB dist-lib/components/ui/code-block.d.ts
+npm notice 562B dist-lib/components/ui/collapsible.d.ts
+npm notice 5.4kB dist-lib/components/ui/combobox.d.ts
+npm notice 1.5kB dist-lib/components/ui/command.d.ts
+npm notice 4.4kB dist-lib/components/ui/context-menu.d.ts
+npm notice 3.4kB dist-lib/components/ui/data-table.d.ts
+npm notice 2.2kB dist-lib/components/ui/date-picker.d.ts
+npm notice 2.5kB dist-lib/components/ui/dialog.d.ts
+npm notice 3.7kB dist-lib/components/ui/drawer.d.ts
+npm notice 499B dist-lib/components/ui/dropzone.d.ts
+npm notice 1.6kB dist-lib/components/ui/field.d.ts
+npm notice 367B dist-lib/components/ui/fieldset.d.ts
+npm notice 211B dist-lib/components/ui/form.d.ts
+npm notice 1.3kB dist-lib/components/ui/inline-edit.d.ts
+npm notice 1.1kB dist-lib/components/ui/input.d.ts
+npm notice 4.4kB dist-lib/components/ui/menu.d.ts
+npm notice 390B dist-lib/components/ui/menubar.d.ts
+npm notice 758B dist-lib/components/ui/meter.d.ts
+npm notice 2.2kB dist-lib/components/ui/navigation-menu.d.ts
+npm notice 1.8kB dist-lib/components/ui/number-field.d.ts
+npm notice 533B dist-lib/components/ui/otp-field.d.ts
+npm notice 942B dist-lib/components/ui/page-header.d.ts
+npm notice 1.1kB dist-lib/components/ui/pagination.d.ts
+npm notice 2.2kB dist-lib/components/ui/popover.d.ts
+npm notice 2.0kB dist-lib/components/ui/preview-card.d.ts
+npm notice 939B dist-lib/components/ui/progress-indicator.d.ts
+npm notice 812B dist-lib/components/ui/progress.d.ts
+npm notice 567B dist-lib/components/ui/radio.d.ts
+npm notice 796B dist-lib/components/ui/resizable.d.ts
+npm notice 1.0kB dist-lib/components/ui/scroll-area.d.ts
+npm notice 555B dist-lib/components/ui/search.d.ts
+npm notice 3.5kB dist-lib/components/ui/select.d.ts
+npm notice 254B dist-lib/components/ui/separator.d.ts
+npm notice 4.8kB dist-lib/components/ui/sidebar.d.ts
+npm notice 1.1kB dist-lib/components/ui/slider.d.ts
+npm notice 960B dist-lib/components/ui/switch.d.ts
+npm notice 2.4kB dist-lib/components/ui/tabs.d.ts
+npm notice 3.1kB dist-lib/components/ui/toast.d.ts
+npm notice 624B dist-lib/components/ui/toggle-group.d.ts
+npm notice 686B dist-lib/components/ui/toggle.d.ts
+npm notice 1.4kB dist-lib/components/ui/toolbar.d.ts
+npm notice 1.9kB dist-lib/components/ui/tooltip.d.ts
+npm notice 7.7kB dist-lib/context-menu.js
+npm notice 13.5kB dist-lib/data-table.js
+npm notice 214B dist-lib/date-picker.js
+npm notice 4.1kB dist-lib/dialog.js
+npm notice 7.0kB dist-lib/drawer.js
+npm notice 2.6kB dist-lib/dropzone.js
+npm notice 876B dist-lib/favicon.svg
+npm notice 3.5kB dist-lib/field.js
+npm notice 717B dist-lib/fieldset.js
+npm notice 410B dist-lib/form.js
+npm notice 110.1kB dist-lib/images/avatars/Female/1.jpg
+npm notice 140.3kB dist-lib/images/avatars/Female/2.jpg
+npm notice 141.0kB dist-lib/images/avatars/Female/3.jpg
+npm notice 168.2kB dist-lib/images/avatars/Female/4.jpg
+npm notice 185.7kB dist-lib/images/avatars/Female/5.jpg
+npm notice 116.6kB dist-lib/images/avatars/Female/6.jpg
+npm notice 46.4kB dist-lib/images/avatars/Female/7.jpg
+npm notice 150.1kB dist-lib/images/avatars/Female/8.jpg
+npm notice 142.2kB dist-lib/images/avatars/Female/9.jpg
+npm notice 83.8kB dist-lib/images/avatars/Female/10.jpg
+npm notice 100.8kB dist-lib/images/avatars/Male/1.jpg
+npm notice 134.9kB dist-lib/images/avatars/Male/2.jpg
+npm notice 68.2kB dist-lib/images/avatars/Male/3.jpg
+npm notice 94.7kB dist-lib/images/avatars/Male/4.jpg
+npm notice 90.4kB dist-lib/images/avatars/Male/5.jpg
+npm notice 71.8kB dist-lib/images/avatars/Male/6.jpg
+npm notice 84.3kB dist-lib/images/avatars/Male/7.jpg
+npm notice 155.1kB dist-lib/images/avatars/Male/8.jpg
+npm notice 118.3kB dist-lib/images/avatars/Male/9.jpg
+npm notice 132.7kB dist-lib/images/avatars/Male/10.jpg
+npm notice 81.2kB dist-lib/images/f8eaede2903e343d71cf8ec9e7b0d317.jpg
+npm notice 324.8kB dist-lib/images/lineart-avatar-1.png
+npm notice 16.6kB dist-lib/index.js
+npm notice 7.4kB dist-lib/inline-edit.js
+npm notice 3.3kB dist-lib/input.js
+npm notice 776B dist-lib/lib/button-variants.d.ts
+npm notice 681B dist-lib/lib/control-sizes.d.ts
+npm notice 754B dist-lib/lib/date-input.d.ts
+npm notice 191B dist-lib/lib/focus-ring.d.ts
+npm notice 20.1kB dist-lib/lib/index.d.ts
+npm notice 208B dist-lib/lib/popup-arrow.d.ts
+npm notice 800B dist-lib/lib/toggle-variants.d.ts
+npm notice 393B dist-lib/lib/utils.d.ts
+npm notice 7.7kB dist-lib/menu.js
+npm notice 757B dist-lib/menubar.js
+npm notice 1.3kB dist-lib/meter.js
+npm notice 5.5kB dist-lib/navigation-menu.js
+npm notice 5.0kB dist-lib/number-field.js
+npm notice 1.3kB dist-lib/otp-field.js
+npm notice 1.8kB dist-lib/page-header.js
+npm notice 2.7kB dist-lib/pagination.js
+npm notice 4.1kB dist-lib/popover.js
+npm notice 3.2kB dist-lib/preview-card.js
+npm notice 4.0kB dist-lib/progress-indicator.js
+npm notice 1.5kB dist-lib/progress.js
+npm notice 1.7kB dist-lib/radio.js
+npm notice 2.2kB dist-lib/resizable.js
+npm notice 3.6kB dist-lib/scroll-area.js
+npm notice 1.5kB dist-lib/search.js
+npm notice 7.3kB dist-lib/select.js
+npm notice 547B dist-lib/separator.js
+npm notice 19.4kB dist-lib/sidebar.js
+npm notice 4.7kB dist-lib/skytrack-logo-full.svg
+npm notice 2.2kB dist-lib/skytrack-logo.svg
+npm notice 2.4kB dist-lib/slider.js
+npm notice 116.6kB dist-lib/styles.css
+npm notice 463B dist-lib/styles.css.d.ts
+npm notice 1.9kB dist-lib/switch.js
+npm notice 7.3kB dist-lib/tabs.js
+npm notice 7.0kB dist-lib/toast.js
+npm notice 1.4kB dist-lib/toggle-group.js
+npm notice 143B dist-lib/toggle.js
+npm notice 3.4kB dist-lib/toolbar.js
+npm notice 4.0kB dist-lib/tooltip.js
+npm notice 4.0MB dist-lib/video/121952-724732135_tiny.mp4
+npm notice 7.4MB dist-lib/video/139646-773417963_tiny.mp4
+npm notice 12.9kB package.json
+npm notice Tarball Details
+npm notice name: skytrack-ui
+npm notice version: 0.1.5
+npm notice filename: skytrack-ui-0.1.5.tgz
+npm notice package size: 14.1 MB
+npm notice unpacked size: 15.7 MB
+npm notice shasum: 8802ad3c9b23ea37d1b094a515c670984083671e
+npm notice integrity: sha512-OOs/n82+R0OSA[...]Y0uxSALxZ9t8A==
+npm notice total files: 249
+npm notice
+skytrack-ui-0.1.5.tgz
+npm notice run skytrack-ui@0.1.5 test:consumer
+npm notice run node scripts/test-consumer.mjs
+[consumer] tarball: dist-lib-tarball/skytrack-ui-0.1.5.tgz
+[consumer] evidence: /var/folders/q0/v8hrpcv10kj5grqwy4s7vhfc0000gp/T/skytrack-ui-consumer-evidence-R5Ervw
+
+[consumer] 1. tarball contents
+  PASS  tarball has 249 files, none of them sources, demos, showcase, config, lockfiles or credentials
+  PASS  tarball omits test/spec artifacts
+  PASS  tarball top level is exactly README.md, dist-lib, package.json
+
+[consumer] 2. exports targets and CSS assets are inside the tarball
+  PASS  all 59 exports targets (JS + types) exist in the tarball
+  PASS  all 90 font url() references in the packed styles.css are packed too
+
+[consumer] isolated project: /var/folders/q0/v8hrpcv10kj5grqwy4s7vhfc0000gp/T/skytrack-ui-consumer-o6Zz2d
+
+[consumer] 3. install tarball (offline)
+  FAIL  npm install --offline failed: npm error code ENOTCACHED
+npm error request to https://registry.npmjs.org/regex-utilities failed: cache mode is 'only-if-cached' but no cached response is available.
+npm error A complete log of this run can be found in: /Users/tuan.tg/.npm/_logs/2026-11-11T19_28_06_003Z-debug-0.log
+
+
+[consumer] FAIL — 1 check(s) failed (project kept at /var/folders/q0/v8hrpcv10kj5grqwy4s7vhfc0000gp/T/skytrack-ui-consumer-o6Zz2d)
+

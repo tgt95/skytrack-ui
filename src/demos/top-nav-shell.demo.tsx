@@ -98,11 +98,7 @@ export function TopNavShellMock() {
         </div>
 
         <div className='flex items-center gap-2'>
-          <Search
-            size='sm'
-            placeholder='Search reports...'
-            className='h-7 w-36 text-xs sm:w-48'
-          />
+          <Search size='sm' placeholder='Search reports...' className='h-7 w-36 text-xs sm:w-48' />
           <Button size='icon-xs' variant='ghost' aria-label='Notifications'>
             <BellIcon className='size-4' />
           </Button>
@@ -200,7 +196,8 @@ export function TopNavShellMock() {
 export const demo: DemoMeta = {
   id: 'top-nav-shell',
   title: 'Top Navigation Shell',
-  description: 'Full-width horizontal navigation for data-dense analytics dashboards, reporting suites, and wide grids.',
+  description:
+    'Full-width horizontal navigation for data-dense analytics dashboards, reporting suites, and wide grids.',
   group: 'UI shell',
   variants: [
     {

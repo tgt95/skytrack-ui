@@ -77,9 +77,7 @@ function ToggleableCodeExample() {
         <Button size='xs' variant='outline' onClick={() => setEnabled((v) => !v)}>
           {enabled ? 'Tắt line index (API prop)' : 'Mở line index (API prop)'}
         </Button>
-        <span className='font-mono text-xs text-muted-foreground'>
-          lineNumbers={String(enabled)}
-        </span>
+        <span className='font-mono text-xs text-muted-foreground'>lineNumbers={String(enabled)}</span>
       </div>
       <CodeBlock lineNumbers={enabled}>
         <CodeBlockHeader>

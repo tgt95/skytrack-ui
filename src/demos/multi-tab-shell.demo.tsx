@@ -161,9 +161,13 @@ export function MultiTabShellMock() {
                 <Badge size='sm' count='Processing' status='default' />
               </div>
               <div className='mt-1 flex items-center gap-3 text-xs text-muted-foreground'>
-                <span>Customer: <strong className='text-foreground'>Acme Corp</strong></span>
+                <span>
+                  Customer: <strong className='text-foreground'>Acme Corp</strong>
+                </span>
                 <span>•</span>
-                <span>Order Total: <strong className='text-foreground'>$45,000.00 USD</strong></span>
+                <span>
+                  Order Total: <strong className='text-foreground'>$45,000.00 USD</strong>
+                </span>
               </div>
             </div>
 
@@ -187,16 +191,28 @@ export function MultiTabShellMock() {
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
             <div className='rounded-(--radius) border border-border bg-card p-3 space-y-1.5'>
               <div className='text-xs sub-heading text-muted-foreground'>Fulfillment Information</div>
-              <div className='text-xs'><span className='text-muted-foreground'>Carrier:</span> FedEx Freight Express</div>
-              <div className='text-xs'><span className='text-muted-foreground'>Tracking Number:</span> 7849-2910-4491</div>
-              <div className='text-xs'><span className='text-muted-foreground'>Estimated Delivery:</span> Nov 14, 2026</div>
+              <div className='text-xs'>
+                <span className='text-muted-foreground'>Carrier:</span> FedEx Freight Express
+              </div>
+              <div className='text-xs'>
+                <span className='text-muted-foreground'>Tracking Number:</span> 7849-2910-4491
+              </div>
+              <div className='text-xs'>
+                <span className='text-muted-foreground'>Estimated Delivery:</span> Nov 14, 2026
+              </div>
             </div>
 
             <div className='rounded-(--radius) border border-border bg-card p-3 space-y-1.5'>
               <div className='text-xs sub-heading text-muted-foreground'>Financial Terms</div>
-              <div className='text-xs'><span className='text-muted-foreground'>Payment Method:</span> Wire Transfer (Net 30)</div>
-              <div className='text-xs'><span className='text-muted-foreground'>Escrow ID:</span> ESC-2026-99120</div>
-              <div className='text-xs'><span className='text-muted-foreground'>Ledger Account:</span> 1010-Accounts-Receivable</div>
+              <div className='text-xs'>
+                <span className='text-muted-foreground'>Payment Method:</span> Wire Transfer (Net 30)
+              </div>
+              <div className='text-xs'>
+                <span className='text-muted-foreground'>Escrow ID:</span> ESC-2026-99120
+              </div>
+              <div className='text-xs'>
+                <span className='text-muted-foreground'>Ledger Account:</span> 1010-Accounts-Receivable
+              </div>
             </div>
           </div>
         </main>
@@ -208,7 +224,8 @@ export function MultiTabShellMock() {
 export const demo: DemoMeta = {
   id: 'multi-tab-shell',
   title: 'Multi-Tabbed Shell',
-  description: 'In-app tabbed workspace supporting intensive multitasking across multiple documents without state loss.',
+  description:
+    'In-app tabbed workspace supporting intensive multitasking across multiple documents without state loss.',
   group: 'UI shell',
   variants: [
     {

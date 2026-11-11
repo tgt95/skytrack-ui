@@ -1,0 +1,36 @@
+{
+  "$comment": "File-size budgets for src. Thresholds equal the 2026-11-12 baseline; reduce them when a file shrinks. src/lib/index.ts is generated.",
+  "defaultMaxLines": 400,
+  "exclude": [
+    "src/lib/index.ts"
+  ],
+  "thresholds": {
+    "src/components/ui/code-block-tree.tsx": 515,
+    "src/components/ui/code-block.tsx": 501,
+    "src/components/ui/combobox.tsx": 430,
+    "src/components/ui/data-table.tsx": 448,
+    "src/components/ui/date-picker.tsx": 476,
+    "src/components/ui/sidebar.tsx": 709,
+    "src/demos/autocomplete.demo.tsx": 983,
+    "src/demos/combobox.demo.tsx": 1099,
+    "src/demos/data-table.demo.tsx": 931,
+    "src/demos/dialog.demo.tsx": 664,
+    "src/demos/drawer.demo.tsx": 802,
+    "src/demos/menu.demo.tsx": 547,
+    "src/demos/select.demo.tsx": 568,
+    "src/demos/toast.demo.tsx": 497,
+    "src/showcase/App.tsx": 1434,
+    "src/showcase/component-guidelines/designer-type-patterns.ts": 509,
+    "src/showcase/component-guidelines/practices/designer-practices-a.tsx": 1139,
+    "src/showcase/component-guidelines/practices/designer-practices-b.tsx": 1182,
+    "src/showcase/overview-dashboard.tsx": 1111,
+    "src/showcase/overview-style.tsx": 1554,
+    "src/showcase/pattern-library/catalog.ts": 666,
+    "src/showcase/pattern-library/demos.tsx": 5801,
+    "src/showcase/pattern-library/example-copy.ts": 770,
+    "src/showcase/pattern-library/page-content.ts": 12174,
+    "src/showcase/pattern-library/pattern-library.test.tsx": 1881,
+    "src/showcase/sheet-specimens.tsx": 2601,
+    "src/showcase/sheet.tsx": 1284
+  }
+}

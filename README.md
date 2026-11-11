@@ -307,7 +307,6 @@ After developing and committing in `skytrack-ui`:
 
 The sync script (`scripts/sync-to-design-guide.mjs`) automatically mirrors `src/`, `public/`, `skills/`, package definitions, and build scripts while safely preserving target-specific files in `skytrack-design-guide` (`.git/`, `node_modules/`, `design/`, `ci/`, `CHANGELOG.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `docs/PRESENTATIONS.md`, and `scripts/export-design.mjs`).
 
-
 `build:lib` runs, in order: clean `dist-lib` → regenerate the export map → Vite ESM bundle
 (`vite.lib.config.ts`) → compile `src/styles.css` (`vite.lib.css.config.ts`) → emit `.d.ts`
 (`tsconfig.lib.json`) → rewrite `@/` aliases in the declarations → verify

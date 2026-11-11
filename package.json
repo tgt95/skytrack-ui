@@ -312,6 +312,8 @@
     "build": "tsc -p tsconfig.json && vite build",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "node scripts/lint-ui-practices.mjs && node scripts/sync-sheet-specs.mjs",
+    "guardrails": "node scripts/architecture-guardrails.cjs",
+    "guardrails:selftest": "node scripts/architecture-guardrails.cjs --self-test",
     "sync:sheet": "node scripts/sync-sheet-specs.mjs",
     "test": "vitest run",
     "preview": "vite preview",
@@ -326,8 +328,8 @@
     "build:site": "node scripts/build-site.mjs",
     "deploy:pages": "node scripts/deploy-pages.mjs",
     "sync:guide": "node scripts/sync-to-design-guide.mjs",
-    "format": "prettier --write 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md",
-    "format:check": "prettier --check 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md"
+    "format": "prettier --write 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,cjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md",
+    "format:check": "prettier --check 'src/**/*.{ts,tsx,css}' 'scripts/**/*.{mjs,cjs,ts}' 'vite*.ts' 'vitest.config.ts' package.json 'tsconfig*.json' README.md"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -340,8 +342,7 @@
     "react-resizable-panels": "^4.18.1",
     "recharts": "^3.10.1",
     "shiki": "^4.6.0",
-    "tailwind-merge": "^3.7.0",
-    "zod": "^4.6.5"
+    "tailwind-merge": "^3.7.0"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -370,6 +371,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.2",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "zod": "^4.6.5"
   }
 }

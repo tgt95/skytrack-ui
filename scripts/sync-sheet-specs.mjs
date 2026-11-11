@@ -55,8 +55,19 @@ checkAxisIncludes('combobox', 'size (input group)', ['xs', 'sm', 'default', 'lg'
 checkAxisIncludes('select', 'size (trigger)', ['xs', 'sm', 'default', 'lg'])
 checkAxisIncludes('autocomplete', 'input size', ['xs', 'sm', 'default', 'lg'])
 checkAxisIncludes('number-field', 'size', ['xs', 'sm', 'default', 'lg'])
-checkAxisIncludes('toggle', 'size', ['icon', 'icon-xs', 'icon-sm', 'icon-lg'])
-checkAxisIncludes('toggle-group', 'size', ['icon', 'icon-xs', 'icon-sm', 'icon-lg'])
+
+// Shared button/toggle axes are derived from the component cva config at runtime.
+// Guard the derivation instead of matching literal values that no longer exist.
+for (const derived of [
+  'Object.keys(buttonVariantConfig.variants.variant)',
+  'Object.keys(buttonVariantConfig.variants.size)',
+  'Object.keys(toggleVariantConfig.variants.variant)',
+  'Object.keys(toggleVariantConfig.variants.size)'
+]) {
+  if (!sheetContent.includes(derived)) {
+    failures.push(`sheet.tsx must derive shared axes with ${derived}`)
+  }
+}
 
 if (failures.length > 0) {
   console.error(`FAIL  Component API sync check failed (${failures.length} issue(s)):`)

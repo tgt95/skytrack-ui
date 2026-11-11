@@ -418,9 +418,9 @@ describe('Pattern Library teaching content', () => {
     )
     expect(calloutExample).toBeTruthy()
     expect(within(calloutExample!).getByRole('note', { name: 'Page-load callout' })).toBeTruthy()
-    expect(within(calloutExample!).getByRole('textbox', { name: 'Review collection' })).toHaveProperty('readOnly', true)
+    expect(within(calloutExample!).getByRole('textbox', { name: 'Workspace name' })).toHaveProperty('readOnly', true)
     expect(within(calloutExample!).queryByRole('button')).toBeNull()
-    expect(within(calloutExample!).getByText(/Visual reference only/)).toBeTruthy()
+    expect(within(calloutExample!).getByText(/stays beside the field/)).toBeTruthy()
 
     const toastExample = container.querySelector<HTMLElement>('[data-pattern-example-id="notifications-toast-brief"]')
     expect(within(toastExample!).getByRole('button', { name: 'Show success toast' })).toBeTruthy()
@@ -428,9 +428,8 @@ describe('Pattern Library teaching content', () => {
     expect(within(toastExample!).queryByRole('button', { name: /warning|error/i })).toBeNull()
 
     const panelExample = container.querySelector<HTMLElement>('[data-pattern-example-id="notifications-panel-review"]')
-    await user.click(within(panelExample!).getByRole('button', { name: 'Notifications · 3 unread' }))
-    expect(within(panelExample!).getByText(/Experimental preview/)).toBeTruthy()
-    expect(within(panelExample!).getAllByText('Unread')).toHaveLength(3)
+    await user.click(within(panelExample!).getByRole('button', { name: 'Open sample panel' }))
+    expect(within(panelExample!).getByText(/Experimental local illustration/)).toBeTruthy()
     expect(within(panelExample!).getByText('Information')).toBeTruthy()
     expect(within(panelExample!).getByText('Success')).toBeTruthy()
     expect(within(panelExample!).getByText('Warning')).toBeTruthy()
@@ -1743,7 +1742,7 @@ describe('Pattern Library teaching content', () => {
           showedResponse = true
         } else if (demo.id === 'notifications-toast-brief') {
           await user.click(within(example!).getByRole('button', { name: 'Show success toast' }))
-          const savedMessages = await screen.findAllByText('Sample changes saved.')
+          const savedMessages = await screen.findAllByText('Your changes have been saved.')
           expect(savedMessages.some((message) => message.getAttribute('data-slot') === 'toast-description')).toBe(true)
           showedResponse = true
         } else {

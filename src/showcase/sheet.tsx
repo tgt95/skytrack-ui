@@ -4,6 +4,8 @@ import themeCss from '../index.css?raw'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { buttonVariantConfig } from '@/lib/button-variants'
+import { toggleVariantConfig } from '@/lib/toggle-variants'
 import { renderConfiguredSpecimen, renderStateSpecimen } from './sheet-specimens'
 
 /**
@@ -329,8 +331,11 @@ type ComponentSpec = {
   note?: string
 }
 
-const BUTTON_VARIANTS = ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link']
-const BUTTON_SIZES = ['default', 'xs', 'sm', 'lg', 'icon', 'icon-xs', 'icon-sm', 'icon-lg']
+/** Variant axes derived from the component cva definitions, never hand-copied. */
+const BUTTON_VARIANTS = Object.keys(buttonVariantConfig.variants.variant)
+const BUTTON_SIZES = Object.keys(buttonVariantConfig.variants.size)
+const TOGGLE_VARIANTS = Object.keys(toggleVariantConfig.variants.variant)
+const TOGGLE_SIZES = Object.keys(toggleVariantConfig.variants.size)
 
 /** cva axes copied from the component sources (button.tsx, toggle.tsx, ...). */
 const SPECS: ComponentSpec[] = [
@@ -359,10 +364,10 @@ const SPECS: ComponentSpec[] = [
     title: 'Toggle',
     group: 'Actions',
     axes: [
-      { name: 'variant', values: ['default', 'outline', 'segmented', 'brand'], default: 'default' },
+      { name: 'variant', values: TOGGLE_VARIANTS, default: 'default' },
       {
         name: 'size',
-        values: ['default', 'xs', 'sm', 'lg', 'icon', 'icon-xs', 'icon-sm', 'icon-lg'],
+        values: TOGGLE_SIZES,
         default: 'default'
       }
     ],
@@ -375,10 +380,10 @@ const SPECS: ComponentSpec[] = [
     title: 'Toggle Group',
     group: 'Actions',
     axes: [
-      { name: 'variant', values: ['default', 'outline', 'segmented', 'brand'], default: 'default' },
+      { name: 'variant', values: TOGGLE_VARIANTS, default: 'default' },
       {
         name: 'size',
-        values: ['default', 'xs', 'sm', 'lg', 'icon', 'icon-xs', 'icon-sm', 'icon-lg'],
+        values: TOGGLE_SIZES,
         default: 'default'
       },
       { name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' }
@@ -776,6 +781,13 @@ const SPECS: ComponentSpec[] = [
     ],
     states: ['header', 'footer', 'copy action', 'line numbers'],
     note: 'Syntax-highlighted code container with header title, copy button and line numbers.'
+  },
+  {
+    id: 'code-block-tree',
+    title: 'Code Block Tree',
+    group: 'Data Display',
+    states: ['expanded', 'collapsed', 'line numbers', 'copy action', 'invalid JSON'],
+    note: 'JSON tree with expandable nodes, line numbers and copy action.'
   },
   {
     id: 'data-table',

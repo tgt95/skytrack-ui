@@ -98,11 +98,7 @@ export function LeftNavShellMock() {
         </div>
 
         <div className='flex max-w-64 flex-1 items-center px-2'>
-          <Search
-            size='sm'
-            placeholder='Search deals, accounts...'
-            className='h-7 w-full text-xs'
-          />
+          <Search size='sm' placeholder='Search deals, accounts...' className='h-7 w-full text-xs' />
         </div>
 
         <div className='flex items-center gap-1.5'>

@@ -4,5 +4,6 @@ dist-lib
 dist-lib-tarball
 *.tgz
 site
+artifact
 .DS_Store
 draft
