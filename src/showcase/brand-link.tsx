@@ -7,7 +7,7 @@ export function ShowcaseBrandLink({ logo }: ShowcaseBrandLinkProps) {
     <a
       href='/'
       aria-label='SkyTrack UI home'
-      className='block h-5 [&>svg]:block [&>svg]:h-full [&>svg]:w-full'
+      className='block h-6 [&>svg]:block [&>svg]:h-full [&>svg]:w-full'
       dangerouslySetInnerHTML={{ __html: logo }}
     />
   )

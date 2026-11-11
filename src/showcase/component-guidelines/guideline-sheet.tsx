@@ -2,7 +2,6 @@ import * as React from 'react'
 import { CheckIcon, CopyIcon } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs'
 import type { DemoMeta } from '@/showcase/demo'
 import { MarkdownRenderer } from './markdown-renderer'
 import type { ParsedGuideline } from './types'
@@ -130,25 +129,7 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
 
   return (
     <div className='w-full min-w-0 rounded-(--radius) border border-border/80 bg-card/60 p-6'>
-      <Tabs defaultValue='Overview' className='w-full min-w-0'>
-        <div className='mb-4'>
-          <TabsList
-            variant='line'
-            width='hug'
-            aria-label={`${guideline.title} guideline sections`}
-            className='gap-2 sm:gap-4 overflow-x-auto max-w-full pb-px'
-          >
-            {TAB_KEYS.map((tabKey) => {
-              const sec = guideline.sections[tabKey]
-              if (!sec) return null
-              return (
-                <TabsTab key={tabKey} value={tabKey} className='text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap'>
-                  {tabKey}
-                </TabsTab>
-              )
-            })}
-          </TabsList>
-        </div>
+      <div className='space-y-10'>
 
         {TAB_KEYS.map((tabKey) => {
           const sec = guideline.sections[tabKey]
@@ -165,7 +146,8 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
           const isStacked = targetDemo?.group === 'UI shell'
 
           return (
-            <TabsPanel key={tabKey} value={tabKey} className='w-full min-w-0 pt-1'>
+            <section key={tabKey} aria-labelledby={`guideline-${tabKey.replaceAll(' ', '-')}`} className='w-full min-w-0 border-t border-border/60 pt-6'>
+              <h2 id={`guideline-${tabKey.replaceAll(' ', '-')}`} className='h3 mb-4'>{tabKey}</h2>
               <div className={isStacked ? 'flex flex-col gap-6 w-full min-w-0' : 'grid grid-cols-1 lg:grid-cols-2 gap-6 items-start'}>
                 {/* Guidance Column (stacked first on mobile) */}
                 <div className='min-w-0 space-y-4'>
@@ -215,10 +197,10 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
                   </div>
                 </div>
               </div>
-            </TabsPanel>
+            </section>
           )
         })}
-      </Tabs>
+      </div>
     </div>
   )
 }

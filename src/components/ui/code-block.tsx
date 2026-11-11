@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CheckIcon, CopySimpleIcon } from '@phosphor-icons/react'
+import { CheckIcon, CopySimpleIcon, ListNumbersIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import type { BundledLanguage } from 'shiki'
 import { Button, type ButtonProps } from '@/components/ui/button'
@@ -15,11 +15,16 @@ const codeBlockLineHeight: Record<CodeBlockSize, string> = {
 type CodeBlockContextValue = {
   size: CodeBlockSize
   floatingActions: boolean
+  lineNumbers: boolean
+  startLine: number
+  toggleLineNumbers?: () => void
 }
 
 const CodeBlockContext = React.createContext<CodeBlockContextValue>({
   size: 'default',
-  floatingActions: false
+  floatingActions: false,
+  lineNumbers: false,
+  startLine: 1
 })
 
 const codeBlockVariants = cva(
@@ -36,15 +41,64 @@ const codeBlockVariants = cva(
 )
 
 export type CodeBlockProps = React.ComponentProps<'div'> &
-  VariantProps<typeof codeBlockVariants> & { size?: CodeBlockSize }
+  VariantProps<typeof codeBlockVariants> & {
+    size?: CodeBlockSize
+    lineNumbers?: boolean
+    lineIndex?: boolean
+    showLineNumbers?: boolean
+    defaultLineNumbers?: boolean
+    defaultLineIndex?: boolean
+    startLine?: number
+    startLineIndex?: number
+    onLineNumbersChange?: (enabled: boolean) => void
+  }
 
-function CodeBlock({ className, size = 'default', variant = 'default', children, ...props }: CodeBlockProps) {
+function CodeBlock({
+  className,
+  size = 'default',
+  variant = 'default',
+  lineNumbers: controlledLineNumbers,
+  lineIndex: controlledLineIndex,
+  showLineNumbers: controlledShowLineNumbers,
+  defaultLineNumbers,
+  defaultLineIndex,
+  startLine,
+  startLineIndex,
+  onLineNumbersChange,
+  children,
+  ...props
+}: CodeBlockProps) {
   const resolvedSize = size ?? 'default'
   const resolvedVariant = variant ?? 'default'
+  const explicitLineNumbers = controlledLineNumbers ?? controlledLineIndex ?? controlledShowLineNumbers
+  const isControlled = explicitLineNumbers !== undefined
+  const initialLineNumbers = defaultLineNumbers ?? defaultLineIndex ?? false
+  const [internalLineNumbers, setInternalLineNumbers] = React.useState<boolean>(initialLineNumbers)
+  const lineNumbers = isControlled ? explicitLineNumbers : internalLineNumbers
+
+  const toggleLineNumbers = React.useCallback(() => {
+    const next = !lineNumbers
+    if (!isControlled) {
+      setInternalLineNumbers(next)
+    }
+    onLineNumbersChange?.(next)
+  }, [lineNumbers, isControlled, onLineNumbersChange])
+
+  const resolvedStartLine = startLine ?? startLineIndex ?? 1
+
   const floatingActions = !React.Children.toArray(children).some(
     (child) => React.isValidElement(child) && child.type === CodeBlockHeader
   )
-  const context = React.useMemo(() => ({ size: resolvedSize, floatingActions }), [resolvedSize, floatingActions])
+  const context = React.useMemo(
+    () => ({
+      size: resolvedSize,
+      floatingActions,
+      lineNumbers,
+      startLine: resolvedStartLine,
+      toggleLineNumbers
+    }),
+    [resolvedSize, floatingActions, lineNumbers, resolvedStartLine, toggleLineNumbers]
+  )
 
   return (
     <CodeBlockContext.Provider value={context}>
@@ -52,6 +106,7 @@ function CodeBlock({ className, size = 'default', variant = 'default', children,
         data-slot='code-block'
         data-size={resolvedSize}
         data-variant={resolvedVariant}
+        data-line-numbers={lineNumbers ? 'true' : 'false'}
         className={cn(codeBlockVariants({ variant: resolvedVariant }), className)}
         {...props}
       >
@@ -169,36 +224,56 @@ export type CodeBlockContentProps = Omit<React.ComponentProps<'pre'>, 'children'
   children?: React.ReactNode
   wrap?: boolean
   lineNumbers?: boolean
+  lineIndex?: boolean
+  showLineNumbers?: boolean
   startLine?: number
+  startLineIndex?: number
 }
 
 function CodeBlockContent({
   children,
   wrap = false,
-  lineNumbers = false,
-  startLine = 1,
+  lineNumbers: propLineNumbers,
+  lineIndex: propLineIndex,
+  showLineNumbers: propShowLineNumbers,
+  startLine: propStartLine,
+  startLineIndex: propStartLineIndex,
   tabIndex = 0,
   style,
   className,
   ...props
 }: CodeBlockContentProps) {
-  const { size, floatingActions } = React.useContext(CodeBlockContext)
-  const validStartLine = Number.isFinite(startLine) && startLine > 0 ? Math.floor(startLine) : 1
+  const context = React.useContext(CodeBlockContext)
+  const size = context.size
+  const floatingActions = context.floatingActions
+
+  const lineNumbers =
+    propLineNumbers ?? propLineIndex ?? propShowLineNumbers ?? context.lineNumbers ?? false
+  const rawStartLine =
+    propStartLine ?? propStartLineIndex ?? context.startLine ?? 1
+  const validStartLine = Number.isFinite(rawStartLine) && rawStartLine > 0 ? Math.floor(rawStartLine) : 1
   const childLines = typeof children === 'string' ? children.split('\n') : React.Children.toArray(children)
   const lastLineNumber = validStartLine + Math.max(0, childLines.length - 1)
-  const gutterWidth = `${Math.max(2, String(lastLineNumber).length + 1)}ch`
+  const digitsCount = Math.max(2, String(lastLineNumber).length)
+  const gutterPadding = size === 'sm' ? '1.5rem' : size === 'xs' ? '1.25rem' : '1.75rem'
+  const gutterWidth = `calc(${digitsCount}ch + ${gutterPadding})`
+
   const contentStyle = {
     ...style,
     ...(lineNumbers ? { '--code-block-gutter-width': gutterWidth } : {})
   } as React.CSSProperties
+
   const content = lineNumbers
     ? childLines.map((line, index) => {
         const lineNumber = String(validStartLine + index)
         if (React.isValidElement(line) && line.type === CodeBlockLine) {
-          return React.cloneElement(line as React.ReactElement<CodeBlockLineProps>, { 'data-line-number': lineNumber })
+          return React.cloneElement(line as React.ReactElement<CodeBlockLineProps>, {
+            lineNumber,
+            'data-line-number': lineNumber
+          })
         }
         return (
-          <CodeBlockLine key={index} data-line-number={lineNumber}>
+          <CodeBlockLine key={index} lineNumber={lineNumber} data-line-number={lineNumber}>
             {typeof line === 'string' && line.length === 0 ? '\u00a0' : line}
           </CodeBlockLine>
         )
@@ -209,12 +284,23 @@ function CodeBlockContent({
     <pre
       {...props}
       data-slot='code-block-content'
+      data-line-numbers={lineNumbers ? 'true' : 'false'}
       dir='ltr'
       tabIndex={tabIndex}
       style={contentStyle}
       className={cn(
         'm-0 min-w-0 max-w-full overflow-x-auto font-mono text-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:ring-inset',
-        size === 'sm' ? 'p-2 text-sm' : size === 'xs' ? 'p-1 text-xs' : 'p-3',
+        lineNumbers
+          ? size === 'sm'
+            ? 'py-2 pr-2 pl-0 text-sm'
+            : size === 'xs'
+              ? 'py-1 pr-1 pl-0 text-xs'
+              : 'py-3 pr-3 pl-0'
+          : size === 'sm'
+            ? 'p-2 text-sm'
+            : size === 'xs'
+              ? 'p-1 text-xs'
+              : 'p-3',
         codeBlockLineHeight[size],
         floatingActions && 'pt-10',
         className
@@ -229,23 +315,30 @@ function CodeBlockContent({
 
 export type CodeBlockLineProps = React.ComponentProps<'span'> & {
   variant?: 'default' | 'added' | 'removed' | 'highlighted'
+  lineNumber?: string | number
   'data-line-number'?: string
 }
 
-function CodeBlockLine({ variant = 'default', className, children, ...props }: CodeBlockLineProps) {
+function CodeBlockLine({
+  variant = 'default',
+  lineNumber,
+  className,
+  children,
+  ...props
+}: CodeBlockLineProps) {
   const { size } = React.useContext(CodeBlockContext)
-  const hasLineNumber = props['data-line-number'] !== undefined
+  const resolvedLineNumber = lineNumber ?? props['data-line-number']
+  const hasLineNumber = resolvedLineNumber !== undefined
   const marker = variant === 'added' ? '+' : variant === 'removed' ? '−' : null
 
   return (
     <span
       data-slot='code-block-line'
       data-variant={variant}
+      data-line-number={resolvedLineNumber}
       className={cn(
-        'block',
+        'flex min-w-full',
         codeBlockLineHeight[size],
-        hasLineNumber &&
-          'before:mr-4 before:inline-block before:w-[var(--code-block-gutter-width)] before:select-none before:text-right before:text-muted-foreground before:content-[attr(data-line-number)]',
         variant === 'added' && 'bg-success/10',
         variant === 'removed' && 'bg-destructive/10',
         variant === 'highlighted' && 'bg-primary/10',
@@ -253,11 +346,81 @@ function CodeBlockLine({ variant = 'default', className, children, ...props }: C
       )}
       {...props}
     >
-      {marker && <span className='mr-3 inline-block w-3 select-none text-muted-foreground'>{marker}</span>}
-      {children}
+      {hasLineNumber && (
+        <span
+          aria-hidden='true'
+          data-slot='code-block-line-number'
+          className={cn(
+            'sticky left-0 z-1 inline-flex shrink-0 select-none justify-end border-r border-border font-mono text-muted-foreground/60 transition-colors',
+            'bg-muted/20 pr-3.5 pl-3',
+            size === 'sm' && 'pr-2.5 pl-2 text-xs',
+            size === 'xs' && 'pr-2 pl-1.5 text-[11px]',
+            variant === 'added' && 'bg-success/15 text-success',
+            variant === 'removed' && 'bg-destructive/15 text-destructive',
+            variant === 'highlighted' && 'bg-primary/15 text-primary'
+          )}
+          style={{ width: 'var(--code-block-gutter-width, 3.5rem)' }}
+        >
+          {resolvedLineNumber}
+        </span>
+      )}
+      <span
+        data-slot='code-block-line-content'
+        className={cn(
+          'flex-1 min-w-0',
+          hasLineNumber ? (size === 'sm' ? 'pl-2.5' : size === 'xs' ? 'pl-2' : 'pl-3.5') : '',
+          'inline-block'
+        )}
+      >
+        {marker && <span className='mr-3 inline-block w-3 select-none text-muted-foreground'>{marker}</span>}
+        {children}
+      </span>
     </span>
   )
 }
+
+export type CodeBlockLineNumbersToggleProps = Omit<ButtonProps, 'children'> & {
+  pressedLabel?: string
+  unpressedLabel?: string
+}
+
+function CodeBlockLineNumbersToggle({
+  className,
+  variant = 'ghost',
+  size = 'icon-sm',
+  pressedLabel = 'Hide line numbers',
+  unpressedLabel = 'Show line numbers',
+  onClick,
+  ...props
+}: CodeBlockLineNumbersToggleProps) {
+  const { lineNumbers, toggleLineNumbers } = React.useContext(CodeBlockContext)
+  const label = lineNumbers ? pressedLabel : unpressedLabel
+
+  const handleClick: NonNullable<ButtonProps['onClick']> = (event) => {
+    onClick?.(event)
+    if (event.defaultPrevented) return
+    toggleLineNumbers?.()
+  }
+
+  return (
+    <Button
+      type='button'
+      variant={variant}
+      size={size}
+      aria-label={label}
+      aria-pressed={lineNumbers}
+      title={label}
+      className={cn(lineNumbers && 'bg-accent text-accent-foreground', className)}
+      onClick={handleClick}
+      {...props}
+    >
+      <ListNumbersIcon aria-hidden='true' />
+    </Button>
+  )
+}
+
+const CodeBlockLineIndexToggle = CodeBlockLineNumbersToggle
+export type CodeBlockLineIndexToggleProps = CodeBlockLineNumbersToggleProps
 
 function CodeBlockFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -339,5 +502,7 @@ export {
   CodeBlockFooter,
   CodeBlockHeader,
   CodeBlockLine,
+  CodeBlockLineIndexToggle,
+  CodeBlockLineNumbersToggle,
   CodeBlockTitle
 }

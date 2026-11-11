@@ -2,7 +2,7 @@ import { ProgressStepIndicator } from '@/components/ui/progress-indicator'
 import type { DemoMeta } from '@/showcase/demo'
 
 const setupSteps = [
-  { label: 'Workspace', description: 'Choose a team workspace.' },
+  // { label: 'Workspace', description: 'Choose a team workspace.' },
   { label: 'Flight plan', description: 'Add sample route details.' },
   { label: 'Review', description: 'Check the saved configuration.' },
   { label: 'Finish', description: 'Complete setup.' }
@@ -17,9 +17,8 @@ export const demo: DemoMeta = {
     {
       name: 'HORIZONTAL',
       render: () => (
-        <div className='w-full space-y-2'>
-          <p className='text-xs text-muted-foreground'>Sample workflow state only; no workspace is changed.</p>
-          <ProgressStepIndicator aria-label='Workspace setup' steps={setupSteps} currentStep={2} />
+        <div className='w-full max-w-lg space-y-2'>
+          <ProgressStepIndicator aria-label='Workspace setup' steps={setupSteps} currentStep={2} alignment='center' />
         </div>
       )
     },

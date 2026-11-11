@@ -1,3 +1,4 @@
+import * as React from 'react'
 import {
   CodeBlock,
   CodeBlockActions,
@@ -6,6 +7,7 @@ import {
   CodeBlockFooter,
   CodeBlockHeader,
   CodeBlockLine,
+  CodeBlockLineNumbersToggle,
   CodeBlockTitle,
   useHighlightedCode
 } from '@/components/ui/code-block'
@@ -48,19 +50,52 @@ function HighlightedCodeExample({
   const lines = useHighlightedCode(code, 'typescript')
 
   return (
-    <CodeBlock className='w-full max-w-3xl' size={size}>
+    <CodeBlock className='w-full max-w-3xl' size={size} lineNumbers={lineNumbers} startLine={startLine}>
       <CodeBlockHeader>
         <CodeBlockTitle>{title}</CodeBlockTitle>
         <CodeBlockActions>
+          <CodeBlockLineNumbersToggle />
           <CodeBlockCopyButton value={code} />
         </CodeBlockActions>
       </CodeBlockHeader>
-      <CodeBlockContent lineNumbers={lineNumbers} startLine={startLine}>
+      <CodeBlockContent>
         {lines.map((line, index) => (
           <CodeBlockLine key={index}>{line}</CodeBlockLine>
         ))}
       </CodeBlockContent>
     </CodeBlock>
+  )
+}
+
+function ToggleableCodeExample() {
+  const [enabled, setEnabled] = React.useState(true)
+  const lines = useHighlightedCode(routeCode, 'typescript')
+
+  return (
+    <div className='flex w-full max-w-3xl flex-col gap-3'>
+      <div className='flex items-center gap-2'>
+        <Button size='xs' variant='outline' onClick={() => setEnabled((v) => !v)}>
+          {enabled ? 'Tắt line index (API prop)' : 'Mở line index (API prop)'}
+        </Button>
+        <span className='font-mono text-xs text-muted-foreground'>
+          lineNumbers={String(enabled)}
+        </span>
+      </div>
+      <CodeBlock lineNumbers={enabled}>
+        <CodeBlockHeader>
+          <CodeBlockTitle>route-distance.ts</CodeBlockTitle>
+          <CodeBlockActions>
+            <CodeBlockLineNumbersToggle />
+            <CodeBlockCopyButton value={routeCode} />
+          </CodeBlockActions>
+        </CodeBlockHeader>
+        <CodeBlockContent>
+          {lines.map((line, index) => (
+            <CodeBlockLine key={index}>{line}</CodeBlockLine>
+          ))}
+        </CodeBlockContent>
+      </CodeBlock>
+    </div>
   )
 }
 
@@ -79,6 +114,10 @@ export const demo: DemoMeta = {
       render: () => (
         <HighlightedCodeExample code={routeCode} title='route-distance.ts · lines 12–17' lineNumbers startLine={12} />
       )
+    },
+    {
+      name: 'Toggle line numbers',
+      render: () => <ToggleableCodeExample />
     },
     {
       name: 'Diff',

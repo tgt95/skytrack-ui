@@ -15,6 +15,10 @@ Patterns guide product decisions. They are not component exports and do not prov
 5. Verify components separately in [COMPONENT_ROUTING.md](COMPONENT_ROUTING.md), then inspect installed exports, types, source, and compatible demos before implementing.
 6. Treat local interactive and visual examples as demonstrations only. They do not perform product operations or establish operational policy.
 
+## Supplemental report guidance
+
+For report, dashboard, and analytical overview UX, read [Report and dashboard UX guidelines](research/REPORT_UX_GUIDELINES.md) alongside the relevant workflow pattern. This is supplemental research guidance, not a catalog pattern or component API contract. Verify component support separately.
+
 ## Core patterns
 
 | Pattern ID          | Pattern           | Source status          | Skill knowledge                        | Primary source                                                                            |

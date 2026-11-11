@@ -62,11 +62,12 @@ Use it when people need to inspect or copy code, commands, logs, or a compact ch
    └─ <CodeBlockCode />
 ```
 
-- `CodeBlock` provides the bordered, themed root and `default` or `destructive` treatment; `size` is `default` or `sm`.
+- `CodeBlock` provides the bordered, themed root and `default` or `destructive` treatment; `size` is `default` or `sm`. Supports `lineNumbers` / `lineIndex` (boolean), `defaultLineNumbers`, `startLine`, and `onLineNumbersChange` to toggle line numbers globally via context.
 - `CodeBlockHeader` is optional. Place `CodeBlockTitle` and `CodeBlockActions` directly inside it.
 - `CodeBlockCopyButton` copies its `value` and announces success or failure. Place it in `CodeBlockActions`.
-- `CodeBlockContent` renders a focusable, left-to-right `<pre><code>` region. `wrap`, `lineNumbers`, and `startLine` are optional.
-- `CodeBlockLine` supports `default`, `added`, `removed`, and `highlighted` line treatments. It owns its line height from the root size (`leading-6` for default, `leading-5` for `sm`); empty highlighted lines retain their height with a non-breaking space.
+- `CodeBlockLineNumbersToggle` (or `CodeBlockLineIndexToggle`) renders an accessible button to toggle line index / numbers on and off dynamically.
+- `CodeBlockContent` renders a focusable, left-to-right `<pre><code>` region. `wrap`, `lineNumbers` (or `lineIndex`), and `startLine` are optional. When line numbers are enabled, renders a sticky gutter column with a vertical divider border.
+- `CodeBlockLine` supports `default`, `added`, `removed`, and `highlighted` line treatments. It owns its line height from the root size (`leading-6` for default, `leading-5` for `sm`); empty highlighted lines retain their height with a non-breaking space. Accepts `lineNumber` or `'data-line-number'`.
 - `CodeBlockFooter` is optional and can hold related actions or status.
 
 Without a header, `CodeBlockActions` is positioned over the content and the content receives top padding. Use the documented direct-child composition so the root can detect its header.
@@ -89,7 +90,7 @@ The content region is keyboard-focusable and uses left-to-right direction for co
 
 ## API & examples
 
-Import the compound parts from `skytrack-ui/code-block` or named exports from the package root. `CodeBlockContent` accepts native `<pre>` props plus `wrap`, `lineNumbers`, and `startLine`; `CodeBlockLine` accepts native `<span>` props plus its line `variant`. `CodeBlockCopyButton` takes required `value` and optional `copyLabel`, `copiedLabel`, and `copyFailedLabel`. `useHighlightedCode(code, language)` returns renderable line nodes and selects the bundled language with the matching light/dark VS Code theme.
+Import the compound parts from `skytrack-ui/code-block` or named exports from the package root. `CodeBlock` accepts `lineNumbers` / `lineIndex` (boolean), `defaultLineNumbers` / `defaultLineIndex`, `startLine` / `startLineIndex`, and `onLineNumbersChange`. `CodeBlockContent` accepts native `<pre>` props plus `wrap`, `lineNumbers`, `lineIndex`, and `startLine`. `CodeBlockLineNumbersToggle` (alias `CodeBlockLineIndexToggle`) provides an interactive toggle button for `CodeBlockActions`. `CodeBlockLine` accepts native `<span>` props plus `lineNumber` and line `variant`. `CodeBlockCopyButton` takes required `value` and optional `copyLabel`, `copiedLabel`, and `copyFailedLabel`. `useHighlightedCode(code, language)` returns renderable line nodes and selects the bundled language with the matching light/dark VS Code theme.
 
 The component uses SkyTrack semantic surface, border, foreground, and state tokens and the package radius token. It does not execute code. The code area scrolls horizontally unless `wrap` is enabled.
 

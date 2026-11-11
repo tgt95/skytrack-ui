@@ -209,8 +209,9 @@ for (const file of fs.readdirSync(uiDir).sort()) {
   for (const span of classPosition(code)) {
     for (const literal of span.matchAll(/"([^"\n]*)"|'([^'\n]*)'/g)) {
       const text = literal[1] ?? literal[2] ?? ''
+      const before = span.slice(0, literal.index).trimEnd()
       const after = span.slice(literal.index + literal[0].length)
-      if (/^\s*:/.test(after)) continue // object key, e.g. `"icon-sm": "size-8"`
+      if (/^\s*:/.test(after) || before.endsWith('[')) continue // object/computed key, e.g. `"icon-sm":` or `sizes['icon-sm']`
       if (/[-:]/.test(text) && !/[<>{}()="']/.test(text)) {
         for (const token of text.split(/\s+/)) {
           if (token && token.length <= 120 && /^[-[:a-z@[]/.test(token)) candidates.add(token)

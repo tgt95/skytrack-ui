@@ -49,6 +49,7 @@ In package version `0.1.5`, `renderColumnVisibility` replaces the built-in contr
 omit it. Omit the render prop to keep the default Columns menu.
 
 - **Cell alignment:** Left-align textual columns; right-align numerical values, timestamps, and currency for rapid vertical comparison. Center status badges and action menus.
+- **Sortable headers:** Keep the sort indicator after the header label for left-, center-, and right-aligned columns. Align the full label-and-indicator group with its column.
 - **Horizontal scroll:** When columns exceed the available width, keep horizontal scrolling within the table container and preserve access to the primary row identifier.
 - **Long lists:** Bound the table viewport with `tableContainerClassName` when users need to scroll through many rows while keeping the toolbar and pagination visible.
 - **Expanded details:** Use `renderExpandedRow` for supplementary record details; pair it with row selection only when both interactions support the task.

@@ -22,17 +22,22 @@ export const LineNumbers: Story = {
   render: () => <VariantBlock name={"Line numbers"}>{demo.variants[1].render()}</VariantBlock>,
 };
 
+export const ToggleLineNumbers: Story = {
+  name: "Toggle line numbers",
+  render: () => <VariantBlock name={"Toggle line numbers"}>{demo.variants[2].render()}</VariantBlock>,
+};
+
 export const Diff: Story = {
   name: "Diff",
-  render: () => <VariantBlock name={"Diff"}>{demo.variants[2].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Diff"}>{demo.variants[3].render()}</VariantBlock>,
 };
 
 export const SmallTerminalOutput: Story = {
   name: "Small terminal output",
-  render: () => <VariantBlock name={"Small terminal output"}>{demo.variants[3].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Small terminal output"}>{demo.variants[4].render()}</VariantBlock>,
 };
 
 export const SyntaxHighlighting: Story = {
   name: "Syntax highlighting",
-  render: () => <VariantBlock name={"Syntax highlighting"}>{demo.variants[4].render()}</VariantBlock>,
+  render: () => <VariantBlock name={"Syntax highlighting"}>{demo.variants[5].render()}</VariantBlock>,
 };

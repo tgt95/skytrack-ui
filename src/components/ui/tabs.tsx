@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Tabs as BaseTabs } from '@base-ui/react/tabs'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
+import { CONTROL_CHILD_SVG_CLASSES, CONTROL_FONT_SIZE_CLASSES } from '@/lib/control-sizes'
 import { focusRing } from '@/lib/focus-ring'
 
 type TabsRootProps = React.ComponentProps<typeof BaseTabs.Root>
@@ -37,8 +38,8 @@ const tabsListVariants = cva('relative z-0 flex items-center text-muted-foregrou
     size: {
       xs: 'h-6',
       sm: 'h-8',
-      default: 'h-9',
-      lg: 'h-10'
+      default: 'h-10',
+      lg: 'h-12'
     }
   },
   compoundVariants: [{ variant: 'filled', size: 'xs', class: 'p-0' }],
@@ -117,10 +118,10 @@ const tabsTabVariants = cva(
         pill: 'data-active:bg-secondary data-active:text-secondary-foreground dark:hover:bg-secondary/40 hover:bg-secondary/80'
       },
       size: {
-        xs: 'px-2 py-0.5 text-xs',
-        sm: 'px-2.5 py-1 text-xs',
-        default: 'px-3 py-1.5 text-sm',
-        lg: 'px-4 py-2 text-base'
+        xs: cn('px-2 py-0.5', CONTROL_FONT_SIZE_CLASSES.xs, CONTROL_CHILD_SVG_CLASSES.xs),
+        sm: cn('px-2.5 py-1', CONTROL_FONT_SIZE_CLASSES.sm, CONTROL_CHILD_SVG_CLASSES.sm),
+        default: cn('px-3 py-1.5', CONTROL_FONT_SIZE_CLASSES.default, CONTROL_CHILD_SVG_CLASSES.default),
+        lg: cn('px-4 py-2', CONTROL_FONT_SIZE_CLASSES.lg, CONTROL_CHILD_SVG_CLASSES.lg)
       }
     },
     compoundVariants: [{ variant: 'filled', size: 'xs', class: 'px-1.5 py-0' }],

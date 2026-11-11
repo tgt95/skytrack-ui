@@ -15,12 +15,12 @@ import type { DemoMeta } from '@/showcase/demo'
 function BasicNumberField() {
   const id = useId()
   return (
-    <FieldRoot className='w-64'>
+    <FieldRoot className='w-64 items-center'>
       <NumberField id={id} defaultValue={100}>
         <NumberFieldScrubArea className='flex items-center gap-1'>
           <FieldLabel className='cursor-ew-resize'>Amount</FieldLabel>
           <NumberFieldScrubAreaCursor>
-            <ArrowsHorizontal />
+            <ArrowsHorizontalIcon />
           </NumberFieldScrubAreaCursor>
         </NumberFieldScrubArea>
         <NumberFieldGroup>
@@ -33,7 +33,7 @@ function BasicNumberField() {
   )
 }
 
-function ArrowsHorizontal() {
+function ArrowsHorizontalIcon() {
   return (
     <svg width='14' height='10' viewBox='0 0 24 14' fill='currentColor' aria-hidden style={{ display: 'block' }}>
       <path d='M19.5 5.5L6.49737 5.51844V2L1 6.9999L6.5 12L6.49737 8.5L19.5 8.5V12L25 6.9999L19.5 2V5.5Z' />
@@ -49,7 +49,7 @@ function ControlledNumberField() {
         <NumberFieldScrubArea className='flex items-center gap-1'>
           <FieldLabel>Seats</FieldLabel>
           <NumberFieldScrubAreaCursor>
-            <ArrowsHorizontal />
+            <ArrowsHorizontalIcon />
           </NumberFieldScrubAreaCursor>
         </NumberFieldScrubArea>
         <NumberFieldGroup>

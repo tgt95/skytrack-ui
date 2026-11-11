@@ -36,7 +36,7 @@ const calendarClassNames: Partial<ClassNames> = {
   [UI.NextMonthButton]: 'absolute end-0 top-0 size-9 p-0',
   [UI.MonthGrid]: 'w-full border-collapse',
   [UI.Weekdays]: 'flex',
-  [UI.Weekday]: 'w-9 rounded-(--radius) text-center text-xs font-normal text-muted-foreground',
+  [UI.Weekday]: 'w-9 rounded-(--radius) text-center text-xs sub-heading',
   [UI.Weeks]: 'mt-2 flex flex-col gap-1',
   [UI.Week]: 'flex w-full',
   [UI.Day]: 'relative size-9 p-0 text-center text-sm focus-within:z-10',

@@ -11,6 +11,7 @@ Use this route for every UI implementation using SkyTrack UI. The repository roo
 | Product decisions, visual rules, typography, color, radius, content | Relevant section in [`UI_RULES.md`](UI_RULES.md) |
 | Candidate scan across the library | [`knowledge/COMPONENT_ROUTING.md`](knowledge/COMPONENT_ROUTING.md) |
 | Task/page pattern selection and local pattern references | [`knowledge/PATTERN_ROUTING.md`](knowledge/PATTERN_ROUTING.md) |
+| Report, dashboard, or analytical overview UX | [`knowledge/research/REPORT_UX_GUIDELINES.md`](knowledge/research/REPORT_UX_GUIDELINES.md), then relevant pattern and component guides |
 | Component API, composition, types, examples | Shortlisted page in [`knowledge/README.md`](knowledge/README.md) |
 | Component purpose, selection, interaction, accessibility | Shortlisted page in [`knowledge/designer/README.md`](knowledge/designer/README.md) |
 | Package-wide theme or composition detail | Relevant heading in [`AGENT_GUIDE.md`](AGENT_GUIDE.md) only |

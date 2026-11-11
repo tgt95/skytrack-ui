@@ -15,7 +15,7 @@ function CollapsiblePanel({ className, ...props }: React.ComponentProps<typeof B
     <BaseCollapsible.Panel
       data-slot='collapsible-panel'
       className={cn(
-        'flex h-[var(--collapsible-panel-height)] flex-col justify-end overflow-hidden text-sm transition-[height] duration-150 ease-out',
+        'flex h-[var(--collapsible-panel-height)] flex-col justify-end overflow-hidden transition-[height] duration-150 ease-out',
         "[&[hidden]:not([hidden='until-found'])]:hidden data-ending-style:h-0 data-starting-style:h-0",
         className
       )}

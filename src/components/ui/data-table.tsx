@@ -280,6 +280,7 @@ function DataTable<TData extends RowData>({
           renderSearch(renderProps)
         ) : (
           <Search
+            size='sm'
             aria-label={searchPlaceholder}
             placeholder={searchPlaceholder}
             className='w-full sm:max-w-64'
@@ -366,14 +367,11 @@ function DataTable<TData extends RowData>({
                           )}
                           onClick={header.column.getToggleSortingHandler()}
                         >
-                          <span className='relative'>
+                          <span className='inline-flex items-center gap-1.5'>
                             <FlexRender header={header} />
                             <SortIcon
                               aria-hidden='true'
-                              className={cn(
-                                'absolute top-1/2 size-3.5 -translate-y-1/2',
-                                align === 'right' ? 'right-full mr-1.5' : 'left-full ml-1.5'
-                              )}
+                              className='size-3.5 shrink-0'
                             />
                           </span>
                         </Button>

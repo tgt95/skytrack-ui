@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { CheckCircleIcon, XCircleIcon } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsList, TabsPanel, TabsTab } from '@/components/ui/tabs'
 import type { DemoMeta } from '@/showcase/demo'
 import { MarkdownRenderer, renderInlineMarkdown } from './markdown-renderer'
 import { designerTypePatternsByDemoId } from './designer-type-patterns'
@@ -156,7 +155,7 @@ function DesignerTypeGallery({ demoId, demo }: { demoId: string; demo?: DemoMeta
                     <h5 className='text-xs font-medium sub-heading'>{example.label}</h5>
                     <Badge size='sm' count='Try it' />
                   </div>
-                  <div className='flex min-h-80 min-w-0 max-w-full gap-3 flex-1 flex-wrap items-center justify-center overflow-x-auto rounded-(--radius) border border-border bg-sidebar p-4 [&>[data-slot=field].w-full]:items-center [&>[data-slot=field].w-full]:justify-center'>
+                  <div className='flex min-h-80 min-w-0 max-w-full gap-3 flex-1 flex-wrap items-center justify-center overflow-x-auto rounded-(--radius) border border-border bg-sidebar p-4 [&>[data-slot=field].w-full]:items-start [&>[data-slot=field].w-full]:justify-center'>
                     {previewContent ? (
                       <DesignerPreviewBoundary key={exampleKey}>{previewContent}</DesignerPreviewBoundary>
                     ) : (
@@ -182,23 +181,7 @@ export function DesignerGuidelineSheet({ guideline, demo, allDemos, practices }:
 
   return (
     <section className='w-full min-w-0 rounded-(--radius)'>
-      <Tabs defaultValue={tabs[0]} className='w-full min-w-0'>
-        <div className='mb-4 max-w-full overflow-x-auto border-border border-b'>
-          <TabsList
-            variant='line'
-            width='hug'
-            size='lg'
-            aria-label={`${guideline.title} designer guidance sections`}
-            className='gap-2 sm:gap-4 max-w-full pb-px border-0'
-          >
-            {tabs.map((title) => (
-              <TabsTab key={title} value={title} className='whitespace-nowrap px-2 py-2 text-xs sm:px-3 sm:text-sm'>
-                {title}
-              </TabsTab>
-            ))}
-          </TabsList>
-        </div>
-
+      <div className='space-y-10'>
         {tabs.map((title) => {
           const section = guideline.sections[title]
           const requestedVariant = section.variantName
@@ -208,7 +191,14 @@ export function DesignerGuidelineSheet({ guideline, demo, allDemos, practices }:
             : targetDemo?.variants[0]
 
           return (
-            <TabsPanel key={title} value={title} className='w-full min-w-0 pt-1 outline-none'>
+            <section
+              key={title}
+              aria-labelledby={`designer-guideline-${title.replaceAll(' ', '-')}`}
+              className='w-full min-w-0 border-t border-border/60 pt-6'
+            >
+              <h2 id={`designer-guideline-${title.replaceAll(' ', '-')}`} className='h3 mb-4'>
+                {title}
+              </h2>
               {typePatterns ? (
                 <div className='space-y-6'>
                   <DesignerGuidance blocks={section.blocks} practices={practices?.[title]} />
@@ -275,10 +265,10 @@ export function DesignerGuidelineSheet({ guideline, demo, allDemos, practices }:
               ) : (
                 <DesignerGuidance blocks={section.blocks} practices={practices?.[title]} />
               )}
-            </TabsPanel>
+            </section>
           )
         })}
-      </Tabs>
+      </div>
     </section>
   )
 }

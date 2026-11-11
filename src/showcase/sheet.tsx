@@ -452,9 +452,9 @@ const SPECS: ComponentSpec[] = [
     id: 'date-picker',
     title: 'Date Picker',
     group: 'Forms',
-    axes: [{ name: 'mode', values: ['single', 'range'], default: 'single' }],
+    axes: [{ name: 'mode', values: ['single', 'range', 'week'], default: 'single' }],
     states: ['open', 'preset selection', 'disabled'],
-    note: 'Single date or date range selection via popover calendar.'
+    note: 'Single date, date range, or ISO week selection via popover calendar.'
   },
   {
     id: 'field',
@@ -807,7 +807,10 @@ const SPECS: ComponentSpec[] = [
     id: 'progress-indicator',
     title: 'Progress Indicator',
     group: 'Data Display',
-    axes: [{ name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' }],
+    axes: [
+      { name: 'orientation', values: ['horizontal', 'vertical'], default: 'horizontal' },
+      { name: 'alignment', values: ['start', 'center'], default: 'start' }
+    ],
     states: ['complete', 'current', 'upcoming', 'error', 'disabled'],
     note: 'Step-by-step progress tracking with numbered or checked step badges and connector lines.'
   },
@@ -899,6 +902,7 @@ const OPTION_COUNT = SPECS.reduce((n, spec) => n + (spec.axes?.reduce((m, axis) 
 
 function combinationCount(spec: ComponentSpec) {
   if (!spec.axes?.length) return 1
+  if (spec.id === 'progress-indicator') return 3
   return spec.axes.reduce((n, axis) => n * axis.values.length, 1)
 }
 
@@ -920,10 +924,7 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
 
   const [selected, setSelected] = useState<Record<string, string>>(() =>
     Object.fromEntries(
-      (spec.axes ?? []).map((axis) => [
-        axis.name,
-        isSizeAxisName(axis.name) ? 'all' : (axis.default ?? axis.values[0])
-      ])
+      (spec.axes ?? []).map((axis) => [axis.name, isSizeAxisName(axis.name) ? 'all' : (axis.default ?? axis.values[0])])
     )
   )
   const [selectedState, setSelectedState] = useState<string | undefined>(spec.states?.[0])
@@ -942,39 +943,49 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
         <p className='text-base text-muted-foreground'>{meta}</p>
       </div>
       <div className='flex min-w-0 flex-col gap-2.5'>
-        {spec.axes?.map((axis) => {
-          const isSizeAxis = isSizeAxisName(axis.name)
-          const values = isSizeAxis ? ['all', ...axis.values] : axis.values
-          return (
-            <div key={axis.name} className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
-              <span className='text-muted-foreground'>{axis.name}</span>
-              <div role='group' aria-label={`${spec.title} ${axis.name}`} className='flex flex-wrap gap-1.5'>
-                {values.map((value) => {
-                  const active = selected[axis.name] === value
-                  const isDefault = isSizeAxis ? value === 'all' : axis.default === value
-                  return (
-                    <button
-                      key={value}
-                      type='button'
-                      aria-pressed={active}
-                      title={isDefault ? 'Component default' : undefined}
-                      onClick={() => setSelected((current) => ({ ...current, [axis.name]: value }))}
-                      className={cn(
-                        'inline-flex min-h-7 items-center border px-2 py-1 leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
-                        active
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
-                      )}
-                    >
-                      {value === 'all' ? 'All' : value}
-                      {isDefault && <span className='ml-1 opacity-75'>· default</span>}
-                    </button>
-                  )
-                })}
+        {spec.axes
+          ?.filter((axis) => axis.name !== 'alignment' || selected.orientation === 'horizontal')
+          .map((axis) => {
+            const isSizeAxis = isSizeAxisName(axis.name)
+            const values = isSizeAxis ? ['all', ...axis.values] : axis.values
+            return (
+              <div key={axis.name} className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
+                <span className='text-muted-foreground'>{axis.name}</span>
+                <div role='group' aria-label={`${spec.title} ${axis.name}`} className='flex flex-wrap gap-1.5'>
+                  {values.map((value) => {
+                    const active = selected[axis.name] === value
+                    const isDefault = isSizeAxis ? value === 'all' : axis.default === value
+                    return (
+                      <button
+                        key={value}
+                        type='button'
+                        aria-pressed={active}
+                        title={isDefault ? 'Component default' : undefined}
+                        onClick={() =>
+                          setSelected((current) => ({
+                            ...current,
+                            [axis.name]: value,
+                            ...(spec.id === 'progress-indicator' && axis.name === 'orientation' && value === 'vertical'
+                              ? { alignment: 'start' }
+                              : {})
+                          }))
+                        }
+                        className={cn(
+                          'inline-flex min-h-7 items-center border px-2 py-1 leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
+                          active
+                            ? 'border-primary bg-primary text-primary-foreground'
+                            : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
+                        )}
+                      >
+                        {value === 'all' ? 'All' : value}
+                        {isDefault && <span className='ml-1 opacity-75'>· default</span>}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
         {spec.axes?.length ? (
           <div className='mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
             <div className='flex flex-wrap items-center justify-between gap-2'>
@@ -1013,9 +1024,7 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
                     return (
                       <div key={sizeVal} className='flex flex-col items-start gap-1.5'>
                         <span className='font-mono text-xs text-muted-foreground'>{sizeVal}</span>
-                        <div className='flex items-center'>
-                          {renderConfiguredSpecimen(spec.id, variantSettings)}
-                        </div>
+                        <div className='flex items-center'>{renderConfiguredSpecimen(spec.id, variantSettings)}</div>
                       </div>
                     )
                   })}
@@ -1123,7 +1132,7 @@ export function Sheet() {
       <header className='flex flex-col gap-4'>
         <div className='flex flex-col gap-1'>
           <span className='text-xs tracking-widest sub-heading'>Reference sheet</span>
-          <h1 className='h1 heading'>Tokens and component props</h1>
+          <h1 className='h1'>Tokens and component props</h1>
           <p className='max-w-2xl text-sm text-muted-foreground'>
             See each component&apos;s configurable variants, prop values and combination count. Change a value to
             inspect the combined preview before adding a one-off style.

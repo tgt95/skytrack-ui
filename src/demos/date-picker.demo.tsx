@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type { DateRange } from 'react-day-picker'
 import { Calendar } from '@/components/ui/calendar'
-import { DatePicker, DateRangePicker } from '@/components/ui/date-picker'
+import { DatePicker, DateRangePicker, DateWeekPicker } from '@/components/ui/date-picker'
 import { FieldDescription, FieldLabel, FieldRoot } from '@/components/ui/field'
 import type { DemoMeta } from '@/showcase/demo'
 
@@ -9,13 +9,13 @@ function DatePickerField() {
   const id = React.useId()
   const [date, setDate] = React.useState<Date>()
   return (
-    <FieldRoot className='flex w-64 flex-col gap-2'>
+    <FieldRoot className='w-full max-w-64'>
       <FieldLabel htmlFor={id}>Flight date</FieldLabel>
       <DatePicker id={id} value={date} onValueChange={setDate} placeholder='Select a date' />
       <FieldDescription aria-live='polite'>
         {date
           ? `Selected ${new Intl.DateTimeFormat(undefined, { dateStyle: 'long' }).format(date)}`
-          : 'No date selected'}
+          : 'Pick a day or type a date'}
       </FieldDescription>
     </FieldRoot>
   )
@@ -55,6 +55,22 @@ function DateRangeField() {
   )
 }
 
+function DateWeekField() {
+  const id = React.useId()
+  const [week, setWeek] = React.useState<Date>()
+  return (
+    <FieldRoot className='w-full max-w-64'>
+      <FieldLabel htmlFor={id}>Sprint week</FieldLabel>
+      <DateWeekPicker id={id} value={week} onValueChange={setWeek} placeholder='Select a week' />
+      <FieldDescription aria-live='polite'>
+        {week
+          ? `Week of ${new Intl.DateTimeFormat(undefined, { dateStyle: 'long' }).format(week)}`
+          : 'Pick an ISO week'}
+      </FieldDescription>
+    </FieldRoot>
+  )
+}
+
 export const demo: DemoMeta = {
   id: 'date-picker',
   title: 'Date Picker',
@@ -63,6 +79,7 @@ export const demo: DemoMeta = {
   variants: [
     { name: 'DEFAULT', render: () => <DatePickerField /> },
     { name: 'CALENDAR', render: () => <StandaloneCalendar /> },
-    { name: 'DATE RANGE', render: () => <DateRangeField /> }
+    { name: 'DATE RANGE', render: () => <DateRangeField /> },
+    { name: 'WEEK', render: () => <DateWeekField /> }
   ]
 }

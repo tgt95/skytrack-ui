@@ -94,8 +94,11 @@
       "CodeBlockFooter",
       "CodeBlockHeader",
       "CodeBlockLine",
+      "CodeBlockLineIndexToggle",
+      "CodeBlockLineNumbersToggle",
       "CodeBlockTitle",
       "useHighlightedCode",
+      "CodeBlockTree",
       "Collapsible",
       "CollapsiblePanel",
       "CollapsibleTrigger",
@@ -163,6 +166,7 @@
       "DataTable",
       "DatePicker",
       "DateRangePicker",
+      "DateWeekPicker",
       "Dialog",
       "DialogBackdrop",
       "DialogClose",
@@ -433,8 +437,13 @@
       "ChartContainerProps",
       "CodeBlockContentProps",
       "CodeBlockCopyButtonProps",
+      "CodeBlockLineIndexToggleProps",
+      "CodeBlockLineNumbersToggleProps",
       "CodeBlockLineProps",
       "CodeBlockProps",
+      "CodeBlockTreeNodeContext",
+      "CodeBlockTreeNodeKind",
+      "CodeBlockTreeProps",
       "ComboboxRootProps",
       "ContextMenuItemVariantProps",
       "DataTableColumnDef",
@@ -445,6 +454,7 @@
       "DataTableSize",
       "DatePickerProps",
       "DateRangePickerProps",
+      "DateWeekPickerProps",
       "DialogButtonProps",
       "DialogChangeEventDetails",
       "DrawerButtonProps",
@@ -464,6 +474,7 @@
       "PopoverTriggerProps",
       "PreviewCardChangeEventDetails",
       "PreviewCardTriggerProps",
+      "ProgressIndicatorAlignment",
       "ProgressIndicatorOrientation",
       "ProgressIndicatorStep",
       "ProgressStepIndicatorProps",
@@ -689,16 +700,31 @@
         "CodeBlockFooter",
         "CodeBlockHeader",
         "CodeBlockLine",
+        "CodeBlockLineIndexToggle",
+        "CodeBlockLineNumbersToggle",
         "CodeBlockTitle",
         "useHighlightedCode"
       ],
       "types": [
         "CodeBlockContentProps",
         "CodeBlockCopyButtonProps",
+        "CodeBlockLineIndexToggleProps",
+        "CodeBlockLineNumbersToggleProps",
         "CodeBlockLineProps",
         "CodeBlockProps"
       ],
       "prefix": "CodeBlock"
+    },
+    "./code-block-tree": {
+      "values": [
+        "CodeBlockTree"
+      ],
+      "types": [
+        "CodeBlockTreeNodeContext",
+        "CodeBlockTreeNodeKind",
+        "CodeBlockTreeProps"
+      ],
+      "prefix": "CodeBlockTree"
     },
     "./collapsible": {
       "values": [
@@ -809,11 +835,13 @@
     "./date-picker": {
       "values": [
         "DatePicker",
-        "DateRangePicker"
+        "DateRangePicker",
+        "DateWeekPicker"
       ],
       "types": [
         "DatePickerProps",
-        "DateRangePickerProps"
+        "DateRangePickerProps",
+        "DateWeekPickerProps"
       ],
       "prefix": "DatePicker"
     },
@@ -1100,6 +1128,7 @@
         "ProgressStepIndicator"
       ],
       "types": [
+        "ProgressIndicatorAlignment",
         "ProgressIndicatorOrientation",
         "ProgressIndicatorStep",
         "ProgressStepIndicatorProps",

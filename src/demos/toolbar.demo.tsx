@@ -16,6 +16,20 @@ import { ToggleGroup } from '@/components/ui/toggle-group'
 import { Toggle } from '@/components/ui/toggle'
 import { Menu, MenuItem, MenuPopup, MenuPortal, MenuPositioner, MenuSeparator, MenuTrigger } from '@/components/ui/menu'
 import {
+  Select,
+  SelectIcon,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectList,
+  SelectPopup,
+  SelectPortal,
+  SelectPositioner,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import {
   NumberField,
   NumberFieldDecrement,
   NumberFieldGroup,
@@ -33,6 +47,12 @@ import {
 } from '@/components/ui/tooltip'
 import type { DemoMeta } from '@/showcase/demo'
 
+const fontOptions = [
+  { label: 'Helvetica', value: 'helvetica' },
+  { label: 'Arial', value: 'arial' },
+  { label: 'Inter', value: 'inter', disabled: true }
+]
+
 /* ------------------------------------------------------------- Default */
 
 /** Controlled toolbar so the demo reflects live toolbar state. */
@@ -42,7 +62,13 @@ function DefaultToolbar() {
 
   return (
     <Toolbar className='w-full max-w-2xl'>
-      <ToggleGroup value={alignment} onValueChange={setAlignment} aria-label='Alignment' className='border-0 p-0'>
+      <ToggleGroup
+        value={alignment}
+        onValueChange={setAlignment}
+        size='sm'
+        aria-label='Alignment'
+        className='border-0 p-0'
+      >
         <ToolbarButton render={<Toggle />} value='align-left' aria-label='Align left'>
           <TextAlignLeftIcon />
         </ToolbarButton>
@@ -57,8 +83,9 @@ function DefaultToolbar() {
         value={format}
         onValueChange={setFormat}
         variant='outline'
+        size='sm'
         aria-label='Formatting'
-        className='border-0 p-'
+        className='border-0 p-0'
       >
         <ToolbarButton
           render={<Toggle />}
@@ -80,21 +107,33 @@ function DefaultToolbar() {
 
       <ToolbarSeparator />
 
-      <Menu>
-        <ToolbarButton render={<MenuTrigger />} className='min-w-32 justify-between border border-input'>
-          Helvetica
+      <Select items={fontOptions} defaultValue='helvetica'>
+        <ToolbarButton
+          render={<SelectTrigger size='sm' className='w-32' />}
+          className='justify-between'
+          aria-label='Font family'
+        >
+          <SelectValue />
+          <SelectIcon />
         </ToolbarButton>
-        <MenuPortal>
-          <MenuPositioner side='bottom' align='start' sideOffset={4}>
-            <MenuPopup>
-              <MenuItem>Helvetica</MenuItem>
-              <MenuItem>Arial</MenuItem>
-              <MenuSeparator />
-              <MenuItem disabled>Inter</MenuItem>
-            </MenuPopup>
-          </MenuPositioner>
-        </MenuPortal>
-      </Menu>
+        <SelectPortal>
+          <SelectPositioner side='bottom' align='start' sideOffset={4}>
+            <SelectPopup>
+              <SelectList>
+                {fontOptions.map((font) => (
+                  <React.Fragment key={font.value}>
+                    {font.value === 'inter' && <SelectSeparator />}
+                    <SelectItem value={font.value} disabled={font.disabled}>
+                      <SelectItemIndicator />
+                      <SelectItemText>{font.label}</SelectItemText>
+                    </SelectItem>
+                  </React.Fragment>
+                ))}
+              </SelectList>
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
 
       <ToolbarSeparator />
 

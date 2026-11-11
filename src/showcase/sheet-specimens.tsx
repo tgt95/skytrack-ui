@@ -31,16 +31,9 @@ import {
   CodeBlockLine,
   CodeBlockTitle
 } from '@/components/ui/code-block'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '@/components/ui/command'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { DataTable, type DataTableColumnDef, type DataTableSize } from '@/components/ui/data-table'
-import { DatePicker, DateRangePicker } from '@/components/ui/date-picker'
+import { DatePicker, DateRangePicker, DateWeekPicker } from '@/components/ui/date-picker'
 import { InlineEdit, InlineEditInput, InlineEditTrigger } from '@/components/ui/inline-edit'
 import { PageHeader } from '@/components/ui/page-header'
 import {
@@ -312,10 +305,7 @@ function ButtonSpecimen({ variant, size }: { variant?: string; size?: string }) 
   )
 }
 
-const ALERT_VARIANTS_CONTENT: Record<
-  string,
-  { icon: React.ReactNode; title: string; description: string }
-> = {
+const ALERT_VARIANTS_CONTENT: Record<string, { icon: React.ReactNode; title: string; description: string }> = {
   default: {
     icon: <InfoIcon className='size-5 shrink-0' aria-hidden='true' />,
     title: 'Heads up',
@@ -408,11 +398,7 @@ function BreadcrumbSpecimen({ state = 'link' }: { state?: string }) {
           </>
         )}
         <BreadcrumbItem>
-          {isCurrent ? (
-            <BreadcrumbPage>Plan</BreadcrumbPage>
-          ) : (
-            <BreadcrumbLink href='#'>Mission Alpha</BreadcrumbLink>
-          )}
+          {isCurrent ? <BreadcrumbPage>Plan</BreadcrumbPage> : <BreadcrumbLink href='#'>Mission Alpha</BreadcrumbLink>}
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
@@ -1219,7 +1205,9 @@ function FormSpecimen({ state = 'valid' }: { state?: string }) {
           <FieldDescription>Ready to submit.</FieldDescription>
         )}
       </FieldRoot>
-      <Button size='sm' type='submit'>Submit</Button>
+      <Button size='sm' type='submit'>
+        Submit
+      </Button>
     </Form>
   )
 }
@@ -1286,12 +1274,7 @@ function AccordionSpecimen({ state = 'multiple expansion' }: { state?: string })
 
   return (
     <div key={state} className='w-full max-w-sm'>
-      <AccountFaqAccordion
-        defaultOpen
-        multiple={!isSingle}
-        compact={isCompact}
-        disabled={isDisabled}
-      />
+      <AccountFaqAccordion defaultOpen multiple={!isSingle} compact={isCompact} disabled={isDisabled} />
     </div>
   )
 }
@@ -1539,7 +1522,11 @@ function NavigationMenuSpecimen({ state = 'active' }: { state?: string }) {
   const isInstant = state === 'instant'
 
   return (
-    <NavigationMenu key={state} defaultValue={isPopupOpen || isInstant ? 'overview' : undefined} delay={isInstant ? 0 : undefined}>
+    <NavigationMenu
+      key={state}
+      defaultValue={isPopupOpen || isInstant ? 'overview' : undefined}
+      delay={isInstant ? 0 : undefined}
+    >
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger value='overview'>Overview</NavigationMenuTrigger>
@@ -1721,13 +1708,7 @@ const dataTableSampleColumns: DataTableColumnDef<DataTableSample>[] = [
   { accessorKey: 'status', header: 'Status' }
 ]
 
-function DataTableSpecimen({
-  size = 'md',
-  selection = 'none'
-}: {
-  size?: DataTableSize
-  selection?: string
-}) {
+function DataTableSpecimen({ size = 'md', selection = 'none' }: { size?: DataTableSize; selection?: string }) {
   const enableSelection = selection === 'single' || selection === 'multiple'
   const selectionMode = selection === 'single' ? 'single' : 'multiple'
   return (
@@ -1749,6 +1730,9 @@ function DataTableSpecimen({
 function DatePickerSpecimen({ mode = 'single' }: { mode?: string }) {
   if (mode === 'range') {
     return <DateRangePicker className='w-full max-w-xs' />
+  }
+  if (mode === 'week') {
+    return <DateWeekPicker className='w-full max-w-xs' />
   }
   return <DatePicker className='w-full max-w-xs' />
 }
@@ -1887,9 +1871,11 @@ const progressSteps: ProgressIndicatorStep[] = [
 
 function ProgressIndicatorSpecimen({
   orientation = 'horizontal',
+  alignment = 'start',
   state
 }: {
   orientation?: 'horizontal' | 'vertical'
+  alignment?: 'start' | 'center'
   state?: ProgressStepStatus
 }) {
   const steps: ProgressIndicatorStep[] = React.useMemo(() => {
@@ -1931,7 +1917,7 @@ function ProgressIndicatorSpecimen({
 
   return (
     <div className={orientation === 'vertical' ? 'w-48' : 'w-full max-w-md'}>
-      <ProgressStepIndicator steps={steps} orientation={orientation} />
+      <ProgressStepIndicator steps={steps} orientation={orientation} alignment={alignment} />
     </div>
   )
 }
@@ -1972,12 +1958,7 @@ function SearchSpecimen({
 }) {
   return (
     <div className='w-full max-w-xs'>
-      <Search
-        appearance={appearance}
-        size={size}
-        placeholder='Search missions...'
-        defaultValue='Initial query'
-      />
+      <Search appearance={appearance} size={size} placeholder='Search missions...' defaultValue='Initial query' />
     </div>
   )
 }
@@ -2065,7 +2046,9 @@ function SidebarSpecimen({
                     isActive={isActiveMenuItem}
                     autoFocus={isFocusVisible}
                     data-focus-visible={isFocusVisible ? '' : undefined}
-                    className={isFocusVisible ? 'ring-2 ring-sidebar-ring ring-offset-2 ring-offset-sidebar' : undefined}
+                    className={
+                      isFocusVisible ? 'ring-2 ring-sidebar-ring ring-offset-2 ring-offset-sidebar' : undefined
+                    }
                   >
                     Overview
                   </SidebarMenuButton>
@@ -2354,6 +2337,7 @@ const SPECIMENS: Record<string, ComponentSpecimens> = {
   },
   'progress-indicator': {
     orientation: (value) => <ProgressIndicatorSpecimen orientation={value as 'horizontal' | 'vertical'} />,
+    alignment: (value) => <ProgressIndicatorSpecimen alignment={value as 'start' | 'center'} />,
     states: (state) => <ProgressIndicatorSpecimen state={state as ProgressStepStatus} />
   },
   'page-header': {
@@ -2478,6 +2462,7 @@ export function renderConfiguredSpecimen(specId: string, settings: SpecimenSetti
       return (
         <ProgressIndicatorSpecimen
           orientation={setting(settings, 'orientation', 'horizontal') as 'horizontal' | 'vertical'}
+          alignment={setting(settings, 'alignment', 'start') as 'start' | 'center'}
         />
       )
     case 'command':

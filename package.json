@@ -91,6 +91,11 @@
       "import": "./dist-lib/code-block.js",
       "default": "./dist-lib/code-block.js"
     },
+    "./code-block-tree": {
+      "types": "./dist-lib/components/ui/code-block-tree.d.ts",
+      "import": "./dist-lib/code-block-tree.js",
+      "default": "./dist-lib/code-block-tree.js"
+    },
     "./collapsible": {
       "types": "./dist-lib/components/ui/collapsible.d.ts",
       "import": "./dist-lib/collapsible.js",

@@ -218,7 +218,8 @@ export const designerTypePatternsByDemoId: Record<string, DesignerTypePattern[]>
       'Use an input-triggered calendar when a date belongs in a form; use an inline calendar when date navigation is the main task.',
       ['DEFAULT', 'Date picker in a form'],
       ['CALENDAR', 'Calendar displayed inline'],
-      ['DATE RANGE', 'Select a start and end date']
+      ['DATE RANGE', 'Select a start and end date'],
+      ['WEEK', 'Select a whole ISO week']
     )
   ],
   dialog: [

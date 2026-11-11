@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
-import { CaretDownIcon, CaretUpDownIcon, CheckIcon, XIcon } from '@phosphor-icons/react'
+import { CaretDownIcon, CheckIcon, XIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/lib/focus-ring'
@@ -136,7 +136,7 @@ function ComboboxTriggerButton({
       React.isValidElement(c) &&
       (c.type === ComboboxIcon ||
         (c.props as { 'data-slot'?: string })?.['data-slot'] === 'combobox-icon' ||
-        c.type === CaretUpDownIcon)
+        c.type === CaretDownIcon)
   )
 
   return (
@@ -156,7 +156,7 @@ function ComboboxTriggerButton({
       {...props}
     >
       {children}
-      {!hasIcon && <CaretUpDownIcon className='shrink-0 text-muted-foreground' />}
+      {!hasIcon && <CaretDownIcon className='shrink-0 text-muted-foreground' />}
     </BaseCombobox.Trigger>
   )
 }
@@ -168,7 +168,7 @@ function ComboboxIcon({ className, children, ...props }: React.ComponentProps<ty
       className={cn('flex shrink-0 items-center justify-center text-muted-foreground', className)}
       {...props}
     >
-      {children ?? <CaretUpDownIcon />}
+      {children ?? <CaretDownIcon />}
     </BaseCombobox.Icon>
   )
 }

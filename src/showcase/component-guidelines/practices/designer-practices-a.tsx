@@ -629,11 +629,11 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
           <Accordion className='w-full max-w-md' multiple defaultValue={['activity', 'preferences']}>
             <AccordionItem value='activity'>
               <AccordionTrigger>Activity</AccordionTrigger>
-              <AccordionContent className='text-muted-foreground'>Sync paused</AccordionContent>
+              <AccordionContent className='text-muted-foreground pb-3'>Sync paused</AccordionContent>
             </AccordionItem>
             <AccordionItem value='preferences'>
               <AccordionTrigger>Settings</AccordionTrigger>
-              <AccordionContent className='text-muted-foreground'>Settings updated</AccordionContent>
+              <AccordionContent className='text-muted-foreground pb-3'>Settings updated</AccordionContent>
             </AccordionItem>
           </Accordion>
         ),
@@ -641,11 +641,11 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
           <Accordion className='w-full max-w-md' defaultValue={['activity']}>
             <AccordionItem value='activity'>
               <AccordionTrigger>Activity</AccordionTrigger>
-              <AccordionContent className='text-muted-foreground'>Sync paused</AccordionContent>
+              <AccordionContent className='text-muted-foreground pb-3'>Sync paused</AccordionContent>
             </AccordionItem>
             <AccordionItem value='preferences'>
               <AccordionTrigger>Settings</AccordionTrigger>
-              <AccordionContent className='text-muted-foreground'>Settings updated</AccordionContent>
+              <AccordionContent className='text-muted-foreground pb-3'>Settings updated</AccordionContent>
             </AccordionItem>
           </Accordion>
         )

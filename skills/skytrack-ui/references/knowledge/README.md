@@ -23,6 +23,7 @@ discovery, while installed exports, types, and source decide API support.
 
 ## Cross-component reference research
 
+- [Report and dashboard UX guidelines](research/REPORT_UX_GUIDELINES.md) distills report design heuristics and citations. Read for report, dashboard, or analytical overview UX; treat it as guidance, not package API evidence.
 - [Vendor design-system benchmark](research/DESIGN_SYSTEM_BENCHMARK.md) informs SkyTrack product rules using Fluent 2, Carbon, and SAP Fiori guidance. Open it only when reviewing those decisions.
 - [Figma comparison](research/FIGMA-SKYTRACK-COMPARISON.md) is a partial inventory marked `IN_PROGRESS`; do not treat it as approved product policy or package API evidence.
 

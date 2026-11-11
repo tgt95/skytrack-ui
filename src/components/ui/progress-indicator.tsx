@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CheckIcon, WarningCircleIcon } from '@phosphor-icons/react'
+import { CheckIcon, ExclamationMarkIcon } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 
 export type ProgressStepStatus = 'complete' | 'current' | 'upcoming' | 'error' | 'disabled'
@@ -12,10 +12,14 @@ export type ProgressIndicatorStep = {
   status?: ProgressStepStatus
 }
 
+export type ProgressIndicatorAlignment = 'start' | 'center'
+
 export type ProgressStepIndicatorProps = React.ComponentProps<'ol'> & {
   steps: ProgressIndicatorStep[]
   currentStep?: number
   orientation?: ProgressIndicatorOrientation
+  /** Align each horizontal step marker and its text to the start or center of its column. */
+  alignment?: ProgressIndicatorAlignment
 }
 
 function getStepStatus(step: ProgressIndicatorStep, index: number, currentStep: number): ProgressStepStatus {
@@ -34,6 +38,7 @@ function ProgressStepIndicator({
   steps,
   currentStep = 0,
   orientation = 'horizontal',
+  alignment = 'start',
   className,
   'aria-label': ariaLabel = 'Progress',
   ...props
@@ -54,7 +59,7 @@ function ProgressStepIndicator({
         const isComplete = status === 'complete'
         const isError = status === 'error'
         const isLast = index === steps.length - 1
-        const MarkerIcon = isComplete ? CheckIcon : isError ? WarningCircleIcon : null
+        const MarkerIcon = isComplete ? CheckIcon : isError ? ExclamationMarkIcon : null
 
         return (
           <li
@@ -62,13 +67,23 @@ function ProgressStepIndicator({
             data-status={status}
             aria-current={isCurrent ? 'step' : undefined}
             aria-disabled={status === 'disabled' || undefined}
-            className={cn('min-w-0', orientation === 'horizontal' ? 'flex flex-1 flex-col gap-2' : 'flex gap-3')}
+            className={cn(
+              'min-w-0',
+              orientation === 'horizontal' ? 'flex flex-1 flex-col gap-2' : 'flex gap-3'
+            )}
           >
-            <div className={cn('flex', orientation === 'horizontal' ? 'w-full items-center' : 'flex-col items-center')}>
+            <div
+              className={cn(
+                'flex',
+                orientation === 'horizontal'
+                  ? cn('relative w-full items-center', alignment === 'center' && 'justify-center')
+                  : 'flex-col items-center'
+              )}
+            >
               <span
                 aria-hidden='true'
                 className={cn(
-                  'flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-medium',
+                  'flex size-7 shrink-0 items-center justify-center rounded-full border text-sm font-medium',
                   markerClasses[status]
                 )}
               >
@@ -80,7 +95,11 @@ function ProgressStepIndicator({
                   className={cn(
                     'bg-border',
                     isComplete && 'bg-primary',
-                    orientation === 'horizontal' ? 'mx-2 h-px min-w-3 flex-1' : 'my-1 min-h-5 w-px'
+                    orientation === 'horizontal'
+                      ? alignment === 'center'
+                        ? 'absolute left-[calc(50%+14px)] right-[calc(-50%+14px)] top-1/2 h-px -translate-y-1/2'
+                        : 'mx-2 h-px min-w-3 flex-1'
+                      : 'my-1 h-full min-h-5 w-px'
                   )}
                 />
               )}
@@ -88,13 +107,14 @@ function ProgressStepIndicator({
             <div
               className={cn(
                 'min-w-0',
-                orientation === 'horizontal' && !isLast && 'pe-4',
-                orientation === 'vertical' && 'pb-4'
+                orientation === 'horizontal' && alignment === 'start' && !isLast && 'pe-4',
+                orientation === 'vertical' && 'pb-4',
+                orientation === 'horizontal' && alignment === 'center' && 'text-center'
               )}
             >
               <p
                 className={cn(
-                  'text-sm font-medium',
+                  'text-base font-medium leading-7',
                   status === 'disabled' ? 'text-muted-foreground' : 'text-foreground',
                   isError && 'text-destructive'
                 )}
@@ -111,9 +131,9 @@ function ProgressStepIndicator({
                           : 'Not started: '}
                 </span>
                 {step.label}
-                {step.optional && <span className='ml-1 text-xs font-normal text-muted-foreground'>Optional</span>}
+                {step.optional && <span className='ml-1 text-sm font-normal text-muted-foreground'>Optional</span>}
               </p>
-              {step.description && <p className='mt-1 text-xs text-muted-foreground'>{step.description}</p>}
+              {step.description && <p className='mt-0.5 text-sm text-muted-foreground'>{step.description}</p>}
             </div>
           </li>
         )
