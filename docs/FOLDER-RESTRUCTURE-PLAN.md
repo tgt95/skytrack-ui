@@ -173,6 +173,8 @@ Sau D0:
 
 **Gate 3:** workflow xanh trên PR thử; không có secret; thời gian chạy ghi lại.
 
+**Trạng thái 2026-11-12:** `COMPLETE`. Lần chạy xanh đầu tiên: run `43147200202` (~1 phút 30 giây, `push` lên `main`, commit `8df003d`). Hai lần đỏ đầu tiên là lỗi môi trường CI, đã sửa và ghi ở `agents/task-work/T-445/verification.md`: timeout 5 giây quá ngắn cho test tương tác, và `npm install --offline` thiếu packument. Còn cảnh báo deprecated Node 20 cho `actions/checkout@v4`/`setup-node@v4` — không chặn.
+
 ### Phase 4 — Token & CSS publish
 
 1. **B1 — sửa root cause thay vì xoá mù:**
