@@ -317,9 +317,18 @@ The sync script (`scripts/sync-to-design-guide.mjs`) automatically mirrors `src/
 ```bash
 npm run typecheck       # TypeScript checks for the showcase and source
 npm run lint            # audited component-boundary and accessibility invariants
-npm test                # focused component behavior tests
+npm test                # focused component behavior tests + axe accessibility pass
+npm run a11y            # axe-core accessibility pass only
+npm run a11y:baseline   # rewrite src/showcase/a11y-baseline.json (refuses to add findings)
 npm run format:check    # package source, scripts, configs, and maintained package docs
 ```
+
+`npm test` includes `src/showcase/component-a11y.test.tsx`, which runs axe-core over every
+shipped component (one variant at a time) and fails when a component gains an accessibility
+violation that is not recorded in `src/showcase/a11y-baseline.json`. Findings that are known
+and accepted are stored there with a reason and the intended fix; the file can only shrink
+unless a rebaseline is run with `A11Y_ACCEPT_NEW=1`. `color-contrast` is disabled because
+jsdom cannot compute it — that stays in the manual browser pass (see [Not verified](#not-verified)).
 
 Before shipping package changes, also run `npm run build:lib` and `npm run test:consumer`.
 The format commands use explicit package-owned paths and leave unrelated docs untouched.
@@ -384,5 +393,10 @@ to retain it in a chosen location.
   component state and viewport before making a rendered-appearance claim.
 - **Behaviour in a real browser** (focus trapping, portals, gestures, SSR/prerender, screen
   readers, RTL, responsive layout).
+- **Colour contrast.** axe-core's `color-contrast` rule needs layout and canvas support, so it
+  is disabled in the jsdom pass; no automated contrast check exists yet.
+- **Accessibility beyond static markup.** The axe pass catches names, roles, states and
+  relationships. It cannot judge focus order, keyboard reachability, announcement quality or
+  whether a component is usable with a screen reader.
 - **Registry installation.** Only the local tarball was installed; no registry, no
   authentication, no access-control check has been performed.

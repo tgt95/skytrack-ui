@@ -1,98 +1,28 @@
-import type { ReactNode } from 'react'
-import { cleanup, render } from '@testing-library/react'
+import { cleanup } from '@testing-library/react'
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { Calendar } from '@/components/ui/calendar'
-import type { DemoMeta } from './demo'
-import { SPECS } from './specs/component-specs'
+import {
+  demoById,
+  installBrowserStubs,
+  MANUAL_CASES,
+  renderComponent,
+  SHELL_DEMO_IDS,
+  SPECS
+} from './test-support/demo-harness'
 
 /**
  * Smoke coverage for every shipped component.
  *
- * The Sheet specs (`component-specs.ts`) are the list of components the library
- * claims to ship, and `src/demos/*.demo.tsx` are the showcase's own usage
- * examples. This test renders each component once through its demo, so a new
- * component without a demo — or a demo that no longer renders — fails here
- * before it reaches the Sheet.
+ * This test renders each component once through its demo, so a new component
+ * without a demo — or a demo that no longer renders — fails here before it
+ * reaches the Sheet. The same harness feeds `component-a11y.test.tsx`.
  */
-const modules = import.meta.glob<{ demo: DemoMeta }>('../demos/*.demo.tsx', { eager: true })
-
-const demoById = new Map<string, DemoMeta>()
-for (const module of Object.values(modules)) {
-  if (module.demo) demoById.set(module.demo.id, module.demo)
-}
-
-/** Shell demos compose many components, so they have no single component to smoke test. */
-const SHELL_DEMO_IDS = new Set([
-  'canvas-shell',
-  'combined-shell',
-  'command-first-shell',
-  'left-nav-shell',
-  'multi-pane-shell',
-  'multi-tab-shell',
-  'top-nav-shell'
-])
-
-/** Components with no showcase demo yet still need a case here. */
-const MANUAL_CASES: Record<string, () => ReactNode> = {
-  calendar: () => <Calendar mode='single' />
-}
-
-/** The demo harness in the showcase wraps each variant in its own block. */
-function renderComponent(id: string) {
-  const demo = demoById.get(id)
-
-  if (!demo) {
-    const manual = MANUAL_CASES[id]
-    expect(manual, `No demo or manual smoke case for "${id}"`).toBeDefined()
-    return render(<>{manual()}</>).container
-  }
-
-  return render(
-    <>
-      {demo.variants.map((variant) => (
-        <div key={variant.name} data-smoke-variant={variant.name}>
-          {variant.render()}
-        </div>
-      ))}
-    </>
-  ).container
-}
 
 /** A component rendered nothing recognisable if it has no slot marker, role or form element. */
 function landmarkCount(container: HTMLElement) {
   return container.querySelectorAll('[data-slot], [role]').length
 }
 
-beforeAll(() => {
-  // jsdom lacks these; several components measure themselves or observe scroll.
-  class ObserverStub {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-    takeRecords() {
-      return []
-    }
-  }
-  const globals = globalThis as unknown as Record<string, unknown>
-  for (const name of ['ResizeObserver', 'IntersectionObserver', 'MutationObserver']) {
-    if (!globals[name]) globals[name] = ObserverStub
-  }
-
-  if (!window.matchMedia) {
-    window.matchMedia = ((query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener() {},
-      removeEventListener() {},
-      addListener() {},
-      removeListener() {},
-      dispatchEvent: () => false
-    })) as unknown as typeof window.matchMedia
-  }
-
-  if (!Element.prototype.scrollIntoView) Element.prototype.scrollIntoView = () => {}
-})
+beforeAll(installBrowserStubs)
 
 afterEach(cleanup)
 

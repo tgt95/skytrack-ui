@@ -8,7 +8,7 @@
     "src/components/ui/code-block-tree.tsx": 515,
     "src/components/ui/code-block.tsx": 501,
     "src/components/ui/combobox.tsx": 430,
-    "src/components/ui/data-table.tsx": 448,
+    "src/components/ui/data-table.tsx": 453,
     "src/components/ui/date-picker.tsx": 476,
     "src/components/ui/sidebar.tsx": 709,
     "src/demos/autocomplete.demo.tsx": 983,

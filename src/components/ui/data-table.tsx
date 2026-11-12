@@ -330,10 +330,15 @@ function DataTable<TData extends RowData>({
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className='border-b border-border'>
                 {renderExpandedRow && headerGroup.id === table.getHeaderGroups()[0]?.id && (
-                  <th scope='col' aria-label='Expand row' className={cn('w-10', cellSizeClasses[size])} />
+                  <th scope='col' className={cn('w-10', cellSizeClasses[size])}>
+                    <span className='sr-only'>Expand row</span>
+                  </th>
                 )}
                 {enableRowSelection && (
-                  <th scope='col' aria-label='Select row' className={cn('w-10', cellSizeClasses[size])}>
+                  <th scope='col' className={cn('w-10', cellSizeClasses[size])}>
+                    {(selectionMode !== 'multiple' || headerGroup.id !== table.getHeaderGroups()[0]?.id) && (
+                      <span className='sr-only'>Select row</span>
+                    )}
                     {selectionMode === 'multiple' && headerGroup.id === table.getHeaderGroups()[0]?.id && (
                       <CheckboxRoot
                         aria-label='Select all rows on this page'

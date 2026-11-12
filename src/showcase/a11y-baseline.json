@@ -1,0 +1,67 @@
+{
+  "note": "Known axe-core findings per component. Regenerate with `npm run a11y:baseline` after fixing or accepting a finding.",
+  "generatedFrom": "src/showcase/component-a11y.test.tsx",
+  "disabledRules": [
+    "color-contrast"
+  ],
+  "knownIssues": [
+    {
+      "component": "date-picker",
+      "rule": "aria-allowed-role",
+      "why": "The Base UI popover trigger renders as `<input role=\"button\">`; ARIA in HTML does not allow the button role on a text input.",
+      "next": "Trigger the popover from a real `<button>` that contains the read-only display value, then verify with a browser pass."
+    },
+    {
+      "component": "tabs",
+      "rule": "aria-required-children",
+      "why": "The closable-tabs demo puts the \"Add tab\" button inside `role=\"tablist\"`, which must only contain tabs.",
+      "next": "Move the add control outside `TabsList` and re-check the visual grouping."
+    },
+    {
+      "component": "tabs",
+      "rule": "nested-interactive",
+      "why": "Each demo tab nests its close `<button>` inside `role=\"tab\"`, so a screen reader meets an interactive control inside an interactive control.",
+      "next": "Move the close control next to the tab inside a `role=\"presentation\"` wrapper and confirm keyboard order in a browser."
+    }
+  ],
+  "findings": [
+    {
+      "component": "date-picker",
+      "rule": "aria-allowed-role",
+      "severity": "minor",
+      "nodes": 1,
+      "targets": [
+        "DATE RANGE: #_r_e6_"
+      ]
+    },
+    {
+      "component": "date-picker",
+      "rule": "aria-allowed-role",
+      "severity": "minor",
+      "nodes": 1,
+      "targets": [
+        "WEEK: #_r_ed_"
+      ]
+    },
+    {
+      "component": "tabs",
+      "rule": "aria-required-children",
+      "severity": "critical",
+      "nodes": 1,
+      "targets": [
+        "Closable tabs: .z-0"
+      ]
+    },
+    {
+      "component": "tabs",
+      "rule": "nested-interactive",
+      "severity": "serious",
+      "nodes": 3,
+      "targets": [
+        "Closable tabs: #base-ui-_r_220_",
+        "Closable tabs: #base-ui-_r_221_",
+        "Closable tabs: #base-ui-_r_222_"
+      ]
+    }
+  ]
+}

@@ -63,6 +63,7 @@ function WorkspaceSidebar({ variant = 'sidebar' }: { variant?: 'sidebar' | 'inse
             <SidebarMenuButton
               size='default'
               tooltip='SkyTrack workspace'
+              aria-label='SkyTrack workspace'
               className='group-data-[icon-collapsed=true]/sidebar:p-0'
             >
               <span className='flex min-w-0 flex-1 flex-col items-start gap-0.5 group-data-[icon-collapsed=true]/sidebar:hidden'>
