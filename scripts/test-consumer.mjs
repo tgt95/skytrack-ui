@@ -16,8 +16,10 @@
  *   5. `node` can import the installed root entry and a subpath, and React is
  *      resolved once (the package ships no nested `node_modules`)
  *
- * No network: npm runs with `--offline`, so everything resolves from the local
- * cache. Nothing is rendered — no jsdom, no headless browser, no localhost.
+ * Network: npm runs with `--prefer-offline`, so a warm cache keeps the install
+ * offline and only metadata never seen before is fetched. Set
+ * SKYTRACK_UI_CONSUMER_OFFLINE=1 to force `--offline` (release gate on a warm
+ * cache). Nothing is rendered — no jsdom, no headless browser, no localhost.
  *
  * Usage: `npm run test:consumer` (uses the tarball matching package.json version,
  * packing it first if it is missing).
@@ -272,14 +274,15 @@ const versions = {
   '@types/react': pkg.devDependencies['@types/react'],
   '@types/react-dom': pkg.devDependencies['@types/react-dom']
 }
-console.log('\n[consumer] 3. install tarball (offline)')
+const strictOffline = process.env.SKYTRACK_UI_CONSUMER_OFFLINE === '1'
+console.log(`\n[consumer] 3. install tarball (${strictOffline ? 'offline' : 'prefer cached'})`)
 let installed = true
 try {
   run(
     'npm',
     [
       'install',
-      '--offline',
+      strictOffline ? '--offline' : '--prefer-offline',
       '--no-audit',
       '--no-fund',
       '--ignore-scripts',
@@ -290,10 +293,14 @@ try {
   )
 } catch (error) {
   installed = false
-  bad(`npm install --offline failed: ${error.stdout || error.stderr || error.message}`)
+  bad(`npm install failed: ${error.stdout || error.stderr || error.message}`)
 }
 if (installed) {
-  ok(`installed ${path.basename(tarball)} + ${Object.keys(versions).join(', ')} from the local npm cache (no network)`)
+  ok(
+    `installed ${path.basename(tarball)} + ${Object.keys(versions).join(', ')} from the local npm cache${
+      strictOffline ? ' (no network)' : ''
+    }`
+  )
 }
 
 const bin = (name) => path.join(dir, 'node_modules/.bin', name)
@@ -376,7 +383,7 @@ if (installed) {
 
 console.log(
   failures === 0
-    ? `\n[consumer] PASS — tarball verified in an isolated offline consumer (${dir})\n`
+    ? `\n[consumer] PASS — tarball verified in an isolated consumer (${dir})\n`
     : `\n[consumer] FAIL — ${failures} check(s) failed (project kept at ${dir})\n`
 )
 process.exit(failures === 0 ? 0 : 1)
