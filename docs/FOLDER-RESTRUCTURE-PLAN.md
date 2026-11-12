@@ -211,16 +211,17 @@ Theo pattern `skytrack-mission-studio`, nhưng rule đúng với package này:
 
 Chỉ bắt đầu sau Gate 6. Tách theo ranh giới dữ liệu/render, không sửa logic.
 
-**Trạng thái 2026-11-12:** `SPECS` đã tách khỏi `sheet.tsx` (task `T-442`), xem `agents/task-work/T-442/verification.md`. Các file còn lại chưa làm.
+**Trạng thái 2026-11-12:** `COMPLETE`. Chi tiết + bằng chứng: `agents/task-work/T-442/verification.md` (sheet) và `agents/task-work/T-443/verification.md` (các file còn lại).
 
 | File | Hiện tại | Mục tiêu | Trạng thái |
 |---|---|---|---|
-| `src/showcase/pattern-library/page-content.ts` | 12.173 dòng | 1 file / pattern (26 file) trong `pattern-library/pages/` | chờ |
-| `src/showcase/sheet-specimens.tsx` | 2.600 dòng | tách theo nhóm component | chờ |
-| `src/showcase/App.tsx` | 1.433 dòng | tách router, showcase panel, header | chờ |
+| `src/showcase/pattern-library/page-content.ts` | 12.173 → 1 dòng (barrel) | 1 file / pattern (26 file) trong `pattern-library/pages/` | `COMPLETE` (`T-443`) |
+| `src/showcase/pattern-library/demos.tsx` | 5.800 → 1 dòng (barrel) | 1 file / pattern trong `pattern-library/demos/` | `COMPLETE` (`T-443`) |
+| `src/showcase/sheet-specimens.tsx` | 2.600 → 1 dòng (barrel) | tách theo nhóm component trong `specimens/` | `COMPLETE` (`T-443`) |
+| `src/showcase/App.tsx` | 1.433 → 518 dòng | tách router (`app/registry.ts`) và thumbnail (`app/thumbnails.tsx`) | `COMPLETE` (`T-443`) |
 | `src/showcase/sheet.tsx` | 1.283 → 682 dòng | tách `SPECS` (dữ liệu) khỏi render | `COMPLETE` (`T-442`) |
 
-**Gate 7:** `test`, `lint`, `typecheck` PASS; screenshot trước/sau cho route bị ảnh hưởng; không đổi public API.
+**Gate 7:** PASS — `typecheck`, `lint`, `guardrails`, `test`, `format:check`, `build`, `build:lib`, `verify:lib`; ảnh before/after route `/`, `sheet`, `showcase`, `showcase&panel=dashboard`, `pattern` diff 0 pixel (trừ Progress demo tự đổi `52%`/`45%`); text hash khớp cho 11 pattern page; CSS bundle hash không đổi; public API không đổi.
 
 ### Phase 8 — Smoke test theo component (task riêng)
 
