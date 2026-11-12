@@ -237,10 +237,22 @@ Chỉ bắt đầu sau Gate 6. Tách theo ranh giới dữ liệu/render, không
 
 ### Phase 9 — Đóng gói & phát hành (Owner quyết định)
 
-1. **C1 — nội dung tarball:** giữ `["dist-lib","README.md"]` hoặc thêm `AGENTS.md` + `skills/skytrack-ui`. Nếu thêm, cập nhật `scripts/test-consumer.mjs`.
-2. **C2 — registry:** giữ `"private": true`, không `publishConfig`. Chưa chọn registry.
+**Trạng thái 2026-11-12:** `COMPLETE` cho phần đóng gói cục bộ. **Chưa publish** — registry/scope vẫn là quyết định của Owner (C2). Bằng chứng: `agents/task-work/T-446/verification.md`.
 
-**Gate 9:** `pack:local` + `test:consumer` PASS theo nội dung tarball đã chốt.
+1. **C1 — nội dung tarball:** giữ `files: ["dist-lib","README.md"]`. Không thêm `AGENTS.md` / `skills/` (tài liệu nội bộ, không phải artifact consumer cần).
+2. **C2 — registry:** giữ `"private": true`, không `publishConfig`. `scripts/guard-publish.mjs` (chạy ở `prepack`) chặn publish cho tới khi Owner chốt registry + access level.
+3. **Sửa lỗi đóng gói phát hiện ở Gate 9:** hai config lib để Vite copy nguyên `public/` vào `dist-lib/`, khiến tarball chứa `video/` (11 MB) và `images/` (3.4 MB) — asset chỉ dùng cho showcase. Đặt `publicDir: false` trong `vite.lib.config.ts` và `vite.lib.css.config.ts`; `vite.config.ts` (showcase) giữ nguyên nên `dist/` vẫn có đủ asset demo.
+
+| Tarball `skytrack-ui-0.1.5.tgz` | Trước | Sau |
+|---|---|---|
+| Dung lượng nén | 14.1 MB | 1.1 MB |
+| Dung lượng giải nén | 15.7 MB | 1.6 MB |
+| Số file | 249 | 222 |
+| `sha256` | `4d2bd91a…` | `e46a5c3d…` (`shasum` `e46a5c3d16594203dbfe9d1ebc7937eb2c6dbed1`) |
+
+Nội dung tarball giờ chỉ còn: root barrel + 56 subpath entry + `chunks/`, `.d.ts` tree, `styles.css` + `styles.css.d.ts`, `assets/` (font Host Grotesk, IBM Plex Sans/Mono), `package.json`, `README.md`.
+
+**Gate 9:** PASS — `typecheck`, `lint`, `guardrails`, `test` (134/134), `format:check`, `build`, `build:lib`, `verify:lib` (442 class / 415 root / 56 subpath), `pack:local`, `test:consumer` ở cả hai chế độ (cache sạch + mạng; cache ấm + `SKYTRACK_UI_CONSUMER_OFFLINE=1`). Bước còn lại: Owner chọn registry/scope trước khi bỏ `private: true`.
 
 ---
 

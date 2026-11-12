@@ -41,6 +41,11 @@ for (const subpath of Object.keys(exportMap.subpaths).sort()) {
 }
 
 export default defineConfig({
+  // `public/` holds showcase-only assets (avatars, demo video, logos) that the
+  // config files under `src/demos` import from the showcase build. Copying them
+  // into `dist-lib/` would add ~14 MB of dead weight to every consumer install,
+  // and no library module references them.
+  publicDir: false,
   plugins: [react()],
   resolve: { alias: { '@': path.resolve(import.meta.dirname, 'src') } },
   build: {

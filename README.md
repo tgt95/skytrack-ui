@@ -357,6 +357,11 @@ When the owner picks a destination, the options and their requirements are:
 
 Until then, consumers install the tarball (or a Git URL / workspace link to this directory).
 
+The tarball holds only what a consumer needs: `dist-lib/` (56 subpath entries, the root barrel,
+shared chunks, the `.d.ts` tree, `styles.css` plus its font assets) and `README.md`. Both library
+Vite configs set `publicDir: false`, so the showcase-only `public/` assets (demo video, avatars,
+logos) stay out of `dist-lib/` — they are only copied into the showcase `dist/` build.
+
 ## Verified how
 
 `npm run build:lib` → `scripts/verify-lib.mjs` (entry points, no `@/` alias in any emitted

@@ -15,6 +15,10 @@ export default defineConfig({
   // Relative asset URLs: the package is consumed from arbitrary base paths
   // (a sub-path deployment, a file:// harness, a bundler with a custom base).
   base: './',
+  // The CSS build shares `dist-lib/` with the JS build, so it must not re-copy
+  // `public/` either. Only `src/styles.css` and its font `@font-face` sources
+  // belong in the package.
+  publicDir: false,
   plugins: [tailwindcss()],
   build: {
     outDir: 'dist-lib',
