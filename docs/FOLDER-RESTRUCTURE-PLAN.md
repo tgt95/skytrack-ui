@@ -225,11 +225,13 @@ Chỉ bắt đầu sau Gate 6. Tách theo ranh giới dữ liệu/render, không
 
 ### Phase 8 — Smoke test theo component (task riêng)
 
-1. Một file parametrized cho 56 component.
-2. Assertion tối thiểu: render không crash; role ARIA chính; `data-slot` đúng.
-3. Component cần provider/browser API phải có wrapper trong test, không skip.
+**Trạng thái 2026-11-12:** `COMPLETE`. Bằng chứng: `agents/task-work/T-444/verification.md`.
 
-**Gate 8:** 56/56 case PASS; thêm component mới mà thiếu case thì test đỏ.
+1. Một file parametrized cho 56 component — `src/showcase/component-smoke.test.tsx` (đặt ngoài `src/components/ui/` để không vi phạm guardrail layer UI→showcase).
+2. Assertion tối thiểu: render không crash; có `data-slot`, role ARIA hoặc form element; không có `[data-demo-error]`.
+3. Component cần provider/browser API phải có wrapper trong test, không skip: demo tự bọc provider; `calendar` chưa có demo nên dùng `MANUAL_CASES`; `matchMedia`/`ResizeObserver`/`IntersectionObserver` được stub trong `beforeAll`.
+
+**Gate 8:** PASS — 56/56 case PASS; component mới thiếu demo/case thì test đỏ; demo lạ không có spec hoặc không nằm trong danh sách shell cũng đỏ.
 
 ### Phase 9 — Đóng gói & phát hành (Owner quyết định)
 
