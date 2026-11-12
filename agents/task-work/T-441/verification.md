@@ -197,6 +197,14 @@ Before (`436ad81`) and after (final branch commit, built from `6dc2f95` sources)
 
 Body background resolves to `rgb(244, 244, 245)` in light and `rgb(39, 39, 42)` in dark in both builds. `data-showcase-view` appears once in each showcase CSS bundle and 0 times in `dist-lib/styles.css`.
 
+## Demo surface builds (not covered by CI)
+
+Evidence: `agents/task-work/T-441/surface-gates.log`, exit 0.
+
+- `npm run build-storybook`: PASS; 62 story bundles in `storybook-static/`.
+- `npm run build:site`: PASS; `site/` written, showcase CSS still carries `data-showcase-view` (1 occurrence), `dist/assets` unchanged.
+- `storybook-static/` added to `.gitignore`; it was never ignored before.
+
 ## Remaining limits
 
 1. `test:consumer` cannot install offline here (`ENOTCACHED` / unresolved `react`); needs network or a CI run.

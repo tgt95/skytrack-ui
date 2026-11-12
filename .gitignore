@@ -4,6 +4,7 @@ dist-lib
 dist-lib-tarball
 *.tgz
 site
+storybook-static
 artifact
 .DS_Store
 draft
