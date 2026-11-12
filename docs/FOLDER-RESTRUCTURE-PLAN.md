@@ -320,7 +320,7 @@ X2–X8 chưa được kiểm lại trong v2; cần verify trước khi mở tas
 
 | ID | Quyết định | Đề xuất |
 |---|---|---|
-| D0 | Carbon reference cho test: tracked, submodule, fetch script, hay bỏ | Fetch script nếu license cho phép; nếu không, giữ tracked |
+| D0 | Carbon reference cho test: tracked, submodule, fetch script, hay bỏ | **CHỐT 2026-11-12: giữ tracked, chấp nhận clone chậm.** Owner quyết định không tối ưu 94 MB / 2.447 file; chỉ 28 file (343 KB) được cite và test cần chúng. Không mở lại trừ khi Owner yêu cầu. Xem `decisions/DR-037` (workspace root). |
 | D1 | `primitive.css`: sửa giá trị và giữ, hay chuyển `docs/` reference-only | Sửa 6 token lỗi, chuyển reference-only nếu không còn consumer |
 | D2 | Lịch sử git 166 MB: `git filter-repo` hay chỉ gỡ ở commit hiện tại | Chỉ gỡ hiện tại trong task này; filter-repo task riêng |
 | D3 | Storybook: giữ generator (đề xuất) hay bỏ hẳn | Giữ generator, sửa format |
