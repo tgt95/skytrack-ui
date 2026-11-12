@@ -3,7 +3,7 @@
 **Trạng thái:** `EXECUTED` — Phase 0-6 hoàn tất ngày 2026-11-12. Phase 7 (tách file lớn), Phase 8 (smoke test 56 component) và Phase 9 (đóng gói/phát hành) tách thành task riêng. Báo cáo kết quả: `agents/task-work/T-441/verification.md`.
 **Bản:** v2, thay thế v1. Bản v1 lưu tại `agents/task-work/_plan-backups/FOLDER-RESTRUCTURE-PLAN-v1-2026-11-12.md`.
 **Phạm vi:** chỉ repository `designs/components/skytrack-ui` (nested git repo, remote `github.com/tgt95/skytrack-ui`). Mọi path tương đối so với thư mục gốc package.
-**Ngoài phạm vi:** workspace root `SkyTrack/`, `skytrack-design-guide`, `skytrack-mission-studio`, `skytrack-ui-android`, `skytrack-ui-dev`, `prototype-hub`. Phát hiện liên quan ghi ở Mục 7, không thực hiện trong task này.
+**Ngoài phạm vi:** workspace root `SkyTrack/`, `skytrack-design-guide`, `skytrack-mission-studio`, `skytrack-ui-android`, `skytrack-ui-dev` (đã bỏ ngày 2026-11-12 — xem phụ lục ở Phase 9), `prototype-hub`. Phát hiện liên quan ghi ở Mục 7, không thực hiện trong task này.
 **Ngày audit:** 2026-11-12 · **Cập nhật:** 2026-11-12.
 **Lý do lên v2:** v1 chứa 5 lỗi chặn (xem Mục 9) và nhiều số liệu lệch. v2 sửa số liệu, đảo thứ tự thực thi, thêm Phase 0 baseline và gate xanh trước CI.
 
@@ -253,6 +253,8 @@ Chỉ bắt đầu sau Gate 6. Tách theo ranh giới dữ liệu/render, không
 Nội dung tarball giờ chỉ còn: root barrel + 56 subpath entry + `chunks/`, `.d.ts` tree, `styles.css` + `styles.css.d.ts`, `assets/` (font Host Grotesk, IBM Plex Sans/Mono), `package.json`, `README.md`.
 
 **Gate 9:** PASS — `typecheck`, `lint`, `guardrails`, `test` (134/134), `format:check`, `build`, `build:lib`, `verify:lib` (442 class / 415 root / 56 subpath), `pack:local`, `test:consumer` ở cả hai chế độ (cache sạch + mạng; cache ấm + `SKYTRACK_UI_CONSUMER_OFFLINE=1`). Bước còn lại: Owner chọn registry/scope trước khi bỏ `private: true`.
+
+**Phụ lục — nhánh `dev` đã bỏ (2026-11-12):** `designs/components/skytrack-ui-dev` trong workspace là git worktree của chính repo này ở branch `dev`, không phải project riêng. Branch `dev` tách từ `6b1073c` (initial) và chỉ có 1 commit (`4f1f18e` brand tokens v4, 2026-10-23); `main` đi trước 35 commit và chưa từng nhận commit đó. Trước khi xoá, work đã bảo tồn: tag annotated **`archive/dev-brand-tokens-v4`** (đã push remote) giữ `src/theme/skytrack-brand-tokens-v4.json`, `scripts/generate-token-css.mjs`, `scripts/audit-contrast.mjs`, `tokens.css`, `theme-map.css`. Sau đó bỏ worktree, branch local và branch remote. Lấy lại: `git show archive/dev-brand-tokens-v4:src/theme/skytrack-brand-tokens-v4.json`. Chi tiết: `agents/task-work/T-447/verification.md`.
 
 ---
 
