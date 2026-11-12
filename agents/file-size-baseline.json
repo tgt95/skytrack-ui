@@ -31,6 +31,7 @@
     "src/showcase/pattern-library/page-content.ts": 12174,
     "src/showcase/pattern-library/pattern-library.test.tsx": 1881,
     "src/showcase/sheet-specimens.tsx": 2601,
-    "src/showcase/sheet.tsx": 1284
+    "src/showcase/sheet.tsx": 683,
+    "src/showcase/specs/component-specs.ts": 609
   }
 }

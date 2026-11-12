@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const uiDir = path.join(root, 'src/components/ui')
-const sheetPath = path.join(root, 'src/showcase/sheet.tsx')
+const specsPath = path.join(root, 'src/showcase/specs/component-specs.ts')
 
 // 1. Collect all component files in src/components/ui/
 const componentFiles = fs
@@ -14,15 +14,15 @@ const componentFiles = fs
   .map((f) => f.replace('.tsx', ''))
   .sort()
 
-// 2. Read sheet.tsx and extract SPECS array
-const sheetContent = fs.readFileSync(sheetPath, 'utf8')
-const specsStart = sheetContent.indexOf('const SPECS: ComponentSpec[] = [')
+// 2. Read the spec module and extract the SPECS array
+const specsContent = fs.readFileSync(specsPath, 'utf8')
+const specsStart = specsContent.indexOf('export const SPECS: ComponentSpec[] = [')
 if (specsStart === -1) {
-  console.error('FAIL: Could not locate SPECS array in src/showcase/sheet.tsx')
+  console.error('FAIL: Could not locate SPECS array in src/showcase/specs/component-specs.ts')
   process.exit(1)
 }
 
-const specsSlice = sheetContent.slice(specsStart)
+const specsSlice = specsContent.slice(specsStart)
 const specIds = [...specsSlice.matchAll(/id:\s*['"]([a-z0-9-]+)['"]/g)].map((m) => m[1])
 
 const missingComponents = componentFiles.filter((id) => !specIds.includes(id))
@@ -31,19 +31,19 @@ const failures = []
 
 if (missingComponents.length > 0) {
   failures.push(
-    `sheet.tsx is missing ${missingComponents.length} component(s):\n  - ${missingComponents.join('\n  - ')}`
+    `component-specs.ts is missing ${missingComponents.length} component(s):\n  - ${missingComponents.join('\n  - ')}`
   )
 }
 
 // 3. Check for specific known size axes that must be present
 const checkAxisIncludes = (compId, axisName, expectedValues) => {
   const compRegex = new RegExp(`id:\\s*['"]${compId}['"][\\s\\S]*?(?:states:|sizes:|note:)`, 'g')
-  const match = compRegex.exec(sheetContent)
+  const match = compRegex.exec(specsContent)
   if (!match) return
   const block = match[0]
   for (const val of expectedValues) {
     if (!block.includes(`'${val}'`) && !block.includes(`"${val}"`)) {
-      failures.push(`${compId}: axis "${axisName}" is missing expected value "${val}" in sheet.tsx`)
+      failures.push(`${compId}: axis "${axisName}" is missing expected value "${val}" in component-specs.ts`)
     }
   }
 }
@@ -64,8 +64,8 @@ for (const derived of [
   'Object.keys(toggleVariantConfig.variants.variant)',
   'Object.keys(toggleVariantConfig.variants.size)'
 ]) {
-  if (!sheetContent.includes(derived)) {
-    failures.push(`sheet.tsx must derive shared axes with ${derived}`)
+  if (!specsContent.includes(derived)) {
+    failures.push(`component-specs.ts must derive shared axes with ${derived}`)
   }
 }
 
@@ -74,5 +74,7 @@ if (failures.length > 0) {
   console.error(failures.join('\n'))
   process.exitCode = 1
 } else {
-  console.log(`PASS  all ${componentFiles.length} UI components and their variant axes are registered in sheet.tsx`)
+  console.log(
+    `PASS  all ${componentFiles.length} UI components and their variant axes are registered in component-specs.ts`
+  )
 }

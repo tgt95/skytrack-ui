@@ -211,12 +211,14 @@ Theo pattern `skytrack-mission-studio`, nhưng rule đúng với package này:
 
 Chỉ bắt đầu sau Gate 6. Tách theo ranh giới dữ liệu/render, không sửa logic.
 
-| File | Hiện tại | Mục tiêu |
-|---|---|---|
-| `src/showcase/pattern-library/page-content.ts` | 12.173 dòng | 1 file / pattern (26 file) trong `pattern-library/pages/` |
-| `src/showcase/sheet-specimens.tsx` | 2.600 dòng | tách theo nhóm component |
-| `src/showcase/App.tsx` | 1.433 dòng | tách router, showcase panel, header |
-| `src/showcase/sheet.tsx` | 1.271 dòng | tách `SPECS` (dữ liệu) khỏi render |
+**Trạng thái 2026-11-12:** `SPECS` đã tách khỏi `sheet.tsx` (task `T-442`), xem `agents/task-work/T-442/verification.md`. Các file còn lại chưa làm.
+
+| File | Hiện tại | Mục tiêu | Trạng thái |
+|---|---|---|---|
+| `src/showcase/pattern-library/page-content.ts` | 12.173 dòng | 1 file / pattern (26 file) trong `pattern-library/pages/` | chờ |
+| `src/showcase/sheet-specimens.tsx` | 2.600 dòng | tách theo nhóm component | chờ |
+| `src/showcase/App.tsx` | 1.433 dòng | tách router, showcase panel, header | chờ |
+| `src/showcase/sheet.tsx` | 1.283 → 682 dòng | tách `SPECS` (dữ liệu) khỏi render | `COMPLETE` (`T-442`) |
 
 **Gate 7:** `test`, `lint`, `typecheck` PASS; screenshot trước/sau cho route bị ảnh hưởng; không đổi public API.
 
