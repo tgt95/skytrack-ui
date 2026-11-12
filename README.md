@@ -5,7 +5,7 @@ Private, reusable React component library for SkyTrack. Built on
 
 **Status: local/private phase.** The package is `private: true`, it is installed from a
 local tarball, and no npm registry destination has been chosen yet. See
-[Publishing](#publishing--still-an-open-owner-decision). **Building UI with this library?**
+[Publishing](#publishing--localprivate-only-decided-2026-11-12). **Building UI with this library?**
 Start with this repository's [`AGENTS.md`](AGENTS.md), then route through its local
 [`skills/README.md`](skills/README.md) and open only the relevant guide sections.
 Contributor file-read logging is off by default; for the `DEBUG=true` opt-in and command examples,
@@ -338,16 +338,22 @@ version, so consumers pin the tarball path they were given.
 (`src/demos`, `src/showcase`, `index.html`), the build configs and the scripts are **not**
 published — they stay in this repository.
 
-## Publishing — still an open owner decision
+## Publishing — local/private only (decided 2026-11-12)
+
+**Decision (owner, 2026-11-12):** the package is not published publicly for now. It stays
+local/internal and is distributed as a tarball, Git URL, or workspace link. Recorded as
+`decisions/DR-036-skytrack-ui-stays-local-no-public-publish.md` in the SkyTrack workspace.
 
 Nothing is configured for publication, on purpose:
 
 - `"private": true` is set. npm **refuses to publish** a package with this flag, which is the
-  guard that keeps the package internal while the destination is undecided.
+  guard that keeps the package internal while no destination is chosen.
 - There is no `publishConfig`, no registry URL and no `.npmrc` in this package, and no
   credentials are read anywhere in the build or pack scripts.
+- `scripts/guard-publish.mjs` runs from `prepack` and fails if either of the above changes.
 
-When the owner picks a destination, the options and their requirements are:
+If that decision is ever revisited, the owner must first pick a destination, a package name
+(a scope is mandatory for restricted access), and an access level:
 
 | Destination                                                      | What has to change                                                                                                                              |
 | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |

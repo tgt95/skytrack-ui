@@ -240,7 +240,7 @@ Chỉ bắt đầu sau Gate 6. Tách theo ranh giới dữ liệu/render, không
 **Trạng thái 2026-11-12:** `COMPLETE` cho phần đóng gói cục bộ. **Chưa publish** — registry/scope vẫn là quyết định của Owner (C2). Bằng chứng: `agents/task-work/T-446/verification.md`.
 
 1. **C1 — nội dung tarball:** giữ `files: ["dist-lib","README.md"]`. Không thêm `AGENTS.md` / `skills/` (tài liệu nội bộ, không phải artifact consumer cần).
-2. **C2 — registry:** giữ `"private": true`, không `publishConfig`. `scripts/guard-publish.mjs` (chạy ở `prepack`) chặn publish cho tới khi Owner chốt registry + access level.
+2. **C2 — registry:** giữ `"private": true`, không `publishConfig`. `scripts/guard-publish.mjs` (chạy ở `prepack`) chặn publish cho tới khi Owner chốt registry + access level. **Owner đã chốt 2026-11-12: chưa publish công khai**, package ở lại local/private, phân phối qua tarball / Git URL / workspace link — ghi tại `decisions/DR-036-skytrack-ui-stays-local-no-public-publish.md` (workspace root).
 3. **Sửa lỗi đóng gói phát hiện ở Gate 9:** hai config lib để Vite copy nguyên `public/` vào `dist-lib/`, khiến tarball chứa `video/` (11 MB) và `images/` (3.4 MB) — asset chỉ dùng cho showcase. Đặt `publicDir: false` trong `vite.lib.config.ts` và `vite.lib.css.config.ts`; `vite.config.ts` (showcase) giữ nguyên nên `dist/` vẫn có đủ asset demo.
 
 | Tarball `skytrack-ui-0.1.5.tgz` | Trước | Sau |
