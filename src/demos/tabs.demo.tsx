@@ -11,8 +11,14 @@ const TABS = [
 ]
 
 /**
- * Render the tab trigger as a div so its separate close button is not nested
- * inside a native button. Base UI still supplies tab semantics and keyboard handling.
+ * Render the tab trigger as a div so its close affordance is not nested inside a
+ * native button. Base UI still supplies tab semantics and keyboard handling.
+ *
+ * The close control is a decorative `span` on purpose: a real `<button>` inside
+ * `role="tab"` is an interactive control nested in an interactive control, which
+ * screen readers cannot represent (axe `nested-interactive`). Mouse users click the
+ * icon; keyboard users press Delete on the focused tab, advertised through
+ * `aria-keyshortcuts`. Visual output is unchanged from a real button.
  */
 function ClosableTabsExample() {
   const [tabs, setTabs] = useState(['Tab 1', 'Tab 2', 'Tab 3'])
@@ -45,20 +51,26 @@ function ClosableTabsExample() {
             value={tab}
             render={<div />}
             nativeButton={false}
+            aria-keyshortcuts='Delete'
+            onKeyDown={(event) => {
+              if (event.key !== 'Delete' && event.key !== 'Backspace') return
+              event.preventDefault()
+              closeTab(tab)
+            }}
             className="rounded-b-none rounded-t-[var(--radius)] border border-b-0 border-transparent -mb-px data-active:border-border data-active:bg-background data-active:after:absolute data-active:after:inset-x-px data-active:after:-bottom-px data-active:after:h-0.5 data-active:after:bg-background data-active:after:content-[''] data-active:after:pointer-events-none"
           >
             {tab}
-            <button
-              type='button'
-              aria-label={`Close ${tab}`}
+            <span
+              aria-hidden='true'
+              title={`Close ${tab} (Delete)`}
               onClick={(event) => {
                 event.stopPropagation()
                 closeTab(tab)
               }}
-              className={`-mr-1 rounded-(--radius) p-0.5 text-muted-foreground hover:text-foreground ${focusRing}`}
+              className='-mr-1 cursor-pointer rounded-(--radius) p-0.5 text-muted-foreground hover:text-foreground'
             >
               <XIcon className='size-3.5' />
-            </button>
+            </span>
           </TabsTab>
         ))}
         <button

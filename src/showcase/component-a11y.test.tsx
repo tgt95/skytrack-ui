@@ -43,20 +43,14 @@ const KNOWN_ISSUES = [
   {
     component: 'date-picker',
     rule: 'aria-allowed-role',
-    why: 'The Base UI popover trigger renders as `<input role="button">`; ARIA in HTML does not allow the button role on a text input.',
-    next: 'Trigger the popover from a real `<button>` that contains the read-only display value, then verify with a browser pass.'
+    why: 'The range and week pickers use the Base UI popover trigger directly on their input, which renders `<input role="button">`; ARIA in HTML does not allow the button role on a text input.',
+    next: 'ACCEPTED by the owner on 2026-11-13: keep the input trigger. The planned fix instead gives both pickers the editable-input plus separate calendar-button pattern the single date picker already uses, which removes this finding as a side effect.'
   },
   {
     component: 'tabs',
     rule: 'aria-required-children',
-    why: 'The closable-tabs demo puts the "Add tab" button inside `role="tablist"`, which must only contain tabs.',
-    next: 'Move the add control outside `TabsList` and re-check the visual grouping.'
-  },
-  {
-    component: 'tabs',
-    rule: 'nested-interactive',
-    why: 'Each demo tab nests its close `<button>` inside `role="tab"`, so a screen reader meets an interactive control inside an interactive control.',
-    next: 'Move the close control next to the tab inside a `role="presentation"` wrapper and confirm keyboard order in a browser.'
+    why: 'The closable-tabs demo keeps the "Add tab" button inside `role="tablist"`, which ARIA says may only contain tabs.',
+    next: 'Probe result: moving a button out of the tablist is the only fix that clears the rule. The owner chose on 2026-11-13 to keep the current visual grouping, so this critical finding is accepted. Revisit only if the add control can move outside the tab row without changing the layout.'
   }
 ] as const
 
