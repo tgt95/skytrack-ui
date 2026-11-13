@@ -4,11 +4,25 @@ import { dateMatchModifiers, type DateRange, type DayPickerProps } from 'react-d
 import { Calendar } from '@/components/ui/calendar'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverPortal, PopoverPositioner, PopoverPopup, PopoverTrigger } from '@/components/ui/popover'
-import { parseDateInput } from '@/lib/date-input'
+import {
+  DATE_RANGE_SEPARATOR,
+  hasDateRangeSeparator,
+  isCompleteDateText,
+  parseDateInput,
+  parseDateRangeInput
+} from '@/lib/date-input'
+import { useDateField, type DateField } from '@/lib/date-field'
 import { focusRing } from '@/lib/focus-ring'
+import { endOfISOWeek, formatWeekLabel, parseWeekInput, startOfISOWeek } from '@/lib/iso-week'
 import { cn } from '@/lib/utils'
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never
+
+/** Calendar props shared by the pickers; `mode`, selection and nav layout stay internal. */
+type PickerCalendarProps<Mode extends 'single' | 'range'> = DistributiveOmit<
+  Extract<DayPickerProps, { mode: Mode }>,
+  'mode' | 'selected' | 'onSelect' | 'captionLayout' | 'navLayout'
+>
 
 /**
  * Base UI flips `align` from start to end when a popup is wider than its trigger and the
@@ -28,35 +42,8 @@ function resolveFieldAnchor(element: HTMLElement | null) {
   return element?.closest('[data-slot="input-root"]') ?? element
 }
 
-/** Monday that starts the ISO-8601 week containing `date`. */
-function startOfISOWeek(date: Date) {
-  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-  start.setDate(start.getDate() - ((start.getDay() + 6) % 7))
-  return start
-}
-
-/** Sunday that ends the ISO-8601 week starting on `weekStart`. */
-function endOfISOWeek(weekStart: Date) {
-  const end = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate())
-  end.setDate(end.getDate() + 6)
-  return end
-}
-
-/** ISO-8601 week-year and week number for a date, e.g. `2026, Week 45`. */
-function getISOWeek(date: Date) {
-  const thursday = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-  const dayNumber = thursday.getDay() || 7
-  thursday.setDate(thursday.getDate() + 4 - dayNumber)
-  const weekYear = thursday.getFullYear()
-  const yearStart = new Date(weekYear, 0, 1)
-  const week = Math.ceil(((thursday.getTime() - yearStart.getTime()) / 86_400_000 + 1) / 7)
-  return { weekYear, week }
-}
-
-function formatWeekLabel(date: Date) {
-  const { weekYear, week } = getISOWeek(date)
-  return `${weekYear}, Week ${week}`
-}
+/** Locale the fields format with, and therefore the locale typed dates are read in. */
+const DATE_LOCALE = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).resolvedOptions().locale
 
 export type DatePickerProps = {
   id?: string
@@ -72,10 +59,7 @@ export type DatePickerProps = {
   calendarClassName?: string
   /** Accessible name for the calendar button that opens the popover. */
   calendarButtonLabel?: string
-  calendarProps?: DistributiveOmit<
-    Extract<DayPickerProps, { mode: 'single' }>,
-    'mode' | 'selected' | 'onSelect' | 'captionLayout' | 'navLayout'
-  >
+  calendarProps?: PickerCalendarProps<'single'>
 }
 
 export type DateRangePickerProps = {
@@ -90,10 +74,9 @@ export type DateRangePickerProps = {
   className?: string
   buttonClassName?: string
   calendarClassName?: string
-  calendarProps?: DistributiveOmit<
-    Extract<DayPickerProps, { mode: 'range' }>,
-    'mode' | 'selected' | 'onSelect' | 'captionLayout' | 'navLayout'
-  >
+  /** Accessible name for the calendar button that opens the popover. */
+  calendarButtonLabel?: string
+  calendarProps?: PickerCalendarProps<'range'>
 }
 
 export type DateWeekPickerProps = {
@@ -109,10 +92,112 @@ export type DateWeekPickerProps = {
   className?: string
   buttonClassName?: string
   calendarClassName?: string
-  calendarProps?: DistributiveOmit<
-    Extract<DayPickerProps, { mode: 'range' }>,
-    'mode' | 'selected' | 'onSelect' | 'captionLayout' | 'navLayout'
-  >
+  /** Accessible name for the calendar button that opens the popover. */
+  calendarButtonLabel?: string
+  calendarProps?: PickerCalendarProps<'range'>
+}
+
+type DatePickerFieldProps = {
+  slot: string
+  inputRef: React.RefObject<HTMLInputElement | null>
+  field: DateField
+  value: string
+  placeholder: string
+  disabled: boolean
+  empty: boolean
+  /** Name used when the caller supplied no label of its own. */
+  accessibleName: string
+  id?: string
+  ariaLabel?: string
+  ariaLabelledby?: string
+  calendarButtonLabel: string
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  className?: string
+  inputClassName?: string
+  popupClassName?: string
+  children: React.ReactNode
+}
+
+/**
+ * The text field every picker shares: an editable input plus a separate calendar button that
+ * opens the popover. The button is a real `<button>` (not the input wearing `role="button"`),
+ * and the input keeps native text-box semantics so typing works the same in all three pickers.
+ */
+function DatePickerField({
+  slot,
+  inputRef,
+  field,
+  value,
+  placeholder,
+  disabled,
+  empty,
+  accessibleName,
+  id,
+  ariaLabel,
+  ariaLabelledby,
+  calendarButtonLabel,
+  open,
+  onOpenChange,
+  className,
+  inputClassName,
+  popupClassName,
+  children
+}: DatePickerFieldProps) {
+  const anchor = React.useCallback(() => resolveFieldAnchor(inputRef.current), [inputRef])
+
+  return (
+    <Popover open={open} onOpenChange={onOpenChange}>
+      <div data-slot={slot} className={cn('w-full', className)}>
+        <Input
+          ref={inputRef}
+          disabled={disabled}
+          id={id}
+          type='text'
+          value={value}
+          placeholder={placeholder}
+          autoComplete='off'
+          spellCheck={false}
+          data-empty={empty}
+          data-invalid={field.invalid ? '' : undefined}
+          aria-invalid={field.invalid || undefined}
+          aria-label={ariaLabel ?? (id || ariaLabelledby ? undefined : accessibleName)}
+          aria-labelledby={ariaLabelledby}
+          className={cn('w-full', inputClassName)}
+          startAdornment={
+            <PopoverTrigger
+              render={
+                <button
+                  type='button'
+                  disabled={disabled}
+                  aria-label={calendarButtonLabel}
+                  className={cn(
+                    '-ms-1 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--radius) text-muted-foreground transition-colors',
+                    'hover:text-foreground disabled:pointer-events-none disabled:opacity-50',
+                    focusRing
+                  )}
+                />
+              }
+            >
+              <CalendarBlankIcon aria-hidden='true' />
+            </PopoverTrigger>
+          }
+          {...field.handlers}
+        />
+      </div>
+      <PopoverPortal>
+        <PopoverPositioner
+          anchor={anchor}
+          side='bottom'
+          align='start'
+          sideOffset={4}
+          collisionAvoidance={calendarCollisionAvoidance}
+        >
+          <PopoverPopup className={cn('w-auto max-w-none p-0', popupClassName)}>{children}</PopoverPopup>
+        </PopoverPositioner>
+      </PopoverPortal>
+    </Popover>
+  )
 }
 
 function DatePicker(props: DatePickerProps) {
@@ -133,176 +218,58 @@ function DatePicker(props: DatePickerProps) {
   } = props
   const [internalValue, setInternalValue] = React.useState<Date | undefined>(defaultValue)
   const [open, setOpen] = React.useState(false)
-  // `draft` is the text the user is typing; `null` means the field shows the formatted value.
-  const [draft, setDraft] = React.useState<string | null>(null)
-  const [invalid, setInvalid] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
-  const anchor = React.useCallback(() => resolveFieldAnchor(inputRef.current), [])
-  const selectAllOnMouseUpRef = React.useRef(false)
   const isControlled = Object.prototype.hasOwnProperty.call(props, 'value')
   const selectedDate = isControlled ? value : internalValue
   const formatter = React.useMemo(() => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }), [])
-  const locale = formatter.resolvedOptions().locale
-  const formattedValue = selectedDate ? formatter.format(selectedDate) : ''
-  const inputValue = draft ?? formattedValue
+  const formatDate = React.useCallback((date: Date | undefined) => (date ? formatter.format(date) : ''), [formatter])
 
   const commitValue = (nextValue: Date | undefined) => {
     if (!isControlled) setInternalValue(nextValue)
     onValueChange?.(nextValue)
   }
 
-  const isUnavailableDate = (date: Date | undefined) =>
-    date == null || (calendarProps?.disabled != null && dateMatchModifiers(date, calendarProps.disabled))
-
-  const commitDraft = () => {
-    if (draft === null) return true
-
-    // Unchanged text (including a locale display format the parser cannot read) keeps the value.
-    if (draft === formattedValue) {
-      setDraft(null)
-      setInvalid(false)
-      return true
-    }
-
-    const text = draft.trim()
-    if (!text) {
-      commitValue(undefined)
-      setDraft(null)
-      setInvalid(false)
-      return true
-    }
-
-    const parsed = parseDateInput(text, formatter.resolvedOptions().locale)
-    if (isUnavailableDate(parsed)) {
-      setInvalid(true)
-      return false
-    }
-
-    commitValue(parsed)
-    setDraft(null)
-    setInvalid(false)
-    return true
-  }
-
-  const handleSelect = (nextValue: Date | undefined) => {
-    commitValue(nextValue)
-    setDraft(null)
-    setInvalid(false)
-    setOpen(false)
-  }
-
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-    setDraft(formattedValue)
-    setInvalid(false)
-    selectAllOnMouseUpRef.current = true
-    event.currentTarget.select()
-  }
-
-  const handleMouseUp = (event: React.MouseEvent<HTMLInputElement>) => {
-    if (!selectAllOnMouseUpRef.current) return
-    event.preventDefault()
-    selectAllOnMouseUpRef.current = false
-  }
-
-  const handleBlur = () => {
-    selectAllOnMouseUpRef.current = false
-    if (commitDraft()) return
-    // Unparseable text reverts to the last committed date instead of staying in the field.
-    setDraft(null)
-    setInvalid(false)
-  }
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      if (commitDraft()) setOpen(false)
-      return
-    }
-
-    if (event.key === 'Escape') {
-      if (draft !== null) {
-        setDraft(null)
-        setInvalid(false)
-      }
-      return
-    }
-
-    if (event.key === 'ArrowDown' && !open) {
-      event.preventDefault()
-      setOpen(true)
-    }
-  }
+  const field = useDateField<Date>({
+    value: selectedDate,
+    format: formatDate,
+    parse: (text) => parseDateInput(text, DATE_LOCALE),
+    commit: commitValue,
+    isUnavailable: (date) => calendarProps?.disabled != null && dateMatchModifiers(date, calendarProps.disabled),
+    onCommitFromKeyboard: () => setOpen(false),
+    onRequestOpen: () => setOpen(true)
+  })
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <div data-slot='date-picker' className={cn('w-full', className)}>
-        <Input
-          ref={inputRef}
-          disabled={disabled}
-          id={id}
-          type='text'
-          value={inputValue}
-          placeholder={placeholder}
-          autoComplete='off'
-          spellCheck={false}
-          data-empty={!selectedDate}
-          data-invalid={invalid ? '' : undefined}
-          aria-invalid={invalid || undefined}
-          aria-label={
-            ariaLabel ??
-            (id || ariaLabelledby ? undefined : selectedDate ? `Selected date: ${formattedValue}` : placeholder)
-          }
-          aria-labelledby={ariaLabelledby}
-          className={cn('w-full', buttonClassName)}
-          startAdornment={
-            <PopoverTrigger
-              render={
-                <button
-                  type='button'
-                  disabled={disabled}
-                  aria-label={calendarButtonLabel}
-                  className={cn(
-                    '-ms-1 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--radius) text-muted-foreground transition-colors',
-                    'hover:text-foreground disabled:pointer-events-none disabled:opacity-50',
-                    focusRing
-                  )}
-                />
-              }
-            >
-              <CalendarBlankIcon aria-hidden='true' />
-            </PopoverTrigger>
-          }
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onChange={(event) => {
-            const nextDraft = event.target.value
-            setDraft(nextDraft)
-            setInvalid(nextDraft.trim().length > 0 && isUnavailableDate(parseDateInput(nextDraft, locale)))
-          }}
-          onKeyDown={handleKeyDown}
-          onMouseUp={handleMouseUp}
-        />
-      </div>
-      <PopoverPortal>
-        <PopoverPositioner
-          anchor={anchor}
-          side='bottom'
-          align='start'
-          sideOffset={4}
-          collisionAvoidance={calendarCollisionAvoidance}
-        >
-          <PopoverPopup className='w-auto p-0'>
-            <Calendar
-              mode='single'
-              selected={selectedDate}
-              onSelect={handleSelect}
-              className={calendarClassName}
-              {...calendarProps}
-            />
-          </PopoverPopup>
-        </PopoverPositioner>
-      </PopoverPortal>
-    </Popover>
+    <DatePickerField
+      slot='date-picker'
+      inputRef={inputRef}
+      field={field}
+      value={field.inputValue}
+      placeholder={placeholder}
+      disabled={disabled}
+      empty={!selectedDate}
+      accessibleName={selectedDate ? `Selected date: ${formatDate(selectedDate)}` : placeholder}
+      id={id}
+      ariaLabel={ariaLabel}
+      ariaLabelledby={ariaLabelledby}
+      calendarButtonLabel={calendarButtonLabel}
+      open={open}
+      onOpenChange={setOpen}
+      className={className}
+      inputClassName={buttonClassName}
+    >
+      <Calendar
+        mode='single'
+        selected={selectedDate}
+        onSelect={(nextValue) => {
+          commitValue(nextValue)
+          field.reset()
+          setOpen(false)
+        }}
+        className={calendarClassName}
+        {...calendarProps}
+      />
+    </DatePickerField>
   )
 }
 
@@ -319,77 +286,92 @@ function DateRangePicker(props: DateRangePickerProps) {
     className,
     buttonClassName,
     calendarClassName,
+    calendarButtonLabel = 'Open calendar',
     calendarProps
   } = props
   const [internalValue, setInternalValue] = React.useState<DateRange | undefined>(defaultValue)
   const [open, setOpen] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
-  const anchor = React.useCallback(() => resolveFieldAnchor(inputRef.current), [])
   const isControlled = Object.prototype.hasOwnProperty.call(props, 'value')
   const selectedRange = isControlled ? value : internalValue
   const formatDate = React.useCallback(
     (date: Date) => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(date),
     []
   )
-  const label = selectedRange?.from
-    ? selectedRange.to
-      ? `${formatDate(selectedRange.from)} – ${formatDate(selectedRange.to)}`
-      : `${formatDate(selectedRange.from)} – Select end date`
-    : placeholder
+
+  const formatRange = (range: DateRange | undefined) => {
+    if (!range?.from) return ''
+    if (range.to) return `${formatDate(range.from)}${DATE_RANGE_SEPARATOR}${formatDate(range.to)}`
+    return `${formatDate(range.from)}${DATE_RANGE_SEPARATOR}Select end date`
+  }
+
+  const isUnavailableDate = (date: Date) =>
+    calendarProps?.disabled != null && dateMatchModifiers(date, calendarProps.disabled)
+
+  const commitValue = (nextValue: DateRange | undefined) => {
+    if (!isControlled) setInternalValue(nextValue)
+    onValueChange?.(nextValue)
+  }
+
+  const field = useDateField<DateRange>({
+    value: selectedRange,
+    format: formatRange,
+    parse: (text) => parseDateRangeInput(text, DATE_LOCALE),
+    commit: commitValue,
+    // A range is unavailable when it is inside out or either end sits on a disabled day.
+    isUnavailable: (range) => {
+      if (!range.from) return true
+      if (range.to != null && range.to.getTime() < range.from.getTime()) return true
+      return isUnavailableDate(range.from) || (range.to != null && isUnavailableDate(range.to))
+    },
+    // Typing a complete start date appends the en dash so the end date follows naturally.
+    completeText: (text, caretAtEnd) => {
+      if (!caretAtEnd || hasDateRangeSeparator(text) || !isCompleteDateText(text, DATE_LOCALE)) return text
+      return `${text.trim()}${DATE_RANGE_SEPARATOR}`
+    },
+    onCommitFromKeyboard: () => setOpen(false),
+    onRequestOpen: () => setOpen(true)
+  })
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <div data-slot='date-range-picker' className={cn('w-full', className)}>
-        <PopoverTrigger
-          nativeButton={false}
-          render={
-            <Input
-              ref={inputRef}
-              disabled={disabled}
-              id={id}
-              value={selectedRange?.from ? label : ''}
-              placeholder={placeholder}
-              readOnly
-              startAdornment={<CalendarBlankIcon aria-hidden='true' />}
-              data-empty={!selectedRange?.from}
-              aria-label={ariaLabel ?? (id || ariaLabelledby ? undefined : label)}
-              aria-labelledby={ariaLabelledby}
-              className={cn('w-full', buttonClassName)}
-            />
-          }
-        />
-      </div>
-      <PopoverPortal>
-        <PopoverPositioner
-          anchor={anchor}
-          side='bottom'
-          align='start'
-          sideOffset={4}
-          collisionAvoidance={calendarCollisionAvoidance}
-        >
-          <PopoverPopup className='w-auto max-w-none p-0'>
-            <Calendar
-              mode='range'
-              selected={selectedRange}
-              onSelect={(nextRange) => {
-                const isFirstDay =
-                  !selectedRange?.from &&
-                  nextRange?.from &&
-                  nextRange.to &&
-                  nextRange.from.toDateString() === nextRange.to.toDateString()
-                const normalizedRange = isFirstDay ? { from: nextRange.from } : nextRange
+    <DatePickerField
+      slot='date-range-picker'
+      inputRef={inputRef}
+      field={field}
+      value={field.inputValue}
+      placeholder={placeholder}
+      disabled={disabled}
+      empty={!selectedRange?.from}
+      accessibleName={formatRange(selectedRange) || placeholder}
+      id={id}
+      ariaLabel={ariaLabel}
+      ariaLabelledby={ariaLabelledby}
+      calendarButtonLabel={calendarButtonLabel}
+      open={open}
+      onOpenChange={setOpen}
+      className={className}
+      inputClassName={buttonClassName}
+      popupClassName='max-w-none'
+    >
+      <Calendar
+        mode='range'
+        selected={selectedRange}
+        onSelect={(nextRange) => {
+          const isFirstDay =
+            !selectedRange?.from &&
+            nextRange?.from &&
+            nextRange.to &&
+            nextRange.from.toDateString() === nextRange.to.toDateString()
+          const normalizedRange = isFirstDay ? { from: nextRange.from } : nextRange
 
-                if (!isControlled) setInternalValue(normalizedRange)
-                onValueChange?.(normalizedRange)
-                if (normalizedRange?.from && normalizedRange.to) setOpen(false)
-              }}
-              className={calendarClassName}
-              {...calendarProps}
-            />
-          </PopoverPopup>
-        </PopoverPositioner>
-      </PopoverPortal>
-    </Popover>
+          commitValue(normalizedRange)
+          field.reset()
+          if (normalizedRange?.from && normalizedRange.to) setOpen(false)
+        }}
+        className={calendarClassName}
+        {...calendarProps}
+      />
+    </DatePickerField>
   )
 }
 
@@ -406,69 +388,78 @@ function DateWeekPicker(props: DateWeekPickerProps) {
     className,
     buttonClassName,
     calendarClassName,
+    calendarButtonLabel = 'Open calendar',
     calendarProps
   } = props
   const [internalValue, setInternalValue] = React.useState<Date | undefined>(defaultValue)
   const [open, setOpen] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
-  const anchor = React.useCallback(() => resolveFieldAnchor(inputRef.current), [])
   const isControlled = Object.prototype.hasOwnProperty.call(props, 'value')
   const selectedDate = isControlled ? value : internalValue
   const weekStart = selectedDate ? startOfISOWeek(selectedDate) : undefined
   const weekEnd = weekStart ? endOfISOWeek(weekStart) : undefined
-  const label = weekStart ? formatWeekLabel(weekStart) : ''
+  const formatWeek = React.useCallback(
+    (date: Date | undefined) => (date ? formatWeekLabel(startOfISOWeek(date)) : ''),
+    []
+  )
+
+  const commitValue = (nextValue: Date | undefined) => {
+    if (!isControlled) setInternalValue(nextValue)
+    onValueChange?.(nextValue)
+  }
+
+  const field = useDateField<Date>({
+    value: selectedDate,
+    format: formatWeek,
+    parse: (text) => parseWeekInput(text, DATE_LOCALE),
+    commit: commitValue,
+    // Whole weeks are the unit here, so a disabled day anywhere in the week rejects it.
+    isUnavailable: (date) => {
+      if (calendarProps?.disabled == null) return false
+      const start = startOfISOWeek(date)
+      return (
+        dateMatchModifiers(start, calendarProps.disabled) ||
+        dateMatchModifiers(endOfISOWeek(start), calendarProps.disabled)
+      )
+    },
+    onCommitFromKeyboard: () => setOpen(false),
+    onRequestOpen: () => setOpen(true)
+  })
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <div data-slot='date-week-picker' className={cn('w-full', className)}>
-        <PopoverTrigger
-          nativeButton={false}
-          render={
-            <Input
-              ref={inputRef}
-              disabled={disabled}
-              id={id}
-              value={label}
-              placeholder={placeholder}
-              readOnly
-              startAdornment={<CalendarBlankIcon aria-hidden='true' />}
-              data-empty={!weekStart}
-              aria-label={
-                ariaLabel ?? (id || ariaLabelledby ? undefined : weekStart ? `Selected ${label}` : placeholder)
-              }
-              aria-labelledby={ariaLabelledby}
-              className={cn('w-full', buttonClassName)}
-            />
-          }
-        />
-      </div>
-      <PopoverPortal>
-        <PopoverPositioner
-          anchor={anchor}
-          side='bottom'
-          align='start'
-          sideOffset={4}
-          collisionAvoidance={calendarCollisionAvoidance}
-        >
-          <PopoverPopup className='w-auto max-w-none p-0'>
-            <Calendar
-              {...calendarProps}
-              mode='range'
-              selected={weekStart && weekEnd ? { from: weekStart, to: weekEnd } : undefined}
-              weekStartsOn={1}
-              onSelect={(_range, triggerDate) => {
-                if (!triggerDate) return
-                const nextWeek = startOfISOWeek(triggerDate)
-                if (!isControlled) setInternalValue(nextWeek)
-                onValueChange?.(nextWeek)
-                setOpen(false)
-              }}
-              className={calendarClassName}
-            />
-          </PopoverPopup>
-        </PopoverPositioner>
-      </PopoverPortal>
-    </Popover>
+    <DatePickerField
+      slot='date-week-picker'
+      inputRef={inputRef}
+      field={field}
+      value={field.inputValue}
+      placeholder={placeholder}
+      disabled={disabled}
+      empty={!weekStart}
+      accessibleName={weekStart ? `Selected ${formatWeek(weekStart)}` : placeholder}
+      id={id}
+      ariaLabel={ariaLabel}
+      ariaLabelledby={ariaLabelledby}
+      calendarButtonLabel={calendarButtonLabel}
+      open={open}
+      onOpenChange={setOpen}
+      className={className}
+      inputClassName={buttonClassName}
+      popupClassName='max-w-none'
+    >
+      <Calendar
+        {...calendarProps}
+        mode='range'
+        selected={weekStart && weekEnd ? { from: weekStart, to: weekEnd } : undefined}
+        weekStartsOn={1}
+        onSelect={(_range, triggerDate) => {
+          if (!triggerDate) return
+          commitValue(startOfISOWeek(triggerDate))
+          field.reset()
+          setOpen(false)
+        }}
+        className={calendarClassName}
+      />
+    </DatePickerField>
   )
 }
 

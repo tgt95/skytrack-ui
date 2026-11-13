@@ -41,12 +41,6 @@ const DISABLED_RULES = ['color-contrast'] as const
  */
 const KNOWN_ISSUES = [
   {
-    component: 'date-picker',
-    rule: 'aria-allowed-role',
-    why: 'The range and week pickers use the Base UI popover trigger directly on their input, which renders `<input role="button">`; ARIA in HTML does not allow the button role on a text input.',
-    next: 'ACCEPTED by the owner on 2026-11-13: keep the input trigger. The planned fix instead gives both pickers the editable-input plus separate calendar-button pattern the single date picker already uses, which removes this finding as a side effect.'
-  },
-  {
     component: 'tabs',
     rule: 'aria-required-children',
     why: 'The closable-tabs demo keeps the "Add tab" button inside `role="tablist"`, which ARIA says may only contain tabs.',

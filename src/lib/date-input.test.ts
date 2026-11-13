@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { getNumericDatePartOrder, parseDateInput } from './date-input'
+import {
+  getNumericDatePartOrder,
+  hasDateRangeSeparator,
+  isCompleteDateText,
+  parseDateInput,
+  parseDateRangeInput
+} from './date-input'
 
 function iso(date: Date | undefined) {
   if (!date) return undefined
@@ -55,5 +61,65 @@ describe('parseDateInput', () => {
     const date = parseDateInput('2026-11-11')
     expect(date?.getHours()).toBe(0)
     expect(date?.getMinutes()).toBe(0)
+  })
+})
+
+describe('isCompleteDateText', () => {
+  it('accepts whole dates that carry a four-digit year', () => {
+    expect(isCompleteDateText('2026-11-11')).toBe(true)
+    expect(isCompleteDateText('11/11/2026', 'en-US')).toBe(true)
+    expect(isCompleteDateText('11 Nov 2026')).toBe(true)
+    expect(isCompleteDateText('Nov 11, 2026')).toBe(true)
+  })
+
+  it('rejects partial text so a typed year is not cut short', () => {
+    expect(isCompleteDateText('')).toBe(false)
+    expect(isCompleteDateText('11/11/2')).toBe(false)
+    expect(isCompleteDateText('11/11/26')).toBe(false)
+    expect(isCompleteDateText('11 Nov')).toBe(false)
+    expect(isCompleteDateText('31 Nov 2026')).toBe(false)
+  })
+})
+
+describe('hasDateRangeSeparator', () => {
+  it('recognises the separators a person might type', () => {
+    expect(hasDateRangeSeparator('11 Nov 2026 – 15 Nov 2026')).toBe(true)
+    expect(hasDateRangeSeparator('11 Nov 2026—15 Nov 2026')).toBe(true)
+    expect(hasDateRangeSeparator('11 Nov 2026 - 15 Nov 2026')).toBe(true)
+  })
+
+  it('leaves single dates and bare hyphens alone', () => {
+    expect(hasDateRangeSeparator('11 Nov 2026')).toBe(false)
+    expect(hasDateRangeSeparator('2026-11-11')).toBe(false)
+  })
+})
+
+describe('parseDateRangeInput', () => {
+  it('parses both halves of a typed range', () => {
+    const range = parseDateRangeInput('11 Nov 2026 – 15 Nov 2026')
+    expect(iso(range?.from)).toBe('2026-11-11')
+    expect(iso(range?.to)).toBe('2026-11-15')
+  })
+
+  it('accepts an em dash and a padded hyphen', () => {
+    expect(iso(parseDateRangeInput('11 Nov 2026 — 15 Nov 2026')?.to)).toBe('2026-11-15')
+    expect(iso(parseDateRangeInput('11 Nov 2026 - 15 Nov 2026')?.to)).toBe('2026-11-15')
+  })
+
+  it('treats a single date or a half-finished range as a start date only', () => {
+    expect(parseDateRangeInput('11 Nov 2026')).toEqual({ from: parseDateInput('11 Nov 2026') })
+    expect(parseDateRangeInput('11 Nov 2026 – ')).toEqual({ from: parseDateInput('11 Nov 2026') })
+  })
+
+  it('keeps a reversed range so the picker can reject it as unavailable', () => {
+    const range = parseDateRangeInput('15 Nov 2026 – 11 Nov 2026')
+    expect(iso(range?.from)).toBe('2026-11-15')
+    expect(iso(range?.to)).toBe('2026-11-11')
+  })
+
+  it('rejects text whose halves are not dates', () => {
+    expect(parseDateRangeInput('')).toBeUndefined()
+    expect(parseDateRangeInput(' – 15 Nov 2026')).toBeUndefined()
+    expect(parseDateRangeInput('11 Nov 2026 – next week')).toBeUndefined()
   })
 })

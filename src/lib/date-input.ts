@@ -120,3 +120,70 @@ export function parseDateInput(value: string, locale?: string): Date | undefined
 
   return parseMonthNameDate(text, locale)
 }
+
+/** Separator the range picker displays and inserts once a start date is complete. */
+export const DATE_RANGE_SEPARATOR = ' – '
+
+/** En dash, em dash, or a hyphen padded with spaces. A bare hyphen is left alone so ISO dates type cleanly. */
+const RANGE_SEPARATOR_PATTERN = /\s*[–—]\s*|\s+-\s+/
+
+/** True when the text already contains a range separator, so typing should not add another. */
+export function hasDateRangeSeparator(value: string) {
+  return RANGE_SEPARATOR_PATTERN.test(value)
+}
+
+const COMPLETE_DATE_PATTERNS = [
+  /^\d{4}-\d{1,2}-\d{1,2}$/, // ISO: 2026-11-11
+  /^\d{1,2}[/.-]\d{1,2}[/.-]\d{4}$/, // Locale order: 11/11/2026
+  /^\d{1,2}\s+[a-z]{3,}\.?,?\s+\d{4}$/i, // 11 Nov 2026
+  /^[a-z]{3,}\.?\s+\d{1,2},?\s+\d{4}$/i // Nov 11, 2026
+]
+
+/**
+ * True when the text reads as a whole date with an unambiguous four-digit year.
+ *
+ * The range field uses this to decide a typed start date is finished and the end date can
+ * follow. It is deliberately stricter than `parseDateInput`, which already accepts
+ * `11/11/2` as 2002: completing on any successful parse would insert the range separator
+ * while the user is still typing the year.
+ */
+export function isCompleteDateText(value: string, locale?: string) {
+  const text = value.trim()
+  if (!text) return false
+  return COMPLETE_DATE_PATTERNS.some((pattern) => pattern.test(text)) && parseDateInput(text, locale) !== undefined
+}
+
+export type ParsedDateRange = { from: Date; to?: Date }
+
+/**
+ * Parses a typed date range such as `11 Nov 2026 – 15 Nov 2026`.
+ *
+ * - A single date is accepted and returned as `{ from }`, matching a first click in the calendar.
+ * - An empty end half (`11 Nov 2026 – `) is also `{ from }`, so typing does not need to finish.
+ *
+ * Order is not checked here: an end date before the start date still parses, because whether
+ * that range is selectable is the caller's rule. The range picker rejects it as unavailable.
+ */
+export function parseDateRangeInput(value: string, locale?: string): ParsedDateRange | undefined {
+  const text = value.trim()
+  if (!text) return undefined
+
+  const separator = RANGE_SEPARATOR_PATTERN.exec(text)
+  if (!separator) {
+    const single = parseDateInput(text, locale)
+    return single ? { from: single } : undefined
+  }
+
+  const startText = text.slice(0, separator.index).trim()
+  const endText = text.slice(separator.index + separator[0].length).trim()
+
+  const from = parseDateInput(startText, locale)
+  if (!from) return undefined
+
+  if (!endText) return { from }
+
+  const to = parseDateInput(endText, locale)
+  if (!to) return undefined
+
+  return { from, to }
+}

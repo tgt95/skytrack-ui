@@ -38,7 +38,7 @@ function DateRangeField() {
     ? range.to
       ? `${new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(range.from)} – ${new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(range.to)}`
       : 'Choose an end date'
-    : 'Choose a start and end date'
+    : 'Pick or type a start and end date'
 
   return (
     <FieldRoot className='flex w-72 flex-col gap-2'>
@@ -65,7 +65,7 @@ function DateWeekField() {
       <FieldDescription aria-live='polite'>
         {week
           ? `Week of ${new Intl.DateTimeFormat(undefined, { dateStyle: 'long' }).format(week)}`
-          : 'Pick an ISO week'}
+          : 'Pick or type an ISO week'}
       </FieldDescription>
     </FieldRoot>
   )

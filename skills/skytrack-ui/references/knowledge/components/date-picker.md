@@ -11,7 +11,7 @@
 
 ## Overview
 
-The Date Picker component combines an editable date Input with a calendar button that opens an embedded DayPicker calendar view. People can pick a day from the calendar or type a date into the field. `DatePicker` supports a single date; `DateRangePicker` supports a start/end range, remains open until the range is complete, and is pick-only; `DateWeekPicker` selects a whole Monday-start ISO week, highlights all seven days, and is pick-only.
+The Date Picker component combines an editable date Input with a calendar button that opens an embedded DayPicker calendar view. All three pickers work the same way: pick from the calendar, or type into the field and commit with `Enter` or by leaving it. `DatePicker` handles a single date; `DateRangePicker` handles a start/end range and stays open until both ends are selected or typed; `DateWeekPicker` selects a whole Monday-start ISO week and highlights all seven days.
 
 **Live demo variant:** `DEFAULT`
 
@@ -78,21 +78,23 @@ Supported configurations include:
 - Uncontrolled mode: via `defaultValue`.
 - States: open, closed, placeholder displayed, date selected, invalid typed text (`aria-invalid`), and `disabled`.
 - Direct entry: typing a date and pressing `Enter` or leaving the field commits it. Accepted text is ISO (`2026-11-11`), numeric dates in the locale order or an unambiguous day-first/month-first order (`11/11/2026`, `11-11-2026`, `11.11.2026`), and month-name dates (`11 Nov 2026`, `Nov 11, 2026`). Impossible or disabled dates are rejected; unparseable text reverts to the last committed date on blur.
+- Direct entry in range mode: typing a complete start date inserts the en dash (` – `) so the end date follows it; the separator is not inserted while the year is still being typed. Two halves separated by an en dash, an em dash, or a hyphen padded with spaces are accepted. A start date alone commits as an open range, an end date before the start date is rejected as unavailable, and either end on a day the `disabled` matcher rejects invalidates the range.
+- Direct entry in week mode: the field accepts the label it displays (`2026, Week 45`, also `2026 week 45`) or any date, which snaps to the Monday of its ISO week. Week numbers outside 1–53, week numbers that the year does not have (e.g. `2021, Week 53`), and weeks with an end that the `disabled` matcher rejects are refused.
 - Custom calendar props: passed through `calendarProps` for min/max dates, disabled date predicates, or month navigation. The `disabled` matcher also rejects typed dates.
-- Range mode: use `DateRangePicker` with a `DateRange` value; the popup closes after both endpoints are selected.
+- Range mode: use `DateRangePicker` with a `DateRange` value; the popup closes after both endpoints are selected. The field reads `11 Nov 2026 – 15 Nov 2026`, or `11 Nov 2026 – Select end date` while only the start is set.
 - Week mode: use `DateWeekPicker`. Clicking any day selects the ISO-8601 week that contains it and closes the popup. The value is the Monday that starts that week, and the field reads `2026, Week 47`. Weeks always start on Monday regardless of locale. The calendar renders the week as a range, so the selection looks the same as the date range picker: Monday and Sunday carry the primary background as the range start and end, and the days between carry the muted range-middle background.
 
 **Live demo variant:** `CALENDAR`
 
 ## Accessibility
 
-The field is a normal text input named by `aria-label` or `aria-labelledby`, with a separate `Open calendar` icon button (`calendarButtonLabel`) that exposes `aria-expanded` and `aria-haspopup='dialog'`. An empty selection shows `placeholder`; a selected date is written as the input's formatted value. Focus selects the whole value so typing replaces it, `ArrowDown` opens the calendar, `Enter` commits typed text, and `Escape` restores the last committed date. Invalid typed text sets `aria-invalid`. The popup calendar complies with ARIA grid conventions, allowing full keyboard navigation across days and months via arrow keys, PageUp/PageDown, Home, and End.
+All three fields are normal text inputs named by `aria-label` or `aria-labelledby`, each with a separate `Open calendar` icon button (`calendarButtonLabel`) that exposes `aria-expanded` and `aria-haspopup='dialog'`. The button is a real `<button>`, so the input keeps native text-box semantics instead of wearing `role='button'`. An empty selection shows `placeholder`; a selected date is written as the input's formatted value. Focus selects the whole value so typing replaces it, `ArrowDown` opens the calendar, `Enter` commits typed text, and `Escape` restores the last committed date. Invalid typed text sets `aria-invalid`. The popup calendar complies with ARIA grid conventions, allowing full keyboard navigation across days and months via arrow keys, PageUp/PageDown, Home, and End.
 
 **Live demo variant:** `DEFAULT`
 
 ## API & examples
 
-Import `DatePicker`, `DateRangePicker`, `DateWeekPicker`, `DatePickerProps`, `DateRangePickerProps`, and `DateWeekPickerProps` from `skytrack-ui/date-picker` or `@/components/ui/date-picker`. All three controls support `value`, `defaultValue`, `onValueChange`, `placeholder`, `disabled`, `className`, `buttonClassName`, `calendarClassName`, and `calendarProps`; `DatePicker` also accepts `calendarButtonLabel` for the icon button's accessible name. `buttonClassName` keeps its historical name but now styles the `Input` (it is applied to the input's wrapper). Single values use `Date`; range values use `DateRange` from `react-day-picker`; week values use the `Date` that starts the selected ISO week (the component normalizes any date in that week to its Monday).
+Import `DatePicker`, `DateRangePicker`, `DateWeekPicker`, `DatePickerProps`, `DateRangePickerProps`, and `DateWeekPickerProps` from `skytrack-ui/date-picker` or `@/components/ui/date-picker`. All three controls support `value`, `defaultValue`, `onValueChange`, `placeholder`, `disabled`, `className`, `buttonClassName`, `calendarClassName`, `calendarButtonLabel` (the icon button's accessible name), and `calendarProps`. `buttonClassName` keeps its historical name but now styles the `Input` (it is applied to the input's wrapper). Single values use `Date`; range values use `DateRange` from `react-day-picker`; week values use the `Date` that starts the selected ISO week (the component normalizes any date in that week to its Monday).
 
 **Live demo variant:** `DEFAULT`
 
