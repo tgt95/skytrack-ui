@@ -74,6 +74,7 @@ import {
   hasLegacyView
 } from './app/registry'
 import { ThumbnailPreview } from './app/thumbnails'
+import { resetDocumentScroll } from '@/lib/reset-document-scroll'
 
 export function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
@@ -160,9 +161,7 @@ export function App() {
     }
   }, [view, showcasePanel])
 
-  useLayoutEffect(() => {
-    window.scrollTo(0, 0)
-  }, [view, componentId, showcasePanel])
+  useLayoutEffect(resetDocumentScroll, [view, componentId, showcasePanel])
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
