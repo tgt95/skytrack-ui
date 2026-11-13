@@ -16,8 +16,6 @@ import { OverviewDashboard } from './overview-dashboard'
 import { PatternLibrary } from './pattern-library'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Toggle } from '@/components/ui/toggle'
-import { ToggleGroup } from '@/components/ui/toggle-group'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -63,7 +61,6 @@ import {
   GROUP_ORDER,
   demos,
   demosMap,
-  VIEWS,
   View,
   Audience,
   SHOWCASE_PANELS,
@@ -75,6 +72,7 @@ import {
 } from './app/registry'
 import { ThumbnailPreview } from './app/thumbnails'
 import { resetDocumentScroll } from '@/lib/reset-document-scroll'
+import { ViewSwitcher } from './app/view-switcher'
 
 export function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
@@ -345,25 +343,14 @@ export function App() {
       >
         <header className='w-full sticky top-0 z-1 flex h-14 items-center gap-1 border-b border-border bg-background/90 px-3 backdrop-blur sm:gap-4 md:z-40'>
           {view === 'components' && <SidebarTrigger />}
-          <ToggleGroup
-            className='w-18 shrink-0 gap-1 overflow-x-auto border-none sm:w-full sm:min-w-0 sm:flex-1'
-            variant='default'
-            aria-label='Showcase views'
-            value={[view]}
-          >
-            {VIEWS.map(([id, label]) => (
-              <Toggle key={id} onClick={() => navigateToView(id)} value={id}>
-                {label}
-              </Toggle>
-            ))}
-          </ToggleGroup>
+          <ViewSwitcher view={view} onSelect={navigateToView} />
           {view === 'components' && (
             <>
               <Input
                 startAdornment={<MagnifyingGlassIcon />}
                 endAdornment={
                   <>
-                    <Badge size='sm' count='⌘ K' className='rounded-(--radius)' />
+                    <Badge size='sm' count='⌘ K' className='hidden rounded-(--radius) sm:inline-flex' />
                     {query !== '' && (
                       <Button size='icon-xs' variant='ghost' aria-label='Clear filter' onClick={() => setQuery('')}>
                         <XIcon />
