@@ -21,26 +21,12 @@ const rawDemos = Object.values(modules)
   .map((m) => m.demo)
   .filter(Boolean)
 
-const datePickerDemo = rawDemos.find((d) => d.id === 'date-picker')
-const hasCalendarDemo = rawDemos.some((d) => d.id === 'calendar')
-
-const calendarDemo: DemoMeta | null =
-  !hasCalendarDemo && datePickerDemo
-    ? {
-        id: 'calendar',
-        title: 'Calendar',
-        description: 'A standalone month-grid calendar for selecting dates.',
-        group: 'Forms',
-        variants: datePickerDemo.variants.filter((v) => v.name === 'CALENDAR')
-      }
-    : null
-
 const groupRank = (group: DemoMeta['group']) => {
   const index = GROUP_ORDER.indexOf(group)
   return index === -1 ? GROUP_ORDER.length : index
 }
 
-export const demos: DemoMeta[] = (calendarDemo ? [...rawDemos, calendarDemo] : rawDemos).sort(
+export const demos: DemoMeta[] = rawDemos.sort(
   (a, b) => groupRank(a.group) - groupRank(b.group) || a.title.localeCompare(b.title)
 )
 

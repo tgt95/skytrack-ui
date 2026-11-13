@@ -21,7 +21,8 @@ function DatePickerField() {
   )
 }
 
-function StandaloneCalendar() {
+/** Standalone month grid, also used by the `Calendar` demo so both pages show the same component. */
+export function StandaloneCalendar() {
   const [date, setDate] = React.useState<Date>()
   return <Calendar mode='single' selected={date} onSelect={setDate} />
 }
