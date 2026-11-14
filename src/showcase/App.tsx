@@ -73,6 +73,7 @@ import {
 import { ThumbnailPreview } from './app/thumbnails'
 import { resetDocumentScroll } from '@/lib/reset-document-scroll'
 import { ViewSwitcher } from './app/view-switcher'
+import { SearchTrigger } from './app/search-trigger'
 
 export function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
@@ -148,6 +149,16 @@ export function App() {
     window.addEventListener('keydown', handleSearchShortcut)
     return () => window.removeEventListener('keydown', handleSearchShortcut)
   }, [])
+
+  /**
+   * Opens the component search dialog. The header keeps the inline filter field from `sm` up;
+   * below it there is no room for a usable field, so a search button opens the same dialog as
+   * the keyboard shortcut.
+   */
+  const openSearchDialog = () => {
+    setCommandQuery('')
+    setCommandOpen(true)
+  }
 
   useEffect(() => {
     // The showcase route keeps the old per-showcase markers so the shipped CSS selectors
@@ -361,8 +372,9 @@ export function App() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder='Search components'
-                className='w-full min-w-0 max-w-28 sm:max-w-60'
+                className='hidden w-full min-w-0 sm:flex sm:max-w-60'
               />
+              <SearchTrigger onOpen={openSearchDialog} />
               <Separator orientation='vertical' className='h-[calc(100%-var(--spacing)*8)]' />
               <div className='flex flex-row items-center gap-2'>
                 <div className='hidden text-xs text-muted-foreground sm:block'>View as:</div>

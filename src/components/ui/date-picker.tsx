@@ -14,6 +14,7 @@ import {
 import { useDateField, type DateField } from '@/lib/date-field'
 import { focusRing } from '@/lib/focus-ring'
 import { endOfISOWeek, formatWeekLabel, parseWeekInput, startOfISOWeek } from '@/lib/iso-week'
+import { usePickerNumberOfMonths } from '@/lib/use-picker-months'
 import { cn } from '@/lib/utils'
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never
@@ -223,6 +224,7 @@ function DatePicker(props: DatePickerProps) {
   const selectedDate = isControlled ? value : internalValue
   const formatter = React.useMemo(() => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }), [])
   const formatDate = React.useCallback((date: Date | undefined) => (date ? formatter.format(date) : ''), [formatter])
+  const numberOfMonths = usePickerNumberOfMonths(calendarProps)
 
   const commitValue = (nextValue: Date | undefined) => {
     if (!isControlled) setInternalValue(nextValue)
@@ -268,6 +270,7 @@ function DatePicker(props: DatePickerProps) {
         }}
         className={calendarClassName}
         {...calendarProps}
+        numberOfMonths={numberOfMonths}
       />
     </DatePickerField>
   )
@@ -298,6 +301,7 @@ function DateRangePicker(props: DateRangePickerProps) {
     (date: Date) => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(date),
     []
   )
+  const numberOfMonths = usePickerNumberOfMonths(calendarProps)
 
   const formatRange = (range: DateRange | undefined) => {
     if (!range?.from) return ''
@@ -370,6 +374,7 @@ function DateRangePicker(props: DateRangePickerProps) {
         }}
         className={calendarClassName}
         {...calendarProps}
+        numberOfMonths={numberOfMonths}
       />
     </DatePickerField>
   )
@@ -402,6 +407,7 @@ function DateWeekPicker(props: DateWeekPickerProps) {
     (date: Date | undefined) => (date ? formatWeekLabel(startOfISOWeek(date)) : ''),
     []
   )
+  const numberOfMonths = usePickerNumberOfMonths(calendarProps)
 
   const commitValue = (nextValue: Date | undefined) => {
     if (!isControlled) setInternalValue(nextValue)
@@ -458,6 +464,7 @@ function DateWeekPicker(props: DateWeekPickerProps) {
           setOpen(false)
         }}
         className={calendarClassName}
+        numberOfMonths={numberOfMonths}
       />
     </DatePickerField>
   )
