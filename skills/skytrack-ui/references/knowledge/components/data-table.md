@@ -81,6 +81,7 @@ All internal elements are rendered as standard semantic HTML elements styled wit
 Supported visual and functional states include:
 
 - `align`: Specified per column via `meta: { align: 'left' | 'center' | 'right' }`.
+- `wrap`: Set `meta: { wrap: true }` to allow cell content to wrap; cells stay `whitespace-nowrap` by default.
 - `sorting`: Columns support ascending, descending, or unsorted states.
 - `filtering`: Global search input filters rows using TanStack Table's global filtering via `includesString`; there is no `searchKey` prop. The input placeholder is customizable via `searchPlaceholder` (default `'Search records'`).
 - `visibility`: Dropdown menu toggles column visibility checkboxes dynamically.
@@ -101,7 +102,7 @@ Renders native HTML `table`, `thead`, `tbody`, `tr`, `th`, and `td` elements. So
 
 ## API & examples
 
-Import `DataTable` and types `DataTableColumnDef`, `DataTableRenderProps`, `DataTableExpandedRowProps`, `DataTableSelectionMode`, and `DataTableSize` from `skytrack-ui/data-table` or `@/components/ui/data-table`. The primary component props are `columns`, `data`, `enableRowSelection`, `selectionMode`, `getRowId`, `pageSize`, `size`, `striped`, `loading`, `searchPlaceholder`, `renderSearch`, `renderColumnVisibility`, `renderPagination`, `renderExpandedRow`, `getRowCanExpand`, `tableContainerClassName`, `emptyMessage`, and `className`. Pagination defaults to 10 rows per page with built-in TanStack Table page index calculation.
+Import `DataTable` and types `DataTableColumnDef`, `DataTableRenderProps`, `DataTableExpandedRowProps`, `DataTableSelectionMode`, and `DataTableSize` from `skytrack-ui/data-table` or `@/components/ui/data-table`. The primary component props are `columns`, `data`, `enableRowSelection`, `selectionMode`, `getRowId`, `pageSize`, `size`, `striped`, `loading`, `searchPlaceholder`, `renderSearch`, `renderColumnVisibility`, `renderPagination`, `renderExpandedRow`, `getRowCanExpand`, `tableContainerClassName`, `emptyMessage`, `showRowCount`, and `className`. `showRowCount` defaults to `true` and controls the row-range summary beneath the table. Pagination defaults to 10 rows per page with built-in TanStack Table page index calculation.
 
 The three `render*` props replace their built-in controls and receive `{ table, rowCount, firstRow, lastRow }`. Use the supplied TanStack table instance to build custom JSX while keeping it connected to filtering, column visibility, or pagination. Omit a prop to keep its default control; return `null` to hide that control.
 

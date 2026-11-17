@@ -26,10 +26,12 @@ import {
   CaretUpIcon,
   CaretUpDownIcon,
   CheckIcon,
-  SlidersHorizontalIcon
+  SlidersHorizontalIcon,
+  TableIcon
 } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { CheckboxRoot } from '@/components/ui/checkbox'
+import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { RadioGroup, RadioRoot } from '@/components/ui/radio'
 import { Search } from '@/components/ui/search'
 import {
@@ -69,7 +71,7 @@ const dataTableFeatures = tableFeatures({
 type DataTableAlignment = 'left' | 'center' | 'right'
 export type DataTableSelectionMode = 'multiple' | 'single'
 export type DataTableSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-type DataTableColumnMeta = { align?: DataTableAlignment }
+type DataTableColumnMeta = { align?: DataTableAlignment; wrap?: boolean }
 
 const alignmentClasses: Record<DataTableAlignment, string> = {
   left: 'text-left',
@@ -123,7 +125,10 @@ export type DataTableProps<TData extends RowData> = {
   renderExpandedRow?: (props: DataTableExpandedRowProps<TData>) => React.ReactNode
   getRowCanExpand?: (originalRow: TData) => boolean
   tableContainerClassName?: string
+  /** Content of the no-data / no-match state, rendered inside a compact Empty in the spanning cell. */
   emptyMessage?: React.ReactNode
+  /** Render the current row range beneath the table. Defaults to true. */
+  showRowCount?: boolean
   className?: string
 }
 
@@ -145,6 +150,7 @@ function DataTable<TData extends RowData>({
   getRowCanExpand,
   tableContainerClassName,
   emptyMessage = 'No results found.',
+  showRowCount = true,
   className
 }: DataTableProps<TData>) {
   const selectionName = React.useId()
@@ -167,6 +173,88 @@ function DataTable<TData extends RowData>({
   const selectedRowId = Object.keys(table.state.rowSelection).find((rowId) => table.state.rowSelection[rowId]) ?? ''
   const query = table.state.globalFilter ?? ''
   const renderProps: DataTableRenderProps<TData> = { table, rowCount, firstRow, lastRow }
+  const footerPagination = loading
+    ? null
+    : renderPagination
+      ? renderPagination(renderProps)
+      : (
+        <Pagination className='mx-0 w-auto justify-end'>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href='#'
+                aria-disabled={!table.getCanPreviousPage()}
+                onClick={(event) => {
+                  event.preventDefault()
+                  if (table.getCanPreviousPage()) table.previousPage()
+                }}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <span className='px-2 text-sm tabular-nums text-muted-foreground'>
+                Page {Math.min(pageIndex + 1, Math.max(table.getPageCount(), 1))} of{' '}
+                {Math.max(table.getPageCount(), 1)}
+              </span>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                href='#'
+                aria-disabled={!table.getCanNextPage()}
+                onClick={(event) => {
+                  event.preventDefault()
+                  if (table.getCanNextPage()) table.nextPage()
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )
+  const toolbarSearch = renderSearch ? (
+    renderSearch(renderProps)
+  ) : (
+    <Search
+      size='sm'
+      aria-label={searchPlaceholder}
+      placeholder={searchPlaceholder}
+      className='w-full sm:max-w-64'
+      value={String(query)}
+      disabled={loading}
+      onValueChange={(nextQuery) => table.setGlobalFilter(nextQuery)}
+      onClear={() => table.setGlobalFilter('')}
+    />
+  )
+  const toolbarColumns = renderColumnVisibility ? (
+    renderColumnVisibility(renderProps)
+  ) : (
+    <Menu>
+      <MenuTrigger render={<Button type='button' variant='outline' size='sm' disabled={loading} />}>
+        <SlidersHorizontalIcon aria-hidden='true' />
+        Columns
+      </MenuTrigger>
+      <MenuPortal>
+        <MenuPositioner side='bottom' align='end' sideOffset={4}>
+          <MenuPopup>
+            {table
+              .getAllLeafColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => (
+                <MenuCheckboxItem
+                  key={column.id}
+                  inset
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(checked) => column.toggleVisibility(checked)}
+                >
+                  <MenuCheckboxItemIndicator>
+                    <CheckIcon className='size-3.5' weight='bold' />
+                  </MenuCheckboxItemIndicator>
+                  {typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id}
+                </MenuCheckboxItem>
+              ))}
+          </MenuPopup>
+        </MenuPositioner>
+      </MenuPortal>
+    </Menu>
+  )
 
   const renderBodyRows = () => {
     if (loading) {
@@ -195,9 +283,12 @@ function DataTable<TData extends RowData>({
             colSpan={
               table.getVisibleLeafColumns().length + Number(enableRowSelection) + Number(Boolean(renderExpandedRow))
             }
-            className={cn('h-24 text-center text-muted-foreground', cellSizeClasses[size])}
+            className={cn('h-28', cellSizeClasses[size])}
           >
-            {emptyMessage}
+            <Empty size='sm' variant='simple' className='h-full justify-center'>
+              <EmptyMedia icon={TableIcon} />
+              {typeof emptyMessage === 'string' ? <EmptyTitle>{emptyMessage}</EmptyTitle> : emptyMessage}
+            </Empty>
           </td>
         </tr>
       )
@@ -242,18 +333,22 @@ function DataTable<TData extends RowData>({
               )}
             </td>
           )}
-          {row.getVisibleCells().map((cell) => (
-            <td
-              key={cell.id}
-              className={cn(
-                'whitespace-nowrap align-middle',
-                cellSizeClasses[size],
-                alignmentClasses[(cell.column.columnDef.meta as DataTableColumnMeta | undefined)?.align ?? 'left']
-              )}
-            >
-              <FlexRender cell={cell} />
-            </td>
-          ))}
+          {row.getVisibleCells().map((cell) => {
+            const meta = cell.column.columnDef.meta as DataTableColumnMeta | undefined
+            return (
+              <td
+                key={cell.id}
+                className={cn(
+                  meta?.wrap ? 'whitespace-normal' : 'whitespace-nowrap',
+                  'align-middle',
+                  cellSizeClasses[size],
+                  alignmentClasses[meta?.align ?? 'left']
+                )}
+              >
+                <FlexRender cell={cell} />
+              </td>
+            )
+          })}
         </tr>
         {renderExpandedRow && row.getIsExpanded() && (
           <tr className='border-b border-border'>
@@ -275,54 +370,12 @@ function DataTable<TData extends RowData>({
       aria-busy={loading || undefined}
       className={cn('flex w-full min-w-0 flex-col gap-4', className)}
     >
-      <div className='flex flex-wrap items-center justify-between gap-3'>
-        {renderSearch ? (
-          renderSearch(renderProps)
-        ) : (
-          <Search
-            size='sm'
-            aria-label={searchPlaceholder}
-            placeholder={searchPlaceholder}
-            className='w-full sm:max-w-64'
-            value={String(query)}
-            disabled={loading}
-            onValueChange={(nextQuery) => table.setGlobalFilter(nextQuery)}
-            onClear={() => table.setGlobalFilter('')}
-          />
-        )}
-        {renderColumnVisibility ? (
-          renderColumnVisibility(renderProps)
-        ) : (
-          <Menu>
-            <MenuTrigger render={<Button type='button' variant='outline' size='sm' disabled={loading} />}>
-              <SlidersHorizontalIcon aria-hidden='true' />
-              Columns
-            </MenuTrigger>
-            <MenuPortal>
-              <MenuPositioner side='bottom' align='end' sideOffset={4}>
-                <MenuPopup>
-                  {table
-                    .getAllLeafColumns()
-                    .filter((column) => column.getCanHide())
-                    .map((column) => (
-                      <MenuCheckboxItem
-                        key={column.id}
-                        inset
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(checked) => column.toggleVisibility(checked)}
-                      >
-                        <MenuCheckboxItemIndicator>
-                          <CheckIcon className='size-3.5' weight='bold' />
-                        </MenuCheckboxItemIndicator>
-                        {typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id}
-                      </MenuCheckboxItem>
-                    ))}
-                </MenuPopup>
-              </MenuPositioner>
-            </MenuPortal>
-          </Menu>
-        )}
-      </div>
+      {toolbarSearch != null || toolbarColumns != null ? (
+        <div className='flex flex-wrap items-center justify-between gap-3'>
+          {toolbarSearch}
+          {toolbarColumns}
+        </div>
+      ) : null}
 
       <div className={cn('w-full overflow-x-auto rounded-(--radius) border border-border', tableContainerClassName)}>
         <table aria-busy={loading || undefined} className='w-max min-w-full border-collapse text-left text-sm'>
@@ -403,48 +456,18 @@ function DataTable<TData extends RowData>({
         </table>
       </div>
 
-      <div className='flex flex-wrap items-center justify-between gap-3'>
-        <p role={loading ? 'status' : undefined} className='whitespace-nowrap text-sm text-muted-foreground'>
-          {loading
-            ? 'Loading records…'
-            : `Showing ${firstRow}–${lastRow} of ${rowCount} rows${enableRowSelection ? ` · ${Object.keys(table.state.rowSelection).length} selected` : ''}`}
-        </p>
-        {!loading &&
-          (renderPagination ? (
-            renderPagination(renderProps)
-          ) : (
-            <Pagination className='mx-0 w-auto justify-end'>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    href='#'
-                    aria-disabled={!table.getCanPreviousPage()}
-                    onClick={(event) => {
-                      event.preventDefault()
-                      if (table.getCanPreviousPage()) table.previousPage()
-                    }}
-                  />
-                </PaginationItem>
-                <PaginationItem>
-                  <span className='px-2 text-sm tabular-nums text-muted-foreground'>
-                    Page {Math.min(pageIndex + 1, Math.max(table.getPageCount(), 1))} of{' '}
-                    {Math.max(table.getPageCount(), 1)}
-                  </span>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext
-                    href='#'
-                    aria-disabled={!table.getCanNextPage()}
-                    onClick={(event) => {
-                      event.preventDefault()
-                      if (table.getCanNextPage()) table.nextPage()
-                    }}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          ))}
-      </div>
+      {(showRowCount || loading || footerPagination != null) && (
+        <div className='flex flex-wrap items-center justify-between gap-3'>
+          {loading ? (
+            <p role='status' className='whitespace-nowrap text-sm text-muted-foreground'>Loading records…</p>
+          ) : showRowCount ? (
+            <p className='whitespace-nowrap text-sm text-muted-foreground'>
+              {`Showing ${firstRow}–${lastRow} of ${rowCount} rows${enableRowSelection ? ` · ${Object.keys(table.state.rowSelection).length} selected` : ''}`}
+            </p>
+          ) : null}
+          {footerPagination}
+        </div>
+      )}
     </div>
   )
 }

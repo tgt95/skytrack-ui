@@ -47,3 +47,8 @@ export const SyntaxHighlighting: Story = {
   name: 'Syntax highlighting',
   render: () => <VariantBlock name={'Syntax highlighting'}>{demo.variants[5].render()}</VariantBlock>
 }
+
+export const PythonSyntaxHighlighting: Story = {
+  name: 'Python syntax highlighting',
+  render: () => <VariantBlock name={'Python syntax highlighting'}>{demo.variants[6].render()}</VariantBlock>
+}

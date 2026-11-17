@@ -6,7 +6,7 @@ function Meter({ className, ...props }: React.ComponentProps<typeof BaseMeter.Ro
   return (
     <BaseMeter.Root
       data-slot='meter'
-      className={cn('grid w-60 max-w-full grid-cols-2 gap-y-2', className)}
+      className={cn('grid max-w-full grid-cols-2 gap-y-2', className)}
       {...props}
     />
   )

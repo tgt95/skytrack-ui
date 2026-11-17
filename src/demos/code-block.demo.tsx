@@ -34,21 +34,28 @@ const highlightedCode = `type Mission = {
 
 const isReady = (mission: Mission) => mission.status === 'planned'`
 
+const highlightedPython = `from typing import Any, Iterator
+
+def scenario(ctx: Any) -> Iterator[Any]:
+    yield takeoff(alt_m=2.5)
+    yield fly_to(north=12, east=3.5, alt_m=2.5)
+    yield land()`
+
 function HighlightedCodeExample({
   code,
   title,
   lineNumbers = false,
   startLine = 1,
-  size = 'default'
+  size = 'default',
+  language = 'typescript'
 }: {
   code: string
   title: string
   lineNumbers?: boolean
   startLine?: number
   size?: 'default' | 'sm'
+  language?: string
 }) {
-  const lines = useHighlightedCode(code, 'typescript')
-
   return (
     <CodeBlock className='w-full max-w-3xl' size={size} lineNumbers={lineNumbers} startLine={startLine}>
       <CodeBlockHeader>
@@ -58,11 +65,7 @@ function HighlightedCodeExample({
           <CodeBlockCopyButton value={code} />
         </CodeBlockActions>
       </CodeBlockHeader>
-      <CodeBlockContent>
-        {lines.map((line, index) => (
-          <CodeBlockLine key={index}>{line}</CodeBlockLine>
-        ))}
-      </CodeBlockContent>
+      <CodeBlockContent language={language}>{code}</CodeBlockContent>
     </CodeBlock>
   )
 }
@@ -161,6 +164,10 @@ export const demo: DemoMeta = {
     {
       name: 'Syntax highlighting',
       render: () => <HighlightedCodeExample code={highlightedCode} title='mission.ts' lineNumbers />
+    },
+    {
+      name: 'Python syntax highlighting',
+      render: () => <HighlightedCodeExample code={highlightedPython} title='script.py' language='python' lineNumbers />
     }
   ]
 }

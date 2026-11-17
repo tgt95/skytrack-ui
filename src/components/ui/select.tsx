@@ -5,6 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/lib/focus-ring'
 import { CONTROL_SIZE_CLASSES } from '@/lib/control-sizes'
+import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 
 /** Props of the `Select` root, generic over the value type and `multiple` mode. */
 export type SelectRootProps<Value, Multiple extends boolean | undefined = false> = BaseSelect.Root.Props<
@@ -136,7 +137,15 @@ function SelectPopup({ className, ...props }: React.ComponentProps<typeof BaseSe
   )
 }
 
-function SelectList({ className, ...props }: React.ComponentProps<typeof BaseSelect.List>) {
+export type SelectListProps = Omit<React.ComponentProps<typeof BaseSelect.List>, 'children'> & {
+  children?: React.ReactNode
+  /** Content shown when there are no option children. */
+  emptyMessage?: React.ReactNode
+}
+
+function SelectList({ className, children, emptyMessage = 'No options available.', ...props }: SelectListProps) {
+  const hasOptions = React.Children.toArray(children).length > 0
+
   return (
     <BaseSelect.List
       data-slot='select-list'
@@ -145,7 +154,16 @@ function SelectList({ className, ...props }: React.ComponentProps<typeof BaseSel
         className
       )}
       {...props}
-    />
+    >
+      {hasOptions ? (
+        children
+      ) : (
+        <Empty size='sm' variant='simple' role='status' className='p-4'>
+          <EmptyMedia />
+          {typeof emptyMessage === 'string' ? <EmptyTitle>{emptyMessage}</EmptyTitle> : emptyMessage}
+        </Empty>
+      )}
+    </BaseSelect.List>
   )
 }
 

@@ -75,7 +75,7 @@ import { resetDocumentScroll } from '@/lib/reset-document-scroll'
 import { ViewSwitcher } from './app/view-switcher'
 import { SearchTrigger } from './app/search-trigger'
 
-export function App() {
+export function App () {
   const [dark, setDark] = useState(() => localStorage.getItem('skytrack-ui-theme') === 'dark')
   const [query, setQuery] = useState('')
   const [view, setView] = useState<View>(readViewFromUrl)
@@ -204,7 +204,7 @@ export function App() {
               <header className='space-y-2'>
                 <h1 className='h1'>{d.title}</h1>
                 <p className='text-muted-foreground'>
-                  {selectedAudience === 'designer' ? (designerGuideline?.description ?? d.description) : d.description}
+                  {selectedAudience === 'designer' ? designerGuideline?.description ?? d.description : d.description}
                 </p>
               </header>
               {selectedAudience === 'designer' && designerGuideline ? (
@@ -229,8 +229,13 @@ export function App() {
           )
         })()
       ) : (
-        <div className='mx-auto max-w-[1600px] space-y-16 px-6 sm:px-8 py-10'>
-          <h1 className='h1'>All components</h1>
+        <div className='mx-auto max-w-[1600px] space-y-32 px-6 sm:px-8 py-10'>
+          <div className='flex flex-col gap-2'>
+            <div className='h1'>All components</div>
+            <div className='max-w-2xl text-base text-muted-foreground'>
+              Browse by category or search for a component to view its examples and guidance.
+            </div>
+          </div>
           {GROUP_ORDER.map((group) => {
             const items = filtered.filter((d) => d.group === group)
             return items.length ? (
@@ -282,9 +287,7 @@ export function App() {
     ) : view === 'pattern' ? (
       <PatternLibrary query={query} audience={selectedAudience} onClearSearch={() => setQuery('')} />
     ) : (
-      <div className='mx-auto max-w-7xl px-8 py-10'>
-        <Sheet />
-      </div>
+      <Sheet className='mx-auto bg-(--canvas) px-8 py-10' />
     )
 
   const renderShowcasePanel = (panel: ShowcasePanel) => (

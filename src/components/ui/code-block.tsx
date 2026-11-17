@@ -222,6 +222,7 @@ function CodeBlockCopyButton({
 
 export type CodeBlockContentProps = Omit<React.ComponentProps<'pre'>, 'children'> & {
   children?: React.ReactNode
+  language?: string
   wrap?: boolean
   lineNumbers?: boolean
   lineIndex?: boolean
@@ -232,6 +233,7 @@ export type CodeBlockContentProps = Omit<React.ComponentProps<'pre'>, 'children'
 
 function CodeBlockContent({
   children,
+  language,
   wrap = false,
   lineNumbers: propLineNumbers,
   lineIndex: propLineIndex,
@@ -246,11 +248,18 @@ function CodeBlockContent({
   const context = React.useContext(CodeBlockContext)
   const size = context.size
   const floatingActions = context.floatingActions
+  const sourceCode = typeof children === 'string' ? children : ''
+  const highlightedLines = useHighlightedCode(sourceCode, typeof children === 'string' ? (language ?? '') : '')
+  const resolvedChildren =
+    language && typeof children === 'string'
+      ? highlightedLines.map((line, index) => <CodeBlockLine key={index}>{line}</CodeBlockLine>)
+      : children
 
   const lineNumbers = propLineNumbers ?? propLineIndex ?? propShowLineNumbers ?? context.lineNumbers ?? false
   const rawStartLine = propStartLine ?? propStartLineIndex ?? context.startLine ?? 1
   const validStartLine = Number.isFinite(rawStartLine) && rawStartLine > 0 ? Math.floor(rawStartLine) : 1
-  const childLines = typeof children === 'string' ? children.split('\n') : React.Children.toArray(children)
+  const childLines =
+    typeof resolvedChildren === 'string' ? resolvedChildren.split('\n') : React.Children.toArray(resolvedChildren)
   const lastLineNumber = validStartLine + Math.max(0, childLines.length - 1)
   const digitsCount = Math.max(2, String(lastLineNumber).length)
   const gutterPadding = size === 'sm' ? '1.5rem' : size === 'xs' ? '1.25rem' : '1.75rem'
@@ -276,7 +285,7 @@ function CodeBlockContent({
           </CodeBlockLine>
         )
       })
-    : children
+    : resolvedChildren
 
   return (
     <pre
@@ -344,7 +353,7 @@ function CodeBlockLine({ variant = 'default', lineNumber, className, children, .
           data-slot='code-block-line-number'
           className={cn(
             'sticky left-0 z-1 inline-flex shrink-0 select-none justify-end border-r border-border font-mono text-muted-foreground/60 transition-colors',
-            'bg-muted/20 pr-3.5 pl-3',
+            'bg-card pr-3.5 pl-3',
             size === 'sm' && 'pr-2.5 pl-2 text-xs',
             size === 'xs' && 'pr-2 pl-1.5 text-[11px]',
             variant === 'added' && 'bg-success/15 text-success',

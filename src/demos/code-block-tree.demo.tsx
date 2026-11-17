@@ -88,6 +88,12 @@ export const demo: DemoMeta = {
       )
     },
     {
+      name: 'Expand all by default',
+      render: () => (
+        <CodeBlockTree className='w-full max-w-3xl' value={missionJson} title='mission-report.json' defaultExpandAll />
+      )
+    },
+    {
       name: 'Invalid JSON',
       render: () => <CodeBlockTree className='w-full max-w-3xl' value='{"mission": ' title='broken-report.json' />
     },

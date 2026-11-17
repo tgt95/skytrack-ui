@@ -107,6 +107,24 @@ import {
 import { Button, buttonVariants, controlSizeClasses, focusRing, ButtonProps, ControlSize } from '@/components/ui/button'
 import { Calendar, CalendarProps } from '@/components/ui/calendar'
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardHeading,
+  CardTitle,
+  CardToolbar,
+  CardContentProps,
+  CardDescriptionProps,
+  CardFooterProps,
+  CardHeaderProps,
+  CardHeadingProps,
+  CardProps,
+  CardTitleProps,
+  CardToolbarProps
+} from '@/components/ui/card'
+import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -118,6 +136,7 @@ import {
 } from '@/components/ui/chart'
 import { CheckboxIndicator, CheckboxRoot } from '@/components/ui/checkbox'
 import { CheckboxGroup } from '@/components/ui/checkbox-group'
+import { ChoiceButton, ChoiceGroup, ChoiceButtonProps, ChoiceGroupProps } from '@/components/ui/choice-button'
 import {
   CodeBlock,
   CodeBlockActions,
@@ -273,6 +292,21 @@ import {
 } from '@/components/ui/drawer'
 import { Dropzone, DropzoneProps } from '@/components/ui/dropzone'
 import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyMedia,
+  EmptyTitle,
+  emptyVariants,
+  EmptyContentProps,
+  EmptyDescriptionProps,
+  EmptyMediaProps,
+  EmptyProps,
+  EmptySize,
+  EmptyTitleProps,
+  EmptyVariant
+} from '@/components/ui/empty'
+import {
   Field,
   FieldControl,
   FieldDescription,
@@ -285,6 +319,7 @@ import {
   FieldValidity
 } from '@/components/ui/field'
 import { FieldsetLegend, FieldsetRoot } from '@/components/ui/fieldset'
+import { FilterButton, FilterButtonOption, FilterButtonProps } from '@/components/ui/filter-button'
 import { Form } from '@/components/ui/form'
 import {
   InlineEdit,
@@ -429,6 +464,7 @@ import {
   SelectTrigger,
   SelectValue,
   selectTriggerVariants,
+  SelectListProps,
   SelectRootProps
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
@@ -473,6 +509,16 @@ import {
   SliderTrack,
   SliderValue
 } from '@/components/ui/slider'
+import {
+  SplitButton,
+  SplitButtonAction,
+  SplitButtonTrigger,
+  SplitButtonActionProps,
+  SplitButtonProps,
+  SplitButtonSize,
+  SplitButtonTriggerProps,
+  SplitButtonVariant
+} from '@/components/ui/split-button'
 import { Switch, SwitchThumb, switchThumbVariants, switchVariants } from '@/components/ui/switch'
 import {
   Tabs,
@@ -609,6 +655,14 @@ export {
   controlSizeClasses,
   focusRing,
   Calendar,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardHeading,
+  CardTitle,
+  CardToolbar,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -618,6 +672,8 @@ export {
   CheckboxIndicator,
   CheckboxRoot,
   CheckboxGroup,
+  ChoiceButton,
+  ChoiceGroup,
   CodeBlock,
   CodeBlockActions,
   CodeBlockContent,
@@ -730,6 +786,12 @@ export {
   drawerPopupVariants,
   drawerSideVariants,
   Dropzone,
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyMedia,
+  EmptyTitle,
+  emptyVariants,
   Field,
   FieldControl,
   FieldDescription,
@@ -742,6 +804,7 @@ export {
   FieldValidity,
   FieldsetLegend,
   FieldsetRoot,
+  FilterButton,
   Form,
   InlineEdit,
   InlineEditInput,
@@ -902,6 +965,9 @@ export {
   SliderThumb,
   SliderTrack,
   SliderValue,
+  SplitButton,
+  SplitButtonAction,
+  SplitButtonTrigger,
   Switch,
   SwitchThumb,
   switchThumbVariants,
@@ -965,8 +1031,18 @@ export type {
   ButtonProps,
   ControlSize,
   CalendarProps,
+  CardContentProps,
+  CardDescriptionProps,
+  CardFooterProps,
+  CardHeaderProps,
+  CardHeadingProps,
+  CardProps,
+  CardTitleProps,
+  CardToolbarProps,
   ChartConfig,
   ChartContainerProps,
+  ChoiceButtonProps,
+  ChoiceGroupProps,
   CodeBlockContentProps,
   CodeBlockCopyButtonProps,
   CodeBlockLineIndexToggleProps,
@@ -994,6 +1070,15 @@ export type {
   DrawerSideProps,
   DrawerSnapPoint,
   DropzoneProps,
+  EmptyContentProps,
+  EmptyDescriptionProps,
+  EmptyMediaProps,
+  EmptyProps,
+  EmptySize,
+  EmptyTitleProps,
+  EmptyVariant,
+  FilterButtonOption,
+  FilterButtonProps,
   InlineEditInputProps,
   InlineEditRootProps,
   InlineEditTriggerProps,
@@ -1013,11 +1098,17 @@ export type {
   ProgressStepStatus,
   ResizableHandleProps,
   SearchProps,
+  SelectListProps,
   SelectRootProps,
   SidebarMenuButtonProps,
   SidebarMenuSubButtonProps,
   SidebarProps,
   SidebarProviderProps,
+  SplitButtonActionProps,
+  SplitButtonProps,
+  SplitButtonSize,
+  SplitButtonTriggerProps,
+  SplitButtonVariant,
   TabsIndicatorVariantProps,
   TabsListVariantProps,
   TabsTabVariantProps,

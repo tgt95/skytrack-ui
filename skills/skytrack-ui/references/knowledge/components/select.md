@@ -77,6 +77,8 @@ export function SelectDemo() {
 
 Use Select when users choose from predefined options and can scan the popup list without filtering. Use `Combobox` when typing to filter will help users find an option or when multiple selections should appear as chips. Use `RadioGroup` when a small, mutually exclusive choice set should stay visible for direct comparison; choose based on option labels, viewport, and task context rather than a fixed count.
 
+When `SelectList` has no option children, it renders a compact `Empty` state with “No options available.” Set `emptyMessage` on `SelectList` to customize that state.
+
 **Live demo variant:** `Labeling a select`
 
 ## Anatomy
@@ -135,7 +137,7 @@ Complies with the WAI-ARIA Select/Listbox pattern. The trigger exposes `role='co
 
 ## API & examples
 
-Import from `skytrack-ui/select` or `@/components/ui/select`. Key props on `Select`: `value`, `defaultValue`, `onValueChange`, `multiple`, `open`, `onOpenChange`, `name`, and `disabled`.
+Import from `skytrack-ui/select` or `@/components/ui/select`. Key props on `Select`: `value`, `defaultValue`, `onValueChange`, `multiple`, `open`, `onOpenChange`, `name`, and `disabled`. `SelectList` accepts `emptyMessage?: React.ReactNode` for its no-options Empty state.
 
 **Live demo variant:** `Grouped`
 

@@ -2,7 +2,7 @@
 
 > Present code, terminal output, or a diff in a readable, copyable block.
 
-- Package version: `0.1.5`
+- Package version: `0.1.6`
 - Public export: `skytrack-ui/code-block`
 - Implementation: [`src/components/ui/code-block.tsx`](../../../../../src/components/ui/code-block.tsx)
 - Public type declaration: generated target is `dist-lib/components/ui/code-block.d.ts`; it is not present until the library build runs. Source types are in the implementation above.
@@ -11,7 +11,7 @@
 
 ## Overview
 
-Use Code Block to display a static snippet, command output, or a line-based diff. Header, copy action, line numbers, wrapping, and footer are optional composition choices. Syntax highlighting is an optional hook so plain text does not load Shiki until it is requested.
+Use Code Block to display a static snippet, command output, or a line-based diff. Header, copy action, line numbers, wrapping, and footer are optional composition choices. Syntax highlighting is opt-in with `CodeBlockContent`'s `language` prop; plain text does not load Shiki until a language is requested.
 
 **Live demo variant:** `Default`
 
@@ -53,13 +53,13 @@ Use it when people need to inspect or copy code, commands, logs, or a compact ch
 ### Composition Tree
 
 ```text
-<CodeBlock value={codeString} language='typescript' variant='default|destructive' size='default|sm'>
+<CodeBlock lineNumbers size='default|sm' variant='default|destructive'>
 ├─ <CodeBlockHeader> (optional)
 │  ├─ <CodeBlockTitle>filename.ts</CodeBlockTitle>
 │  └─ <CodeBlockActions>
 │     └─ <CodeBlockCopyButton value={codeString} />
 └─ <CodeBlockPre>
-   └─ <CodeBlockCode />
+   └─ <CodeBlockContent language='python|json'>source string</CodeBlockContent>
 ```
 
 - `CodeBlock` provides the bordered, themed root and `default` or `destructive` treatment; `size` is `default` or `sm`. Supports `lineNumbers` / `lineIndex` (boolean), `defaultLineNumbers`, `startLine`, and `onLineNumbersChange` to toggle line numbers globally via context.
@@ -78,7 +78,7 @@ Without a header, `CodeBlockActions` is positioned over the content and the cont
 
 The root defaults to `variant="default"` and `size="default"`. `variant="destructive"` is for code or output associated with an error state; `size="sm"` reduces content padding, font size, and line height. Content and individual lines share one density mapping. The copy button uses the SkyTrack Button and reports `Copy`, `Copied`, or `Copy failed` through its accessible label and a live status region.
 
-Syntax coloring is opt-in through `useHighlightedCode(code, language)`. It begins as plain text, loads Shiki on demand, and falls back to plain text if the language cannot be highlighted. It follows the package's class-based theme: VS Code Light+ in light mode and VS Code Dark+ under `.dark`.
+Syntax coloring is opt-in. Pass a Shiki language identifier to `CodeBlockContent` (for example, `language='python'` or `language='json'`) when its children are a source string. It begins as plain text, loads Shiki on demand, and falls back to plain text if highlighting fails. It follows the package's class-based theme: VS Code Light+ in light mode and VS Code Dark+ under `.dark`. `useHighlightedCode(code, language)` remains available when consumers need highlighted line nodes outside `CodeBlockContent`.
 
 **Live demo variant:** `Syntax highlighting`
 
@@ -90,7 +90,7 @@ The content region is keyboard-focusable and uses left-to-right direction for co
 
 ## API & examples
 
-Import the compound parts from `skytrack-ui/code-block` or named exports from the package root. `CodeBlock` accepts `lineNumbers` / `lineIndex` (boolean), `defaultLineNumbers` / `defaultLineIndex`, `startLine` / `startLineIndex`, and `onLineNumbersChange`. `CodeBlockContent` accepts native `<pre>` props plus `wrap`, `lineNumbers`, `lineIndex`, and `startLine`. `CodeBlockLineNumbersToggle` (alias `CodeBlockLineIndexToggle`) provides an interactive toggle button for `CodeBlockActions`. `CodeBlockLine` accepts native `<span>` props plus `lineNumber` and line `variant`. `CodeBlockCopyButton` takes required `value` and optional `copyLabel`, `copiedLabel`, and `copyFailedLabel`. `useHighlightedCode(code, language)` returns renderable line nodes and selects the bundled language with the matching light/dark VS Code theme.
+Import the compound parts from `skytrack-ui/code-block` or named exports from the package root. `CodeBlock` accepts `lineNumbers` / `lineIndex` (boolean), `defaultLineNumbers` / `defaultLineIndex`, `startLine` / `startLineIndex`, and `onLineNumbersChange`. `CodeBlockContent` accepts native `<pre>` props plus `language`, `wrap`, `lineNumbers`, `lineIndex`, and `startLine`. When `language` is set and children are a source string, the component highlights that source while preserving plain-text fallback, line numbers, and copy behavior. `CodeBlockLineNumbersToggle` (alias `CodeBlockLineIndexToggle`) provides an interactive toggle button for `CodeBlockActions`. `CodeBlockLine` accepts native `<span>` props plus `lineNumber` and line `variant`. `CodeBlockCopyButton` takes required `value` and optional `copyLabel`, `copiedLabel`, and `copyFailedLabel`. `useHighlightedCode(code, language)` returns renderable line nodes and selects the bundled language with the matching light/dark VS Code theme.
 
 The component uses SkyTrack semantic surface, border, foreground, and state tokens and the package radius token. It does not execute code. The code area scrolls horizontally unless `wrap` is enabled.
 
@@ -98,8 +98,8 @@ The component uses SkyTrack semantic surface, border, foreground, and state toke
 
 ## Evidence and limits
 
-- Package/version checked: `0.1.5`.
+- Package/version checked: `0.1.6`.
 - Export: [`package.json`](../../../../../package.json) — `./code-block`.
 - Source, types, and demo: linked above. Generated declaration is not present until `build:lib`.
-- Optional syntax highlighting is provided by the package's Shiki dependency; the default unhighlighted path is plain text.
+- Optional syntax highlighting is provided by the package's Shiki dependency; `python` and `json` are demonstrated through the `CodeBlockContent` language prop.
 - Official implementation reference: [shadcn/ui Code Block for Base UI](https://ui.shadcn.com/docs/components/base/code-block).

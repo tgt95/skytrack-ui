@@ -10,6 +10,7 @@ import {
   CodeBlockLine,
   CodeBlockLineNumbersToggle,
   CodeBlockTitle,
+  type CodeBlockProps,
   useHighlightedCode
 } from '@/components/ui/code-block'
 import {
@@ -81,12 +82,16 @@ type ParsedJson = {
 export type CodeBlockTreeProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   /** JSON text or a JSON-serializable value. Strings are parsed as JSON text. */
   value?: unknown
+  /** Matches the `CodeBlock` size scale. Defaults to `sm` to preserve the tree's compact layout. */
+  size?: CodeBlockProps['size']
   /** Short context label shown in the code block header. */
   title?: string
   /** Whether line numbers are visible. Controlled when supplied; defaults to true. */
   lineNumbers?: boolean
   /** Initial line-number visibility when `lineNumbers` is uncontrolled. Defaults to true. */
   defaultLineNumbers?: boolean
+  /** Whether every expandable JSON node starts expanded. Defaults to false. */
+  defaultExpandAll?: boolean
   /** Whether the header shows the line-number visibility toggle. Defaults to true. */
   showLineNumbersToggle?: boolean
   /** Called when the built-in line-number toggle changes visibility. */
@@ -205,6 +210,16 @@ function buildTree(value: unknown): JsonTreeNode {
   return build(value, null, '$', undefined, 0, false)
 }
 
+function collectExpandablePaths(root: JsonTreeNode): Set<string> {
+  const paths = new Set<string>()
+  const visit = (node: JsonTreeNode) => {
+    if (node.expandable) paths.add(node.path)
+    node.children.forEach(visit)
+  }
+  visit(root)
+  return paths
+}
+
 function collectVisibleLines(root: JsonTreeNode, isExpanded: (node: JsonTreeNode) => boolean, sourceLines: string[]) {
   const result: VisibleLine[] = []
 
@@ -251,8 +266,10 @@ function collapsedLine(node: JsonTreeNode) {
 export function CodeBlockTree({
   value,
   title = 'JSON',
+  size = 'sm',
   lineNumbers: controlledLineNumbers,
   defaultLineNumbers = true,
+  defaultExpandAll = false,
   showLineNumbersToggle = true,
   onLineNumbersChange,
   toolbarActions,
@@ -262,14 +279,15 @@ export function CodeBlockTree({
   ...props
 }: CodeBlockTreeProps) {
   const parsed = React.useMemo(() => parseJsonValue(value), [value])
-  const [expandedPaths, setExpandedPaths] = React.useState<Set<string>>(() => new Set())
+  const sourceLines = React.useMemo(() => parsed.text.split(/\r?\n/), [parsed.text])
+  const root = React.useMemo(() => (parsed.error || parsed.empty ? null : buildTree(parsed.value)), [parsed])
+  const [expandedPaths, setExpandedPaths] = React.useState<Set<string>>(() =>
+    defaultExpandAll && root ? collectExpandablePaths(root) : new Set()
+  )
   const [internalLineNumbers, setInternalLineNumbers] = React.useState(defaultLineNumbers)
   const isLineNumbersControlled = controlledLineNumbers !== undefined
   const lineNumbers = isLineNumbersControlled ? controlledLineNumbers : internalLineNumbers
   const treeId = React.useId().replaceAll(':', '')
-
-  const sourceLines = React.useMemo(() => parsed.text.split(/\r?\n/), [parsed.text])
-  const root = React.useMemo(() => (parsed.error || parsed.empty ? null : buildTree(parsed.value)), [parsed])
 
   const isExpanded = React.useCallback((node: JsonTreeNode) => expandedPaths.has(node.path), [expandedPaths])
 
@@ -429,7 +447,7 @@ export function CodeBlockTree({
       {...props}
       style={{ '--code-block-gutter-width': gutterWidth, ...style } as React.CSSProperties}
       className={cn('min-w-0', className)}
-      size='sm'
+      size={size}
       lineNumbers={lineNumbers}
       onLineNumbersChange={handleLineNumbersChange}
     >
@@ -460,7 +478,14 @@ export function CodeBlockTree({
       ) : (
         <ScrollArea className='h-[34rem] min-w-0'>
           <ScrollAreaViewport>
-            <ScrollAreaContent className='min-w-max gap-0 p-0 font-mono text-xs leading-5 whitespace-pre'>
+            <ScrollAreaContent
+              className={cn(
+                'min-w-max gap-0 p-0 font-mono whitespace-pre',
+                size === 'default' && 'text-sm leading-6',
+                size === 'sm' && 'text-xs leading-5',
+                size === 'xs' && 'text-[11px] leading-4'
+              )}
+            >
               {root?.expandable ? (
                 <div role='group' aria-label='JSON tree'>
                   <CodeBlockLine

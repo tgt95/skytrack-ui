@@ -95,6 +95,7 @@ import {
   DrawerViewport
 } from '@/components/ui/drawer'
 import { Dropzone } from '@/components/ui/dropzone'
+import { Empty, EmptyContent, EmptyDescription, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { FieldRoot, FieldLabel, FieldControl, FieldDescription, FieldError } from '@/components/ui/field'
 import { FieldsetRoot, FieldsetLegend } from '@/components/ui/fieldset'
 import { Form } from '@/components/ui/form'
@@ -347,7 +348,7 @@ function DialogActionExample({ equalActions }: { equalActions: boolean }) {
   return (
     <div className='w-full max-w-sm rounded-(--radius) border border-border bg-background p-4 text-foreground shadow-sm'>
       <DialogHeader>
-        <div className='h5 font-semibold text-foreground'>Update project settings</div>
+        <div className='h5 font-medium text-foreground'>Update project settings</div>
         <div className='text-muted-foreground'>Review the project details before saving.</div>
       </DialogHeader>
       <DialogFooter className='mt-4 flex-row justify-end gap-2'>
@@ -444,7 +445,7 @@ function AlertDialogPracticeExample({ equalActions }: { equalActions: boolean })
   return (
     <div className='w-full max-w-sm rounded-(--radius) border border-border bg-background p-4 shadow-sm'>
       <div className='space-y-1.5'>
-        <h4 className='font-semibold text-foreground'>Delete this project?</h4>
+        <h4 className='font-medium text-foreground'>Delete this project?</h4>
         <p className='text-base text-muted-foreground'>
           This action cannot be undone. All project data will be permanently removed.
         </p>
@@ -1060,6 +1061,47 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
           <div className='w-full max-w-md space-y-2'>
             <Dropzone className='min-h-32 p-4' hint='Drop files here' buttonLabel='Browse files' />
           </div>
+        )
+      }
+    ]
+  },
+  empty: {
+    Behavior: [
+      {
+        recommended: (
+          <Empty size='sm' className='w-full max-w-56'>
+            <EmptyMedia />
+            <EmptyTitle>No missions scheduled</EmptyTitle>
+            <EmptyDescription>Create a mission to start planning.</EmptyDescription>
+          </Empty>
+        ),
+        discouraged: (
+          <Empty size='sm' className='w-full max-w-56'>
+            <EmptyMedia />
+            <EmptyTitle>No data</EmptyTitle>
+          </Empty>
+        )
+      },
+      {
+        recommended: (
+          <Empty size='sm' className='w-full max-w-56'>
+            <EmptyTitle>No saved views yet</EmptyTitle>
+            <EmptyDescription>Save a view to reuse its filters.</EmptyDescription>
+            <EmptyContent>
+              <Button size='xs'>Save current view</Button>
+            </EmptyContent>
+          </Empty>
+        ),
+        discouraged: (
+          <Empty size='sm' className='w-full max-w-56'>
+            <EmptyTitle>No saved views yet</EmptyTitle>
+            <EmptyDescription>You do not have access to saved views.</EmptyDescription>
+            <EmptyContent>
+              <Button size='xs' disabled>
+                New saved view
+              </Button>
+            </EmptyContent>
+          </Empty>
         )
       }
     ]

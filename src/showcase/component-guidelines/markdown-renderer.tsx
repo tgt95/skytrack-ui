@@ -39,7 +39,7 @@ export function renderInlineMarkdown(text: string): React.ReactNode[] {
     const boldMatch = part.match(/^\*\*([^*]+)\*\*$/)
     if (boldMatch) {
       return (
-        <strong key={index} className='font-semibold text-foreground'>
+        <strong key={index} className='font-medium text-foreground'>
           {boldMatch[1]}
         </strong>
       )
@@ -68,7 +68,7 @@ export function MarkdownRenderer({ blocks }: { blocks: MarkdownBlock[] }) {
         switch (block.type) {
           case 'paragraph':
             return (
-              <p key={idx} className='text-lg leading-loose text-muted-foreground'>
+              <p key={idx} className='text-base leading-relaxed text-muted-foreground'>
                 {renderInlineMarkdown(block.text)}
               </p>
             )
@@ -137,7 +137,7 @@ export function MarkdownRenderer({ blocks }: { blocks: MarkdownBlock[] }) {
               )
             }
             return (
-              <ul key={idx} className='list-disc pl-5 space-y-1 text-lg text-muted-foreground leading-loose'>
+              <ul key={idx} className='list-disc pl-5 space-y-1 text-base text-muted-foreground leading-relaxed'>
                 {block.items.map((it, itIdx) => (
                   <li key={itIdx}>{renderInlineMarkdown(it)}</li>
                 ))}

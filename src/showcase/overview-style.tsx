@@ -19,7 +19,6 @@ import {
   CalendarCheckIcon,
   ChatCircleDotsIcon,
   ChartLineUpIcon,
-  CaretDownIcon,
   CaretRightIcon,
   CheckIcon,
   CheckCircleIcon,
@@ -86,6 +85,7 @@ import {
 } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SplitButton, SplitButtonAction, SplitButtonTrigger } from '@/components/ui/split-button'
 import { FieldRoot, FieldLabel } from '@/components/ui/field'
 import {
   Select,
@@ -185,7 +185,6 @@ const ICON_BUTTONS = [
   ArrowLeftIcon,
   ArrowRightIcon,
   CheckIcon,
-  CaretDownIcon,
   CaretRightIcon,
   MagnifyingGlassIcon,
   GearIcon,
@@ -923,18 +922,10 @@ export function OverviewStyle({ className = '' }: { className?: string }) {
               </AlertDialogPortal>
             </AlertDialog>
           </div>
-          <span className='flex items-stretch'>
-            <Button variant='outline' className='rounded-r-none border-r-0'>
-              Split Button
-            </Button>
+          <SplitButton variant='outline'>
+            <SplitButtonAction>Split Button</SplitButtonAction>
             <Menu>
-              <MenuTrigger
-                render={
-                  <Button variant='outline' size='icon' aria-label='More group actions' className='rounded-l-none' />
-                }
-              >
-                <CaretDownIcon aria-hidden='true' />
-              </MenuTrigger>
+              <MenuTrigger render={<SplitButtonTrigger aria-label='More group actions' />} />
               <MenuPortal>
                 <MenuPositioner side='bottom' align='end' sideOffset={4}>
                   <MenuPopup>
@@ -947,7 +938,7 @@ export function OverviewStyle({ className = '' }: { className?: string }) {
                 </MenuPositioner>
               </MenuPortal>
             </Menu>
-          </span>
+          </SplitButton>
         </div>
       </Card>
 

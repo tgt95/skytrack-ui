@@ -8,16 +8,18 @@ import { Search } from '@/components/ui/search'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { ButtonSpecimen, ToggleGroupSpecimen, ToggleSpecimen, ToolbarSpecimen } from './actions'
+import { ButtonSpecimen, SplitButtonSpecimen, ToggleGroupSpecimen, ToggleSpecimen, ToolbarSpecimen } from './actions'
 import {
   AttachmentSpecimen,
   AvatarSpecimen,
   BadgeSpecimen,
   CalendarSpecimen,
+  CardSpecimen,
   ChartSpecimen,
   CodeBlockSpecimen,
   DataTableSpecimen,
   DatePickerSpecimen,
+  EmptySpecimen,
   ResizableSpecimen,
   ScrollAreaSpecimen,
   SeparatorSpecimen
@@ -76,9 +78,19 @@ export type ComponentSpecimens = Record<string, SpecimenRenderer | undefined> & 
 }
 
 export const SPECIMENS: Record<string, ComponentSpecimens> = {
+  card: {
+    size: (value) => <CardSpecimen size={value} />,
+    states: (state) => <CardSpecimen state={state} />
+  },
   button: {
     variant: (value) => <ButtonSpecimen variant={value} size='sm' />,
     size: (value) => <ButtonSpecimen size={value} />
+  },
+  'split-button': {
+    variant: (value) => <SplitButtonSpecimen variant={value} />,
+    size: (value) => <SplitButtonSpecimen size={value} />,
+    'action state': (value) => <SplitButtonSpecimen actionState={value} />,
+    states: () => <SplitButtonSpecimen />
   },
   toggle: {
     variant: (value) => <ToggleSpecimen variant={value} />,
@@ -347,6 +359,11 @@ export const SPECIMENS: Record<string, ComponentSpecimens> = {
   'page-header': {
     states: (state) => <PageHeaderSpecimen state={state} />
   },
+  empty: {
+    variant: (value) => <EmptySpecimen variant={value} />,
+    size: (value) => <EmptySpecimen size={value} />,
+    states: () => <EmptySpecimen />
+  },
   resizable: {
     orientation: (value) => <ResizableSpecimen orientation={value} />,
     withHandle: (value) => <ResizableSpecimen withHandle={value} />,
@@ -364,9 +381,19 @@ export function setting(settings: SpecimenSettings, name: string, fallback: stri
 
 export function renderConfiguredSpecimen(specId: string, settings: SpecimenSettings): React.ReactNode {
   switch (specId) {
+    case 'card':
+      return <CardSpecimen size={setting(settings, 'size', 'md')} />
     case 'button':
       return (
         <ButtonSpecimen variant={setting(settings, 'variant', 'default')} size={setting(settings, 'size', 'default')} />
+      )
+    case 'split-button':
+      return (
+        <SplitButtonSpecimen
+          variant={setting(settings, 'variant', 'default')}
+          size={setting(settings, 'size', 'default')}
+          actionState={setting(settings, 'action state', 'enabled')}
+        />
       )
     case 'toggle':
       return (
@@ -481,6 +508,10 @@ export function renderConfiguredSpecimen(specId: string, settings: SpecimenSetti
       )
     case 'page-header':
       return <PageHeaderSpecimen />
+    case 'empty':
+      return (
+        <EmptySpecimen variant={setting(settings, 'variant', 'default')} size={setting(settings, 'size', 'default')} />
+      )
     case 'resizable':
       return (
         <ResizableSpecimen

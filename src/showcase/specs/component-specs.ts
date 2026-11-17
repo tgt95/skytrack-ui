@@ -58,6 +58,32 @@ export const SPECS: ComponentSpec[] = [
     note: 'Dialog, Alert Dialog, Drawer and Toast triggers and closes reuse these six variants and eight sizes.'
   },
   {
+    id: 'split-button',
+    title: 'Split Button',
+    group: 'Actions',
+    axes: [
+      { name: 'variant', values: BUTTON_VARIANTS, default: 'default' },
+      { name: 'size', values: ['xs', 'sm', 'default', 'lg'], default: 'default' },
+      { name: 'action state', values: ['enabled', 'disabled'], default: 'enabled' }
+    ],
+    states: ['default', 'hover', 'focus-visible', 'menu open', 'disabled action'],
+    sizes:
+      'Uses the Button control heights: xs 24 · sm 32 · default 40 · lg 48 px. The icon trigger matches the action height.',
+    note: 'Composes Button with Menu. Both parts inherit the same variant and size; the trigger only adds the square width.'
+  },
+  {
+    id: 'filter-button',
+    title: 'Filter Button',
+    group: 'Actions',
+    axes: [
+      { name: 'variant', values: BUTTON_VARIANTS, default: 'outline' },
+      { name: 'size', values: BUTTON_SIZES, default: 'sm' }
+    ],
+    states: ['closed', 'open', 'option checked', 'option disabled', 'disabled trigger'],
+    sizes: 'Uses the Button control heights: xs 24 · sm 32 · default 40 · lg 48 px.',
+    note: 'Button trigger with a checkbox popup. Trigger content stays caller-owned; a split clear action appears while values are selected.'
+  },
+  {
     id: 'toggle',
     title: 'Toggle',
     group: 'Actions',
@@ -233,6 +259,19 @@ export const SPECS: ComponentSpec[] = [
     note: 'RadioGroup controls layout; RadioRoot is the control. Both are required for a working group.'
   },
   {
+    id: 'choice-button',
+    title: 'Choice Button',
+    group: 'Forms',
+    axes: [
+      { name: 'state', values: ['unchecked', 'checked'], default: 'unchecked' },
+      { name: 'selected appearance', values: ['default', 'subtle'], default: 'default' },
+      { name: 'checkmark', values: ['shown', 'hidden'], default: 'shown' }
+    ],
+    states: ['unchecked', 'checked', 'hover', 'focus-visible', 'disabled'],
+    sizes: 'Shared control heights: xs 24 · sm 32 · default 40 · lg 48 px.',
+    note: 'Radio semantics through ChoiceGroup; checked style supports default or subtle appearance and optional checkmark.'
+  },
+  {
     id: 'search',
     title: 'Search',
     group: 'Forms',
@@ -249,9 +288,9 @@ export const SPECS: ComponentSpec[] = [
     title: 'Select',
     group: 'Forms',
     axes: [{ name: 'size (trigger)', values: ['default', 'xs', 'sm', 'lg'], default: 'default' }],
-    states: ['placeholder', 'filled', 'disabled', 'invalid', 'pressed', 'highlighted'],
+    states: ['placeholder', 'filled', 'empty options', 'disabled', 'invalid', 'pressed', 'highlighted'],
     sizes: 'Trigger min-heights: default 36 · xs 24 · sm 32 · lg 40 px.',
-    note: 'Trigger, value, list, item, item indicator, group label and separator parts ship together.'
+    note: 'Trigger, value, list, item, item indicator, group label and separator parts ship together; SelectList shows Empty when it has no options.'
   },
   {
     id: 'slider',
@@ -506,6 +545,17 @@ export const SPECS: ComponentSpec[] = [
     note: 'Composes Label, Value, Track and Indicator. Use Badge or text for thresholds, not colour alone.'
   },
   {
+    id: 'empty',
+    title: 'Empty',
+    group: 'Data Display',
+    axes: [
+      { name: 'variant', values: ['default', 'simple'], default: 'default' },
+      { name: 'size', values: ['sm', 'default', 'lg'], default: 'default' }
+    ],
+    states: ['with actions', 'custom media', 'inline in a panel'],
+    note: 'Compound placeholder: media, title and description are optional, and actions compose from Button or links.'
+  },
+  {
     id: 'progress',
     title: 'Progress',
     group: 'Data Display',
@@ -530,6 +580,22 @@ export const SPECS: ComponentSpec[] = [
     group: 'Layout',
     states: ['with breadcrumbs', 'with toolbar', 'with tabs'],
     note: 'Page heading composition with breadcrumbs, title and toolbar action slots.'
+  },
+  {
+    id: 'card',
+    title: 'Card',
+    group: 'Layout',
+    axes: [{ name: 'size', values: ['sm', 'md', 'lg'], default: 'md' }],
+    states: [
+      'standard',
+      'without description',
+      'without toolbar',
+      'with footer',
+      'two-row header with long text clamping'
+    ],
+    sizes:
+      'Padding: sm 12 · md 16 · lg 24 px. Header title/toolbar row: 40 px. Description: sm/md text-sm, lg text-base. Toolbar buttons in lg: 40 px high.',
+    note: 'Content surface with a fixed title/toolbar row, description below, and size-based padding and typography.'
   },
   {
     id: 'resizable',

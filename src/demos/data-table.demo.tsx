@@ -12,14 +12,7 @@ import { Toggle } from '@/components/ui/toggle'
 import { ToggleGroup } from '@/components/ui/toggle-group'
 import { CaretDownIcon, DotsThreeIcon, MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react'
 import { Menu, MenuItem, MenuPopup, MenuPortal, MenuPositioner, MenuSeparator, MenuTrigger } from '@/components/ui/menu'
-import {
-  Popover,
-  PopoverPopup,
-  PopoverPortal,
-  PopoverPositioner,
-  PopoverTitle,
-  PopoverTrigger
-} from '@/components/ui/popover'
+import { Popover, PopoverPopup, PopoverPortal, PopoverPositioner, PopoverTrigger } from '@/components/ui/popover'
 import type { DemoMeta } from '@/showcase/demo'
 import type { DataTableRenderProps } from '@/components/ui/data-table'
 
@@ -712,7 +705,7 @@ function MultiSelectFilter({
         <PopoverPortal>
           <PopoverPositioner side='bottom' align='start' sideOffset={4}>
             <PopoverPopup className='w-60 p-2'>
-              <PopoverTitle className='px-2 py-1 text-sm'>Filter by {label.toLowerCase()}</PopoverTitle>
+              <div className='px-2 py-1 text-xs sub-heading'>Filter by {label.toLowerCase()}</div>
               <div className='flex flex-col gap-1'>
                 {options.map((option) => {
                   const optionId = `${id}-${option.value.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`

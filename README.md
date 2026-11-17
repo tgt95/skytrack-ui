@@ -58,7 +58,7 @@ npm run pack:local   # build:lib + npm pack
 Install it in a consumer app:
 
 ```bash
-npm install /path/to/skytrack-ui/dist-lib-tarball/skytrack-ui-0.1.5.tgz
+npm install /path/to/skytrack-ui/dist-lib-tarball/skytrack-ui-0.1.6.tgz
 ```
 
 `react` and `react-dom` are **peer dependencies** (`^19.0.0`) — the consumer installs and
@@ -97,17 +97,15 @@ import { Tooltip, TooltipPopup, TooltipPositioner, TooltipProvider, TooltipTrigg
 Code Block is available as a composable subpath, with optional syntax highlighting:
 
 ```tsx
-import { CodeBlock, CodeBlockContent, CodeBlockLine, useHighlightedCode } from 'skytrack-ui/code-block'
+import { CodeBlock, CodeBlockContent } from 'skytrack-ui/code-block'
 
-const lines = useHighlightedCode('const ready = true', 'typescript')
+const example = ['from typing import Iterator', '', 'def route() -> Iterator[str]:', "    yield 'inspect'"].join('\n')
 
 export function Snippet() {
   return (
     <CodeBlock>
-      <CodeBlockContent lineNumbers>
-        {lines.map((line, index) => (
-          <CodeBlockLine key={index}>{line}</CodeBlockLine>
-        ))}
+      <CodeBlockContent language='python' lineNumbers>
+        {example}
       </CodeBlockContent>
     </CodeBlock>
   )
@@ -182,13 +180,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 ```
 
-There are 53 component subpaths: `accordion`, `alert`, `alert-dialog`, `attachment`,
-`autocomplete`, `avatar`, `badge`, `breadcrumb`, `button`, `calendar`, `chart`, `checkbox`,
-`checkbox-group`, `code-block`, `collapsible`, `combobox`, `command`, `context-menu`, `data-table`, `date-picker`,
-`dialog`, `drawer`, `dropzone`, `field`, `fieldset`, `form`, `inline-edit`, `input`, `menu`,
-`menubar`, `meter`, `navigation-menu`, `number-field`, `otp-field`, `page-header`, `pagination`,
-`popover`, `preview-card`, `progress`, `radio`, `resizable`, `scroll-area`, `select`, `separator`, `sidebar`,
-`slider`, `switch`, `tabs`, `toast`, `toggle`, `toggle-group`, `toolbar`, `tooltip`.
+There are 61 component subpaths: `accordion`, `alert`, `alert-dialog`, `attachment`,
+`autocomplete`, `avatar`, `badge`, `breadcrumb`, `button`, `calendar`, `card`, `chart`, `checkbox`,
+`checkbox-group`, `choice-button`, `code-block`, `code-block-tree`, `collapsible`, `combobox`,
+`command`, `context-menu`, `data-table`, `date-picker`, `dialog`, `drawer`, `dropzone`, `empty`,
+`field`, `fieldset`, `filter-button`, `form`, `inline-edit`, `input`, `menu`, `menubar`, `meter`,
+`navigation-menu`, `number-field`, `otp-field`, `page-header`, `pagination`, `popover`,
+`preview-card`, `progress`, `progress-indicator`, `radio`, `resizable`, `scroll-area`, `search`,
+`select`, `separator`, `sidebar`, `slider`, `split-button`, `switch`, `tabs`, `toast`, `toggle`,
+`toggle-group`, `toolbar`, `tooltip`.
 
 ### Aliased root exports
 

@@ -34,12 +34,17 @@ export const LineNumbersHidden: Story = {
   render: () => <VariantBlock name={'Line numbers hidden'}>{demo.variants[2].render()}</VariantBlock>
 }
 
+export const ExpandAllByDefault: Story = {
+  name: 'Expand all by default',
+  render: () => <VariantBlock name={'Expand all by default'}>{demo.variants[3].render()}</VariantBlock>
+}
+
 export const InvalidJSON: Story = {
   name: 'Invalid JSON',
-  render: () => <VariantBlock name={'Invalid JSON'}>{demo.variants[3].render()}</VariantBlock>
+  render: () => <VariantBlock name={'Invalid JSON'}>{demo.variants[4].render()}</VariantBlock>
 }
 
 export const EmptyValue: Story = {
   name: 'Empty value',
-  render: () => <VariantBlock name={'Empty value'}>{demo.variants[4].render()}</VariantBlock>
+  render: () => <VariantBlock name={'Empty value'}>{demo.variants[5].render()}</VariantBlock>
 }

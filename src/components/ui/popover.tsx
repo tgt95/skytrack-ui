@@ -47,7 +47,7 @@ function PopoverPositioner({ className, ...props }: React.ComponentProps<typeof 
     <BasePopover.Positioner
       data-slot='popover-positioner'
       className={cn(
-        'z-50 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)]',
+        'z-50 h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)] data-[anchor-hidden]:invisible',
         className
       )}
       {...props}
@@ -95,7 +95,7 @@ function PopoverTitle({ className, ...props }: React.ComponentProps<typeof BaseP
   return (
     <BasePopover.Title
       data-slot='popover-title'
-      className={cn('text-lg heading font-medium text-popover-foreground', className)}
+      className={cn('h6 text-popover-foreground', className)}
       {...props}
     />
   )

@@ -8,13 +8,23 @@ that ship with it.
 
 ### Added
 
+- `CodeBlockContent` accepts an optional Shiki `language` for source-string children, including Python and JSON. Plain-text fallback, line numbers, and copy behavior remain available.
 - axe-core accessibility gate inside `npm test`: every demo variant is rendered through the shared
   harness and audited against `src/showcase/a11y-baseline.json`. A new finding fails the run unless
   `A11Y_ACCEPT_NEW=1` is set; `A11Y_WRITE_BASELINE=1` rebaselines deliberately.
 - Typed date entry for all three pickers (single, range, week): accepted text includes
   `2026-11-11`, locale numeric (`11/11/2026`) and month-name (`11 Nov 2026`).
-- Dedicated `Calendar` demo and story page, so Storybook covers every component (63 pages: 56
+- Dedicated `Calendar` demo and story page, so Storybook covers every component (66 pages: 59
   components + 7 UI shells).
+- New `Empty` component and `skytrack-ui/empty` subpath: `Empty`, `EmptyMedia`, `EmptyTitle`,
+  `EmptyDescription` and `EmptyContent` compose a placeholder for regions with no records or
+  results. `variant` switches between a framed media tile and a bare mark; `size` scales spacing,
+  media and copy. Includes a showcase demo, reference sheet entry and developer/designer guides.
+- New `Split Button` component and `skytrack-ui/split-button` subpath: `SplitButton`,
+  `SplitButtonAction` and `SplitButtonTrigger` join one primary action with a `Menu` of related
+  actions. It reuses the Button variant and size axes, so control height, font size, padding, and
+  the square trigger width stay on the shared scale. Includes a showcase demo, reference sheet
+  entry and developer/designer guides.
 
 ### Changed
 

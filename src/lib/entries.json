@@ -78,6 +78,14 @@
       "controlSizeClasses",
       "focusRing",
       "Calendar",
+      "Card",
+      "CardContent",
+      "CardDescription",
+      "CardFooter",
+      "CardHeader",
+      "CardHeading",
+      "CardTitle",
+      "CardToolbar",
       "ChartContainer",
       "ChartLegend",
       "ChartLegendContent",
@@ -87,6 +95,8 @@
       "CheckboxIndicator",
       "CheckboxRoot",
       "CheckboxGroup",
+      "ChoiceButton",
+      "ChoiceGroup",
       "CodeBlock",
       "CodeBlockActions",
       "CodeBlockContent",
@@ -199,6 +209,12 @@
       "drawerPopupVariants",
       "drawerSideVariants",
       "Dropzone",
+      "Empty",
+      "EmptyContent",
+      "EmptyDescription",
+      "EmptyMedia",
+      "EmptyTitle",
+      "emptyVariants",
       "Field",
       "FieldControl",
       "FieldDescription",
@@ -211,6 +227,7 @@
       "FieldValidity",
       "FieldsetLegend",
       "FieldsetRoot",
+      "FilterButton",
       "Form",
       "InlineEdit",
       "InlineEditInput",
@@ -371,6 +388,9 @@
       "SliderThumb",
       "SliderTrack",
       "SliderValue",
+      "SplitButton",
+      "SplitButtonAction",
+      "SplitButtonTrigger",
       "Switch",
       "SwitchThumb",
       "switchThumbVariants",
@@ -433,8 +453,18 @@
       "ButtonProps",
       "ControlSize",
       "CalendarProps",
+      "CardContentProps",
+      "CardDescriptionProps",
+      "CardFooterProps",
+      "CardHeaderProps",
+      "CardHeadingProps",
+      "CardProps",
+      "CardTitleProps",
+      "CardToolbarProps",
       "ChartConfig",
       "ChartContainerProps",
+      "ChoiceButtonProps",
+      "ChoiceGroupProps",
       "CodeBlockContentProps",
       "CodeBlockCopyButtonProps",
       "CodeBlockLineIndexToggleProps",
@@ -462,6 +492,15 @@
       "DrawerSideProps",
       "DrawerSnapPoint",
       "DropzoneProps",
+      "EmptyContentProps",
+      "EmptyDescriptionProps",
+      "EmptyMediaProps",
+      "EmptyProps",
+      "EmptySize",
+      "EmptyTitleProps",
+      "EmptyVariant",
+      "FilterButtonOption",
+      "FilterButtonProps",
       "InlineEditInputProps",
       "InlineEditRootProps",
       "InlineEditTriggerProps",
@@ -481,11 +520,17 @@
       "ProgressStepStatus",
       "ResizableHandleProps",
       "SearchProps",
+      "SelectListProps",
       "SelectRootProps",
       "SidebarMenuButtonProps",
       "SidebarMenuSubButtonProps",
       "SidebarProps",
       "SidebarProviderProps",
+      "SplitButtonActionProps",
+      "SplitButtonProps",
+      "SplitButtonSize",
+      "SplitButtonTriggerProps",
+      "SplitButtonVariant",
       "TabsIndicatorVariantProps",
       "TabsListVariantProps",
       "TabsTabVariantProps",
@@ -627,6 +672,29 @@
       "types": ["CalendarProps"],
       "prefix": "Calendar"
     },
+    "./card": {
+      "values": [
+        "Card",
+        "CardContent",
+        "CardDescription",
+        "CardFooter",
+        "CardHeader",
+        "CardHeading",
+        "CardTitle",
+        "CardToolbar"
+      ],
+      "types": [
+        "CardContentProps",
+        "CardDescriptionProps",
+        "CardFooterProps",
+        "CardHeaderProps",
+        "CardHeadingProps",
+        "CardProps",
+        "CardTitleProps",
+        "CardToolbarProps"
+      ],
+      "prefix": "Card"
+    },
     "./chart": {
       "values": [
         "ChartContainer",
@@ -648,6 +716,11 @@
       "values": ["CheckboxGroup"],
       "types": [],
       "prefix": "CheckboxGroup"
+    },
+    "./choice-button": {
+      "values": ["ChoiceButton", "ChoiceGroup"],
+      "types": ["ChoiceButtonProps", "ChoiceGroupProps"],
+      "prefix": "ChoiceButton"
     },
     "./code-block": {
       "values": [
@@ -827,6 +900,19 @@
       "types": ["DropzoneProps"],
       "prefix": "Dropzone"
     },
+    "./empty": {
+      "values": ["Empty", "EmptyContent", "EmptyDescription", "EmptyMedia", "EmptyTitle", "emptyVariants"],
+      "types": [
+        "EmptyContentProps",
+        "EmptyDescriptionProps",
+        "EmptyMediaProps",
+        "EmptyProps",
+        "EmptySize",
+        "EmptyTitleProps",
+        "EmptyVariant"
+      ],
+      "prefix": "Empty"
+    },
     "./field": {
       "values": [
         "Field",
@@ -847,6 +933,11 @@
       "values": ["FieldsetLegend", "FieldsetRoot"],
       "types": [],
       "prefix": "Fieldset"
+    },
+    "./filter-button": {
+      "values": ["FilterButton"],
+      "types": ["FilterButtonOption", "FilterButtonProps"],
+      "prefix": "FilterButton"
     },
     "./form": {
       "values": ["Form"],
@@ -1056,7 +1147,7 @@
         "SelectValue",
         "selectTriggerVariants"
       ],
-      "types": ["SelectRootProps"],
+      "types": ["SelectListProps", "SelectRootProps"],
       "prefix": "Select"
     },
     "./separator": {
@@ -1108,6 +1199,17 @@
       ],
       "types": [],
       "prefix": "Slider"
+    },
+    "./split-button": {
+      "values": ["SplitButton", "SplitButtonAction", "SplitButtonTrigger"],
+      "types": [
+        "SplitButtonActionProps",
+        "SplitButtonProps",
+        "SplitButtonSize",
+        "SplitButtonTriggerProps",
+        "SplitButtonVariant"
+      ],
+      "prefix": "SplitButton"
     },
     "./switch": {
       "values": ["Switch", "SwitchThumb", "switchThumbVariants", "switchVariants"],

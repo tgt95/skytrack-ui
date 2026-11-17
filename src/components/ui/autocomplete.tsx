@@ -5,6 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/lib/focus-ring'
 import { CONTROL_SIZE_CLASSES, type ControlSize } from '@/lib/control-sizes'
+import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 
 /**
  * Props of the `Autocomplete` root, generic over the item value type.
@@ -245,10 +246,13 @@ function AutocompleteEmpty({ className, children, ...props }: React.ComponentPro
   return (
     <BaseAutocomplete.Empty
       data-slot='autocomplete-empty'
-      className={cn('px-2 py-3 text-sm leading-none text-muted-foreground empty:hidden', className)}
+      className={cn('px-2 py-2 text-sm leading-none text-muted-foreground empty:hidden', className)}
       {...props}
     >
-      {children === undefined ? 'No results found.' : children}
+      <Empty size='sm' variant='simple' className='p-0'>
+        <EmptyMedia icon={MagnifyingGlassIcon} />
+        {children === undefined ? <EmptyTitle>No results found.</EmptyTitle> : children}
+      </Empty>
     </BaseAutocomplete.Empty>
   )
 }

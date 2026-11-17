@@ -1,7 +1,7 @@
 {
   "name": "skytrack-ui",
   "private": true,
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "description": "SkyTrack UI — private React component library (Base UI + Tailwind CSS v4, IBM Plex).",
   "license": "UNLICENSED",
@@ -71,6 +71,11 @@
       "import": "./dist-lib/calendar.js",
       "default": "./dist-lib/calendar.js"
     },
+    "./card": {
+      "types": "./dist-lib/components/ui/card.d.ts",
+      "import": "./dist-lib/card.js",
+      "default": "./dist-lib/card.js"
+    },
     "./chart": {
       "types": "./dist-lib/components/ui/chart.d.ts",
       "import": "./dist-lib/chart.js",
@@ -85,6 +90,11 @@
       "types": "./dist-lib/components/ui/checkbox-group.d.ts",
       "import": "./dist-lib/checkbox-group.js",
       "default": "./dist-lib/checkbox-group.js"
+    },
+    "./choice-button": {
+      "types": "./dist-lib/components/ui/choice-button.d.ts",
+      "import": "./dist-lib/choice-button.js",
+      "default": "./dist-lib/choice-button.js"
     },
     "./code-block": {
       "types": "./dist-lib/components/ui/code-block.d.ts",
@@ -141,6 +151,11 @@
       "import": "./dist-lib/dropzone.js",
       "default": "./dist-lib/dropzone.js"
     },
+    "./empty": {
+      "types": "./dist-lib/components/ui/empty.d.ts",
+      "import": "./dist-lib/empty.js",
+      "default": "./dist-lib/empty.js"
+    },
     "./field": {
       "types": "./dist-lib/components/ui/field.d.ts",
       "import": "./dist-lib/field.js",
@@ -150,6 +165,11 @@
       "types": "./dist-lib/components/ui/fieldset.d.ts",
       "import": "./dist-lib/fieldset.js",
       "default": "./dist-lib/fieldset.js"
+    },
+    "./filter-button": {
+      "types": "./dist-lib/components/ui/filter-button.d.ts",
+      "import": "./dist-lib/filter-button.js",
+      "default": "./dist-lib/filter-button.js"
     },
     "./form": {
       "types": "./dist-lib/components/ui/form.d.ts",
@@ -265,6 +285,11 @@
       "types": "./dist-lib/components/ui/slider.d.ts",
       "import": "./dist-lib/slider.js",
       "default": "./dist-lib/slider.js"
+    },
+    "./split-button": {
+      "types": "./dist-lib/components/ui/split-button.d.ts",
+      "import": "./dist-lib/split-button.js",
+      "default": "./dist-lib/split-button.js"
     },
     "./switch": {
       "types": "./dist-lib/components/ui/switch.d.ts",

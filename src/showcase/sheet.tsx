@@ -1,9 +1,24 @@
-import { useMemo, useState, type ReactNode } from 'react'
-import { MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react'
+import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { ArrowClockwiseIcon, CheckIcon, MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react'
 import themeCss from '../index.css?raw'
+import sharedTokensCss from '../styles/shared-tokens.css?raw'
 import { cn } from '@/lib/utils'
+import { DataTable, type DataTableColumnDef } from '@/components/ui/data-table'
+import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { ChoiceButton, ChoiceGroup } from '@/components/ui/choice-button'
+import { Toggle } from '@/components/ui/toggle'
+import { ToggleGroup } from '@/components/ui/toggle-group'
+import { focusRing } from '@/lib/focus-ring'
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipPortal,
+  TooltipPositioner,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import { renderConfiguredSpecimen, renderStateSpecimen } from './sheet-specimens'
 import { SPECS, type ComponentSpec } from './specs/component-specs'
 
@@ -19,7 +34,7 @@ import { SPECS, type ComponentSpec } from './specs/component-specs'
 type Declarations = Record<string, string>
 
 /** Reads `--name: value` declarations out of one selector block in index.css. */
-function readBlock(source: string, selector: string): Declarations {
+function readBlock (source: string, selector: string): Declarations {
   const at = source.indexOf(`${selector} {`)
   if (at === -1) return {}
   const open = source.indexOf('{', at)
@@ -39,8 +54,8 @@ function readBlock(source: string, selector: string): Declarations {
   return out
 }
 
-const LIGHT = readBlock(themeCss, ':root')
-const DARK = readBlock(themeCss, '.dark')
+const LIGHT = { ...readBlock(sharedTokensCss, ':root'), ...readBlock(themeCss, ':root') }
+const DARK = { ...readBlock(sharedTokensCss, '.dark'), ...readBlock(themeCss, '.dark') }
 const THEME = readBlock(themeCss, '@theme inline')
 const DARK_SURFACE = DARK['--background'] ?? 'oklch(0.145 0 0)'
 
@@ -77,14 +92,14 @@ const TOKEN_GROUPS: { id: string; title: string; description: string; tokens: st
   },
   {
     id: 'status',
-    title: 'Brand & status',
+    title: 'Semantic',
     description:
       'Primary is the brand accent. Destructive, success, warning and info carry status meaning; favourite is for starred state only.',
     tokens: ['--primary', '--destructive', '--success', '--warning', '--info', '--favorite']
   },
   {
     id: 'chart',
-    title: 'Data viz',
+    title: 'Data visuallization',
     description: 'Categorical series colors for charts, with two shades each of blue, orange, teal, purple, and pink.',
     tokens: [
       '--chart-1',
@@ -130,11 +145,13 @@ const TYPE_SCALE: { className: string; size: string; line: string }[] = [
   { className: 'text-3xl', size: '30', line: '36' }
 ]
 
-function round(value: number) {
+type TypeScaleRow = typeof TYPE_SCALE[number]
+
+function round (value: number) {
   return Number(value.toFixed(3)).toString()
 }
 
-function CopyValue({
+function CopyValue ({
   value,
   className,
   tooltipPlacement = 'above'
@@ -145,7 +162,7 @@ function CopyValue({
 }) {
   const [copied, setCopied] = useState(false)
 
-  async function copy() {
+  async function copy () {
     try {
       await navigator.clipboard.writeText(value)
       setCopied(true)
@@ -183,7 +200,7 @@ function CopyValue({
   )
 }
 
-function ColorSwatch({ value, surface }: { value: string; surface: 'light' | 'dark' }) {
+function ColorSwatch ({ value, surface }: { value: string; surface: 'light' | 'dark' }) {
   return (
     <span
       aria-hidden='true'
@@ -195,48 +212,70 @@ function ColorSwatch({ value, surface }: { value: string; surface: 'light' | 'da
   )
 }
 
-function TokenTable({ tokens }: { tokens: string[] }) {
+type TokenRow = { token: string; light: string; dark: string }
+
+const tokenColumns: DataTableColumnDef<TokenRow>[] = [
+  {
+    accessorKey: 'token',
+    header: 'Token',
+    meta: { wrap: true },
+    cell: ({ row }) => (
+      <Badge variant='default' className='max-w-full min-w-0 whitespace-normal break-words font-mono normal-case'>
+        {row.original.token}
+      </Badge>
+    )
+  },
+  {
+    accessorKey: 'light',
+    header: 'Light',
+    meta: { wrap: true },
+    cell: ({ row }) => (
+      <span className='flex min-w-0 items-center gap-2'>
+        <ColorSwatch value={row.original.light} surface='light' />
+        <span className='min-w-0 flex-1'>
+          <CopyValue value={row.original.light} className='block max-w-full text-xs break-words' />
+        </span>
+      </span>
+    )
+  },
+  {
+    accessorKey: 'dark',
+    header: 'Dark',
+    meta: { wrap: true },
+    cell: ({ row }) => (
+      <span className='flex min-w-0 items-center gap-2'>
+        <ColorSwatch value={row.original.dark} surface='dark' />
+        <span className='min-w-0 flex-1'>
+          <CopyValue value={row.original.dark} className='block max-w-full text-xs break-words' />
+        </span>
+      </span>
+    )
+  }
+]
+
+function TokenTable ({ tokens }: { tokens: string[] }) {
+  const rows = tokens.map((token) => {
+    const light = LIGHT[token] ?? '—'
+    const dark = DARK[token] ?? light
+    return { token, light, dark }
+  })
+
   return (
-    <div className='overflow-x-auto border border-border'>
-      <table className='w-full table-fixed text-left'>
-        <thead>
-          <tr className='bg-muted/40 text-xs sub-heading'>
-            <th className='w-[30%] px-2 py-2 font-medium sm:px-3'>Token</th>
-            <th className='px-2 py-2 font-medium sm:px-3'>Light</th>
-            <th className='px-2 py-2 font-medium sm:px-3'>Dark</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tokens.map((token) => {
-            const light = LIGHT[token] ?? '—'
-            const dark = DARK[token] ?? light
-            return (
-              <tr key={token} className='border-t border-border align-middle'>
-                <td className='px-2 py-2 sm:px-3'>
-                  <code className=''>{token}</code>
-                </td>
-                <td className='px-2 py-2 sm:px-3'>
-                  <span className='flex items-center gap-2'>
-                    <ColorSwatch value={light} surface='light' />
-                    <CopyValue value={light} className='break-words' />
-                  </span>
-                </td>
-                <td className='px-2 py-2 sm:px-3'>
-                  <span className='flex items-center gap-2'>
-                    <ColorSwatch value={dark} surface='dark' />
-                    <CopyValue value={dark} className='break-words' />
-                  </span>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      size='lg'
+      data={rows}
+      columns={tokenColumns}
+      getRowId={(row) => row.token}
+      renderSearch={() => null}
+      renderColumnVisibility={() => null}
+      renderPagination={() => null}
+      showRowCount={false}
+      tableContainerClassName='[&_table]:table-fixed [&_table]:w-full'
+    />
   )
 }
 
-function RadiusScale() {
+function RadiusScale () {
   return (
     <div className='flex flex-wrap items-end gap-6'>
       {RADIUS_PREVIEW_PX.map((radiusPx) => {
@@ -255,54 +294,70 @@ function RadiusScale() {
   )
 }
 
-function TypographyTable() {
+const typeScaleColumns: DataTableColumnDef<TypeScaleRow>[] = [
+  {
+    accessorKey: 'className',
+    header: 'Utility',
+    cell: ({ row }) => <code className='block min-w-24'>{row.original.className}</code>
+  },
+  {
+    accessorKey: 'size',
+    header: 'Size / line-height',
+    cell: ({ row }) => (
+      <span className='text-muted-foreground'>
+        {row.original.size}px / {row.original.line}px
+      </span>
+    )
+  },
+  {
+    id: 'sample',
+    header: 'Sample',
+    enableSorting: false,
+    cell: ({ row }) => <span className={row.original.className}>The quick brown fox jumps over a lazy dog</span>
+  }
+]
+
+function TypographyTable () {
   return (
-    <div className='overflow-x-auto border border-border'>
-      <table className='w-full text-left'>
-        <thead>
-          <tr className='bg-muted/40 text-xs sub-heading'>
-            <th className='px-2 py-2 font-medium sm:px-3'>Utility</th>
-            <th className='px-2 py-2 font-medium sm:px-3'>Size / line-height</th>
-            <th className='px-2 py-2 font-medium sm:px-3'>Sample</th>
-          </tr>
-        </thead>
-        <tbody>
-          {TYPE_SCALE.map((row) => (
-            <tr key={row.className} className='border-t border-border'>
-              <td className='whitespace-nowrap px-2 py-2 sm:px-3'>
-                <code className=''>{row.className}</code>
-              </td>
-              <td className='whitespace-nowrap px-2 py-2  text-muted-foreground sm:px-3'>
-                {row.size}px / {row.line}px
-              </td>
-              <td className='px-2 py-2 sm:px-3'>
-                <span className={row.className}>The quick brown fox</span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      size='lg'
+      data={TYPE_SCALE}
+      columns={typeScaleColumns}
+      getRowId={(row) => row.className}
+      renderSearch={() => null}
+      renderColumnVisibility={() => null}
+      renderPagination={() => null}
+      showRowCount={false}
+    />
   )
 }
 
-function firstFamily(stack: string | undefined, fallback: string) {
-  const family = stack
+function firstFamily (stack: string | undefined, fallback: string) {
+  let family = stack
     ?.split(',')[0]
     ?.trim()
-    .replace(/^['"]|['"]$/g, '')
+  if (family?.startsWith('var(')) {
+    const token = family.match(/^var\((--[\w-]+)/)?.[1]
+    family = (token && LIGHT[token]) || fallback
+  }
+  family = family?.replace(/^['"]|['"]$/g, '')
   return family || fallback
 }
 
-function SheetSection({ index, title, description }: { index: string; title: string; description: string }) {
+function SheetSection ({ index, title, description }: { index: string; title: string; description: string }) {
   return (
-    <div className='border-b border-foreground pb-3'>
-      <div className='flex items-baseline gap-3'>
-        <span className='text-base tabular-nums sub-heading'>{index}</span>
-        <h5 className='h5 heading'>{title}</h5>
+    <>
+    <div className='w-full h-px bg-border'/>
+    <div className='pb-8'>
+      <div className='relative flex items-baseline gap-2'>
+        <div className='h2'>{title}</div>
+        {/* <span className='absolute left-0 top-1/2 -translate-x-[calc(100%+1rem)] translate-y-[-50%] text-xl font-extralight tabular-nums text-muted-foreground/50'>
+          {index}
+        </span> */}
       </div>
-      <p className='mt-1 text-sm text-muted-foreground'>{description}</p>
+      <div className='mt-2 text-base text-muted-foreground'>{description}</div>
     </div>
+    </>
   )
 }
 
@@ -311,13 +366,13 @@ function SheetSection({ index, title, description }: { index: string; title: str
 const AXIS_COUNT = SPECS.reduce((n, spec) => n + (spec.axes?.length ?? 0), 0)
 const OPTION_COUNT = SPECS.reduce((n, spec) => n + (spec.axes?.reduce((m, axis) => m + axis.values.length, 0) ?? 0), 0)
 
-function combinationCount(spec: ComponentSpec) {
+function combinationCount (spec: ComponentSpec) {
   if (!spec.axes?.length) return 1
   if (spec.id === 'progress-indicator') return 3
   return spec.axes.reduce((n, axis) => n * axis.values.length, 1)
 }
 
-function Chip({ children, shaded }: { children: ReactNode; shaded?: boolean }) {
+function Chip ({ children, shaded }: { children: ReactNode; shaded?: boolean }) {
   return (
     <code
       className={cn(
@@ -330,12 +385,67 @@ function Chip({ children, shaded }: { children: ReactNode; shaded?: boolean }) {
   )
 }
 
-function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
+function ChoiceStyleToggle ({
+  value,
+  selected,
+  children
+}: {
+  value: string
+  selected: boolean
+  children: ReactNode
+}) {
+  return (
+    <Toggle
+      value={value}
+      size='sm'
+      variant='default'
+      className={cn(
+        'min-h-8 cursor-pointer select-none gap-2 rounded-(--radius) border border-input bg-background px-3 py-1 text-sm font-medium text-foreground',
+        'hover:bg-accent hover:text-accent-foreground',
+        'data-pressed:border-primary data-pressed:bg-primary data-pressed:text-(--foreground-inverse)',
+        'data-pressed:hover:bg-primary/90 data-pressed:hover:text-(--foreground-inverse)',
+        focusRing
+      )}
+    >
+      {selected && <CheckIcon aria-hidden='true' className='size-3.5 shrink-0' weight='bold' />}
+      {children}
+    </Toggle>
+  )
+}
+
+function ResetDefaultButton ({ onClick }: { onClick: () => void }) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              type='button'
+              size='icon-sm'
+              variant='ghost'
+              aria-label='Reset default'
+              onClick={onClick}
+            >
+              <ArrowClockwiseIcon aria-hidden='true' />
+            </Button>
+          }
+        />
+        <TooltipPortal>
+          <TooltipPositioner side='top' align='end' sideOffset={4}>
+            <TooltipPopup>Reset default</TooltipPopup>
+          </TooltipPositioner>
+        </TooltipPortal>
+      </Tooltip>
+    </TooltipProvider>
+  )
+}
+
+function ComponentLevelRow ({ spec }: { spec: ComponentSpec }) {
   const isSizeAxisName = (name: string) => name.toLowerCase().includes('size')
 
   const [selected, setSelected] = useState<Record<string, string>>(() =>
     Object.fromEntries(
-      (spec.axes ?? []).map((axis) => [axis.name, isSizeAxisName(axis.name) ? 'all' : (axis.default ?? axis.values[0])])
+      (spec.axes ?? []).map((axis) => [axis.name, isSizeAxisName(axis.name) ? 'all' : axis.default ?? axis.values[0]])
     )
   )
   const [selectedState, setSelectedState] = useState<string | undefined>(spec.states?.[0])
@@ -348,7 +458,10 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
   const allActiveSizeAxes = sizeAxes.filter((axis) => selected[axis.name] === 'all')
 
   return (
-    <div id={spec.id} className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-8'>
+    <div
+      id={spec.id}
+      className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[24rem_minmax(0,1fr)] md:gap-12'
+    >
       <div className='flex flex-col gap-1'>
         <div className='h5'>{spec.title}</div>
         <p className='text-base text-muted-foreground'>{meta}</p>
@@ -360,69 +473,63 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
             const isSizeAxis = isSizeAxisName(axis.name)
             const values = isSizeAxis ? ['all', ...axis.values] : axis.values
             return (
-              <div key={axis.name} className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
-                <span className='text-muted-foreground'>{axis.name}</span>
-                <div role='group' aria-label={`${spec.title} ${axis.name}`} className='flex flex-wrap gap-1.5'>
+              <div key={axis.name} className='grid gap-1.5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
+                <span className='text-xs sub-heading leading-8'>{axis.name}</span>
+                <ChoiceGroup
+                  aria-label={`${spec.title} ${axis.name}`}
+                  value={selected[axis.name] ?? ''}
+                  className='gap-1.5'
+                  onValueChange={(nextValue) =>
+                    setSelected((current) => ({
+                      ...current,
+                      [axis.name]: String(nextValue),
+                      ...(spec.id === 'progress-indicator' && axis.name === 'orientation' && nextValue === 'vertical'
+                        ? { alignment: 'start' }
+                        : {})
+                    }))
+                  }
+                >
                   {values.map((value) => {
-                    const active = selected[axis.name] === value
                     const isDefault = isSizeAxis ? value === 'all' : axis.default === value
                     return (
-                      <button
+                      <ChoiceButton
                         key={value}
-                        type='button'
-                        aria-pressed={active}
+                        value={value}
                         title={isDefault ? 'Component default' : undefined}
-                        onClick={() =>
-                          setSelected((current) => ({
-                            ...current,
-                            [axis.name]: value,
-                            ...(spec.id === 'progress-indicator' && axis.name === 'orientation' && value === 'vertical'
-                              ? { alignment: 'start' }
-                              : {})
-                          }))
-                        }
-                        className={cn(
-                          'inline-flex min-h-7 items-center border px-2 py-1 leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
-                          active
-                            ? 'border-primary bg-primary text-primary-foreground'
-                            : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
-                        )}
+                        size='sm'
+                        selectedVariant='subtle'
                       >
                         {value === 'all' ? 'All' : value}
                         {isDefault && <span className='ml-1 opacity-75'>· default</span>}
-                      </button>
+                      </ChoiceButton>
                     )
                   })}
-                </div>
+                </ChoiceGroup>
               </div>
             )
           })}
         {spec.axes?.length ? (
-          <div className='mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
+          <div className='bg-background mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
             <div className='flex flex-wrap items-center justify-between gap-2'>
-              <span className='font-medium text-muted-foreground'>Live preview · selected combination</span>
-              <button
-                type='button'
-                className='text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
+              <span className='font-medium text-foreground'>Live preview · selected combination</span>
+              <ResetDefaultButton
                 onClick={() =>
                   setSelected(
                     Object.fromEntries(
                       (spec.axes ?? []).map((axis) => [
                         axis.name,
-                        isSizeAxisName(axis.name) ? 'all' : (axis.default ?? axis.values[0])
+                        isSizeAxisName(axis.name) ? 'all' : axis.default ?? axis.values[0]
                       ])
                     )
                   )
                 }
-              >
-                Reset defaults
-              </button>
+              />
             </div>
             <div className='flex min-h-12 min-w-0 items-center overflow-x-auto -mx-2 px-2 py-1'>
               {allActiveSizeAxes.length === 0 ? (
                 renderConfiguredSpecimen(spec.id, selected)
               ) : (
-                <div className='flex flex-wrap items-start gap-6'>
+                <div className='flex flex-wrap w-full items-start gap-6'>
                   {allActiveSizeAxes[0].values.map((sizeVal) => {
                     const variantSettings: Record<string, string> = { ...selected }
                     for (const axis of allActiveSizeAxes) {
@@ -445,48 +552,40 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
           </div>
         ) : null}
         {spec.states && (
-          <div className='grid gap-1.5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
-            <span className='text-muted-foreground'>states &amp; modes</span>
-            <div role='group' aria-label={`${spec.title} states`} className='flex flex-wrap gap-1.5'>
+          <div className='grid gap-1.5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:items-start sm:gap-3'>
+            <span className='text-xs sub-heading leading-8'>states &amp; modes</span>
+            <ChoiceGroup
+              aria-label={`${spec.title} states`}
+              value={selectedState ?? ''}
+              className='gap-1.5'
+              onValueChange={(value) => setSelectedState(String(value))}
+            >
               {spec.states.map((state, idx) => {
-                const active = (selectedState ?? spec.states![0]) === state
                 const isDefault = idx === 0
                 return (
-                  <button
+                  <ChoiceButton
                     key={state}
-                    type='button'
-                    aria-pressed={active}
-                    onClick={() => setSelectedState(state)}
-                    className={cn(
-                      'inline-flex min-h-7 items-center border px-2 py-1 leading-4 transition-colors focus-visible:outline-2 focus-visible:outline-ring',
-                      active
-                        ? 'border-primary bg-primary text-primary-foreground'
-                        : 'border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
-                    )}
+                    value={state}
+                    size='sm'
+                    selectedVariant='subtle'
                   >
                     {state}
                     {isDefault && <span className='ml-1 opacity-75'>· default</span>}
-                  </button>
+                  </ChoiceButton>
                 )
               })}
-            </div>
+            </ChoiceGroup>
           </div>
         )}
         {renderStateSpecimen(spec.id, selectedState ?? spec.states?.[0]) && (
-          <div className='mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
+          <div className='bg-background mt-1 flex min-w-0 flex-col gap-2 border border-border p-3'>
             <div className='flex flex-wrap items-center justify-between gap-2'>
-              <span className='font-medium text-muted-foreground'>
+              <span className='font-medium text-foreground'>
                 {spec.axes?.length
                   ? `State preview · ${selectedState ?? spec.states?.[0]}`
                   : `Live preview · ${selectedState ?? spec.states?.[0]}`}
               </span>
-              <button
-                type='button'
-                className='text-muted-foreground underline underline-offset-2 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
-                onClick={() => setSelectedState(spec.states?.[0])}
-              >
-                Reset default
-              </button>
+              <ResetDefaultButton onClick={() => setSelectedState(spec.states?.[0])} />
             </div>
             <div className='flex min-h-12 min-w-0 items-center overflow-x-auto -mx-2 px-2 py-1'>
               {renderStateSpecimen(spec.id, selectedState ?? spec.states?.[0])}
@@ -494,7 +593,7 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
           </div>
         )}
         {spec.sizes && !spec.axes?.some((axis) => axis.name.toLowerCase().includes('size')) && (
-          <p className='text-muted-foreground'>{spec.sizes}</p>
+          <p className='text-sm leading-5 text-muted-foreground'>{spec.sizes}</p>
         )}
         {spec.note && <p className='text-sm leading-5 text-muted-foreground'>{spec.note}</p>}
       </div>
@@ -502,7 +601,7 @@ function ComponentLevelRow({ spec }: { spec: ComponentSpec }) {
   )
 }
 
-function SheetLegend() {
+function SheetLegend () {
   return (
     <p className='flex flex-wrap items-center gap-2 text-xs text-muted-foreground'>
       <Chip shaded>default</Chip>
@@ -513,8 +612,26 @@ function SheetLegend() {
   )
 }
 
-export function Sheet() {
+export function Sheet({ className }: { className?: string }) {
   const [query, setQuery] = useState('')
+  const [selectedComponentIds, setSelectedComponentIds] = useState<string[]>(['all'])
+  const pendingScrollAnchor = useRef<{ id: string; top: number } | null>(null)
+
+  useLayoutEffect(() => {
+    const anchor = pendingScrollAnchor.current
+    if (!anchor) return
+
+    const frame = window.requestAnimationFrame(() => {
+      const element = document.getElementById(anchor.id)
+      if (element) {
+        const topDelta = element.getBoundingClientRect().top - anchor.top
+        if (Math.abs(topDelta) > 2) window.scrollBy(0, topDelta)
+      }
+      pendingScrollAnchor.current = null
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [selectedComponentIds])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -533,38 +650,40 @@ export function Sheet() {
   }, [query])
 
   const specs = useMemo(() => filtered.sort((a, b) => a.title.localeCompare(b.title)), [filtered])
+  const visibleSpecs = selectedComponentIds.includes('all')
+    ? specs
+    : specs.filter((spec) => selectedComponentIds.includes(spec.id))
 
   const headingFamily = firstFamily(THEME['--font-heading'], 'Host Grotesk Variable')
   const sansFamily = firstFamily(THEME['--font-sans'], 'IBM Plex Sans')
   const monoFamily = firstFamily(THEME['--font-mono'], 'IBM Plex Mono')
 
   return (
-    <div className='flex flex-col gap-14'>
+    <div className={cn('flex flex-col gap-48', className)}>
       <header className='flex flex-col gap-4'>
-        <div className='flex flex-col gap-1'>
-          <span className='text-xs tracking-widest sub-heading'>Reference sheet</span>
-          <h1 className='h1'>Tokens and component props</h1>
-          <p className='max-w-2xl text-sm text-muted-foreground'>
-            See each component&apos;s configurable variants, prop values and combination count. Change a value to
-            inspect the combined preview before adding a one-off style.
-          </p>
+        <div className='flex flex-col gap-2'>
+          <div className='h1'>UI sheet</div>
+          <div className='max-w-2xl text-base text-muted-foreground'>
+            See each component&apos;s configurable variants, prop values and combination count. <br />
+            Change a value to inspect the combined preview before adding a one-off style.
+          </div>
         </div>
-        <dl className='grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-4'>
+        <dl className='grid grid-cols-2 border border-border bg-card sm:grid-cols-4'>
           {[
             [String(SPECS.length), 'components'],
             [String(AXIS_COUNT), 'configurable props'],
             [String(OPTION_COUNT), 'prop values'],
             [String(COLOR_TOKEN_COUNT), 'colour tokens']
           ].map(([value, label]) => (
-            <div key={label} className='flex flex-col gap-1 bg-background px-4 py-3'>
+            <div key={label} className='flex flex-col justify-between aspect-2/1 p-6 not-last:border-r not-last:border-border'>
               <dt className='text-xs sub-heading'>{label}</dt>
-              <dd className='text-2xl font-semibold tabular-nums'>{value}</dd>
+              <dd className='h2 tabular-nums'>{value}</dd>
             </div>
           ))}
         </dl>
       </header>
 
-      <section className='flex flex-col gap-8'>
+      <section className='flex flex-col gap-16'>
         <SheetSection
           index='01'
           title='Tokens'
@@ -572,56 +691,47 @@ export function Sheet() {
         />
 
         {TOKEN_GROUPS.map((group) => (
-          <div key={group.id} className='flex flex-col gap-3'>
+          <div key={group.id} className='grid scroll-mt-20 gap-3 md:grid-cols-[24rem_minmax(0,1fr)] md:gap-12'>
             <div>
-              <h3 className='h6 heading'>{group.title}</h3>
-              <p className='text-xs text-muted-foreground'>{group.description}</p>
+              <div className='h3'>{group.title}</div>
+              <p className='mt-2 text-base text-muted-foreground'>{group.description}</p>
             </div>
             <TokenTable tokens={group.tokens} />
           </div>
         ))}
 
-        <div className='grid gap-8 lg:grid-cols-2'>
-          <div className='flex flex-col gap-3'>
+          <div className='grid scroll-mt-20 gap-3 md:grid-cols-[24rem_minmax(0,1fr)] md:gap-12'>
             <div>
-              <h3 className='h6 heading'>Radius</h3>
-              <p className='text-xs text-muted-foreground'>Component corner radius: 2px (`var(--radius)`).</p>
+              <div className='h3'>Radius</div>
+              <p className='mt-2 text-base text-muted-foreground'>Component corner radius: 2px (`var(--radius)`).</p>
             </div>
             <RadiusScale />
           </div>
 
-          <div className='flex flex-col gap-3'>
+          <div className='grid scroll-mt-20 gap-3 md:grid-cols-[24rem_minmax(0,1fr)] md:gap-12'>
             <div>
-              <h3 className='h6 heading'>Type</h3>
-              <p className='text-xs text-muted-foreground'>
-                Families come from the theme; the size ramp is Tailwind&apos;s default. Code, kbd, samp and pre switch
-                to mono automatically.
-              </p>
+              <div className='h3'>Typeface</div>
             </div>
-            <div className='grid grid-cols-3 gap-3 border border-border p-4'>
-              <p className='text-base'>
-                <span className='text-xs sub-heading'>Heading</span>
-                <br />
-                {headingFamily}
-              </p>
-              <p className='text-base'>
-                <span className='text-xs sub-heading'>Sans</span>
-                <br />
-                {sansFamily}
-              </p>
-              <p className='text-base'>
-                <span className='text-xs sub-heading'>Mono</span>
-                <br />
-                <code>{monoFamily}</code>
-              </p>
+            <div className='grid grid-cols-3 border border-border'>
+              <div className='flex flex-col justify-between aspect-4/3 bg-card p-6 not-last:border-r not-last:border-border'>
+                <div className='text-xs sub-heading'>Heading</div>
+                <div className='text-2xl heading'>{headingFamily}</div>
+              </div>
+              <div className='flex flex-col justify-between aspect-4/3 bg-card p-6 not-last:border-r not-last:border-border'>
+                <div className='text-xs sub-heading'>Sans</div>
+                <div className='text-2xl'>{sansFamily}</div>
+              </div>
+              <div className='flex flex-col justify-between aspect-4/3 bg-card p-6 not-last:border-r not-last:border-border'>
+                <div className='text-xs sub-heading'>Mono</div>
+                <code className='text-2xl'>{monoFamily}</code>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className='flex flex-col gap-3'>
+        <div className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[24rem_minmax(0,1fr)] md:gap-12'>
           <div>
-            <h3 className='h6 heading'>Type scale</h3>
-            <p className='text-xs text-muted-foreground'>
+            <div className='h3'>Type scale</div>
+            <p className='mt-2 text-base text-muted-foreground'>
               Sizes in px at the default 16 px root. Showcase headings pair a ramp size with semibold and
               tracking-tight.
             </p>
@@ -637,7 +747,7 @@ export function Sheet() {
           description='Each component lists its library-defined design axes (variant, size, orientation, structure, placement, adornment and activation) plus selected states. Base UI pass-through props are not exhaustively listed. Values are copied from component definitions; shaded values are defaults.'
         />
 
-        <div className='flex flex-col gap-4'>
+        <div className='grid scroll-mt-20 gap-3 py-6 md:grid-cols-[24rem_minmax(0,1fr)] md:gap-12'>
           <div className='w-full sm:max-w-64'>
             <Input
               startAdornment={<MagnifyingGlassIcon />}
@@ -650,29 +760,54 @@ export function Sheet() {
               }
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder='Filter components or values'
+              placeholder='Filter components/ values'
             />
           </div>
           <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-            <nav aria-label='Components' className='flex flex-wrap gap-1.5'>
-              {specs.map((spec) => (
-                <a
-                  key={spec.id}
-                  href={`#${spec.id}`}
-                  className='border border-border px-2 py-1 text-xs text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                >
-                  {spec.title}
-                </a>
-              ))}
-            </nav>
+            <div id='component-filter-group' data-component-filter-anchor>
+              <ToggleGroup
+                multiple
+                aria-label='Filter components'
+                value={selectedComponentIds}
+                className='h-auto flex-wrap items-center gap-1.5 rounded-none border-0'
+                onValueChange={(values) => {
+                  const nextValues = values.map(String)
+                  const nextSelection = nextValues.includes('all')
+                    ? selectedComponentIds.includes('all') && nextValues.length > 1
+                      ? nextValues.filter((value) => value !== 'all')
+                      : ['all']
+                    : nextValues.length > 0
+                      ? nextValues
+                      : ['all']
+                  const anchorElement = document.getElementById('component-filter-group')
+                  pendingScrollAnchor.current = anchorElement
+                    ? { id: anchorElement.id, top: anchorElement.getBoundingClientRect().top }
+                    : null
+                  setSelectedComponentIds(nextSelection)
+                }}
+              >
+                <ChoiceStyleToggle value='all' selected={selectedComponentIds.includes('all')}>
+                  All
+                </ChoiceStyleToggle>
+                {specs.map((spec) => (
+                  <ChoiceStyleToggle
+                    key={spec.id}
+                    value={spec.id}
+                    selected={selectedComponentIds.includes(spec.id)}
+                  >
+                    {spec.title}
+                  </ChoiceStyleToggle>
+                ))}
+              </ToggleGroup>
+            </div>
           </div>
-          <SheetLegend />
+          {/* <SheetLegend /> */}
         </div>
 
         {specs.length === 0 && <p className='text-sm text-muted-foreground'>No component matches “{query}”.</p>}
 
         <div className='flex flex-col gap-10'>
-          {specs.map((spec) => (
+          {visibleSpecs.map((spec) => (
             <ComponentLevelRow key={spec.id} spec={spec} />
           ))}
         </div>

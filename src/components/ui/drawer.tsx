@@ -147,7 +147,7 @@ function DrawerContent({ className, ...props }: React.ComponentProps<typeof Base
   return (
     <BaseDrawer.Content
       data-slot='drawer-content'
-      className={cn('flex w-full max-w-lg flex-col gap-4 text-sm outline-none', className)}
+      className={cn('flex w-full flex-col gap-4 text-sm outline-none', className)}
       {...props}
     />
   )

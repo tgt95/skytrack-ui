@@ -2,7 +2,7 @@
 
 > A readable block for inspecting or copying code, commands, output, and diffs.
 
-- Package version: `0.1.5`
+- Package version: `0.1.6`
 - Public export: `skytrack-ui/code-block`
 - Implementation: [`src/components/ui/code-block.tsx`](../../../../../src/components/ui/code-block.tsx)
 - Public type declaration: generated target is `dist-lib/components/ui/code-block.d.ts`; it is not present until the library build runs.
@@ -21,7 +21,7 @@ Use Code Block when people need to read or copy code, command output, logs, or a
 - **Default:** neutral code or output.
 - **Destructive:** code or output associated with an error state.
 - **Default / small size:** use the default density for routine reading and small only when surrounding content is intentionally compact.
-- **Plain / highlighted:** plain text is the baseline; syntax highlighting is optional and must not carry meaning by color alone. Highlighted code uses VS Code Light+ in light mode and Dark+ in dark mode.
+- **Plain / highlighted:** plain text is the baseline; syntax highlighting is opt-in through `CodeBlockContent`'s `language` prop (including `python` and `json`) and must not carry meaning by color alone. Highlighted code uses VS Code Light+ in light mode and Dark+ in dark mode.
 
 **Live demo variant:** `Syntax highlighting`
 
@@ -29,8 +29,8 @@ Use Code Block when people need to read or copy code, command output, logs, or a
 
 People can scroll or wrap long lines, focus the code area, copy its contents, and read line numbers when enabled. A copy result is announced. Added, removed, and highlighted diff lines have distinct semantic treatments and visible markers.
 
-| Do | Don't | Why |
-| --- | --- | --- |
+| Do                                                             | Don't                                                                    | Why                                                                         |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
 | Show a concise filename or purpose and keep the code copyable. | Put essential instructions only in syntax colors or omit needed context. | People need to understand the snippet and use it with assistive technology. |
 
 **Live demo variant:** `Diff`

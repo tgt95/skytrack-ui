@@ -21,9 +21,9 @@
     "src/demos/toast.demo.tsx": 497,
     "src/showcase/App.tsx": 519,
     "src/showcase/app/thumbnails.tsx": 840,
-    "src/showcase/component-guidelines/designer-type-patterns.ts": 509,
-    "src/showcase/component-guidelines/practices/designer-practices-a.tsx": 1139,
-    "src/showcase/component-guidelines/practices/designer-practices-b.tsx": 1182,
+    "src/showcase/component-guidelines/designer-type-patterns.ts": 526,
+    "src/showcase/component-guidelines/practices/designer-practices-a.tsx": 1181,
+    "src/showcase/component-guidelines/practices/designer-practices-b.tsx": 1258,
     "src/showcase/overview-dashboard.tsx": 1111,
     "src/showcase/overview-style.tsx": 1554,
     "src/showcase/pattern-library/catalog.ts": 666,
@@ -45,7 +45,7 @@
     "src/showcase/sheet.tsx": 683,
     "src/showcase/specimens/feedback.tsx": 542,
     "src/showcase/specimens/forms.tsx": 523,
-    "src/showcase/specimens/registry.tsx": 608,
-    "src/showcase/specs/component-specs.ts": 609
+    "src/showcase/specimens/registry.tsx": 639,
+    "src/showcase/specs/component-specs.ts": 650
   }
 }

@@ -59,7 +59,12 @@ export const Grouped: Story = {
   render: () => <VariantBlock name={'Grouped'}>{demo.variants[8].render()}</VariantBlock>
 }
 
+export const EmptyOptions: Story = {
+  name: 'Empty options',
+  render: () => <VariantBlock name={'Empty options'}>{demo.variants[9].render()}</VariantBlock>
+}
+
 export const Disabled: Story = {
   name: 'Disabled',
-  render: () => <VariantBlock name={'Disabled'}>{demo.variants[9].render()}</VariantBlock>
+  render: () => <VariantBlock name={'Disabled'}>{demo.variants[10].render()}</VariantBlock>
 }

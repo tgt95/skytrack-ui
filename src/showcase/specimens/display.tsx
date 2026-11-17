@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PlusIcon } from '@phosphor-icons/react'
+import { PlusIcon, FileImageIcon } from '@phosphor-icons/react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 import type { ControlSize } from '@/lib/control-sizes'
 import { Calendar } from '@/components/ui/calendar'
@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/code-block'
 import { DataTable, type DataTableColumnDef, type DataTableSize } from '@/components/ui/data-table'
 import { DatePicker, DateRangePicker, DateWeekPicker } from '@/components/ui/date-picker'
+import { Button } from '@/components/ui/button'
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle, EmptyContent } from '@/components/ui/empty'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import {
   Attachment,
@@ -40,6 +42,16 @@ import {
   ScrollAreaViewport
 } from '@/components/ui/scroll-area'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardHeading,
+  CardTitle,
+  CardToolbar
+} from '@/components/ui/card'
 
 export function AttachmentSpecimen({
   state = 'done',
@@ -60,7 +72,7 @@ export function AttachmentSpecimen({
       className='max-w-sm'
     >
       <AttachmentMedia variant={media as React.ComponentProps<typeof AttachmentMedia>['variant']}>
-        <PlusIcon aria-hidden />
+        <FileImageIcon aria-hidden />
       </AttachmentMedia>
       <AttachmentContent>
         <AttachmentTitle>mission-plan.json</AttachmentTitle>
@@ -318,5 +330,84 @@ export function ResizableSpecimen({
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
+  )
+}
+
+/* ------------------------------------------------------------------- Empty */
+
+export function EmptySpecimen({ variant = 'default', size = 'default' }: { variant?: string; size?: string }) {
+  return (
+    <Empty
+      variant={variant as React.ComponentProps<typeof Empty>['variant']}
+      size={size as React.ComponentProps<typeof Empty>['size']}
+      className='max-w-sm'
+    >
+      <EmptyMedia />
+      <EmptyTitle>No records</EmptyTitle>
+      <EmptyDescription>Records appear here once they are added.</EmptyDescription>
+      <EmptyContent>
+        <Button size='sm'>
+          <PlusIcon /> New mission
+        </Button>
+        <Button size='sm' variant='outline'>
+          Import flight plan
+        </Button>
+      </EmptyContent>
+    </Empty>
+  )
+}
+
+/* -------------------------------------------------------------------- Card */
+
+export function CardSpecimen({ size = 'md', state = 'standard' }: { size?: string; state?: string }) {
+  const titleId = React.useId()
+  const isLong = state === 'long text clamping'
+  const showDescription = state !== 'without description'
+  const showToolbar = state !== 'without toolbar'
+  const showFooter = state === 'with footer'
+
+  return (
+    <Card
+      size={size as React.ComponentProps<typeof Card>['size']}
+      aria-labelledby={titleId}
+      className='w-full max-w-sm'
+    >
+      <CardHeader>
+        <CardHeading>
+          <CardTitle as='h3' id={titleId}>
+            {isLong ? 'A longer card title that stays on one line' : 'Mission summary'}
+          </CardTitle>
+          {showToolbar && (
+            <CardToolbar aria-label='Card actions'>
+              <Button size={size === 'lg' ? 'lg' : 'sm'} variant='outline'>
+                Open
+              </Button>
+            </CardToolbar>
+          )}
+        </CardHeading>
+        {showDescription && (
+          <CardDescription>
+            {isLong ? 'Long supporting copy sits below the title and toolbar' : 'Supporting description'}
+          </CardDescription>
+        )}
+      </CardHeader>
+      <CardContent>
+        <div className='grid grid-cols-2 gap-3'>
+          <div>
+            <p className='m-0 text-xs text-muted-foreground'>Status</p>
+            <p className='m-0'>Ready</p>
+          </div>
+          <div>
+            <p className='m-0 text-xs text-muted-foreground'>Items</p>
+            <p className='m-0'>12</p>
+          </div>
+        </div>
+      </CardContent>
+      {showFooter && (
+        <CardFooter className='border-t border-border pt-3'>
+          <span className='text-sm text-muted-foreground'>Optional footer</span>
+        </CardFooter>
+      )}
+    </Card>
   )
 }

@@ -129,7 +129,7 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
 
   return (
     <div className='w-full min-w-0 rounded-(--radius) border border-border/80 bg-card/60 p-6'>
-      <div className='space-y-10'>
+      <div className='space-y-24'>
         {TAB_KEYS.map((tabKey) => {
           const sec = guideline.sections[tabKey]
           if (!sec) return null
@@ -148,7 +148,7 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
             <section
               key={tabKey}
               aria-labelledby={`guideline-${tabKey.replaceAll(' ', '-')}`}
-              className='w-full min-w-0 border-t border-border/60 pt-6'
+              className='w-full min-w-0 border-t border-border/60 pt-24'
             >
               <h2 id={`guideline-${tabKey.replaceAll(' ', '-')}`} className='h3 mb-4'>
                 {tabKey}
@@ -184,7 +184,7 @@ export function ComponentGuidelineSheet({ guideline, demo, allDemos }: Component
                     <div className='flex items-center justify-between border-b border-border bg-muted/30 px-3.5 py-2'>
                       <div className='flex items-center gap-2 min-w-0'>
                         <span className='size-1.5 rounded-full bg-primary shrink-0' />
-                        <span className='text-xs font-medium sub-heading truncate'>
+                        <span className='text-xs sub-heading truncate'>
                           Live preview: {activeVariant ? activeVariant.name : 'Preview'}
                         </span>
                       </div>

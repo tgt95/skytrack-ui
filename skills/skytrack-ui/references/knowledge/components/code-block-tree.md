@@ -26,6 +26,7 @@ export function MissionReportJson({ report }: { report: unknown }) {
 - Object and array disclosures nest to match the JSON structure. Empty objects and arrays stay visible as `{}` and `[]`.
 - Each non-empty object or array can expand or collapse independently. Fold arrows sit after line numbers in a dedicated editor-style gutter. JSON row text indents by two spaces per depth.
 - Line numbers default to visible and can be toggled in the code block header or set through the `lineNumbers` API. Hiding numbers keeps the gutter cell and divider mounted, clears only the index text, and shrinks the cell to the narrow disclosure width. Row content stays aligned after it.
+- `defaultExpandAll` opens every non-empty object and array on initial render. It defaults to `false`; consumers can opt in when the full JSON document should be visible immediately.
 - Consumers can hide the line-number toggle with `showLineNumbersToggle={false}` while keeping line numbers visible.
 - The `toolbarActions` slot accepts custom JSX and renders after the line-number toggle, before the built-in Copy button.
 - JSON tokens use the package Shiki light and dark themes. Unsupported or failed highlighting falls back to readable plain text.
@@ -34,7 +35,7 @@ export function MissionReportJson({ report }: { report: unknown }) {
 
 ## API
 
-`CodeBlockTree` accepts `value?: unknown`, `title?: string`, controlled `lineNumbers?: boolean`, uncontrolled `defaultLineNumbers?: boolean`, `showLineNumbersToggle?: boolean`, `onLineNumbersChange?: (enabled: boolean) => void`, `toolbarActions?: React.ReactNode`, `renderNode?: (context) => React.ReactNode`, and native `<div>` props such as `className`. Line numbers default to visible; the visibility toggle also defaults to visible. A string value is parsed as JSON text; other values are serialized and parsed as JSON. The component owns tree hierarchy and disclosure state. `renderNode` can replace each row's displayed content with JSX while keeping disclosure controls and line numbers. Its context exposes `key`, `label`, `value`, `path`, `depth`, `kind`, `expandable`, `expanded`, and `defaultContent`; return `defaultContent` to retain Shiki rendering for rows you do not customize. Custom toolbar JSX appears before the built-in Copy button.
+`CodeBlockTree` accepts `value?: unknown`, `title?: string`, controlled `lineNumbers?: boolean`, uncontrolled `defaultLineNumbers?: boolean`, `defaultExpandAll?: boolean`, `showLineNumbersToggle?: boolean`, `onLineNumbersChange?: (enabled: boolean) => void`, `toolbarActions?: React.ReactNode`, `renderNode?: (context) => React.ReactNode`, and native `<div>` props such as `className`. Line numbers and the visibility toggle default to visible. `defaultExpandAll` defaults to `false`. A string value is parsed as JSON text; other values are serialized and parsed as JSON. The component owns tree hierarchy and disclosure state. `renderNode` can replace each row's displayed content with JSX while keeping disclosure controls and line numbers. Its context exposes `key`, `label`, `value`, `path`, `depth`, `kind`, `expandable`, `expanded`, and `defaultContent`; return `defaultContent` to retain Shiki rendering for rows you do not customize. Custom toolbar JSX appears before the built-in Copy button.
 
 ```tsx
 <CodeBlockTree

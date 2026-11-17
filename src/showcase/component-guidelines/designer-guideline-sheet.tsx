@@ -76,7 +76,7 @@ function DesignerGuidance({ blocks, practices = [] }: { blocks: MarkdownBlock[];
                           Missing compiled JSX example for this comparison.
                         </p>
                       )}
-                      <p className='text-lg leading-loose text-foreground'>{renderInlineMarkdown(row[0] ?? '')}</p>
+                      <p className='text-base leading-relaxed text-foreground'>{renderInlineMarkdown(row[0] ?? '')}</p>
                     </section>
                     <section className='flex min-w-0 flex-col space-y-3 rounded-(--radius) border border-destructive/30 bg-destructive/5 p-4'>
                       <h3 className='flex flex-row items-center gap-1.5 text-sm font-semibold text-destructive'>
@@ -97,11 +97,11 @@ function DesignerGuidance({ blocks, practices = [] }: { blocks: MarkdownBlock[];
                           Missing compiled JSX example for this comparison.
                         </p>
                       )}
-                      <p className='text-lg leading-loose text-foreground'>{renderInlineMarkdown(row[1] ?? '')}</p>
+                      <p className='text-base leading-relaxed text-foreground'>{renderInlineMarkdown(row[1] ?? '')}</p>
                     </section>
                     {whyColumn >= 0 && row[whyColumn] && (
-                      <p className='text-lg leading-loose text-muted-foreground md:col-span-2'>
-                        <span className='font-semibold text-foreground'>Why: </span>
+                      <p className='text-base leading-relaxed text-muted-foreground md:col-span-2'>
+                        <span className='font-medium text-foreground'>Why: </span>
                         {renderInlineMarkdown(row[whyColumn])}
                       </p>
                     )}
@@ -128,7 +128,7 @@ function DesignerTypeGallery({ demoId, demo }: { demoId: string; demo?: DemoMeta
         <section key={pattern.title} className='min-w-0 space-y-4'>
           <div className='space-y-0'>
             <h4 className='h5'>{pattern.title}</h4>
-            <p className='text-lg leading-loose text-muted-foreground'>{pattern.description}</p>
+            <p className='text-base leading-relaxed text-muted-foreground'>{pattern.description}</p>
           </div>
           <div
             className='grid items-stretch gap-10'
@@ -152,7 +152,7 @@ function DesignerTypeGallery({ demoId, demo }: { demoId: string; demo?: DemoMeta
               return (
                 <section key={exampleKey} className='flex min-w-0 flex-col gap-2'>
                   <div className='flex items-center justify-between gap-2'>
-                    <h5 className='text-xs font-medium sub-heading'>{example.label}</h5>
+                    <h5 className='text-xs sub-heading'>{example.label}</h5>
                     <Badge size='sm' count='Try it' />
                   </div>
                   <div className='flex min-h-80 min-w-0 max-w-full gap-3 flex-1 flex-wrap items-center justify-center overflow-x-auto rounded-(--radius) border border-border bg-sidebar p-4 [&>[data-slot=field].w-full]:items-start [&>[data-slot=field].w-full]:justify-center'>
@@ -181,7 +181,7 @@ export function DesignerGuidelineSheet({ guideline, demo, allDemos, practices }:
 
   return (
     <section className='w-full min-w-0 rounded-(--radius)'>
-      <div className='space-y-10'>
+      <div className='space-y-24'>
         {tabs.map((title) => {
           const section = guideline.sections[title]
           const requestedVariant = section.variantName
@@ -194,11 +194,11 @@ export function DesignerGuidelineSheet({ guideline, demo, allDemos, practices }:
             <section
               key={title}
               aria-labelledby={`designer-guideline-${title.replaceAll(' ', '-')}`}
-              className='w-full min-w-0 border-t border-border/60 pt-6'
+              className='w-full min-w-0 border-t border-border/60 pt-24'
             >
-              <h2 id={`designer-guideline-${title.replaceAll(' ', '-')}`} className='h3 mb-4'>
+              <div id={`designer-guideline-${title.replaceAll(' ', '-')}`} className='h3 mb-4'>
                 {title}
-              </h2>
+              </div>
               {typePatterns ? (
                 <div className='space-y-6'>
                   <DesignerGuidance blocks={section.blocks} practices={practices?.[title]} />
@@ -214,7 +214,7 @@ export function DesignerGuidelineSheet({ guideline, demo, allDemos, practices }:
                     <div className='min-w-0 space-y-3 w-full'>
                       <div className='overflow-hidden rounded-(--radius) border border-border bg-background'>
                         <div className='flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3.5 py-2'>
-                          <span className='truncate text-xs font-medium sub-heading'>Interactive example</span>
+                          <span className='truncate text-xs sub-heading'>Interactive example</span>
                           <Badge size='sm' count='Try it' />
                         </div>
                         <div className='flex min-h-80 w-full min-w-0 flex-wrap items-center justify-center gap-4 overflow-x-auto bg-sidebar p-4'>
@@ -242,7 +242,7 @@ export function DesignerGuidelineSheet({ guideline, demo, allDemos, practices }:
                     <div className='min-w-0 space-y-3 lg:sticky lg:top-20'>
                       <div className='overflow-hidden rounded-(--radius) border border-border bg-background'>
                         <div className='flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3.5 py-2'>
-                          <span className='truncate text-xs font-medium sub-heading'>Interactive example</span>
+                          <span className='truncate text-xs sub-heading'>Interactive example</span>
                           <Badge size='sm' count='Try it' />
                         </div>
                         <div className='flex min-h-80 w-full min-w-0 flex-wrap items-center justify-center gap-4 overflow-x-auto bg-sidebar p-4'>

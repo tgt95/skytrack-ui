@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Command as CommandPrimitive } from 'cmdk'
 import { MagnifyingGlassIcon } from '@phosphor-icons/react'
 import { Dialog, DialogBackdrop, DialogPopup, DialogPortal, DialogViewport } from '@/components/ui/dialog'
+import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { cn } from '@/lib/utils'
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
@@ -62,13 +63,18 @@ function CommandList({ className, ...props }: React.ComponentProps<typeof Comman
   )
 }
 
-function CommandEmpty({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {
+function CommandEmpty({ className, children, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {
   return (
     <CommandPrimitive.Empty
       data-slot='command-empty'
-      className={cn('px-3 py-6 text-center text-base text-muted-foreground', className)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
-    />
+    >
+      <Empty size='sm' variant='simple' className='p-2'>
+        <EmptyMedia icon={MagnifyingGlassIcon} />
+        {children === undefined ? <EmptyTitle>No results found.</EmptyTitle> : children}
+      </Empty>
+    </CommandPrimitive.Empty>
   )
 }
 

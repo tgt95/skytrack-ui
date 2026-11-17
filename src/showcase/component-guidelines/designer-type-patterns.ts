@@ -119,6 +119,15 @@ export const designerTypePatternsByDemoId: Record<string, DesignerTypePattern[]>
       ['With icon', 'Action with a leading or trailing icon']
     )
   ],
+  'split-button': [
+    pattern(
+      'Action hierarchy',
+      'Use a split button only when one action is clearly dominant and the rest are variants or follow-ups of it; equal-weight actions belong in separate buttons or a toolbar.',
+      ['Default', 'Dominant action with related actions'],
+      ['Leading icon', 'Action that benefits from an icon'],
+      ['Disabled action', 'Unavailable action with a reachable menu']
+    )
+  ],
   calendar: [
     pattern('Calendar presentation', 'Use the standalone month grid when calendar navigation is the main task.', [
       'CALENDAR',
@@ -266,6 +275,14 @@ export const designerTypePatternsByDemoId: Record<string, DesignerTypePattern[]>
       ['Default', 'Single file'],
       ['Multiple files', 'Multiple files with a list'],
       ['Selected files', 'Review selected files']
+    )
+  ],
+  empty: [
+    pattern(
+      'Visual emphasis',
+      'Match the placeholder to its region: the framed treatment for a page or panel, the simple treatment for a compact area.',
+      ['With actions', 'Framed, with actions'],
+      ['Simple', 'Compact, low emphasis']
     )
   ],
   field: [

@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
-import { CaretDownIcon, CheckIcon, XIcon } from '@phosphor-icons/react'
+import { CaretDownIcon, CheckIcon, MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { focusRing } from '@/lib/focus-ring'
+import { Empty, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import {
   CONTROL_SIZE_CLASSES,
   CONTROL_PADDING_X_CLASSES,
@@ -300,10 +301,13 @@ function ComboboxEmpty({ className, children, ...props }: React.ComponentProps<t
   return (
     <BaseCombobox.Empty
       data-slot='combobox-empty'
-      className={cn('px-2 py-3 text-sm leading-none text-muted-foreground empty:hidden', className)}
+      className={cn('px-2 py-2 text-sm leading-none text-muted-foreground empty:hidden', className)}
       {...props}
     >
-      {children === undefined ? 'No results found.' : children}
+      <Empty size='sm' variant='simple' className='p-0'>
+        <EmptyMedia icon={MagnifyingGlassIcon} />
+        {children === undefined ? <EmptyTitle>No results found.</EmptyTitle> : children}
+      </Empty>
     </BaseCombobox.Empty>
   )
 }

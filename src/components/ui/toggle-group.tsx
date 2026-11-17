@@ -33,8 +33,9 @@ function ToggleGroup({ className, variant, size, ...props }: ToggleGroupProps) {
         className={cn(
           'flex items-center rounded-(--radius) border border-border',
           toggleGroupHeightClasses[size ?? 'default'],
-          variant === 'segmented' && 'gap-1 bg-background p-0.5',
-          variant === 'outline' && '[&>[data-slot=toggle]]:border-0',
+          variant === 'segmented' && 'bg-background p-0.5 *:data-[slot=toggle]:border-transparent *:data-[slot=toggle]:border [&>[data-slot=toggle][data-pressed]]:border-border',
+          variant === 'outline' && '*:data-[slot=toggle]:border-0',
+          '*:data-[slot=toggle]:max-h-full',
           'data-[orientation=vertical]:flex-col data-[orientation=vertical]:h-auto',
           className
         )}

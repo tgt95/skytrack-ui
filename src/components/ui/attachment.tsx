@@ -24,9 +24,9 @@ const attachmentVariants = cva(
   {
     variants: {
       size: {
-        default: 'min-h-16 p-3',
-        sm: 'min-h-14 gap-2 p-2',
-        xs: 'gap-2 p-1'
+        default: 'min-h-16 p-3 pr-4',
+        sm: 'min-h-14 gap-2 p-2 pr-3',
+        xs: 'gap-2 p-1 pr-2'
       },
       orientation: {
         horizontal: 'flex-row items-center',

@@ -90,6 +90,7 @@ Supported features:
 
 - Trigger modes: Click to toggle (default), or hover activation via `openOnHover`.
 - Positioning: Supports `side` (`'top'`, `'bottom'`, `'left'`, `'right'`), `align` (`'start'`, `'center'`, `'end'`), and `sideOffset`.
+- Detached anchor: the positioner becomes invisible when its trigger scrolls outside the viewport and reappears when the trigger returns, so an open popup does not remain detached at a viewport edge.
 - Detached triggers: Controls popover from anywhere via `createHandle`.
 - Animation: Smooth scale and opacity transitions via Base UI CSS states (`data-starting-style`, `data-ending-style`).
 

@@ -503,6 +503,27 @@ function DisabledSelect() {
   return <AppleSelect disabled />
 }
 
+function EmptySelect() {
+  return (
+    <FieldRoot className='w-48'>
+      <Select items={[]} defaultOpen>
+        <SelectLabel>Mission</SelectLabel>
+        <SelectTrigger>
+          <SelectValue placeholder='Select mission' />
+          <SelectIcon />
+        </SelectTrigger>
+        <SelectPortal>
+          <SelectPositioner>
+            <SelectPopup>
+              <SelectList />
+            </SelectPopup>
+          </SelectPositioner>
+        </SelectPortal>
+      </Select>
+    </FieldRoot>
+  )
+}
+
 export const demo: DemoMeta = {
   id: 'select',
   title: 'Select',
@@ -554,6 +575,7 @@ export const demo: DemoMeta = {
     { name: 'Multiple selection', render: () => <MultipleSelect /> },
     { name: 'Object values', render: () => <ObjectValueSelect /> },
     { name: 'Grouped', render: () => <GroupedSelect /> },
+    { name: 'Empty options', render: () => <EmptySelect /> },
     {
       name: 'Disabled',
       render: () => (

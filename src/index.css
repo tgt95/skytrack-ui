@@ -42,9 +42,15 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --canvas: color-mix(in oklab, var(--muted) 50%, transparent);
   --foreground-static: var(--color-neutral-950);
   --foreground-inverse: var(--color-white);
   --foreground-inverse-static: var(--color-white);
+
+  /* Functional status colors derived from Tailwind's palette primitives. */
+  --success: var(--color-green-700);
+  --warning: var(--color-orange-700);
+  --info: var(--color-blue-600);
 
   /* Categorical chart series colors; keep these separate from functional status tokens. */
   --chart-1: var(--color-blue-600);
@@ -72,9 +78,14 @@
 }
 
 .dark {
+  --canvas: color-mix(in oklab, var(--muted) 25%, var(--background) 100%);
   --foreground-static: var(--color-neutral-950);
   --foreground-inverse: var(--color-neutral-950);
   --foreground-inverse-static: var(--color-neutral-50);
+
+  --success: var(--color-green-400);
+  --warning: var(--color-orange-300);
+  --info: var(--color-blue-400);
 
   --favorite: var(--color-amber-400);
 
@@ -208,27 +219,27 @@
 @layer components {
   /* Opt-in heading styles. Native h1–h6 elements keep browser/Tailwind defaults. */
   .h1 {
-    @apply text-4xl lg:text-5xl font-medium;
+    @apply text-4xl lg:text-5xl font-normal;
   }
 
   .h2 {
-    @apply text-3xl lg:text-4xl font-medium;
+    @apply text-3xl lg:text-4xl font-normal;
   }
 
   .h3 {
-    @apply text-2xl lg:text-3xl font-medium;
+    @apply text-2xl lg:text-3xl font-normal;
   }
 
   .h4 {
-    @apply text-xl lg:text-2xl font-semibold;
+    @apply text-xl lg:text-2xl font-medium;
   }
 
   .h5 {
-    @apply text-xl font-semibold;
+    @apply text-xl font-medium;
   }
 
   .h6 {
-    @apply text-lg font-semibold;
+    @apply text-lg font-medium;
   }
 
   .h1,

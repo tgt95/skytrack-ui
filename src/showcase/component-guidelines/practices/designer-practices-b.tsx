@@ -93,6 +93,7 @@ import {
   SidebarInset
 } from '@/components/ui/sidebar'
 import { Slider, SliderControl, SliderTrack, SliderIndicator, SliderThumb } from '@/components/ui/slider'
+import { SplitButton, SplitButtonAction, SplitButtonTrigger } from '@/components/ui/split-button'
 import { Switch, SwitchThumb } from '@/components/ui/switch'
 import { Tabs, TabsList, TabsTab, TabsPanel } from '@/components/ui/tabs'
 import { ToggleGroup } from '@/components/ui/toggle-group'
@@ -970,6 +971,81 @@ export const designerPracticeRegistry: DesignerPracticeRegistry = {
               </SliderControl>
             </Slider>
           </div>
+        )
+      }
+    ]
+  },
+  'split-button': {
+    Behavior: [
+      {
+        recommended: (
+          <SplitButton size='sm'>
+            <SplitButtonAction>Save mission</SplitButtonAction>
+            <Menu>
+              <MenuTrigger render={<SplitButtonTrigger aria-label='More save options' />} />
+              <MenuPortal>
+                <MenuPositioner side='bottom' align='end' sideOffset={4}>
+                  <MenuPopup>
+                    <MenuItem>Save as draft</MenuItem>
+                    <MenuItem>Save and close</MenuItem>
+                  </MenuPopup>
+                </MenuPositioner>
+              </MenuPortal>
+            </Menu>
+          </SplitButton>
+        ),
+        discouraged: (
+          <SplitButton size='sm'>
+            <SplitButtonAction>Save</SplitButtonAction>
+            <Menu>
+              <MenuTrigger render={<SplitButtonTrigger aria-label='Other actions' />} />
+              <MenuPortal>
+                <MenuPositioner side='bottom' align='end' sideOffset={4}>
+                  <MenuPopup>
+                    <MenuItem>Send</MenuItem>
+                    <MenuItem>Archive</MenuItem>
+                    <MenuItem>Share</MenuItem>
+                  </MenuPopup>
+                </MenuPositioner>
+              </MenuPortal>
+            </Menu>
+          </SplitButton>
+        )
+      },
+      {
+        recommended: (
+          <SplitButton size='sm' variant='outline'>
+            <SplitButtonAction>Export report</SplitButtonAction>
+            <Menu>
+              <MenuTrigger render={<SplitButtonTrigger aria-label='Export options' />} />
+              <MenuPortal>
+                <MenuPositioner side='bottom' align='end' sideOffset={4}>
+                  <MenuPopup>
+                    <MenuItem>Export as CSV</MenuItem>
+                    <MenuItem>Export as PDF</MenuItem>
+                  </MenuPopup>
+                </MenuPositioner>
+              </MenuPortal>
+            </Menu>
+          </SplitButton>
+        ),
+        discouraged: (
+          <SplitButton size='sm' variant='outline'>
+            <SplitButtonAction>Export report</SplitButtonAction>
+            <Menu>
+              <MenuTrigger render={<SplitButtonTrigger aria-label='More actions' />} />
+              <MenuPortal>
+                <MenuPositioner side='bottom' align='end' sideOffset={4}>
+                  <MenuPopup>
+                    <MenuItem>Workspace settings</MenuItem>
+                    <MenuItem>Export audit log</MenuItem>
+                    <MenuSeparator />
+                    <MenuItem variant='destructive'>Delete workspace</MenuItem>
+                  </MenuPopup>
+                </MenuPositioner>
+              </MenuPortal>
+            </Menu>
+          </SplitButton>
         )
       }
     ]
