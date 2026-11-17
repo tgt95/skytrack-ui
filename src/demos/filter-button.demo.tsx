@@ -43,7 +43,7 @@ function StatusFilterButton () {
     <FilterButton title='Filter by status' value={value} onValueChange={setValue} options={STATUS_OPTIONS}>
       <UserCircleGearIcon aria-hidden='true' />
       Status
-      {value.length > 0 && <Badge count={value.length} status='outline' size='sm' />}
+      {value.length > 0 && <Badge count={value.length} status='processing' size='sm' />}
     </FilterButton>
   )
 }
