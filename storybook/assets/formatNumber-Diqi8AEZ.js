@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{n as t}from"./stringifyLocale-PE9I0EbU.js";function n(e,n){let r=JSON.stringify({locale:t(e),options:n}),a=i.get(r);if(a)return a;let o=new Intl.NumberFormat(e,n);return i.set(r,o),o}function r(e,t,r){return e==null?``:n(t,r).format(e)}var i;function a(){return(a=e((()=>{i=new Map})))()}export{n,a as r,r as t};
