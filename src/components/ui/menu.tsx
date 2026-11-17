@@ -22,7 +22,7 @@ export const menuItemVariants = cva(
         destructive: 'text-destructive data-highlighted:bg-destructive data-highlighted:text-white'
       },
       inset: {
-        true: 'pl-8',
+        true: '!pl-8',
         false: ''
       }
     },
